@@ -7,21 +7,21 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 import Hero from './components/Hero';
 
 // Páginas carregadas sob demanda (code-splitting) — só baixam quando o usuário acessa.
-const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
-const Feed = lazy(() => import('./pages/Feed'));
-const Planner = lazy(() => import('./pages/Planner'));
-const MapPage = lazy(() => import('./pages/MapPage'));
-const PistaAoVivo = lazy(() => import('./pages/PistaAoVivo'));
-const Passport = lazy(() => import('./pages/Passport'));
-const MyRoutes = lazy(() => import('./pages/MyRoutes'));
-const Events = lazy(() => import('./pages/Events'));
-const Partners = lazy(() => import('./pages/Partners'));
-const Comboio = lazy(() => import('./pages/Comboio'));
-const Store = lazy(() => import('./pages/Store'));
-const Profile = lazy(() => import('./pages/Profile'));
-const Segments = lazy(() => import('./pages/Segments'));
-const RideRecorder = lazy(() => import('./pages/RideRecorder'));
-const Expeditions = lazy(() => import('./pages/Expeditions'));
+const AdminDashboard = lazy(() => import('./views/AdminDashboard'));
+const Feed = lazy(() => import('./views/Feed'));
+const Planner = lazy(() => import('./views/Planner'));
+const MapPage = lazy(() => import('./views/MapPage'));
+const PistaAoVivo = lazy(() => import('./views/PistaAoVivo'));
+const Passport = lazy(() => import('./views/Passport'));
+const MyRoutes = lazy(() => import('./views/MyRoutes'));
+const Events = lazy(() => import('./views/Events'));
+const Partners = lazy(() => import('./views/Partners'));
+const Comboio = lazy(() => import('./views/Comboio'));
+const Store = lazy(() => import('./views/Store'));
+const Profile = lazy(() => import('./views/Profile'));
+const Segments = lazy(() => import('./views/Segments'));
+const RideRecorder = lazy(() => import('./views/RideRecorder'));
+const Expeditions = lazy(() => import('./views/Expeditions'));
 const GlobalTracker = lazy(() => import('./components/GlobalTracker'));
 import {
   registerUser, loginUser, logoutUser, getCurrentUser,

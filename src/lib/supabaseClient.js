@@ -1,6 +1,15 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co'
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key'
+// Next.js usa NEXT_PUBLIC_*; mantém fallback VITE_ p/ o build Vite legado.
+const viteEnv = typeof import.meta !== 'undefined' ? import.meta.env : undefined
+
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  viteEnv?.VITE_SUPABASE_URL ||
+  'https://your-project.supabase.co'
+const supabaseAnonKey =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  viteEnv?.VITE_SUPABASE_ANON_KEY ||
+  'your-anon-key'
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
