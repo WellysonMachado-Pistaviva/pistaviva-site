@@ -32,3 +32,10 @@ dist-ssr
 *.sln
 *.sw?
 .netlify/
+
+# Next.js
+.next/
+out/
+.vercel
+.env.local
+.env*.local
