@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="PISTAVIVA — Mototurismo em Minas Gerais. Destinos épicos, comunidade vibrante, passaporte exclusivo.">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>PISTAVIVA — Mototurismo em Minas Gerais</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Auth Modal -->
+  <div id="auth-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+      <div id="auth-login" class="auth-form">
+        <div class="auth-logo">PISTA<span>VIVA</span></div>
+        <h2>Entrar na comunidade</h2>
+        <div class="calc-field">
+          <input type="text" id="login-cpf" placeholder="Seu CPF" maxlength="14" oninput="maskCPF(this)">
+          <span id="error-login-cpf" class="error-message hidden"></span>
+        </div>
+        <div class="calc-field">
+          <input type="text" id="login-code" placeholder="Seu código de acesso">
+          <span id="error-login-code" class="error-message hidden"></span>
+        </div>
+        <button class="btn-primary" onclick="doLogin()">ENTRAR</button>
+        <p class="auth-switch">Novo por aqui? <a href="#" onclick="showRegister(event)">Cadastre-se</a></p>
+      </div>
+      <div id="auth-register" class="auth-form hidden">
+        <div class="auth-logo">PISTA<span>VIVA</span></div>
+        <h2>Criar conta</h2>
+        <div class="calc-field">
+          <input type="text" id="reg-name" placeholder="Seu nome completo" autocomplete="name">
+          <span id="error-reg-name" class="error-message hidden"></span>
+        </div>
+        <div class="calc-field">
+          <input type="text" id="reg-cpf" placeholder="Seu CPF" maxlength="14" oninput="maskCPF(this)">
+          <span id="error-reg-cpf" class="error-message hidden"></span>
+        </div>
+        <div class="calc-field">
+          <input type="text" id="reg-city" placeholder="Cidade / Estado">
+          <span id="error-reg-city" class="error-message hidden"></span>
+        </div>
+        <div class="calc-field">
+          <input type="text" id="reg-moto" placeholder="Sua moto (ex: CB 500X 2023)">
+          <span id="error-reg-moto" class="error-message hidden"></span>
+        </div>
+        <button class="btn-primary" onclick="doRegister()">CRIAR CONTA</button>
+        <p class="auth-switch">Já tem conta? <a href="#" onclick="showLogin(event)">Entrar</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Side Drawer -->
+  <div id="drawer-overlay" class="drawer-overlay hidden" onclick="toggleDrawer()"></div>
+  <nav id="side-drawer" class="side-drawer">
+    <div class="drawer-header">
+      <div class="drawer-logo">PISTA<span>VIVA</span></div>
+      <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+    </div>
+    <div id="drawer-user" class="drawer-user hidden">
+      <div class="drawer-avatar">🏍</div>
+      <div class="drawer-user-info">
+        <span id="drawer-username"></span>
+        <span id="drawer-usercity" class="text-muted"></span>
+      </div>
+    </div>
+    <ul class="drawer-links">
+      <li><a href="#home" onclick="navigateTo('home')"><i>🏠</i> Início</a></li>
+      <li><a href="#destinos" onclick="navigateTo('destinos')"><i>📍</i> Feed</a></li>
+      <li><a href="#calculadora" onclick="navigateTo('calculadora')"><i>🗺️</i> Planejar Viagem</a></li>
+      <li><a href="#eventos" onclick="navigateTo('eventos')"><i>📅</i> Eventos</a></li>
+      <li><a href="#parceiros" onclick="navigateTo('parceiros')"><i>🤝</i> Parceiros</a></li>
+      <li><a href="#passaporte" onclick="navigateTo('passaporte')"><i>🛂</i> Passaporte</a></li>
+      <li><a href="#pistaAoVivo" onclick="navigateTo('pistaAoVivo')"><i>📡</i> Pista ao Vivo</a></li>
+      <li><a href="#rotas" onclick="navigateTo('rotas')"><i>🛤️</i> Minhas Rotas</a></li>
+      <li><a href="#minhas-publicacoes" onclick="navigateTo('minhas-publicacoes')"><i>🏍️</i> Minhas Publicações</a></li>
+      <li id="drawer-admin-link" class="hidden"><a href="#admin" onclick="navigateTo('admin')" style="color: var(--accent);"><i>👑</i> Painel Admin</a></li>
+    </ul>
+    <div class="drawer-footer">
+      <button id="drawer-auth-btn" class="btn-outline" onclick="openAuthModal()">ENTRAR / CADASTRAR</button>
+      <button id="drawer-logout-btn" class="btn-outline hidden" onclick="doLogout()">SAIR DA CONTA</button>
+    </div>
+  </nav>
+
+  <!-- Main App Container -->
+  <main id="app">
+    <!-- HERO -->
+    <section id="home" class="page active">
+      <div class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+          <div class="hero-logo">PISTA<span>VIVA</span></div>
+          <h1 class="hero-title">MOTOTURISMO<br>EM MINAS GERAIS</h1>
+          <p class="hero-subtitle">Destinos épicos, comunidade vibrante, passaporte exclusivo.<br>Tudo na estrada, de verdade.</p>
+          <div class="hero-stats">
+            <div class="stat"><span class="stat-num" data-count="7">0</span><span class="stat-label">Destinos</span></div>
+            <div class="stat"><span class="stat-num" data-count="777">0</span><span class="stat-label">Km Mapeados</span></div>
+            <div class="stat"><span class="stat-num" data-count="350">0</span><span class="stat-label">Membros</span></div>
+          </div>
+          <div class="hero-actions">
+            <button class="btn-primary" onclick="navigateTo('destinos')">EXPLORAR O FEED</button>
+            <button class="btn-outline" onclick="openAuthModal()">ENTRAR NA COMUNIDADE</button>
+          </div>
+          <div class="scroll-indicator">
+            <span>Deslize para explorar</span>
+            <div class="scroll-arrow">↓</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:20px;max-width:400px;margin:0 auto">
+        <div class="gallery-upload-card" style="margin-bottom:0">
+          <h3>Onde você está?</h3>
+          <p style="text-align:center;color:var(--muted);font-size:13px;margin-bottom:16px">Publique sua foto e ganhe destaque na comunidade.</p>
+          <label class="upload-zone">
+            <span>📷 Escolher Foto</span>
+            <input type="file" id="gal-file" class="hidden" accept="image/*" onchange="previewPhoto(this)">
+            <img id="gal-preview" class="hidden">
+          </label>
+          <input type="text" id="gal-name" placeholder="Seu nome" class="hidden">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+            <select id="gal-uf" style="flex:1;min-width:80px">
+              <option value="">Estado</option>
+              <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option><option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option><option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option><option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option><option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option><option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option><option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+            </select>
+            <input type="text" id="gal-city" placeholder="Sua Cidade" style="flex:2;min-width:140px">
+          </div>
+          <select id="gal-cat" style="margin-bottom:10px">
+            <option value="">Tipo de Viagem</option>
+            <option value="montanha">🏔 Montanhas</option>
+            <option value="historica">🏛 Histórica</option>
+            <option value="gastronomica">🍝 Gastronômica</option>
+            <option value="bateevolta">🏍 Bate e Volta</option>
+            <option value="outro">🛤️ Outro</option>
+          </select>
+          <div class="calc-field">
+            <textarea id="gal-comment" placeholder="Como está a estrada ou o que achou do lugar?"></textarea>
+            <span id="error-gal-comment" class="error-message hidden"></span>
+          </div>
+          <button class="btn-primary" onclick="submitPhotoHome('gal-')">ENVIAR PARA A COMUNIDADE</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESTINOS (FEED DA COMUNIDADE) -->
+    <section id="destinos" class="page">
+      <div class="page-header">
+        <h2 class="page-title">Feed da Comunidade</h2>
+        <p class="page-subtitle">Veja onde a galera está rodando no Brasil</p>
+      </div>
+
+      <!-- Área de Postagem -->
+      <div class="gallery-upload-card" style="margin: 0 16px 20px 16px">
+        <h3 style="font-size:16px;margin-bottom:12px">📸 Compartilhe seu rolê</h3>
+        <label class="upload-zone" style="margin-bottom:12px;padding:20px">
+          <span>📷 Escolher Foto</span>
+          <input type="file" id="dest-file" class="hidden" accept="image/*" onchange="previewPhoto(this, 'dest-preview')">
+          <img id="dest-preview" class="hidden">
+        </label>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+          <select id="dest-uf" style="flex:1;min-width:80px">
+            <option value="">Estado</option>
+            <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option><option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option><option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option><option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option><option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option><option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option><option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+          </select>
+          <input type="text" id="dest-city" placeholder="Sua Cidade" style="flex:2;min-width:140px">
+        </div>
+        <select id="dest-cat" style="margin-bottom:10px">
+          <option value="">Tipo de Viagem</option>
+          <option value="montanha">🏔 Montanhas</option>
+          <option value="historica">🏛 Histórica</option>
+          <option value="gastronomica">🍝 Gastronômica</option>
+          <option value="bateevolta">🏍 Bate e Volta</option>
+          <option value="outro">🛤️ Outro</option>
+        </select>
+        <div class="calc-field">
+          <textarea id="dest-comment" placeholder="Detalhes do trajeto, dicas, condições..."></textarea>
+          <span id="error-dest-comment" class="error-message hidden"></span>
+        </div>
+        <button class="btn-primary" onclick="submitPhotoHome('dest-')">PUBLICAR NO FEED</button>
+      </div>
+
+      <!-- Filtros -->
+      <div class="filter-bar" id="feed-filters">
+        <button class="filter-chip active" onclick="renderCommunityFeed('todos', this)">Tudo</button>
+        <button class="filter-chip" onclick="renderCommunityFeed('roteiros', this)">🗺️ Roteiros</button>
+        <button class="filter-chip" onclick="renderCommunityFeed('montanha', this)">🏔 Montanhas</button>
+        <button class="filter-chip" onclick="renderCommunityFeed('historica', this)">🏛 Histórica</button>
+        <button class="filter-chip" onclick="renderCommunityFeed('gastronomica', this)">🍝 Gastronômica</button>
+        <button class="filter-chip" onclick="renderCommunityFeed('bateevolta', this)">🏍 Bate e Volta</button>
+      </div>
+
+      <div id="feed-grid" class="destinos-grid" style="display:flex;flex-direction:column;gap:16px;"></div>
+    </section>
+
+    <!-- MAPA INTERATIVO -->
+    <section id="mapa" class="page">
+      <div class="page-header">
+        <h2 class="page-title">Mapa</h2>
+        <p class="page-subtitle">Destinos, fotos e fotógrafos no mapa</p>
+      </div>
+      <div class="filter-bar" id="map-filters">
+        <button class="filter-chip active" data-filter="all" onclick="filterMap('all')">📍 Tudo</button>
+        <button class="filter-chip" data-filter="destinos" onclick="filterMap('destinos')">🏔 Destinos</button>
+        <button class="filter-chip" data-filter="fotos" onclick="filterMap('fotos')">📸 Fotos</button>
+        <button class="filter-chip" data-filter="fotografos" onclick="filterMap('fotografos')">📷 Fotógrafos</button>
+      </div>
+      <div id="map-container" style="height:400px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);margin-bottom:16px"></div>
+      <div class="calc-card">
+        <h3 style="font-size:16px;margin-bottom:14px;text-align:center">📷 Cadastrar como Fotógrafo</h3>
+        <input type="text" id="foto-name" placeholder="Seu nome">
+        <input type="text" id="foto-local" placeholder="Local onde costuma ficar (ex: Serra da Mantiqueira, KM 42)" style="margin-top:10px">
+        <input type="text" id="foto-horario" placeholder="Horário (ex: Sáb e Dom, 8h às 16h)" style="margin-top:10px">
+        <input type="text" id="foto-contato" placeholder="WhatsApp ou Instagram" style="margin-top:10px">
+        <button class="btn-primary" onclick="registerPhotographer()" style="margin-top:14px">📍 USAR MINHA LOCALIZAÇÃO E CADASTRAR</button>
+      </div>
+    </section>
+
+    <!-- PLANEJADOR DE VIAGEM -->
+    <section id="calculadora" class="page">
+      <div class="page-header">
+        <h2 class="page-title">Planejador</h2>
+        <p class="page-subtitle">Seu roteiro inteligente e completo</p>
+      </div>
+      
+      <div class="calc-card" id="planner-form">
+        <div class="calc-field" style="position:relative">
+          <label>📍 Origem</label>
+          <input type="text" id="plan-orig" placeholder="Ex: Belo Horizonte" autocomplete="off" oninput="debounceGeocode(this, 'orig')">
+          <input type="hidden" id="plan-orig-lat"><input type="hidden" id="plan-orig-lng">
+          <ul id="plan-orig-results" class="autocomplete-list hidden"></ul>
+        </div>
+        
+        <div id="waypoints-container"></div>
+        <button class="btn-outline" onclick="addWaypoint()" style="margin-bottom:16px;padding:10px;font-size:12px;border-style:dashed">+ ADICIONAR PARADA</button>
+        
+        <div class="calc-field" style="position:relative">
+          <label>🏁 Destino Final</label>
+          <input type="text" id="plan-dest" placeholder="Ex: Capitólio" autocomplete="off" oninput="debounceGeocode(this, 'dest')">
+          <input type="hidden" id="plan-dest-lat"><input type="hidden" id="plan-dest-lng">
+          <ul id="plan-dest-results" class="autocomplete-list hidden"></ul>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-bottom:20px">
+          <div class="calc-field" style="flex:1">
+            <label>⛽ R$/Litro</label>
+            <input type="number" id="plan-price" placeholder="6.50" step="0.01">
+          </div>
+          <div class="calc-field" style="flex:1">
+            <label>🏍 km/l</label>
+            <input type="number" id="plan-avg" placeholder="25">
+          </div>
+        </div>
+        
+        <div class="calc-toggle">
+          <label class="toggle-label">
+            <input type="checkbox" id="plan-roundtrip">
+            <span class="toggle-slider"></span>
+            Ida e Volta
+          </label>
+        </div>
+
+        <button class="btn-primary" onclick="generateTripPlan()" id="btn-generate-trip">GERAR ROTEIRO COMPLETO</button>
+      </div>
+
+      <!-- RESULTADO DO ROTEIRO -->
+      <div id="planner-result" class="calc-card hidden" style="margin-top:20px;border-color:var(--accent)">
+        <h3 style="text-align:center;font-size:18px;margin-bottom:16px;color:var(--accent)">Resumo da Viagem</h3>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+          <div style="background:var(--bg3);padding:14px;border-radius:12px;text-align:center">
+            <span style="font-size:24px" id="res-weather-icon">☀️</span>
+            <div style="font-weight:700;font-size:16px;margin-top:4px" id="res-temp">--°C</div>
+            <div style="font-size:11px;color:var(--muted)">Clima no destino</div>
+          </div>
+          <div style="background:var(--bg3);padding:14px;border-radius:12px;text-align:center">
+            <span style="font-size:24px">⏱</span>
+            <div style="font-weight:700;font-size:16px;margin-top:4px" id="res-duration">--h --m</div>
+            <div style="font-size:11px;color:var(--muted)">Tempo de viagem</div>
+          </div>
+        </div>
+
+        <div class="calc-result" style="margin-top:0">
+          <div class="calc-result-row"><span>Distância Total</span><span id="res-total-dist">0 km</span></div>
+          <div class="calc-result-row"><span>Combustível (Litros)</span><span id="res-total-liters">0 L</span></div>
+          <div class="calc-result-row total"><span>Custo Estimado</span><span id="res-total-cost">R$ 0,00</span></div>
+        </div>
+        
+        <div style="border-top:1px solid var(--border);padding-top:16px;margin-top:16px">
+          <input type="text" id="plan-save-name" placeholder="Nome do Roteiro (Ex: Viagem Férias)" style="margin-bottom:12px">
+          <select id="plan-save-privacy" style="margin-bottom:12px">
+            <option value="private">🔒 Privado (Só eu vejo)</option>
+            <option value="public">🌍 Público (Comunidade)</option>
+          </select>
+          <button class="btn-outline" onclick="saveTripPlan()" style="margin-bottom:12px">SALVAR ROTEIRO</button>
+          <button class="btn-outline" onclick="resetPlanner()" style="border-color:var(--muted);color:var(--text)">NOVO ROTEIRO</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EVENTOS -->
+    <section id="eventos" class="page">
+      <div class="page-header">
+        <h2 class="page-title">Eventos</h2>
+        <p class="page-subtitle">Encontros e viagens da comunidade</p>
+      </div>
+      <div class="calc-card" style="margin-bottom:24px">
+        <h3 style="font-size:16px;margin-bottom:14px;text-align:center">📅 Cadastrar Evento</h3>
+        <input type="text" id="evt-name" placeholder="Nome do evento (ex: Motoata da Serra)">
+        <input type="date" id="evt-date" style="margin-top:10px">
+        <input type="text" id="evt-local" placeholder="Local (Cidade/Ponto de Encontro)" style="margin-top:10px">
+        <textarea id="evt-desc" placeholder="Breve descrição do evento" style="margin-top:10px;min-height:60px"></textarea>
+        <button class="btn-primary" onclick="submitEvent()" style="margin-top:14px">PUBLICAR EVENTO</button>
+      </div>
+      <div id="eventos-list"></div>
+    </section>
+
+    <!-- MINHAS PUBLICAÇÕES -->
+    <section id="minhas-publicacoes" class="page">
+      <div class="page-header">
+        <h2 class="page-title">Minhas Atividades</h2>
+        <p class="page-subtitle">Seu histórico de postagens e roteiros</p>
+      </div>
+      
+      <h3 style="margin-bottom:12px;font-size:16px;color:var(--accent)">Meus Roteiros Salvos</h3>
+      <div id="my-trips-grid" style="display:flex;flex-direction:column;gap:12px;margin-bottom:30px"></div>
+
+      <h3 style="margin-bottom:12px;font-size:16px;color:var(--accent)">Minhas Postagens no Feed</h3>
+      <div id="my-posts-grid" class="destinos-grid" style="display:flex;flex-direction:column;gap:16px;"></div>
+    </section>
+
+    <!-- PARCEIROS -->
+    <section id="parceiros" class="page">
+      <div class="page-header">
+        <h2 class="page-title">Parceiros</h2>
+        <p class="page-subtitle">Rede de apoio na estrada</p>
+      </div>
+      <div id="parceiros-grid" class="parceiros-grid"></div>
+      <div class="parceiro-cta">
+        <p>Tem um estabelecimento amigo do motociclista?</p>
+        <a href="https://wa.me/5535984316992?text=Olá! Quero ser parceiro PISTAVIVA" class="btn-whatsapp" target="_blank">SEJA UM PARCEIRO</a>
+      </div>
+    </section>
+
+    <!-- PASSAPORTE -->
+    <section id="passaporte" class="page">
+      <div class="page-header">
+        <h2 class="page-title">Passaporte</h2>
+        <p class="page-subtitle">Conquiste selos visitando os destinos</p>
+      </div>
+      <div id="passport-locked" class="passport-locked">
+        <div class="passport-icon">🛂</div>
+        <p>Faça login para ativar seu passaporte e começar a colecionar selos!</p>
+        <button class="btn-primary" onclick="openAuthModal()">ENTRAR / CADASTRAR</button>
+      </div>
+      <div id="passport-content" class="hidden">
+        <div class="passport-progress">
+          <div class="progress-bar"><div id="passport-bar" class="progress-fill"></div></div>
+          <span id="passport-count">0 / 7 destinos</span>
+        </div>
+        <div id="passport-grid" class="passport-grid"></div>
+        <button class="btn-primary btn-gps" id="btn-checkin" onclick="doCheckin()">
+          📍 CONFIRMAR MINHA LOCALIZAÇÃO
+        </button>
+        <p id="checkin-status" class="checkin-status"></p>
+      </div>
+    </section>
+
+    <!-- PISTA AO VIVO -->
+    <section id="pistaAoVivo" class="page">
+      <div class="page-header">
+        <h2 class="page-title">Pista ao Vivo</h2>
+        <p class="page-subtitle">Condições das estradas em tempo real</p>
+      </div>
+      <div id="live-feed" class="live-feed"></div>
+      <div class="live-report-card">
+        <h3>📡 Relatar condição</h3>
+        <select id="live-dest"><option value="">Escolha o destino</option></select>
+        <div class="live-status-btns">
+          <button class="status-btn green" data-status="green" onclick="selectLiveStatus(this)">🟢 Boa</button>
+          <button class="status-btn yellow" data-status="yellow" onclick="selectLiveStatus(this)">🟡 Atenção</button>
+          <button class="status-btn red" data-status="red" onclick="selectLiveStatus(this)">🔴 Ruim</button>
+        </div>
+        <textarea id="live-comment" placeholder="Descreva as condições..." maxlength="300"></textarea>
+        <button class="btn-primary" onclick="submitLiveReport()">ENVIAR RELATO</button>
+      </div>
+    </section>
+
+    <!-- ROTAS GPS -->
+    <section id="rotas" class="page">
+      <div class="page-header">
+        <h2 class="page-title">Minhas Rotas</h2>
+        <p class="page-subtitle">Grave e compartilhe seus percursos</p>
+      </div>
+      <div class="calc-card" style="margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div><span id="route-km" style="font-family:var(--display);font-size:28px;font-weight:900;color:var(--accent)">0.0 km</span><br><span id="route-points" class="text-muted">0 pontos</span></div>
+          <span id="route-status"></span>
+        </div>
+        <button class="btn-primary" id="route-start" onclick="startRoute()">▶ GRAVAR ROTA</button>
+      </div>
+      <h3 style="font-size:16px;margin-bottom:14px;color:var(--muted)">Rotas da comunidade</h3>
+      <div id="routes-list"></div>
+    </section>
+
+
+
+    <!-- PAINEL ADMIN -->
+    <section id="admin" class="page">
+      <div class="page-header">
+        <h2 class="page-title">Painel Admin</h2>
+        <p class="page-subtitle">Gestão da Comunidade</p>
+      </div>
+
+      <div class="filter-bar" id="admin-tabs">
+        <button class="filter-chip active" onclick="switchAdminTab('galeria', this)">📸 Feed da Comunidade</button>
+        <button class="filter-chip" onclick="switchAdminTab('live', this)">📡 Pista ao Vivo</button>
+        <button class="filter-chip" onclick="switchAdminTab('rotas', this)">🛤️ Rotas</button>
+        <button class="filter-chip" onclick="switchAdminTab('fotografos', this)">📷 Fotógrafos</button>
+        <button class="filter-chip" onclick="switchAdminTab('passaporte', this)">🛂 Passaporte</button>
+        <button class="filter-chip" onclick="switchAdminTab('users', this)">👥 Usuários (CRM)</button>
+        <button class="filter-chip" onclick="switchAdminTab('config', this)">⚙️ Configurações</button>
+      </div>
+
+      <div id="admin-content-passaporte" class="admin-tab-content hidden">
+        <h3 style="margin-bottom: 12px; font-size: 16px; color: var(--muted)">Novos Selos (GPS)</h3>
+        <div class="calc-card" style="margin-bottom:16px;padding:16px">
+          <input type="text" id="adm-seal-name" placeholder="Nome do Selo (ex: Mirante X)">
+          <input type="number" id="adm-seal-lat" placeholder="Latitude (ex: -20.1234)" style="margin-top:8px">
+          <input type="number" id="adm-seal-lng" placeholder="Longitude (ex: -44.5678)" style="margin-top:8px">
+          <input type="text" id="adm-seal-img" placeholder="Link da imagem (Imgur, Unsplash...)" style="margin-top:8px">
+          <button class="btn-primary" onclick="createCustomSeal()" style="margin-top:12px;padding:10px">CRIAR SELO</button>
+        </div>
+        <div id="admin-list-passaporte" class="admin-list"></div>
+      </div>
+
+
+      <div id="admin-content-galeria" class="admin-tab-content">
+        <h3 style="margin-bottom: 12px; font-size: 16px; color: var(--muted)">Fotos da Comunidade</h3>
+        <div id="admin-list-galeria" class="admin-list"></div>
+      </div>
+
+      <div id="admin-content-live" class="admin-tab-content hidden">
+        <h3 style="margin-bottom: 12px; font-size: 16px; color: var(--muted)">Relatos Ao Vivo</h3>
+        <div id="admin-list-live" class="admin-list"></div>
+      </div>
+
+      <div id="admin-content-rotas" class="admin-tab-content hidden">
+        <h3 style="margin-bottom: 12px; font-size: 16px; color: var(--muted)">Rotas Gravadas</h3>
+        <div id="admin-list-rotas" class="admin-list"></div>
+      </div>
+
+      <div id="admin-content-config" class="admin-tab-content hidden">
+        <h3 style="margin-bottom: 12px; font-size: 16px; color: var(--muted)">Personalização do Site</h3>
+        <div class="calc-card" style="margin-bottom:16px;padding:16px">
+          <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px">Nome do Logo (Parte 1)</label>
+          <input type="text" id="adm-cfg-logo1" placeholder="Ex: PISTA" style="margin-bottom:12px">
+          
+          <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px">Nome do Logo (Parte Laranja)</label>
+          <input type="text" id="adm-cfg-logo2" placeholder="Ex: VIVA" style="margin-bottom:12px">
+          
+          <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px">Link da Imagem de Fundo (Home)</label>
+          <input type="text" id="adm-cfg-hero" placeholder="https://link-da-imagem.com/foto.jpg" style="margin-bottom:12px">
+          
+          <button class="btn-primary" onclick="saveAdminSettings()" style="margin-top:12px;padding:10px">SALVAR CONFIGURAÇÕES</button>
+        </div>
+      </div>
+
+      <div id="admin-content-users" class="admin-tab-content hidden">
+        <h3 style="margin-bottom: 12px; font-size: 16px; color: var(--muted)">Gerenciamento de CRM (Usuários)</h3>
+        <div id="admin-list-users" class="admin-list"></div>
+      </div>
+
+      <div id="admin-content-fotografos" class="admin-tab-content hidden">
+        <h3 style="margin-bottom: 12px; font-size: 16px; color: var(--muted)">Fotógrafos Cadastrados</h3>
+        <div id="admin-list-fotografos" class="admin-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Tab Bar -->
+  <nav id="bottom-bar" class="bottom-bar">
+    <button class="tab active" data-page="home" onclick="navigateTo('home')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Início</span>
+    </button>
+    <button class="tab" data-page="destinos" onclick="navigateTo('destinos')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Feed</span>
+    </button>
+    <button class="tab" data-page="calculadora" onclick="navigateTo('calculadora')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <span>Planejar</span>
+    </button>
+    <button class="tab" data-page="mapa" onclick="navigateTo('mapa')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Mapa</span>
+    </button>
+    <button class="tab" data-page="menu" onclick="toggleDrawer()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span>Menu</span>
+    </button>
+  </nav>
+
+  <!-- WhatsApp Float -->
+  <a href="https://wa.me/5535984316992?text=Olá! Vim pelo site PISTAVIVA 🏍" target="_blank" class="whatsapp-float" id="wa-float">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492l4.624-1.467A11.932 11.932 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-2.115 0-4.142-.657-5.854-1.893l-.42-.296-2.743.87.902-2.665-.325-.462A9.706 9.706 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75z"/></svg>
+  </a>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    if('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW falhou: ', err));
+      });
+    }
+  </script>
+</body>
+</html>
