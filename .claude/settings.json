@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)",
+      "Bash(curl -s 'https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_users?select=count&limit=1' -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8')",
+      "Bash(curl -s 'https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_events?select=count&limit=1' -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8')",
+      "Bash(curl -s 'https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_partners?select=count&limit=1' -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8')",
+      "Bash(curl -s 'https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_stamps_config?select=count&limit=1' -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8')",
+      "Bash(curl -s 'https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_map_pings?select=count&limit=1' -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8')",
+      "Bash(curl -s 'https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_site_config?select=count&limit=1' -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8')",
+      "Bash(curl -s 'https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_posts?select=count&limit=1' -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8')",
+      "Bash(curl -s 'https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_post_comments?select=count&limit=1' -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8')",
+      "Bash(curl -s 'https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_post_likes?select=count&limit=1' -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8')",
+      "Bash(curl -s 'https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_routes?select=count&limit=1' -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8')",
+      "Bash(curl -s 'https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_event_rsvps?select=count&limit=1' -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8')",
+      "Bash(curl -s -X POST https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_posts -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Content-Type: application/json' -H 'Prefer: return=representation' -d '{\"user_id\":\"test-audit\",\"author_name\":\"Teste Auditoria\",\"content\":\"{\\\\\"city\\\\\":\\\\\"BH\\\\\",\\\\\"uf\\\\\":\\\\\"MG\\\\\",\\\\\"category\\\\\":\\\\\"viagem\\\\\",\\\\\"comment\\\\\":\\\\\"Teste de auditoria\\\\\"}\",\"image_url\":\"https://example.com/img.jpg\"}')",
+      "Bash(curl -s -X POST https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_post_comments -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Content-Type: application/json' -H 'Prefer: return=representation' -d '{\"post_id\":\"4ed56e3e-0347-4b81-8a0e-3bed35599163\",\"user_id\":\"test-audit\",\"author_name\":\"Auditoria\",\"content\":\"Comentário teste\"}')",
+      "Bash(curl -s -X POST https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_post_likes -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Content-Type: application/json' -H 'Prefer: return=representation' -d '{\"post_id\":\"4ed56e3e-0347-4b81-8a0e-3bed35599163\",\"user_id\":\"test-audit\"}')",
+      "Bash(curl -s -X DELETE 'https://cnvsooegnraedwmemzgl.supabase.co/rest/v1/pv_posts?id=eq.4ed56e3e-0347-4b81-8a0e-3bed35599163' -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8')",
+      "Bash(curl -s -X POST https://cnvsooegnraedwmemzgl.supabase.co/storage/v1/bucket -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Content-Type: application/json' -d '{\"id\":\"post-images\",\"name\":\"post-images\",\"public\":true}')",
+      "Bash(find /tmp /var/folders -name \"*.png\" -o -name \"*.jpg\" -o -name \"*.jpeg\" 2>/dev/null | grep -v \".cache\" | head -20)",
+      "Read(//private/tmp/**)",
+      "Bash(python3 -c \"from PIL import Image; print\\('PIL ok'\\)\")",
+      "Bash(python3 -c \"import cairosvg; print\\('cairosvg ok'\\)\")",
+      "Bash(git commit -m ' *)",
+      "Bash(gh auth *)",
+      "Bash(ssh-keygen -t ed25519 -C \"contatopively@gmail.com\" -f ~/.ssh/id_ed25519 -N \"\")",
+      "Bash(node test-comboio.mjs)",
+      "Bash(node test-comboio-debug.mjs)",
+      "Bash(npm list *)",
+      "Bash(node -e \"require\\('sharp'\\)\")",
+      "Bash(node test-comboio-stress.mjs)",
+      "Bash(curl -s https://cnvsooegnraedwmemzgl.supabase.co/storage/v1/object/list/post-images -H 'apikey: sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Authorization: Bearer sb_publishable_Ve7XS3dkOXtDbhflxHuCOw_dYHx-c-8' -H 'Content-Type: application/json' -d '{\"limit\":1}')",
+      "Bash(node test-full-stress.mjs)",
+      "Bash(grep -v \"^\\\\s*$\")",
+      "Bash(git commit -m 'design: cores Harley Davidson — laranja #ff6200, preto #080808, branco #ffffff *)",
+      "Bash(git commit -m 'feat: página Expedições — UPSERRA + MotoNomads estilo editorial *)",
+      "Bash(git commit -m 'design: estilo editorial MOTO XP — menos futurista, mais magazine *)",
+      "Bash(git commit -m 'fix: filtros sem corte, Bebas Neue em todos os números, Expedições do banco *)",
+      "Bash(git commit -m 'feat: nova Home — sem imagem de fundo, boas-vindas editorial *)"
+    ]
+  }
+}
