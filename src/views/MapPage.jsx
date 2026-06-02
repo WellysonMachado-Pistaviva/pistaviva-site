@@ -25,10 +25,11 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-const createIcon = (color) => new L.Icon({
-  iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
+// Marcador CSS (sem imagem externa — github raw bloqueia hotlink e some o pin).
+const PIN_COLORS = { orange: '#f97316', violet: '#8b5cf6', green: '#22c55e', red: '#ef4444', blue: '#3b82f6' };
+const createIcon = (color) => L.divIcon({
+  html: `<div style="width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:${PIN_COLORS[color] || color};border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.5);"><span style="display:block;width:8px;height:8px;border-radius:50%;background:#fff;position:absolute;top:7px;left:7px;"></span></div>`,
+  className: '', iconSize: [26, 26], iconAnchor: [13, 26], popupAnchor: [0, -24],
 });
 
 const createBikerIcon = () => L.divIcon({
