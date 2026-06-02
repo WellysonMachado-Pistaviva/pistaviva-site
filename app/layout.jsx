@@ -41,6 +41,7 @@ export const metadata = {
   twitter: { card: 'summary_large_image', title: 'Pistaviva — Mototurismo no Brasil' },
   manifest: '/manifest.webmanifest',
   icons: { icon: '/favicon.png', shortcut: '/favicon.png', apple: '/apple-touch-icon.png' },
+  verification: { google: 'iagsgsf83GCQQNBdfx_ZeDrYuBmGkjY9A54FVp4lOkQ' },
 };
 
 export const viewport = {
