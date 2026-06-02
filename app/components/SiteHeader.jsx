@@ -8,6 +8,7 @@ const LINKS = [
   { href: '/calculadora', label: 'Planejador' },
   { href: '/mapa', label: 'Mapa' },
   { href: '/paradas', label: 'Paradas' },
+  { href: '/fipe', label: 'FIPE' },
   { href: '/comunidade', label: 'Comunidade' },
   { href: '/blog', label: 'Blog' },
   { href: '/eventos', label: 'Eventos' },

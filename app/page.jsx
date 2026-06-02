@@ -8,6 +8,12 @@ const RouteIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="#f3ede1" strokeWidth="1.3"><path d="M3 20l5-12 4 7 3-5 6 10z" /></svg>
 );
 
+// Ranking ilustrativo das motos mais emplacadas no Brasil (dados públicos Fenabrave).
+const MAIS_VENDIDAS = [
+  'Honda CG 160', 'Honda Biz', 'Honda Pop 110i', 'Honda NXR 160 Bros', 'Honda PCX',
+  'Honda Elite 125', 'Yamaha Crosser 150', 'Honda XRE 300', 'Yamaha Fazer 250', 'Honda CB 300F Twister',
+];
+
 export default async function Home() {
   const posts = await getPublishedPosts(3);
   const featured = await getFeaturedPosts(3);
@@ -32,7 +38,7 @@ export default async function Home() {
             <p>Comboio ao vivo, mapa colaborativo, passaporte de carimbos e um feed feito pela estrada.</p>
             <div className="stat-row">
               <div className="stat"><div className="n">+27</div><div className="l">Estados</div></div>
-              <div className="stat"><div className="n">GPX</div><div className="l">Rotas</div></div>
+              <div className="stat"><div className="n">GPS</div><div className="l">Comboio ao vivo</div></div>
               <div className="stat"><div className="n">Livre</div><div className="l">Comunidade</div></div>
             </div>
           </aside>
@@ -52,10 +58,33 @@ export default async function Home() {
           </div>
           <div className="clusters">
             <Link className="cluster" href="/comunidade"><span className="num">01</span><h3>Comunidade</h3><p>Feed aberto de pilotos: relatos, fotos e perrengues da estrada.</p><span className="go">Explorar →</span></Link>
-            <Link className="cluster" href="/rotas"><span className="num">02</span><h3>Rotas &amp; Expedições</h3><p>Roteiros do Sudeste com GPX, paradas e nível de dificuldade.</p><span className="go">Explorar →</span></Link>
+            <Link className="cluster" href="/rotas"><span className="num">02</span><h3>Rotas &amp; Expedições</h3><p>Roteiros do Sudeste com paradas e nível de dificuldade.</p><span className="go">Explorar →</span></Link>
             <Link className="cluster" href="/blog"><span className="num">03</span><h3>Blog</h3><p>Guias, preparação de viagem e cultura do mototurismo brasileiro.</p><span className="go">Ler →</span></Link>
             <Link className="cluster" href="/loja"><span className="num">04</span><h3>Loja Pistaviva</h3><p>Vestuário técnico e casual para quem passa o dia no banco da moto.</p><span className="go">Comprar →</span></Link>
           </div>
+        </div>
+      </section>
+
+      {/* MOTOS MAIS VENDIDAS */}
+      <section className="section">
+        <div className="wrap">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Mercado · Brasil</p>
+              <h2>Motos mais vendidas</h2>
+            </div>
+            <Link className="link" href="/fipe">Consultar FIPE →</Link>
+          </div>
+          <div className="clusters" style={{ gridTemplateColumns: 'repeat(2,1fr)' }}>
+            {MAIS_VENDIDAS.map((m, i) => (
+              <Link key={m} className="cluster" href="/fipe" style={{ minHeight: 'auto', flexDirection: 'row', alignItems: 'center', gap: '14px', padding: '14px 18px' }}>
+                <span style={{ fontFamily: 'var(--display)', fontSize: '1.6rem', color: 'var(--clay)', minWidth: 34 }}>{String(i + 1).padStart(2, '0')}</span>
+                <span style={{ flex: 1, fontWeight: 600 }}>{m}</span>
+                <span className="go" style={{ margin: 0 }}>FIPE →</span>
+              </Link>
+            ))}
+          </div>
+          <p style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-mut)', marginTop: 14 }}>Ranking ilustrativo de emplacamentos no Brasil (dados públicos). Consulte o valor atual na <Link href="/fipe" style={{ color: 'var(--clay)' }}>Tabela FIPE</Link>.</p>
         </div>
       </section>
 
