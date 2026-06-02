@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Cover from '../../components/Cover';
 import { notFound } from 'next/navigation';
 import { getPhotographerBySlug, getAllPhotographerSlugs, igUrl } from '../../lib/photographers';
 
@@ -50,7 +51,7 @@ export default async function FotografoPage({ params }) {
         <p className="eyebrow">📸 Fotógrafo{f.local ? ' · ' + f.local : ''}</p>
         <h1>{f.nome}</h1>
       </header>
-      {f.cover_url && <div className="post-cover"><img src={f.cover_url} alt={f.nome} /></div>}
+      {f.cover_url && <div className="post-cover"><Cover src={f.cover_url} alt={f.nome} sizes="100vw" priority /></div>}
       <div className="article" style={{ maxWidth: '70ch' }}>
         {f.descricao && <p className="lead">{f.descricao}</p>}
         <p>{[f.local, f.cidade, f.uf].filter(Boolean).join(' · ')}</p>

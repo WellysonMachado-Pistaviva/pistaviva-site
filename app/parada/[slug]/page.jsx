@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Cover from '../../components/Cover';
 import { notFound } from 'next/navigation';
 import { getSpotBySlug, getAllSpotSlugs } from '../../lib/spots';
 import { SELOS, catNome } from '../../lib/spotMeta';
@@ -58,7 +59,7 @@ export default async function ParadaPage({ params }) {
         <h1>{s.nome}</h1>
       </header>
 
-      {s.cover_url && <div className="post-cover"><img src={s.cover_url} alt={s.nome} /></div>}
+      {s.cover_url && <div className="post-cover"><Cover src={s.cover_url} alt={s.nome} sizes="100vw" priority /></div>}
 
       <div className="article" style={{ maxWidth: '70ch' }}>
         {s.descricao && <p className="lead">{s.descricao}</p>}

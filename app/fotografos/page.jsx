@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Cover from '../components/Cover';
 import { getPhotographers, igUrl } from '../lib/photographers';
 import NewPhotographerForm from './NewPhotographerForm';
 
@@ -35,7 +36,7 @@ export default async function Fotografos() {
               <Link href={`/fotografo/${f.slug}`} aria-label={f.nome}>
                 <div className="thumb">
                   <span className="tag">📸 {f.local || f.cidade || 'Fotógrafo'}</span>
-                  {f.cover_url && <img src={f.cover_url} alt={f.nome} />}
+                  {f.cover_url && <Cover src={f.cover_url} alt={f.nome} sizes="(max-width:600px) 100vw, 380px" />}
                 </div>
                 <div className="body">
                   <h3>{f.nome}</h3>

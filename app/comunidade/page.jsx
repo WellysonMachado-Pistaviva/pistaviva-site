@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Cover from '../components/Cover';
 import SpaPage from '../components/SpaPage';
 import { getPublishedPosts } from '../lib/blog';
 
@@ -31,7 +32,7 @@ export default async function Comunidade() {
               <Link href={`/blog/${p.slug}`} aria-label={p.title}>
                 <div className="thumb">
                   {p.tags?.[0] && <span className="tag">{p.tags[0]}</span>}
-                  {p.cover_url && <img src={p.cover_url} alt={p.title} />}
+                  {p.cover_url && <Cover src={p.cover_url} alt={p.title} sizes="(max-width:600px) 100vw, 380px" />}
                 </div>
                 <div className="body">
                   <h3>{p.title}</h3>

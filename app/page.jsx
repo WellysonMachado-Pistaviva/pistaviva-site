@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Cover from './components/Cover';
 import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
 
 export const revalidate = 300; // ISR: revalida home a cada 5 min
@@ -71,7 +72,7 @@ export default async function Home() {
                   <Link href={`/blog/${p.slug}`} aria-label={p.title}>
                     <div className="thumb">
                       {p.tags?.[0] && <span className="tag">{p.tags[0]}</span>}
-                      {p.cover_url ? <img src={p.cover_url} alt={p.title} /> : <RouteIcon />}
+                      {p.cover_url ? <Cover src={p.cover_url} alt={p.title} sizes="(max-width:600px) 100vw, 380px" /> : <RouteIcon />}
                     </div>
                     <div className="body"><h3>{p.title}</h3><p>{p.excerpt || ''}</p></div>
                   </Link>
@@ -99,7 +100,7 @@ export default async function Home() {
                   <Link href={`/blog/${p.slug}`} aria-label={p.title}>
                     <div className="thumb">
                       {p.tags?.[0] && <span className="tag">{p.tags[0]}</span>}
-                      {p.cover_url ? <img src={p.cover_url} alt={p.title} /> : <RouteIcon />}
+                      {p.cover_url ? <Cover src={p.cover_url} alt={p.title} sizes="(max-width:600px) 100vw, 380px" /> : <RouteIcon />}
                     </div>
                     <div className="body">
                       <h3>{p.title}</h3>
