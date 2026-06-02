@@ -37,9 +37,9 @@ export default async function Home() {
       <section className="hero">
         <div className="wrap hero-grid">
           <div>
-            <p className="eyebrow">Comunidade aberta · Mototurismo de verdade</p>
+            <p className="eyebrow">Comunidade aberta · Mototurismo no Brasil</p>
             <h1>A estrada<br />é só o<br /><span className="li">começo</span></h1>
-            <p className="lede">Rotas testadas na curva, comunidade vibrante e a cultura de quem vive sobre duas rodas. Conteúdo feito por quem roda — não por quem só pesquisa.</p>
+            <p className="lede">Rotas que a gente já rodou, piloto trocando ideia de verdade e a cultura de quem vive em cima da moto. Aqui o conteúdo vem de quem pega estrada — não de quem só pesquisou.</p>
             <div className="cta-row">
               <Link className="btn btn--primary ihb" href="/rotas"><span>Explorar rotas →</span></Link>
               <Link className="btn btn--ghost" href="/comunidade">Entrar na comunidade</Link>
@@ -50,8 +50,8 @@ export default async function Home() {
               <p className="eyebrow">Comunidade Pistaviva</p>
               <CoolMode><span className="cool-moto" title="clica! 🏍️">🏍️</span></CoolMode>
             </div>
-            <h3>Rode junto, sempre</h3>
-            <p>Comboio ao vivo, mapa colaborativo, passaporte de carimbos e um feed feito pela estrada.</p>
+            <h3>Rode junto</h3>
+            <p>Comboio ao vivo no mapa, passaporte de carimbos e um feed que é só estrada. Sobe teu rolê, acha o próximo.</p>
             <div className="stat-row">
               <div className="stat"><div className="n"><Counter to={27} prefix="+" /></div><div className="l">Estados</div></div>
               <div className="stat"><div className="n">GPS</div><div className="l">Comboio ao vivo</div></div>
@@ -73,10 +73,10 @@ export default async function Home() {
             </div>
           </div>
           <div className="clusters bento">
-            <Link className="cluster" href="/comunidade"><span className="num">01</span><h3>Comunidade</h3><p>Feed aberto de pilotos: relatos, fotos e perrengues da estrada.</p><span className="go">Explorar →</span></Link>
-            <Link className="cluster" href="/rotas"><span className="num">02</span><h3>Rotas &amp; Expedições</h3><p>Roteiros do Sudeste com paradas e nível de dificuldade.</p><span className="go">Explorar →</span></Link>
-            <Link className="cluster" href="/blog"><span className="num">03</span><h3>Blog</h3><p>Guias, preparação de viagem e cultura do mototurismo brasileiro.</p><span className="go">Ler →</span></Link>
-            <Link className="cluster" href="/loja"><span className="num">04</span><h3>Loja Pistaviva</h3><p>Vestuário técnico e casual para quem passa o dia no banco da moto.</p><span className="go">Comprar →</span></Link>
+            <Link className="cluster" href="/comunidade"><span className="num">01</span><h3>Comunidade</h3><p>Feed dos pilotos: relato sincero, foto da paisagem e o perrengue que virou história.</p><span className="go">Explorar →</span></Link>
+            <Link className="cluster" href="/rotas"><span className="num">02</span><h3>Rotas &amp; Expedições</h3><p>Roteiros do Sudeste com as paradas certas e o nível real da curva.</p><span className="go">Explorar →</span></Link>
+            <Link className="cluster" href="/blog"><span className="num">03</span><h3>Blog</h3><p>Guia de viagem, preparo da moto e a cultura do mototurismo brasileiro.</p><span className="go">Ler →</span></Link>
+            <Link className="cluster" href="/loja"><span className="num">04</span><h3>Loja Pistaviva</h3><p>Roupa técnica e casual pra quem passa o dia no banco da moto.</p><span className="go">Comprar →</span></Link>
           </div>
         </div>
       </section>
@@ -189,7 +189,7 @@ export default async function Home() {
         <div className="wrap">
           <div className="cta-band">
             <h2>Faça parte da comunidade</h2>
-            <p>Poste seus rolês, baixe rotas, acompanhe o comboio ao vivo e colecione carimbos. É grátis e é aberto.</p>
+            <p>Posta teus rolês, baixa rota, segue o comboio ao vivo no mapa e junta carimbo. É de graça e é aberto pra todo mundo.</p>
             <div className="cta-row" style={{ justifyContent: 'center' }}>
               <Link className="btn btn--primary" href="/comunidade">Entrar agora</Link>
             </div>

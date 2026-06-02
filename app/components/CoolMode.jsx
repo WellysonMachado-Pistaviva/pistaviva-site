@@ -1,6 +1,6 @@
 'use client';
 // Brincadeira: ao clicar, solta partículas (estilo "cool mode" do MagicUI), leve, sem libs.
-export default function CoolMode({ children, emojis = ['🏍️', '⚡', '✨', '🔥', '🛣️'], count = 16 }) {
+export default function CoolMode({ children, emojis = ['🏍️', '⚡', '✨', '🔥', '🛣️'], count = 16, style }) {
   const burst = (e) => {
     const x = e.clientX, y = e.clientY;
     for (let i = 0; i < count; i++) {
@@ -20,7 +20,7 @@ export default function CoolMode({ children, emojis = ['🏍️', '⚡', '✨', 
     }
   };
   return (
-    <span onClick={burst} style={{ cursor: 'pointer', display: 'inline-flex' }} role="button" aria-label="Diversão" title="Clica! 🏍️">
+    <span onClick={burst} style={{ cursor: 'pointer', display: 'inline-flex', ...style }} role="button" aria-label="Diversão" title="Clica! 🏍️">
       {children}
     </span>
   );
