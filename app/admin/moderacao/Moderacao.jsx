@@ -2,19 +2,20 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../../src/lib/supabaseClient';
+import { getReportsQueue, resolveReport, deleteReport, getAllRouteComments, deleteRouteComment, getAnnouncement, saveAnnouncement } from '../../../src/services/storage';
 import { useAuth, showToast } from '../../components/AuthProvider';
 
 // Configuração de cada tipo de conteúdo moderável.
 const SECTIONS = [
   {
-    id: 'blog', table: 'pv_blog_posts', label: 'Blog', mode: 'published',
-    title: r => r.title, sub: r => `/${r.slug}${r.published ? '' : ' · oculto'}`,
+    id: 'blog', table: 'pv_blog_posts', label: 'Blog', mode: 'published', featured: true,
+    title: r => r.title, sub: r => `/${r.slug}${r.published ? '' : ' · oculto'}${r.featured ? ' · ⭐destaque' : ''}`,
     edit: [{ k: 'title', l: 'Título' }, { k: 'excerpt', l: 'Resumo' }, { k: 'tags', l: 'Tags (vírgula)', arr: true }],
     extra: () => ({ href: '/admin/blog', label: 'Editor completo' }),
   },
   {
-    id: 'paradas', table: 'pv_spots', label: 'Paradas', mode: 'published',
-    title: r => r.nome, sub: r => `${r.categoria} · ${[r.cidade, r.uf].filter(Boolean).join('/')}`,
+    id: 'paradas', table: 'pv_spots', label: 'Paradas', mode: 'published', featured: true,
+    title: r => r.nome, sub: r => `${r.categoria} · ${[r.cidade, r.uf].filter(Boolean).join('/')}${r.featured ? ' · ⭐destaque' : ''}`,
     edit: [{ k: 'nome', l: 'Nome' }, { k: 'categoria', l: 'Categoria' }, { k: 'cidade', l: 'Cidade' }, { k: 'uf', l: 'UF' }, { k: 'descricao', l: 'Descrição' }, { k: 'selos', l: 'Selos (vírgula: asfalto,descanso,gear,sabor)', arr: true }],
   },
   {
@@ -62,6 +63,11 @@ function Section({ cfg }) {
     if (error) return showToast('Erro: ' + error.message, 'error');
     showToast('Excluído', 'success'); load();
   };
+  const toggleFeatured = async (row) => {
+    const { error } = await supabase.from(cfg.table).update({ featured: !row.featured }).eq('id', row.id);
+    if (error) return showToast('Erro: ' + error.message, 'error');
+    showToast(row.featured ? 'Destaque removido' : 'Destacado na home ⭐', 'success'); load();
+  };
   const openEdit = (row) => {
     const f = {};
     cfg.edit.forEach(({ k, arr }) => { f[k] = arr ? (row[k] || []).join(', ') : (row[k] ?? ''); });
@@ -95,6 +101,7 @@ function Section({ cfg }) {
                   <div style={{ fontSize: 12, color: 'var(--paper-mut)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{cfg.sub(row)}</div>
                 </div>
                 <button className="btn btn--ghost" style={{ padding: '.45rem .8rem' }} onClick={() => toggle(row)}>{vis ? 'Ocultar' : 'Mostrar'}</button>
+                {cfg.featured && <button className="btn btn--ghost" style={{ padding: '.45rem .8rem', borderColor: row.featured ? 'var(--clay)' : 'var(--border)', color: row.featured ? 'var(--clay)' : 'var(--text)' }} onClick={() => toggleFeatured(row)}>{row.featured ? '★' : '☆'}</button>}
                 {cfg.edit.length > 0 && <button className="btn btn--ghost" style={{ padding: '.45rem .8rem' }} onClick={() => openEdit(row)}>Editar</button>}
                 <button className="btn btn--ghost" style={{ padding: '.45rem .8rem', borderColor: 'var(--danger)', color: 'var(--danger)' }} onClick={() => remove(row)}>Excluir</button>
               </div>
@@ -122,6 +129,92 @@ function Section({ cfg }) {
   );
 }
 
+function ReportsQueue() {
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const load = useCallback(async () => { setLoading(true); setRows(await getReportsQueue('open')); setLoading(false); }, []);
+  useEffect(() => { load(); }, [load]);
+  const TARGET = { post: 'Post', comment: 'Comentário', spot: 'Parada', photographer: 'Fotógrafo', blog: 'Matéria', event: 'Evento' };
+  const TABLE = { post: 'pv_posts', spot: 'pv_spots', photographer: 'pv_photographers', blog: 'pv_blog_posts', event: 'pv_events', comment: 'pv_post_comments' };
+  const delTarget = async (r) => {
+    if (!confirm(`Excluir o ${TARGET[r.target_type] || r.target_type} denunciado?`)) return;
+    const t = TABLE[r.target_type];
+    if (t) await supabase.from(t).delete().eq('id', r.target_id);
+    await resolveReport(r.id); showToast('Conteúdo excluído + denúncia resolvida', 'success'); load();
+  };
+  return (
+    <div>
+      {loading ? <div className="spinner-wrap"><span className="loading-spinner" /></div> : rows.length === 0 ? <p style={{ color: 'var(--paper-dim)' }}>Nenhuma denúncia aberta. 🎉</p> : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {rows.map(r => (
+            <div key={r.id} style={{ background: 'var(--bg2)', border: '1px solid var(--danger)', borderRadius: 10, padding: '12px 14px' }}>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: 11, background: 'var(--danger)', color: '#fff', padding: '2px 8px', borderRadius: 4 }}>{TARGET[r.target_type] || r.target_type}</span>
+                <span style={{ flex: 1, minWidth: 120, fontSize: 13 }}>{r.target_label || r.target_id}</span>
+                <button className="btn btn--ghost" style={{ padding: '.4rem .8rem' }} onClick={async () => { await resolveReport(r.id); load(); }}>Ignorar</button>
+                <button className="btn btn--ghost" style={{ padding: '.4rem .8rem', borderColor: 'var(--danger)', color: 'var(--danger)' }} onClick={() => delTarget(r)}>Excluir conteúdo</button>
+              </div>
+              {r.reason && <div style={{ fontSize: 13, color: 'var(--paper-dim)', marginTop: 8 }}>Motivo: {r.reason}</div>}
+              <div style={{ fontSize: 11, color: 'var(--paper-mut)', marginTop: 4, fontFamily: 'var(--mono)' }}>por {r.reporter_name || 'anônimo'} · {new Date(r.created_at).toLocaleString('pt-BR')}</div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CommentsMod() {
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const load = useCallback(async () => { setLoading(true); setRows(await getAllRouteComments()); setLoading(false); }, []);
+  useEffect(() => { load(); }, [load]);
+  const del = async (id) => { if (!confirm('Excluir comentário?')) return; await deleteRouteComment(id); showToast('Excluído', 'success'); load(); };
+  return (
+    <div>
+      <p style={{ color: 'var(--paper-mut)', fontSize: 13, marginBottom: 12 }}>Comentários de trechos/roteiros. (Comentários do feed: aba Feed do painel antigo.)</p>
+      {loading ? <div className="spinner-wrap"><span className="loading-spinner" /></div> : rows.length === 0 ? <p style={{ color: 'var(--paper-dim)' }}>Sem comentários.</p> : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {rows.map(c => (
+            <div key={c.id} style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px' }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 700, fontSize: 13 }}>{c.author_name || 'Anônimo'}</div>
+                <div style={{ fontSize: 13, color: 'var(--paper-dim)' }}>{c.content}</div>
+              </div>
+              <button className="btn btn--ghost" style={{ padding: '.45rem .8rem', borderColor: 'var(--danger)', color: 'var(--danger)' }} onClick={() => del(c.id)}>Excluir</button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BannerEditor() {
+  const [text, setText] = useState('');
+  const [active, setActive] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => { getAnnouncement().then(a => { setText(a?.announcement || ''); setActive(!!a?.announcement_active); setLoaded(true); }); }, []);
+  const save = async () => { const ok = await saveAnnouncement(text, active); showToast(ok ? 'Aviso salvo ✓' : 'Erro ao salvar', ok ? 'success' : 'error'); };
+  if (!loaded) return <div className="spinner-wrap"><span className="loading-spinner" /></div>;
+  return (
+    <div style={{ maxWidth: 560 }}>
+      <p style={{ color: 'var(--paper-mut)', fontSize: 13, marginBottom: 12 }}>Faixa no topo do site (ex: "Encontro dia 12 — confirme presença").</p>
+      <textarea value={text} onChange={e => setText(e.target.value)} placeholder="Texto do aviso..." style={{ width: '100%', minHeight: 80, padding: '11px 13px', marginBottom: 12, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)', fontFamily: 'inherit' }} />
+      <label style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 14 }}>
+        <input type="checkbox" checked={active} onChange={e => setActive(e.target.checked)} /> Aviso ativo (aparece no site)
+      </label>
+      <button className="btn btn--primary" onClick={save}>Salvar aviso</button>
+    </div>
+  );
+}
+
+const EXTRA_TABS = [
+  { id: 'denuncias', label: 'Denúncias' },
+  { id: 'comentarios', label: 'Coment. Trechos' },
+  { id: 'aviso', label: 'Aviso/Banner' },
+];
+
 export default function Moderacao() {
   const auth = useAuth();
   const [tab, setTab] = useState('blog');
@@ -133,11 +226,15 @@ export default function Moderacao() {
     <div className="wrap section" style={{ paddingTop: 'clamp(24px,4vw,48px)' }}>
       <div className="section-head"><div><p className="eyebrow eyebrow--moss">Admin</p><h2>Moderação</h2></div><Link className="link" href="/admin">← Painel</Link></div>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: '1.6rem' }}>
-        {SECTIONS.map(s => (
+        {[...SECTIONS, ...EXTRA_TABS].map(s => (
           <button key={s.id} onClick={() => setTab(s.id)} style={{ fontFamily: 'var(--mono)', fontSize: 12, padding: '8px 14px', borderRadius: 6, border: '1px solid var(--border)', textTransform: 'uppercase', letterSpacing: '.06em', cursor: 'pointer', color: tab === s.id ? 'var(--ink)' : 'var(--paper-dim)', background: tab === s.id ? 'var(--clay)' : 'transparent' }}>{s.label}</button>
         ))}
       </div>
-      <Section key={cfg.id} cfg={cfg} />
+      {cfg ? <Section key={cfg.id} cfg={cfg} />
+        : tab === 'denuncias' ? <ReportsQueue />
+        : tab === 'comentarios' ? <CommentsMod />
+        : tab === 'aviso' ? <BannerEditor />
+        : null}
     </div>
   );
 }

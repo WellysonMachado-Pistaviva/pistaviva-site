@@ -892,10 +892,8 @@ const TABS = [
   { id:'ranking',   label:'Ranking',     icon:<Star size={15}/> },
   { id:'trcmts',    label:'Coment. Trechos', icon:<MessageSquare size={15}/> },
   { id:'mapa',      label:'Mapa',        icon:<Map size={15}/> },
-  { id:'rides',     label:'Rolês',       icon:<Navigation size={15}/> },
   { id:'eventos',   label:'Eventos',     icon:<Clock size={15}/> },
   { id:'parceiros', label:'Parceiros',   icon:<Star size={15}/> },
-  { id:'selos',     label:'Selos',       icon:<ShieldCheck size={15}/> },
   { id:'config',    label:'Config',      icon:<Settings size={15}/> },
 ];
 

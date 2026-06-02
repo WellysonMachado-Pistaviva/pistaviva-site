@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MessageSquare, Heart, Camera, Send, X, Image as ImageIcon } from 'lucide-react';
-import { getPosts, addPost, likePost, addComment, uploadPostImage } from '../services/storage';
+import { getPosts, addPost, likePost, addComment, uploadPostImage, reportContent } from '../services/storage';
 
 const showErr = (msg) => {
   const el = document.getElementById('app-toast');
@@ -97,6 +97,15 @@ const Feed = ({ openAuthModal, user }) => {
     setLikedPosts(prev => ({ ...prev, [id]: !isLiked }));
     
     await likePost(id, user.id);
+  };
+
+  const handleReport = async (post) => {
+    if (!user) return openAuthModal('login');
+    const reason = window.prompt('Por que está denunciando este post? (spam, ofensa, etc.)');
+    if (reason === null) return;
+    const ok = await reportContent('post', post.id, `${post.user}: ${(post.comment || '').slice(0, 50)}`, reason, user);
+    const el = document.getElementById('app-toast');
+    if (el) { el.textContent = ok ? 'Denúncia enviada. Obrigado!' : 'Erro ao denunciar.'; el.className = `toast ${ok ? 'success' : 'error'}`; el.style.display = 'block'; setTimeout(() => { el.style.display = 'none'; }, 3000); }
   };
 
   const handleAddComment = async (postId) => {
@@ -294,6 +303,8 @@ const Feed = ({ openAuthModal, user }) => {
                   <MessageSquare size={18} />
                   <span>{(post.comments || []).length}</span>
                 </div>
+                <button className="post-action-btn" style={{ marginLeft: 'auto', color: 'var(--muted)' }} title="Denunciar"
+                  onClick={() => handleReport(post)}>⚠</button>
               </div>
 
               {/* Always-visible comment box */}
