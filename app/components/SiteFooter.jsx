@@ -21,7 +21,7 @@ export default function SiteFooter() {
             <h5>Ferramentas</h5>
             <Link href="/mapa">Mapa</Link>
             <Link href="/comboio">Comboio</Link>
-            <Link href="/passaporte">Passaporte</Link>
+            <Link href="/fotografos">Fotógrafos</Link>
           </div>
           <div className="foot-col">
             <h5>Conecte</h5>

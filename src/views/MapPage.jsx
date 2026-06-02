@@ -5,6 +5,13 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { getPings, addPing, getCurrentRoute } from '../services/storage';
 import { joinSOSChannel, leaveSOSChannel, joinComboioChannel, updateComboioLocation, leaveComboioChannel } from '../services/realtime';
+import { supabase } from '../lib/supabaseClient';
+
+const photIg = (ig) => !ig ? null : (ig.startsWith('http') ? ig : `https://instagram.com/${ig.replace(/^@/, '')}`);
+const photographerIcon = L.divIcon({
+  html: `<div style="width:30px;height:30px;border-radius:50%;background:#0e1311;border:2px solid #f97316;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 2px 8px rgba(0,0,0,.5);">📸</div>`,
+  className: '', iconSize: [30, 30], iconAnchor: [15, 15],
+});
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -158,7 +165,14 @@ const MapPage = ({ user }) => {
   const [pingLocal, setPingLocal] = useState('');
   const [pingInsta, setPingInsta] = useState('');
   const [routeLine, setRouteLine] = useState(null);
+  const [photographers, setPhotographers] = useState([]);
   const [sosAlerts, setSosAlerts] = useState([]);
+
+  useEffect(() => {
+    supabase.from('pv_photographers').select('id, slug, nome, local, instagram, site_url, lat, lng')
+      .eq('published', true).not('lat', 'is', null)
+      .then(({ data }) => setPhotographers(data || []));
+  }, []);
   const [comboioMembers, setComboioMembers] = useState([]);
   const [activeComboioId, setActiveComboioId] = useState(null);
   // Busca de localização para fotógrafo
@@ -516,6 +530,23 @@ const MapPage = ({ user }) => {
                       📸 Ver Instagram
                     </a>
                   )}
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+
+          {/* Fotógrafos cadastrados */}
+          {photographers.map(f => (
+            <Marker key={'ph-' + f.id} position={[f.lat, f.lng]} icon={photographerIcon}>
+              <Popup>
+                <div style={{ minWidth: '190px' }}>
+                  <strong style={{ display: 'block', fontSize: '14px', marginBottom: '4px', color: '#ea580c' }}>📸 {f.nome}</strong>
+                  {f.local && <div style={{ fontSize: '12px', color: '#444', marginBottom: '8px' }}>{f.local}</div>}
+                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                    {photIg(f.instagram) && <a href={photIg(f.instagram)} target="_blank" rel="noopener noreferrer" style={{ background: '#f97316', color: '#fff', padding: '5px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, textDecoration: 'none' }}>Instagram</a>}
+                    {f.site_url && <a href={f.site_url} target="_blank" rel="noopener noreferrer" style={{ border: '1px solid #f97316', color: '#ea580c', padding: '5px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, textDecoration: 'none' }}>Fotos</a>}
+                    <a href={`/fotografo/${f.slug}`} style={{ color: '#666', fontSize: '12px', alignSelf: 'center' }}>perfil →</a>
+                  </div>
                 </div>
               </Popup>
             </Marker>

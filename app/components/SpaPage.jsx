@@ -11,7 +11,6 @@ const PAGES = {
   calculadora: dynamic(() => import('../../src/views/Planner'), { ssr: false, loading: Spinner }),
   mapa:        dynamic(() => import('../../src/views/MapPage'), { ssr: false, loading: Spinner }),
   pistaAoVivo: dynamic(() => import('../../src/views/PistaAoVivo'), { ssr: false, loading: Spinner }),
-  passaporte:  dynamic(() => import('../../src/views/Passport'), { ssr: false, loading: Spinner }),
   rotas:       dynamic(() => import('../../src/views/MyRoutes'), { ssr: false, loading: Spinner }),
   eventos:     dynamic(() => import('../../src/views/Events'), { ssr: false, loading: Spinner }),
   parceiros:   dynamic(() => import('../../src/views/Partners'), { ssr: false, loading: Spinner }),

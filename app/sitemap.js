@@ -1,10 +1,11 @@
 import { getAllSlugs } from './lib/blog';
 import { getAllSpotSlugs } from './lib/spots';
+import { getAllPhotographerSlugs } from './lib/photographers';
 
 const BASE = 'https://moto.pistaviva.com.br';
 
 export default async function sitemap() {
-  const routes = ['', '/comunidade', '/paradas', '/blog', '/rotas', '/eventos', '/mapa', '/comboio', '/loja', '/parceiros', '/expedicoes', '/passaporte', '/trechos', '/pista-ao-vivo', '/calculadora'];
+  const routes = ['', '/comunidade', '/paradas', '/fotografos', '/blog', '/rotas', '/eventos', '/mapa', '/comboio', '/loja', '/parceiros', '/expedicoes', '/trechos', '/pista-ao-vivo', '/calculadora'];
   const staticEntries = routes.map(p => ({
     url: `${BASE}${p}`,
     changeFrequency: 'weekly',
@@ -28,5 +29,11 @@ export default async function sitemap() {
     paradas = slugs.map(s => ({ url: `${BASE}/parada/${s.slug}`, changeFrequency: 'weekly', priority: 0.6 }));
   } catch { /* DB indisponível no build */ }
 
-  return [...staticEntries, ...posts, ...paradas];
+  let fotos = [];
+  try {
+    const slugs = await getAllPhotographerSlugs();
+    fotos = slugs.map(s => ({ url: `${BASE}/fotografo/${s.slug}`, changeFrequency: 'weekly', priority: 0.5 }));
+  } catch { /* DB indisponível no build */ }
+
+  return [...staticEntries, ...posts, ...paradas, ...fotos];
 }
