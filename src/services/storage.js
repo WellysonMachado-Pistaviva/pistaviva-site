@@ -68,14 +68,35 @@ export const uploadAvatar = async (base64DataUrl, userId) => {
   } catch (e) { console.error(e); return null; }
 };
 
-// ── Supabase Storage — upload de imagem de post ──────────────────────────
+// Center-crop p/ quadrado 1080x1080 (padroniza feed/blog/fotos → melhor visual).
+const cropSquare1080 = (dataUrl, size = 1080) => new Promise((resolve) => {
+  try {
+    if (typeof document === 'undefined') return resolve(dataUrl);
+    const img = new Image();
+    img.onload = () => {
+      const s = Math.min(img.width, img.height);
+      const sx = (img.width - s) / 2, sy = (img.height - s) / 2;
+      const c = document.createElement('canvas');
+      c.width = c.height = size;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#0e1311'; ctx.fillRect(0, 0, size, size);
+      ctx.drawImage(img, sx, sy, s, s, 0, 0, size, size);
+      resolve(c.toDataURL('image/jpeg', 0.9));
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  } catch { resolve(dataUrl); }
+});
+
+// ── Supabase Storage — upload de imagem de post (sempre 1080x1080) ────────
 export const uploadPostImage = async (base64DataUrl, userId) => {
   if (!base64DataUrl || !base64DataUrl.startsWith('data:')) return null;
 
   try {
-    const res = await fetch(base64DataUrl);
+    const squared = await cropSquare1080(base64DataUrl);
+    const res = await fetch(squared);
     const blob = await res.blob();
-    const ext = blob.type === 'image/png' ? 'png' : blob.type === 'image/webp' ? 'webp' : 'jpg';
+    const ext = 'jpg';
     const path = `posts/${userId || 'anon'}/${Date.now()}.${ext}`;
 
     const tryUpload = async () =>
