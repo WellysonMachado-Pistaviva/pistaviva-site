@@ -72,6 +72,8 @@ export default async function BlogPost({ params }) {
           {paragraphs.map((para, i) => {
             const img = para.match(/^\[img:(.+)\]$/);
             if (img) return <img key={i} src={img[1].trim()} alt="" style={{ borderRadius: 12, border: '1px solid var(--line)' }} />;
+            if (para.startsWith('### ')) return <h3 key={i}>{para.slice(4)}</h3>;
+            if (para.startsWith('## ')) return <h2 key={i}>{para.slice(3)}</h2>;
             return <p key={i}>{para}</p>;
           })}
         </div>
