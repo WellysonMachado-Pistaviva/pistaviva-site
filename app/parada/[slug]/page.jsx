@@ -38,9 +38,19 @@ export default async function ParadaPage({ params }) {
     ...(s.cover_url ? { image: [s.cover_url] } : {}),
   };
 
+  const breadcrumbLd = {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://moto.pistaviva.com.br/' },
+      { '@type': 'ListItem', position: 2, name: 'Paradas', item: 'https://moto.pistaviva.com.br/paradas' },
+      { '@type': 'ListItem', position: 3, name: s.nome, item: `https://moto.pistaviva.com.br/parada/${slug}` },
+    ],
+  };
+
   return (
     <article className="wrap" style={{ paddingTop: '1rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <nav className="crumbs"><Link href="/">Início</Link> / <Link href="/paradas">Paradas</Link> / <span>{s.nome}</span></nav>
 
       <header className="post-hero">

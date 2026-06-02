@@ -47,9 +47,19 @@ export default async function BlogPost({ params }) {
     mainEntityOfPage: `https://moto.pistaviva.com.br/blog/${slug}`,
   };
 
+  const breadcrumbLd = {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://moto.pistaviva.com.br/' },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://moto.pistaviva.com.br/blog' },
+      { '@type': 'ListItem', position: 3, name: post.title, item: `https://moto.pistaviva.com.br/blog/${slug}` },
+    ],
+  };
+
   return (
     <article>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <div className="wrap">
         <nav className="crumbs"><Link href="/">Início</Link> / <Link href="/blog">Blog</Link> / <span>{post.title}</span></nav>
 

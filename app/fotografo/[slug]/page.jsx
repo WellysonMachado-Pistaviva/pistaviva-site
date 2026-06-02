@@ -32,9 +32,19 @@ export default async function FotografoPage({ params }) {
     jobTitle: 'Fotógrafo', ...(ig ? { sameAs: [ig] } : {}), ...(f.site_url ? { url: f.site_url } : {}),
     ...(f.cidade ? { address: { '@type': 'PostalAddress', addressLocality: f.cidade, addressRegion: f.uf, addressCountry: 'BR' } } : {}),
   };
+  const breadcrumbLd = {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://moto.pistaviva.com.br/' },
+      { '@type': 'ListItem', position: 2, name: 'Fotógrafos', item: 'https://moto.pistaviva.com.br/fotografos' },
+      { '@type': 'ListItem', position: 3, name: f.nome, item: `https://moto.pistaviva.com.br/fotografo/${slug}` },
+    ],
+  };
+
   return (
     <article className="wrap" style={{ paddingTop: '1rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <nav className="crumbs"><Link href="/">Início</Link> / <Link href="/fotografos">Fotógrafos</Link> / <span>{f.nome}</span></nav>
       <header className="post-hero">
         <p className="eyebrow">📸 Fotógrafo{f.local ? ' · ' + f.local : ''}</p>
