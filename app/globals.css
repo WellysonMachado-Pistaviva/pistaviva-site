@@ -6,33 +6,40 @@
    ========================================================= */
 
 :root{
-  /* Cores editoriais */
-  --ink:        #0e1311;
-  --ink-2:      #141b18;
-  --ink-3:      #1c2521;
-  --line:       #2a352f;
-  --paper:      #f3ede1;
-  --paper-dim:  #b9b4a6;
-  --paper-mut:  #847f73;
-  --clay:       #e8821e;
-  --clay-soft:  #f2a24c;
-  --moss:       #6f9a5e;
-  --moss-deep:  #3f5a36;
+  /* Paleta: preto / branco / laranja (CFMoto + Yamaha) */
+  --ink:        #0a0b0d;
+  --ink-2:      #121317;
+  --ink-3:      #1a1c21;
+  --line:       #272a31;
+  --paper:      #ffffff;
+  --paper-dim:  #b6b9c2;
+  --paper-mut:  #82858f;
+  --clay:       #ff5a1f;
+  --clay-soft:  #ff7c47;
+  /* "moss" repontado p/ neutro/laranja — elimina o verde antigo sem quebrar refs */
+  --moss:       #ff5a1f;
+  --moss-deep:  #1a1c21;
+
+  /* tons claros (seções brancas da home) */
+  --snow:       #ffffff;
+  --snow-2:     #f4f4f6;
+  --snow-line:  #e5e6ea;
+  --ink-soft:   #54575f;
 
   /* === Override dos tokens do app antigo: reskin global === */
-  --bg:   #0e1311;
-  --bg2:  #141b18;
-  --bg3:  #1c2521;
-  --bg4:  #222d27;
-  --accent:       #e8821e;
-  --accent-light: #f2a24c;
-  --accent-hover: #f2a24c;
-  --accent-subtle:rgba(232,130,30,.08);
-  --accent-glow:  rgba(232,130,30,.18);
-  --text:  #f3ede1;
-  --muted: #847f73;
-  --border:       #2a352f;
-  --border-hover: #3a4940;
+  --bg:   #0a0b0d;
+  --bg2:  #121317;
+  --bg3:  #1a1c21;
+  --bg4:  #20232a;
+  --accent:       #ff5a1f;
+  --accent-light: #ff7c47;
+  --accent-hover: #ff7c47;
+  --accent-subtle:rgba(255,90,31,.08);
+  --accent-glow:  rgba(255,90,31,.20);
+  --text:  #ffffff;
+  --muted: #82858f;
+  --border:       #272a31;
+  --border-hover: #3a3e47;
 
   /* Tipografia (vars vêm do next/font no <html>) */
   --display: var(--font-display), "Arial Narrow", sans-serif;
@@ -51,10 +58,6 @@ body{
   color:var(--paper);
   line-height:1.6;
   font-size:18px;
-  background-image:
-    radial-gradient(120% 80% at 80% -10%, rgba(111,154,94,.10), transparent 55%),
-    radial-gradient(90% 60% at 0% 0%, rgba(232,130,30,.08), transparent 50%);
-  background-attachment:fixed;
 }
 
 img{ max-width:100%; display:block; }
@@ -184,10 +187,10 @@ a{ color:inherit; text-decoration:none; }
 .post-cover img{ width:100%; height:100%; object-fit:cover; }
 .article{ max-width:70ch; }
 .article > *{ margin-bottom:1.3rem; }
-.article p{ font-size:1.12rem; color:#e7e0d2; }
+.article p{ font-size:1.12rem; color:#d6d8de; }
 .article h2{ font-family:var(--display); font-weight:800; font-size:clamp(1.5rem,3.4vw,2.1rem); text-transform:uppercase; margin-top:2.4rem; padding-top:1.4rem; border-top:1px solid var(--line); }
 .article h3{ font-family:var(--display); font-size:1.3rem; margin-top:1.8rem; color:var(--clay-soft); }
-.article ul, .article ol{ padding-left:1.3rem; color:#e7e0d2; }
+.article ul, .article ol{ padding-left:1.3rem; color:#d6d8de; }
 .article li{ margin-bottom:.5rem; font-size:1.06rem; }
 .article a.inline{ color:var(--clay); border-bottom:1px solid rgba(232,130,30,.4); }
 .article strong{ color:var(--paper); }
@@ -343,3 +346,67 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
 /* Moto clicável (cool mode) — dica sutil */
 .cool-moto{ font-size:30px; line-height:1; transition:transform .2s; }
 .cool-moto:hover{ transform:rotate(-8deg) scale(1.1); }
+
+/* =========================================================
+   REDESIGN HÍBRIDO — preto/branco/laranja (CFMoto + Yamaha)
+   Hero escuro cinematográfico + bandas claras alternadas.
+   ========================================================= */
+
+/* HERO cinematográfico (full-bleed escuro, laranja de fundo) */
+.home .hero{
+  background:
+    radial-gradient(70% 120% at 78% -25%, rgba(255,90,31,.26), transparent 58%),
+    linear-gradient(180deg,#0a0b0d,#0e1013);
+  border-bottom:1px solid var(--line);
+  padding:clamp(60px,10vw,140px) 0 clamp(48px,7vw,90px);
+}
+.home .hero h1{ font-size:clamp(2.9rem,8.5vw,6.6rem); letter-spacing:-.04em; }
+.home .hero .lede{ color:var(--paper-dim); }
+
+/* Marquee = faixa preta de transição */
+.marquee{ background:#0a0b0d; }
+
+/* ---- BANDA CLARA (seções de conteúdo, estilo Yamaha) ---- */
+.section--light{ background:var(--snow); color:var(--ink); }
+.section--light .section-head{ border-bottom-color:var(--snow-line); }
+.section--light .section-head h2{ color:var(--ink); }
+.section--light .eyebrow{ color:var(--clay); }
+.section--light .eyebrow--moss{ color:var(--ink-soft); }
+.section--light .section-head .link{ color:var(--clay); }
+.section--light > .wrap > p{ color:var(--ink-soft); }
+
+/* Pilares (clusters) claros */
+.section--light .clusters{ background:var(--snow-line); border-color:var(--snow-line); }
+.section--light .cluster{ background:var(--snow); }
+.section--light .cluster:hover{ background:#fafafc; }
+.section--light .cluster .num{ color:var(--clay); }
+.section--light .cluster h3{ color:var(--ink); }
+.section--light .cluster p{ color:var(--ink-soft); }
+.section--light .cluster .go{ color:var(--clay); }
+
+/* Cards (rotas/blog) claros — borda fina, sombra suave, zoom no hover */
+.section--light .route{ background:var(--snow); border-color:var(--snow-line); background-image:none; }
+.section--light .route .thumb{ background:var(--snow-2); }
+.section--light .route h3{ color:var(--ink); }
+.section--light .route:hover h3{ color:var(--clay); }
+.section--light .route p{ color:var(--ink-soft); }
+.section--light .route .meta{ border-top-color:var(--snow-line); color:var(--paper-mut); }
+.section--light .route .meta b{ color:var(--clay); }
+.section--light .route:hover{ border-color:var(--clay); box-shadow:0 16px 40px rgba(10,11,13,.14); }
+.section--light .route .tag{ background:rgba(10,11,13,.82); color:#fff; border-color:transparent; }
+
+/* ---- BANDA ESCURA (spec/dados, estilo CFMoto) ---- */
+.section--dark{ background:#0c0e11; }
+
+/* Botões mais "máquina": cantos retos, peso */
+.btn{ border-radius:4px; }
+.btn--primary{ box-shadow:none; }
+.btn--primary:hover{ box-shadow:0 8px 22px rgba(255,90,31,.30); }
+.nav .shop{ border-radius:4px; }
+
+/* Eyebrow sem o tracinho (look mais limpo/industrial) */
+.eyebrow::before{ width:26px; }
+
+@media(max-width:768px){
+  .home .hero h1{ font-size:clamp(2.6rem,13vw,3.8rem); }
+}

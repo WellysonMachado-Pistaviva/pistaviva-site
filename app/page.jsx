@@ -32,7 +32,7 @@ export default async function Home() {
   const ig = await getInstagramPosts();
 
   return (
-    <>
+    <div className="home">
       {/* HERO */}
       <section className="hero">
         <div className="wrap hero-grid">
@@ -64,7 +64,7 @@ export default async function Home() {
       <Marquee items={MARQUEE} />
 
       {/* PILARES */}
-      <section className="section">
+      <section className="section section--light">
         <div className="wrap">
           <div className="section-head">
             <div>
@@ -82,7 +82,7 @@ export default async function Home() {
       </section>
 
       {/* MOTOS MAIS VENDIDAS */}
-      <section className="section">
+      <section className="section section--dark">
         <div className="wrap">
           <div className="section-head">
             <div>
@@ -117,7 +117,7 @@ export default async function Home() {
 
       {/* DESTAQUES */}
       {featured.length > 0 && (
-        <section className="section">
+        <section className="section section--light">
           <div className="wrap">
             <div className="section-head">
               <div><p className="eyebrow">⭐ Destaque</p><h2>Em alta na comunidade</h2></div>
@@ -141,7 +141,7 @@ export default async function Home() {
 
       {/* ÚLTIMO DO BLOG */}
       {posts.length > 0 && (
-        <section className="section">
+        <section className="section section--light">
           <div className="wrap">
             <div className="section-head">
               <div>
@@ -173,7 +173,7 @@ export default async function Home() {
 
       {/* INSTAGRAM */}
       {ig.length > 0 && (
-        <section className="section">
+        <section className="section section--dark">
           <div className="wrap">
             <div className="section-head">
               <div><p className="eyebrow">@pistavivaoficial</p><h2>No nosso Instagram</h2></div>
@@ -185,7 +185,7 @@ export default async function Home() {
       )}
 
       {/* CTA */}
-      <section className="section">
+      <section className="section section--dark">
         <div className="wrap">
           <div className="cta-band">
             <h2>Faça parte da comunidade</h2>
@@ -196,6 +196,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
