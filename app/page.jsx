@@ -3,6 +3,7 @@ import Cover from './components/Cover';
 import InstagramEmbeds from './components/InstagramEmbeds';
 import Counter from './components/Counter';
 import Marquee from './components/Marquee';
+import CoolMode from './components/CoolMode';
 import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
 import { getInstagramPosts } from './lib/site';
 
@@ -40,12 +41,15 @@ export default async function Home() {
             <h1>A estrada<br />é só o<br /><span className="li">começo</span></h1>
             <p className="lede">Rotas testadas na curva, comunidade vibrante e a cultura de quem vive sobre duas rodas. Conteúdo feito por quem roda — não por quem só pesquisa.</p>
             <div className="cta-row">
-              <Link className="btn btn--primary" href="/rotas">Explorar rotas →</Link>
+              <Link className="btn btn--primary ihb" href="/rotas"><span>Explorar rotas →</span></Link>
               <Link className="btn btn--ghost" href="/comunidade">Entrar na comunidade</Link>
             </div>
           </div>
           <aside className="hero-card" aria-label="Destaque">
-            <p className="eyebrow">Comunidade Pistaviva</p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <p className="eyebrow">Comunidade Pistaviva</p>
+              <CoolMode><span className="cool-moto" title="clica! 🏍️">🏍️</span></CoolMode>
+            </div>
             <h3>Rode junto, sempre</h3>
             <p>Comboio ao vivo, mapa colaborativo, passaporte de carimbos e um feed feito pela estrada.</p>
             <div className="stat-row">
