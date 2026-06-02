@@ -209,10 +209,31 @@ function BannerEditor() {
   );
 }
 
+function InstagramEditor() {
+  const [text, setText] = useState('');
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => { supabase.from('pv_site_config').select('instagram_posts').eq('id', 1).maybeSingle().then(({ data }) => { setText((data?.instagram_posts || []).join('\n')); setLoaded(true); }); }, []);
+  const save = async () => {
+    const arr = text.split('\n').map(s => s.trim()).filter(Boolean);
+    const { error } = await supabase.from('pv_site_config').upsert({ id: 1, instagram_posts: arr, updated_at: new Date().toISOString() });
+    showToast(error ? 'Erro: ' + error.message : 'Instagram salvo ✓', error ? 'error' : 'success');
+  };
+  if (!loaded) return <div className="spinner-wrap"><span className="loading-spinner" /></div>;
+  return (
+    <div style={{ maxWidth: 620 }}>
+      <p style={{ color: 'var(--paper-mut)', fontSize: 13, marginBottom: 6 }}>Cole 1 link de post/reel do Instagram por linha. A <b>ordem</b> aqui é a ordem na home — <b>intercale vídeo e post</b>.</p>
+      <p style={{ color: 'var(--paper-mut)', fontSize: 12, marginBottom: 12, fontFamily: 'var(--mono)' }}>Ex: https://www.instagram.com/p/XXXX/ · https://www.instagram.com/reel/YYYY/</p>
+      <textarea value={text} onChange={e => setText(e.target.value)} placeholder={'https://www.instagram.com/reel/.../\nhttps://www.instagram.com/p/.../'} style={{ width: '100%', minHeight: 160, padding: '11px 13px', marginBottom: 12, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)', fontFamily: 'var(--mono)', fontSize: 13 }} />
+      <button className="btn btn--primary" onClick={save}>Salvar Instagram</button>
+    </div>
+  );
+}
+
 const EXTRA_TABS = [
   { id: 'denuncias', label: 'Denúncias' },
   { id: 'comentarios', label: 'Coment. Trechos' },
   { id: 'aviso', label: 'Aviso/Banner' },
+  { id: 'instagram', label: 'Instagram' },
 ];
 
 export default function Moderacao() {
@@ -234,6 +255,7 @@ export default function Moderacao() {
         : tab === 'denuncias' ? <ReportsQueue />
         : tab === 'comentarios' ? <CommentsMod />
         : tab === 'aviso' ? <BannerEditor />
+        : tab === 'instagram' ? <InstagramEditor />
         : null}
     </div>
   );

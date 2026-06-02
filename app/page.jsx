@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import Cover from './components/Cover';
+import InstagramEmbeds from './components/InstagramEmbeds';
 import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
+import { getInstagramPosts } from './lib/site';
 
 export const revalidate = 300; // ISR: revalida home a cada 5 min
 
@@ -17,6 +19,7 @@ const MAIS_VENDIDAS = [
 export default async function Home() {
   const posts = await getPublishedPosts(3);
   const featured = await getFeaturedPosts(3);
+  const ig = await getInstagramPosts();
 
   return (
     <>
@@ -140,6 +143,19 @@ export default async function Home() {
                 </article>
               ))}
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* INSTAGRAM */}
+      {ig.length > 0 && (
+        <section className="section">
+          <div className="wrap">
+            <div className="section-head">
+              <div><p className="eyebrow">@pistavivaoficial</p><h2>No nosso Instagram</h2></div>
+              <a className="link" href="https://www.instagram.com/pistavivaoficial" target="_blank" rel="noopener noreferrer">Seguir →</a>
+            </div>
+            <InstagramEmbeds urls={ig} />
           </div>
         </section>
       )}
