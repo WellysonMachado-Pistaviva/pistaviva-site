@@ -34,7 +34,7 @@ export default function SiteFooter() {
         </div>
         <div className="foot-base">
           <span>© {new Date().getFullYear()} Pistaviva · Comunidade de Mototurismo</span>
-          <span>Feito na curva, não no escritório</span>
+          <span>Feito na curva, não no escritório · Desenvolvido com Next.js e Supabase</span>
         </div>
       </div>
     </footer>

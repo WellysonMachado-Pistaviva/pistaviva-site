@@ -622,6 +622,18 @@ const Comboio = ({ user, openAuthModal }) => {
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {/* COMO FUNCIONA */}
+          <div className="glass" style={{ padding: '20px 24px', borderRadius: 'var(--radius)', border: '1px solid var(--border)', background: 'rgba(249,115,22,0.05)' }}>
+            <h3 style={{ fontWeight: 800, fontSize: '15px', marginBottom: '12px', letterSpacing: '.5px' }}>🏍️ COMO FUNCIONA O COMBOIO</h3>
+            <ol style={{ margin: 0, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13.5px', color: 'var(--muted)', lineHeight: 1.5 }}>
+              <li><b style={{ color: 'var(--text)' }}>Crie um comboio</b> e compartilhe o código com a galera (ou entre no código de um amigo).</li>
+              <li><b style={{ color: 'var(--text)' }}>Todo mundo aparece no mapa ao vivo</b> — seu GPS atualiza a posição de cada piloto em tempo real.</li>
+              <li><b style={{ color: 'var(--text)' }}>Chat do grupo</b> pra combinar parada, ritmo e ponto de encontro sem parar a moto.</li>
+              <li><b style={{ color: 'var(--text)' }}>A tela fica ligada</b> (wake lock) enquanto o comboio está ativo, pra não perder ninguém.</li>
+            </ol>
+            <p style={{ fontSize: '12px', color: 'var(--paper-mut, var(--muted))', marginTop: '12px' }}>Dica: deixe o site aberto e o GPS ligado durante o rolê. Funciona melhor com a tela acesa.</p>
+          </div>
+
           <div className="glass" style={{ padding: '24px', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
               <div style={{ padding: '10px', background: 'rgba(249,115,22,0.1)', borderRadius: '50%' }}><Plus size={24} color="var(--accent)" /></div>
