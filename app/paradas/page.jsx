@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Cover from '../components/Cover';
 import { getSpots } from '../lib/spots';
 import { SELOS, CATEGORIAS, catNome } from '../lib/spotMeta';
 import NewSpotForm from './NewSpotForm';
@@ -71,7 +72,7 @@ export default async function Paradas({ searchParams }) {
               <Link href={`/parada/${s.slug}`} aria-label={s.nome}>
                 <div className="thumb">
                   <span className="tag">{catNome(s.categoria)}</span>
-                  {s.cover_url && <img src={s.cover_url} alt={s.nome} />}
+                  {s.cover_url && <Cover src={s.cover_url} alt={s.nome} sizes="(max-width:600px) 100vw, 380px" />}
                 </div>
                 <div className="body">
                   <h3>{s.nome}</h3>

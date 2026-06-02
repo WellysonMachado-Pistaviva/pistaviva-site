@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Cover from '../../components/Cover';
 import { notFound } from 'next/navigation';
 import { getPostBySlug, getAllSlugs } from '../../lib/blog';
 
@@ -92,7 +93,7 @@ export default async function BlogPost({ params }) {
         </header>
 
         {post.cover_url && (
-          <div className="post-cover"><img src={post.cover_url} alt={post.title} /></div>
+          <div className="post-cover"><Cover src={post.cover_url} alt={post.title} sizes="100vw" priority /></div>
         )}
 
         <div className="article">
