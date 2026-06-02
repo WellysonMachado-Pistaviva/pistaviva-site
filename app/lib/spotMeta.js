@@ -1,10 +1,13 @@
 // Metadados compartilhados (server + client) das Paradas da Comunidade.
 
+// Comodidades (linguagem suave, fácil pro usuário marcar).
 export const SELOS = [
-  { id: 'asfalto',  nome: 'Asfalto VIP',    sigla: 'A', desc: 'Acesso fácil, sem terra ou pedra solta no final.' },
-  { id: 'descanso', nome: 'Descanso Firme', sigla: 'D', desc: 'Estacionamento firme, com sombra e suporte pra moto pesada.' },
-  { id: 'gear',     nome: 'Gear-Friendly',  sigla: 'G', desc: 'Onde guardar capacete, jaqueta e bagagem com segurança.' },
-  { id: 'sabor',    nome: 'Rota Sabor',     sigla: 'S', desc: 'Gastronomia que vale a viagem.' },
+  { id: 'asfalto-bom',    nome: 'Asfalto em ótimas condições', sigla: '🛣️', desc: 'Estrada boa, acesso tranquilo até o local.' },
+  { id: 'cafe',           nome: 'Café da manhã',               sigla: '☕', desc: 'Serve café da manhã.' },
+  { id: 'almoco',         nome: 'Almoço',                      sigla: '🍽️', desc: 'Tem opção de almoço / refeição.' },
+  { id: 'paisagem',       nome: 'Paisagem bonita',             sigla: '🏞️', desc: 'Vista e cenário que valem a parada.' },
+  { id: 'estacionamento', nome: 'Estacionamento fácil',        sigla: '🅿️', desc: 'Lugar seguro e firme pra estacionar a moto.' },
+  { id: 'pernoite',       nome: 'Pernoite',                    sigla: '🛏️', desc: 'Opção de hospedagem / dormir.' },
 ];
 
 export const CATEGORIAS = [
