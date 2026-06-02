@@ -38,7 +38,7 @@ export default function NewSpotForm() {
     return (
       <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '1.4rem', textAlign: 'center' }}>
         <h3 style={{ fontFamily: 'var(--display)', marginBottom: 8 }}>Conhece um bom ponto?</h3>
-        <p style={{ color: 'var(--paper-dim)', marginBottom: 14 }}>Entre para cadastrar paradas e dar selos à comunidade.</p>
+        <p style={{ color: 'var(--paper-dim)', marginBottom: 14 }}>Entre para cadastrar paradas e indicar comodidades pra comunidade.</p>
         <button className="btn btn--primary" onClick={() => auth?.openAuthModal('login')}>Entrar para cadastrar</button>
       </div>
     );
@@ -113,7 +113,7 @@ export default function NewSpotForm() {
         {form.cover_url && <img src={form.cover_url} alt="" style={{ height: 56, borderRadius: 6 }} />}
       </div>
 
-      <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--paper-mut)', marginBottom: 8 }}>Selos (toque pra marcar)</div>
+      <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--paper-mut)', marginBottom: 8 }}>Comodidades (toque pra marcar)</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 16 }}>
         {SELOS.map(s => (
           <button key={s.id} type="button" onClick={() => toggle(s.id)}

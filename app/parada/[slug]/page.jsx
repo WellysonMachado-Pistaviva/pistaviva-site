@@ -64,7 +64,7 @@ export default async function ParadaPage({ params }) {
       <div className="article" style={{ maxWidth: '70ch' }}>
         {s.descricao && <p className="lead">{s.descricao}</p>}
 
-        <h2>Selos da comunidade</h2>
+        <h2>Comodidades</h2>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
           {SELOS.map(sl => {
             const has = (s.selos || []).includes(sl.id);

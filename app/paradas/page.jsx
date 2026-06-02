@@ -8,17 +8,17 @@ export const revalidate = 120;
 
 export const metadata = {
   title: 'Paradas da Comunidade — pousadas, restaurantes e pontos para motociclistas',
-  description: 'Mapa colaborativo de paradas para motociclistas no Brasil: pousadas, restaurantes, mirantes e oficinas com selos de qualidade dados pela comunidade Pistaviva.',
+  description: 'Mapa colaborativo de paradas para motociclistas no Brasil: pousadas, restaurantes, mirantes e oficinas com comodidades indicadas pela comunidade Pistaviva.',
   alternates: { canonical: '/paradas' },
   openGraph: { title: 'Paradas da Comunidade · Pistaviva', description: 'Pontos amigos do motociclista, avaliados pela comunidade.' },
 };
 
 const SeloDots = ({ ids = [] }) => (
-  <span style={{ display: 'inline-flex', gap: 4 }}>
-    {ids.map(id => {
+  <span style={{ display: 'inline-flex', gap: 6 }}>
+    {ids.slice(0, 5).map(id => {
       const s = SELOS.find(x => x.id === id);
       if (!s) return null;
-      return <span key={id} title={s.nome} style={{ width: 18, height: 18, borderRadius: '50%', border: '1px solid var(--clay)', color: 'var(--clay)', fontSize: 10, fontWeight: 800, display: 'grid', placeItems: 'center', fontFamily: 'var(--mono)' }}>{s.sigla}</span>;
+      return <span key={id} title={s.nome} style={{ fontSize: 15, lineHeight: 1 }}>{s.sigla}</span>;
     })}
   </span>
 );
@@ -57,7 +57,7 @@ export default async function Paradas({ searchParams }) {
 
       {/* Legenda dos selos */}
       <p style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-mut)', marginBottom: '1.6rem', lineHeight: 1.7 }}>
-        Selos (dados por quem cadastra): {SELOS.map((s, i) => (
+        Comodidades indicadas por quem cadastrou: {SELOS.map((s, i) => (
           <span key={s.id}>{i > 0 ? ' · ' : ''}<b style={{ color: 'var(--clay)' }}>{s.sigla}</b> = {s.nome}</span>
         ))}
       </p>
