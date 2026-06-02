@@ -10,10 +10,15 @@ const RouteIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="#f3ede1" strokeWidth="1.3"><path d="M3 20l5-12 4 7 3-5 6 10z" /></svg>
 );
 
-// Ranking ilustrativo das motos mais emplacadas no Brasil (dados públicos Fenabrave).
-const MAIS_VENDIDAS = [
-  'Honda CG 160', 'Honda Biz', 'Honda Pop 110i', 'Honda NXR 160 Bros', 'Honda PCX',
-  'Honda Elite 125', 'Yamaha Crosser 150', 'Honda XRE 300', 'Yamaha Fazer 250', 'Honda CB 300F Twister',
+// Rankings de emplacamentos no Brasil (dados públicos). Atualização periódica.
+const RANKINGS = [
+  { cat: 'Marcas mais vendidas', items: [['Honda', '512.121'], ['Yamaha', '108.064'], ['Shineray', '50.749']] },
+  { cat: 'Motos mais vendidas', items: [['CG 160', '168.617'], ['Biz 125', '90.318'], ['Pop 110i', '84.643']] },
+  { cat: 'Trail mais vendidas', items: [['NXR 160 Bros', '63.537'], ['XRE 190', '18.687'], ['Sahara 300', '13.964']] },
+  { cat: 'Big Trail mais vendidas', items: [['NX500', '2.012'], ['R 1300 GS', '1.714']] },
+  { cat: 'Scooter mais vendidas', items: [['PCX 160', '18.579'], ['Elite 125', '11.219']] },
+  { cat: 'Naked mais vendidas', items: [['MT-03', '3.143'], ['Dominar NS400Z', '1.996']] },
+  { cat: 'Esportivas mais vendidas', items: [['R15', '4.457'], ['R3', '559']] },
 ];
 
 export default async function Home() {
@@ -74,20 +79,31 @@ export default async function Home() {
           <div className="section-head">
             <div>
               <p className="eyebrow">Mercado · Brasil</p>
-              <h2>Motos mais vendidas</h2>
+              <h2>Mais vendidas no Brasil</h2>
             </div>
-            <Link className="link" href="/fipe">Consultar FIPE →</Link>
+            <a className="link" target="_blank" rel="noopener noreferrer"
+              href={`https://wa.me/?text=${encodeURIComponent('🏍️ Motos mais vendidas no Brasil:\n1º CG 160\n2º Biz 125\n3º Pop 110i\n\nRanking + Tabela FIPE no Pistaviva: https://moto.pistaviva.com.br/')}`}>
+              Compartilhar →
+            </a>
           </div>
-          <div className="clusters" style={{ gridTemplateColumns: 'repeat(2,1fr)' }}>
-            {MAIS_VENDIDAS.map((m, i) => (
-              <Link key={m} className="cluster" href="/fipe" style={{ minHeight: 'auto', flexDirection: 'row', alignItems: 'center', gap: '14px', padding: '14px 18px' }}>
-                <span style={{ fontFamily: 'var(--display)', fontSize: '1.6rem', color: 'var(--clay)', minWidth: 34 }}>{String(i + 1).padStart(2, '0')}</span>
-                <span style={{ flex: 1, fontWeight: 600 }}>{m}</span>
-                <span className="go" style={{ margin: 0 }}>FIPE →</span>
-              </Link>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px,1fr))', gap: '16px' }}>
+            {RANKINGS.map(r => (
+              <div key={r.cat} style={{ background: 'var(--ink-2)', border: '1px solid var(--line)', borderRadius: 12, overflow: 'hidden' }}>
+                <div style={{ background: 'var(--ink)', borderBottom: '2px solid var(--clay)', padding: '12px 16px', fontFamily: 'var(--display)', fontWeight: 800, fontSize: 14, textTransform: 'uppercase', letterSpacing: '.04em' }}>{r.cat}</div>
+                <div>
+                  {r.items.map(([nome, un], i) => (
+                    <div key={nome} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: i < r.items.length - 1 ? '1px solid var(--line)' : 'none' }}>
+                      <span style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: '1.4rem', color: i === 0 ? 'var(--clay)' : 'var(--paper-mut)', minWidth: 30 }}>{i + 1}º</span>
+                      <span style={{ flex: 1, fontWeight: 600, fontSize: 14 }}>{nome}</span>
+                      <span style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--paper-dim)' }}>{un}</span>
+                    </div>
+                  ))}
+                </div>
+                <Link href="/fipe" style={{ display: 'block', textAlign: 'center', padding: '10px', fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--clay)', textTransform: 'uppercase', letterSpacing: '.08em', borderTop: '1px solid var(--line)' }}>Ver FIPE →</Link>
+              </div>
             ))}
           </div>
-          <p style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-mut)', marginTop: 14 }}>Ranking ilustrativo de emplacamentos no Brasil (dados públicos). Consulte o valor atual na <Link href="/fipe" style={{ color: 'var(--clay)' }}>Tabela FIPE</Link>.</p>
+          <p style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-mut)', marginTop: 14 }}>Dados públicos de emplacamentos (Brasil), atualização periódica. Consulte o valor atual na <Link href="/fipe" style={{ color: 'var(--clay)' }}>Tabela FIPE</Link>.</p>
         </div>
       </section>
 
