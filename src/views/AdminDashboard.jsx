@@ -883,9 +883,7 @@ const RankingAdminTab = () => {
 // ADMIN DASHBOARD PRINCIPAL
 // ══════════════════════════════════════════════════════════
 const TABS = [
-  { id:'overview',  label:'Geral',       icon:<BarChart3 size={15}/> },
   { id:'radar',     label:'GPS Live',    icon:<Radio size={15}/> },
-  { id:'usuarios',  label:'Usuários',    icon:<Users size={15}/> },
   { id:'feed',      label:'Feed',        icon:<MessageSquare size={15}/> },
   { id:'trechos',   label:'Trechos',     icon:<Route size={15}/> },
   { id:'expedicoes',label:'Expedições',  icon:<MapPin size={15}/> },
@@ -898,7 +896,7 @@ const TABS = [
 ];
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('radar');
 
   return (
     <div style={{ paddingBottom:'100px' }}>
