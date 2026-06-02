@@ -19,6 +19,7 @@ export default function SiteFooter() {
           </div>
           <div className="foot-col">
             <h5>Ferramentas</h5>
+            <Link href="/calculadora">Planejador</Link>
             <Link href="/mapa">Mapa</Link>
             <Link href="/comboio">Comboio</Link>
             <Link href="/fotografos">Fotógrafos</Link>

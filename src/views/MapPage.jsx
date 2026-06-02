@@ -12,6 +12,11 @@ const photographerIcon = L.divIcon({
   html: `<div style="width:30px;height:30px;border-radius:50%;background:#0e1311;border:2px solid #f97316;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 2px 8px rgba(0,0,0,.5);">📸</div>`,
   className: '', iconSize: [30, 30], iconAnchor: [15, 15],
 });
+const CAT_EMOJI = { pousada: '🛏️', restaurante: '🍽️', mirante: '🏔️', oficina: '🔧', posto: '⛽', atrativo: '🌄', outro: '📍' };
+const spotIcon = (cat) => L.divIcon({
+  html: `<div style="width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#6f9a5e;border:2px solid #fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.5);"><span style="transform:rotate(45deg);font-size:14px;">${CAT_EMOJI[cat] || '📍'}</span></div>`,
+  className: '', iconSize: [30, 30], iconAnchor: [15, 28],
+});
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -166,12 +171,16 @@ const MapPage = ({ user }) => {
   const [pingInsta, setPingInsta] = useState('');
   const [routeLine, setRouteLine] = useState(null);
   const [photographers, setPhotographers] = useState([]);
+  const [spots, setSpots] = useState([]);
   const [sosAlerts, setSosAlerts] = useState([]);
 
   useEffect(() => {
     supabase.from('pv_photographers').select('id, slug, nome, local, instagram, site_url, lat, lng')
       .eq('published', true).not('lat', 'is', null)
       .then(({ data }) => setPhotographers(data || []));
+    supabase.from('pv_spots').select('id, slug, nome, categoria, cidade, uf, lat, lng, selos')
+      .eq('published', true).not('lat', 'is', null)
+      .then(({ data }) => setSpots(data || []));
   }, []);
   const [comboioMembers, setComboioMembers] = useState([]);
   const [activeComboioId, setActiveComboioId] = useState(null);
@@ -326,6 +335,25 @@ const MapPage = ({ user }) => {
 
   const savePing = async () => {
     if (!newPing || !pingTitle) return;
+
+    // Parada normal → grava em pv_spots (mesma fonte de /paradas → aparece nos dois).
+    if (pingType === 'user') {
+      const slug = pingTitle.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 50) + '-' + Math.random().toString(36).slice(2, 6);
+      const row = {
+        slug, nome: pingTitle, categoria: 'outro',
+        cidade: pingLocal || '', uf: '',
+        lat: newPing.lat, lng: newPing.lng, selos: [],
+        author: user?.nome || user?.name || 'Piloto', author_id: String(user?.id || ''), published: true,
+      };
+      const { data, error } = await supabase.from('pv_spots').insert(row).select().single();
+      if (!error && data) setSpots(prev => [...prev, data]);
+      setIsAdding(false); setIsPhotographerMode(false); setNewPing(null);
+      setPingTitle(''); setPingLocal(''); setPingInsta('');
+      return;
+    }
+
+    // Fotógrafo / monumento → ping efêmero no mapa (pv_map_pings).
     const ping = {
       type: pingType, lat: newPing.lat, lng: newPing.lng,
       title: pingTitle,
@@ -547,6 +575,19 @@ const MapPage = ({ user }) => {
                     {f.site_url && <a href={f.site_url} target="_blank" rel="noopener noreferrer" style={{ border: '1px solid #f97316', color: '#ea580c', padding: '5px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, textDecoration: 'none' }}>Fotos</a>}
                     <a href={`/fotografo/${f.slug}`} style={{ color: '#666', fontSize: '12px', alignSelf: 'center' }}>perfil →</a>
                   </div>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+
+          {/* Paradas da Comunidade (pv_spots) */}
+          {spots.map(s => (
+            <Marker key={'sp-' + s.id} position={[s.lat, s.lng]} icon={spotIcon(s.categoria)}>
+              <Popup>
+                <div style={{ minWidth: '180px' }}>
+                  <strong style={{ display: 'block', fontSize: '14px', marginBottom: '4px', color: '#3f5a36' }}>{s.nome}</strong>
+                  <div style={{ fontSize: '12px', color: '#444', marginBottom: '8px' }}>{[s.cidade, s.uf].filter(Boolean).join(' · ')}</div>
+                  <a href={`/parada/${s.slug}`} style={{ display: 'inline-block', background: '#6f9a5e', color: '#fff', padding: '5px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, textDecoration: 'none' }}>Ver parada →</a>
                 </div>
               </Popup>
             </Marker>
