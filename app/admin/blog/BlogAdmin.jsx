@@ -53,12 +53,27 @@ export default function BlogAdmin() {
       const reader = new FileReader();
       reader.onload = async () => {
         const url = await uploadPostImage(reader.result, auth.user?.id || 'admin');
-        if (url) { setForm(f => ({ ...f, cover_url: url })); showToast('Imagem enviada ✓', 'success'); }
+        if (url) { setForm(f => ({ ...f, cover_url: url })); showToast('Capa enviada ✓', 'success'); }
         else showToast('Falha no upload da imagem', 'error');
         setUploading(false);
       };
       reader.readAsDataURL(file);
     } catch { showToast('Erro no upload', 'error'); setUploading(false); }
+  };
+
+  // Sobe imagem e insere no corpo como [img:URL] (renderizado como <img> no post).
+  const onBodyImage = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const url = await uploadPostImage(reader.result, auth.user?.id || 'admin');
+      if (url) { setForm(f => ({ ...f, body: `${f.body}\n\n[img:${url}]\n\n` })); showToast('Imagem inserida no corpo ✓', 'success'); }
+      else showToast('Falha no upload', 'error');
+      setUploading(false);
+    };
+    reader.readAsDataURL(file);
   };
 
   const save = async () => {
@@ -116,7 +131,13 @@ export default function BlogAdmin() {
           </label>
         </div>
         {form.cover_url && <img src={form.cover_url} alt="" style={{ maxHeight: 140, borderRadius: 8, marginBottom: 10 }} />}
-        <textarea style={{ ...inp, minHeight: 220, resize: 'vertical' }} placeholder="Corpo do post (parágrafos separados por linha em branco)" value={form.body} onChange={e => setForm(f => ({ ...f, body: e.target.value }))} />
+        <div style={{ marginBottom: 8 }}>
+          <label className="btn btn--ghost" style={{ cursor: 'pointer', margin: 0, display: 'inline-flex' }}>
+            🖼️ Inserir imagem no corpo
+            <input type="file" accept="image/*" hidden onChange={onBodyImage} />
+          </label>
+        </div>
+        <textarea style={{ ...inp, minHeight: 220, resize: 'vertical' }} placeholder="Corpo do post (parágrafos separados por linha em branco). Imagens viram [img:URL]." value={form.body} onChange={e => setForm(f => ({ ...f, body: e.target.value }))} />
         <label style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 14 }}>
           <input type="checkbox" checked={form.published} onChange={e => setForm(f => ({ ...f, published: e.target.checked }))} /> Publicado
         </label>

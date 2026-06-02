@@ -69,7 +69,11 @@ export default async function BlogPost({ params }) {
 
         <div className="article">
           {post.excerpt && <p className="lead">{post.excerpt}</p>}
-          {paragraphs.map((para, i) => <p key={i}>{para}</p>)}
+          {paragraphs.map((para, i) => {
+            const img = para.match(/^\[img:(.+)\]$/);
+            if (img) return <img key={i} src={img[1].trim()} alt="" style={{ borderRadius: 12, border: '1px solid var(--line)' }} />;
+            return <p key={i}>{para}</p>;
+          })}
         </div>
 
         <div style={{ marginTop: '3rem' }}>

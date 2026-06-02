@@ -1,8 +1,9 @@
-import { Bricolage_Grotesque, Newsreader, Space_Mono } from 'next/font/google';
+import { Bricolage_Grotesque, Newsreader, Space_Mono, Poppins } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import '../src/index.css';
 import '../src/App.css';
+import 'leaflet/dist/leaflet.css';
 import './globals.css';
 import AuthProvider from './components/AuthProvider';
 import SiteHeader from './components/SiteHeader';
@@ -11,6 +12,7 @@ import SiteFooter from './components/SiteFooter';
 const display = Bricolage_Grotesque({ subsets: ['latin'], weight: ['700', '800'], variable: '--font-display', display: 'swap' });
 const serif = Newsreader({ subsets: ['latin'], weight: ['400', '500', '600'], style: ['normal', 'italic'], variable: '--font-serif', display: 'swap' });
 const mono = Space_Mono({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-mono', display: 'swap' });
+const poppins = Poppins({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-sans', display: 'swap' });
 
 const SITE_URL = 'https://moto.pistaviva.com.br';
 
@@ -71,7 +73,7 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="pt-BR" className={`${display.variable} ${serif.variable} ${mono.variable}`}>
+    <html lang="pt-BR" className={`${display.variable} ${serif.variable} ${mono.variable} ${poppins.variable}`}>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
         <div className="topo" aria-hidden="true" />

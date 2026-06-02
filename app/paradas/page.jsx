@@ -54,6 +54,13 @@ export default async function Paradas({ searchParams }) {
         ))}
       </div>
 
+      {/* Legenda dos selos */}
+      <p style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-mut)', marginBottom: '1.6rem', lineHeight: 1.7 }}>
+        Selos (dados por quem cadastra): {SELOS.map((s, i) => (
+          <span key={s.id}>{i > 0 ? ' · ' : ''}<b style={{ color: 'var(--clay)' }}>{s.sigla}</b> = {s.nome}</span>
+        ))}
+      </p>
+
       {/* Lista */}
       {spots.length === 0 ? (
         <p style={{ color: 'var(--paper-dim)', marginBottom: '2rem' }}>Nenhuma parada ainda com esse filtro. Seja o primeiro a cadastrar abaixo.</p>

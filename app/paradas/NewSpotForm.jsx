@@ -2,10 +2,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../src/lib/supabaseClient';
+import { uploadPostImage } from '../../src/services/storage';
 import { useAuth, showToast } from '../components/AuthProvider';
 import { SELOS, CATEGORIAS, slugify } from '../lib/spotMeta';
 
-const EMPTY = { nome: '', categoria: 'pousada', cidade: '', uf: '', descricao: '', lat: null, lng: null };
+const EMPTY = { nome: '', categoria: 'pousada', cidade: '', uf: '', descricao: '', lat: null, lng: null, cover_url: '' };
 
 export default function NewSpotForm() {
   const auth = useAuth();
@@ -15,6 +16,21 @@ export default function NewSpotForm() {
   const [selos, setSelos] = useState({});
   const [saving, setSaving] = useState(false);
   const [geo, setGeo] = useState('');
+  const [uploading, setUploading] = useState(false);
+
+  const onImage = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const url = await uploadPostImage(reader.result, auth.user?.id || 'spot');
+      if (url) { setForm(f => ({ ...f, cover_url: url })); showToast('Foto enviada ✓', 'success'); }
+      else showToast('Falha no upload', 'error');
+      setUploading(false);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const inp = { width: '100%', padding: '10px 12px', marginBottom: 10, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)', fontFamily: 'inherit' };
 
@@ -57,6 +73,7 @@ export default function NewSpotForm() {
       cidade: form.cidade.trim(),
       uf: form.uf.toUpperCase(),
       lat: form.lat, lng: form.lng,
+      cover_url: form.cover_url || null,
       selos: Object.keys(selos).filter(k => selos[k]),
       author: auth.user?.nome || auth.user?.name || 'Piloto',
       author_id: String(auth.user?.id || ''),
@@ -86,6 +103,14 @@ export default function NewSpotForm() {
       <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
         <button className="btn btn--ghost" onClick={pegarGeo} type="button">📍 Usar minha localização</button>
         <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-dim)' }}>{geo}</span>
+      </div>
+
+      <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
+        <label className="btn btn--ghost" style={{ cursor: 'pointer', margin: 0 }}>
+          {uploading ? 'Enviando…' : '📷 Enviar foto'}
+          <input type="file" accept="image/*" hidden onChange={onImage} />
+        </label>
+        {form.cover_url && <img src={form.cover_url} alt="" style={{ height: 56, borderRadius: 6 }} />}
       </div>
 
       <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--paper-mut)', marginBottom: 8 }}>Selos (toque pra marcar)</div>
