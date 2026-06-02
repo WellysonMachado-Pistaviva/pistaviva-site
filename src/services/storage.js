@@ -201,6 +201,71 @@ export const likePost = async (postId, userId) => {
 // ── Official Preset Routes (CMS) ──────────────────────────────────────────
 const PRESET_ROUTES = [
   {
+    id: 'sp-circuito-aguas',
+    name: 'Circuito das Águas Paulista',
+    region: 'São Paulo · Rotas de Mototurismo SP',
+    origin: 'Socorro, SP', originLat: -22.5908, originLng: -46.5289,
+    dest: 'Águas de Lindóia, SP', destLat: -22.4744, destLng: -46.6328,
+    waypoints: [[-22.5908, -46.5289], [-22.6122, -46.7006], [-22.5236, -46.6478], [-22.4744, -46.6328], [-22.7019, -46.7714]],
+    distance: '±71 km de circuito', duration: '2–3h na rota',
+    difficulty: 'Iniciante', diffColor: '#22c55e',
+    highlights: ['Socorro, Serra Negra e Lindóia', 'Estradas sinuosas e bem cuidadas', 'Gastronomia e artesanato local', 'Paisagens de montanha o ano todo'],
+    tip: 'Roteiro tranquilo e bem asfaltado, ótimo pra fim de semana. Vá com tempo pras paradas.',
+    emoji: '💧', tags: ['SP', 'Asfalto', 'Serra'], comments: [],
+  },
+  {
+    id: 'sp-mantiqueira-paulista',
+    name: 'Rota Mantiqueira Paulista',
+    region: 'São Paulo · Rotas de Mototurismo SP',
+    origin: 'São José dos Campos, SP', originLat: -23.1896, originLng: -45.8841,
+    dest: 'Campos do Jordão, SP', destLat: -22.7397, destLng: -45.5912,
+    waypoints: [[-23.1896, -45.8841], [-22.8275, -45.6628], [-22.7397, -45.5912], [-22.6889, -45.7306]],
+    distance: '±200 km', duration: '5h na rota',
+    difficulty: 'Intermediário', diffColor: '#f59e0b',
+    highlights: ['Santo Antônio do Pinhal e Campos do Jordão', 'Pedra do Baú', 'Altitude e clima de montanha', 'Mirantes e cachoeiras escondidas'],
+    tip: 'Leve agasalho mesmo no verão. Atenção à neblina no fim da tarde.',
+    emoji: '⛰️', tags: ['SP', 'Big Trail', 'Mantiqueira'], comments: [],
+  },
+  {
+    id: 'sp-cantareira',
+    name: 'Rota da Cantareira',
+    region: 'São Paulo · Rotas de Mototurismo SP',
+    origin: 'Mairiporã, SP', originLat: -23.3186, originLng: -46.5872,
+    dest: 'Mairiporã, SP', destLat: -23.3186, destLng: -46.5872,
+    waypoints: [[-23.3186, -46.5872], [-23.3600, -46.6300], [-23.2900, -46.5500]],
+    distance: '+15 trilhas oficiais', duration: 'o dia todo',
+    difficulty: 'Avançado', diffColor: '#ef4444',
+    highlights: ['Mais de 15 trilhas oficiais', 'Trilhas leves a pesadas', 'Estrutura com paradas e gastronomia', 'Perto da capital'],
+    tip: 'Tem trilha pra todo nível. Confira condições antes (chuva fecha algumas).',
+    emoji: '🌲', tags: ['SP', 'Trilha', 'Off-road'], comments: [],
+  },
+  {
+    id: 'sp-tropeiros',
+    name: 'Rota dos Tropeiros',
+    region: 'São Paulo · Rotas de Mototurismo SP',
+    origin: 'Silveiras, SP', originLat: -22.6628, originLng: -44.8531,
+    dest: 'Bananal, SP', destLat: -22.6836, destLng: -44.3231,
+    waypoints: [[-22.6628, -44.8531], [-22.5808, -44.7022], [-22.6414, -44.5808], [-22.6836, -44.3231]],
+    distance: '±90 km (SP-068)', duration: '2–3h na rota',
+    difficulty: 'Iniciante', diffColor: '#22c55e',
+    highlights: ['Cidades históricas coloniais', 'Casarões e fazendas históricas', 'Importância cultural e turística', 'Reservas naturais'],
+    tip: 'Roteiro histórico no Vale do Paraíba. Vale parar em São José do Barreiro.',
+    emoji: '🐎', tags: ['SP', 'Histórico', 'Asfalto'], comments: [],
+  },
+  {
+    id: 'sp-rastro-serpente',
+    name: 'Rastro da Serpente',
+    region: 'São Paulo · Rotas de Mototurismo SP',
+    origin: 'Capão Bonito, SP', originLat: -24.0058, originLng: -48.3494,
+    dest: 'Apiaí, SP', destLat: -24.5097, destLng: -48.8442,
+    waypoints: [[-24.0058, -48.3494], [-24.1839, -48.5328], [-24.6500, -49.0000], [-24.5097, -48.8442]],
+    distance: '±260 km', duration: '4–5h na rota',
+    difficulty: 'Intermediário', diffColor: '#f59e0b',
+    highlights: ['SP-165 (Estrada da Serpente)', 'Curvas acentuadas', 'Vale do Ribeira', 'Natureza preservada'],
+    tip: 'Curvas técnicas e fechadas. Pista pode ter trechos irregulares — atenção.',
+    emoji: '🐍', tags: ['SP', 'Curvas', 'Serra'], comments: [],
+  },
+  {
     id: 'r01',
     name: 'Serra do Rio do Rastro',
     region: 'Santa Catarina',
@@ -393,8 +458,8 @@ const PRESET_ROUTES = [
     comments: [],
   },
 ];
-export const getPresetRoutes = () => read('pv_preset_routes_v2', PRESET_ROUTES);
-export const savePresetRoutes = (routes) => write('pv_preset_routes_v2', routes);
+export const getPresetRoutes = () => read('pv_preset_routes_v3', PRESET_ROUTES);
+export const savePresetRoutes = (routes) => write('pv_preset_routes_v3', routes);
 
 // ── Routes (Supabase) ───────────────────────────────────────────────────
 const fmtDuration = (sec) => {
