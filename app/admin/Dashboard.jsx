@@ -17,6 +17,114 @@ async function count(table, build) {
 const fmtDate = (iso) => iso ? new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: '2-digit' }) : '—';
 const n = (v) => v == null ? '—' : v;
 
+// Barras horizontais simples (sem libs).
+function Bars({ data, color = 'var(--clay)', empty = 'Sem dados ainda.' }) {
+  if (!data || data.length === 0) return <p style={{ color: 'var(--paper-dim)', fontSize: 13 }}>{empty}</p>;
+  const max = Math.max(...data.map(d => d.value), 1);
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      {data.map((d, i) => (
+        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span style={{ width: 100, fontSize: 12, color: 'var(--paper-mut)', textAlign: 'right', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flexShrink: 0 }}>{d.label}</span>
+          <div style={{ flex: 1, background: 'var(--bg2)', borderRadius: 6, height: 22, position: 'relative', overflow: 'hidden' }}>
+            <div style={{ width: `${(d.value / max) * 100}%`, minWidth: d.value > 0 ? 3 : 0, height: '100%', background: color, borderRadius: 6, transition: 'width .4s' }} />
+          </div>
+          <span style={{ width: 38, fontSize: 13, fontWeight: 800, color: 'var(--text)', textAlign: 'right', flexShrink: 0 }}>{d.value}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const Card = ({ title, children }) => (
+  <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '18px 18px 20px' }}>
+    <h4 style={{ fontFamily: 'var(--display)', fontSize: 15, marginBottom: 14 }}>{title}</h4>
+    {children}
+  </div>
+);
+
+// ════════════════════════════════════════════════════════════
+// ANÁLISES (gráficos com dados existentes — sem alterar o banco)
+// ════════════════════════════════════════════════════════════
+const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+function Analytics() {
+  const [d, setD] = useState(null);
+
+  const load = useCallback(async () => {
+    // usuários (cadastros/mês) — via rota server
+    let signups = [];
+    try {
+      const { data: sess } = await supabase.auth.getSession();
+      const res = await fetch('/api/admin/users', { headers: { Authorization: `Bearer ${sess?.session?.access_token || ''}` } });
+      const j = await res.json();
+      if (res.ok) {
+        const buckets = {};
+        for (let i = 11; i >= 0; i--) { const dt = new Date(); dt.setDate(1); dt.setMonth(dt.getMonth() - i); buckets[`${dt.getFullYear()}-${dt.getMonth()}`] = { label: `${MESES[dt.getMonth()]}/${String(dt.getFullYear()).slice(2)}`, value: 0 }; }
+        (j.users || []).forEach(u => { if (!u.createdAt) return; const dt = new Date(u.createdAt); const k = `${dt.getFullYear()}-${dt.getMonth()}`; if (buckets[k]) buckets[k].value++; });
+        signups = Object.values(buckets);
+      }
+    } catch { /* ignora */ }
+
+    // paradas (categoria + estado)
+    const { data: spots } = await supabase.from('pv_spots').select('categoria, uf').limit(1000);
+    const byCat = {}, byUf = {};
+    (spots || []).forEach(s => { if (s.categoria) byCat[s.categoria] = (byCat[s.categoria] || 0) + 1; if (s.uf) byUf[s.uf] = (byUf[s.uf] || 0) + 1; });
+    const topCat = Object.entries(byCat).map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value).slice(0, 8);
+    const topUf = Object.entries(byUf).map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value).slice(0, 8);
+
+    // eventos por confirmações
+    let topEvents = [];
+    try {
+      const [{ data: rsvps }, { data: events }] = await Promise.all([
+        supabase.from('pv_event_rsvps').select('event_id, status').limit(5000),
+        supabase.from('pv_events').select('id, title').limit(500),
+      ]);
+      if (rsvps && events) {
+        const title = Object.fromEntries(events.map(e => [e.id, e.title]));
+        const cnt = {};
+        rsvps.forEach(r => { if (r.status === 'no') return; cnt[r.event_id] = (cnt[r.event_id] || 0) + 1; });
+        topEvents = Object.entries(cnt).map(([id, value]) => ({ label: title[id] || 'Evento', value })).sort((a, b) => b.value - a.value).slice(0, 6);
+      }
+    } catch { /* sem permissão -> vazio */ }
+
+    // posts do feed por curtidas
+    let topPosts = [];
+    try {
+      const [{ data: likes }, { data: posts }] = await Promise.all([
+        supabase.from('pv_post_likes').select('post_id').limit(5000),
+        supabase.from('pv_posts').select('id, author_name').limit(2000),
+      ]);
+      if (likes && posts) {
+        const author = Object.fromEntries(posts.map(p => [p.id, p.author_name]));
+        const cnt = {};
+        likes.forEach(l => { cnt[l.post_id] = (cnt[l.post_id] || 0) + 1; });
+        topPosts = Object.entries(cnt).map(([id, value]) => ({ label: author[id] || 'Post', value })).sort((a, b) => b.value - a.value).slice(0, 6);
+      }
+    } catch { /* vazio */ }
+
+    setD({ signups, topCat, topUf, topEvents, topPosts });
+  }, []);
+  useEffect(() => { load(); }, [load]);
+
+  if (!d) return <div className="spinner-wrap"><span className="loading-spinner" /></div>;
+
+  return (
+    <div>
+      <div className="section-head" style={{ marginBottom: 14 }}>
+        <h3 style={{ fontFamily: 'var(--display)' }}>📈 Análises</h3>
+        <button className="btn btn--ghost" style={{ padding: '.4rem .9rem' }} onClick={load}>Atualizar</button>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px,1fr))', gap: 14 }}>
+        <Card title="📅 Cadastros por mês (12 meses)"><Bars data={d.signups} color="var(--clay)" empty="Sem cadastros no período (ou chave admin ausente)." /></Card>
+        <Card title="🏍️ Eventos mais confirmados"><Bars data={d.topEvents} color="var(--moss)" empty="Sem confirmações ainda." /></Card>
+        <Card title="📍 Paradas por categoria"><Bars data={d.topCat} color="var(--clay)" /></Card>
+        <Card title="🗺️ Paradas por estado"><Bars data={d.topUf} color="var(--moss)" /></Card>
+        <Card title="❤️ Posts do feed mais curtidos"><Bars data={d.topPosts} color="var(--clay)" empty="Sem curtidas ainda." /></Card>
+      </div>
+    </div>
+  );
+}
+
 // ════════════════════════════════════════════════════════════
 // ESTATÍSTICAS
 // ════════════════════════════════════════════════════════════
@@ -241,12 +349,13 @@ export default function Dashboard() {
 
       {/* sub-abas */}
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 22 }}>
-        {[['stats', 'Estatísticas'], ['users', 'Usuários']].map(([k, l]) => (
+        {[['stats', 'Estatísticas'], ['analytics', 'Análises'], ['users', 'Usuários']].map(([k, l]) => (
           <button key={k} onClick={() => setTab(k)} style={{ fontFamily: 'var(--mono)', fontSize: 12, padding: '8px 16px', borderRadius: 6, border: '1px solid var(--border)', textTransform: 'uppercase', letterSpacing: '.06em', cursor: 'pointer', color: tab === k ? 'var(--ink)' : 'var(--paper-dim)', background: tab === k ? 'var(--clay)' : 'transparent' }}>{l}</button>
         ))}
       </div>
 
       <div style={{ display: tab === 'stats' ? 'block' : 'none' }}><Stats userStats={userStats} /></div>
+      {tab === 'analytics' && <Analytics />}
       <div style={{ display: tab === 'users' ? 'block' : 'none' }}><Users onStats={setUserStats} /></div>
     </div>
   );
