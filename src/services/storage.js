@@ -924,7 +924,7 @@ const toEvent = (e) => ({
   id: e.id, title: e.title, category: e.category, date: e.date,
   time: e.time, local: e.local, organizer: e.organizer,
   maxParticipants: e.max_participants, description: e.description,
-  tags: e.tags, type: e.type,
+  tags: e.tags, type: e.type, imageUrl: e.image_url,
 });
 
 export const getEvents = async () => {
@@ -939,6 +939,7 @@ export const addEvent = async (event) => {
     time: event.time, local: event.local, organizer: event.organizer,
     max_participants: event.maxParticipants || 100,
     description: event.description, tags: event.tags, type: event.type || 'open',
+    image_url: event.imageUrl || null,
   }).select().single();
   if (error) { console.error(error); return null; }
   return toEvent(data);
@@ -961,21 +962,29 @@ export const deleteEvent = async (id) => {
 
 // ── Event RSVPs (Supabase) ────────────────────────────────────
 export const getEventRsvps = async () => {
-  const { data, error } = await supabase.from('pv_event_rsvps').select('event_id, user_id, user_name');
+  const { data, error } = await supabase.from('pv_event_rsvps').select('event_id, user_id, user_name, status');
   if (error) return [];
   return data;
 };
 
-export const toggleEventRsvp = async (eventId, userId, userName) => {
+// status: 'going' (vou) | 'no' (não vou). Reenviar o mesmo status remove (toggle).
+export const setEventRsvp = async (eventId, userId, userName, status) => {
   const { data: existing } = await supabase.from('pv_event_rsvps')
-    .select('id').eq('event_id', eventId).eq('user_id', userId).maybeSingle();
+    .select('id, status').eq('event_id', eventId).eq('user_id', userId).maybeSingle();
   if (existing) {
-    await supabase.from('pv_event_rsvps').delete().eq('event_id', eventId).eq('user_id', userId);
-    return 'removed';
+    if (existing.status === status) {
+      await supabase.from('pv_event_rsvps').delete().eq('event_id', eventId).eq('user_id', userId);
+      return 'removed';
+    }
+    await supabase.from('pv_event_rsvps').update({ status, user_name: userName }).eq('event_id', eventId).eq('user_id', userId);
+    return status;
   }
-  await supabase.from('pv_event_rsvps').insert({ event_id: eventId, user_id: userId, user_name: userName });
-  return 'added';
+  await supabase.from('pv_event_rsvps').insert({ event_id: eventId, user_id: userId, user_name: userName, status });
+  return status;
 };
+
+// compat antigo
+export const toggleEventRsvp = (eventId, userId, userName) => setEventRsvp(eventId, userId, userName, 'going');
 
 // ── Site Config (Supabase) ────────────────────────────────────
 const DEFAULT_CONFIG = {
