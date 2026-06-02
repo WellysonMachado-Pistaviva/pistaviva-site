@@ -71,8 +71,14 @@ export default function FipeSearch() {
           <div style={{ color: 'var(--paper-dim)', fontSize: 14, marginTop: 4 }}>{res.AnoModelo === 32000 ? 'Zero KM' : res.AnoModelo} · {res.Combustivel} · cód. {res.CodigoFipe}</div>
 
           <div style={{ marginTop: 20, paddingTop: 18, borderTop: '1px solid var(--line)' }}>
-            <p style={{ color: 'var(--paper-dim)', fontSize: 14, marginBottom: 12 }}>Te ajudou? Segue a gente e bora rodar junto 🏍️</p>
-            <a className="btn btn--primary" href="https://www.instagram.com/pistavivaoficial" target="_blank" rel="noopener noreferrer" style={{ margin: '0 auto' }}>Seguir @pistavivaoficial</a>
+            <p style={{ color: 'var(--paper-dim)', fontSize: 14, marginBottom: 12 }}>Te ajudou? Compartilha e segue a gente 🏍️</p>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <a className="btn btn--primary" target="_blank" rel="noopener noreferrer"
+                href={`https://wa.me/?text=${encodeURIComponent(`💰 FIPE ${res.Marca} ${res.Modelo} (${res.AnoModelo === 32000 ? '0km' : res.AnoModelo}): ${res.Valor}\n\nConsulta grátis no Pistaviva: https://moto.pistaviva.com.br/fipe`)}`}>
+                Compartilhar no WhatsApp
+              </a>
+              <a className="btn btn--ghost" href="https://www.instagram.com/pistavivaoficial" target="_blank" rel="noopener noreferrer">Seguir @pistavivaoficial</a>
+            </div>
           </div>
         </div>
       )}
