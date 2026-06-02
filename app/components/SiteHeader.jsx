@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from './AuthProvider';
 
 const LINKS = [
-  { href: '/comunidade', label: 'Comunidade' },
+  { href: '/calculadora', label: 'Planejador' },
+  { href: '/mapa', label: 'Mapa' },
   { href: '/paradas', label: 'Paradas' },
+  { href: '/comunidade', label: 'Comunidade' },
   { href: '/blog', label: 'Blog' },
-  { href: '/rotas', label: 'Rotas' },
   { href: '/eventos', label: 'Eventos' },
 ];
 
