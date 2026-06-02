@@ -1,9 +1,26 @@
 import { useState, useEffect } from 'react';
 import { MapPin, Clock, Navigation, Star, ChevronDown, ChevronUp, MessageSquare, Send, BookOpen } from 'lucide-react';
-import { MapContainer, TileLayer, Polyline, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, Polyline, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useWeather } from '../hooks/useWeather';
 import { getRoutes, getPresetRoutes, getRouteComments, addRouteComment } from '../services/storage';
+
+const distMeters = (aLat, aLng, bLat, bLng) => {
+  const R = 6371000, toR = Math.PI / 180;
+  const dLat = (bLat - aLat) * toR, dLng = (bLng - aLng) * toR;
+  const s = Math.sin(dLat / 2) ** 2 + Math.cos(aLat * toR) * Math.cos(bLat * toR) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s));
+};
+
+const FitBounds = ({ points }) => {
+  const map = useMap();
+  useEffect(() => {
+    const pts = (points || []).filter(p => p && p[0] != null);
+    if (pts.length >= 2) map.fitBounds(pts, { padding: [25, 25] });
+    setTimeout(() => map.invalidateSize(), 200);
+  }, [points, map]);
+  return null;
+};
 
 const destIcon = L.divIcon({
   html: `<div style="width:22px;height:22px;border-radius:50%;background:#ef4444;display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:0 2px 6px rgba(239,68,68,.6);border:2px solid #fff;">🏁</div>`,
@@ -41,12 +58,32 @@ const RouteCard = ({ route, user, userLocation }) => {
   const [loadingCmt, setLoadingCmt] = useState(false);
   const [sending, setSending]     = useState(false);
   const [text, setText]           = useState('');
+  const [routeLine, setRouteLine] = useState(null);
 
   useEffect(() => {
     if (!expanded || comments.length > 0) return;
     setLoadingCmt(true);
     getRouteComments(route.id).then(data => { setComments(data); setLoadingCmt(false); });
   }, [expanded]);
+
+  // Desenha a rota (linha pelas estradas) via OSRM pelos waypoints — igual ao traçado do guia.
+  useEffect(() => {
+    if (!expanded || routeLine || !route.waypoints?.length) return;
+    const coords = route.waypoints.map(([la, ln]) => `${ln},${la}`).join(';');
+    fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`)
+      .then(r => r.json())
+      .then(d => { if (d?.routes?.[0]) setRouteLine(d.routes[0].geometry.coordinates.map(c => [c[1], c[0]])); })
+      .catch(() => {});
+  }, [expanded]);
+
+  // Início da rota e distância/tempo a partir do GPS do usuário.
+  const start = (route.originLat != null) ? { lat: route.originLat, lng: route.originLng } : { lat: route.destLat, lng: route.destLng };
+  const fromYou = (userLocation && start.lat != null) ? (() => {
+    const km = distMeters(userLocation.lat, userLocation.lng, start.lat, start.lng) / 1000;
+    const h = km / 55; // média ~55 km/h em estrada de moto
+    const tempo = h < 1 ? `${Math.round(h * 60)}min` : `${Math.floor(h)}h${h % 1 >= 0.1 ? String(Math.round((h % 1) * 60)).padStart(2, '0') : ''}`;
+    return { km: Math.round(km), tempo };
+  })() : null;
 
   const handleSend = async () => {
     if (!text.trim() || !user) return;
@@ -80,6 +117,9 @@ const RouteCard = ({ route, user, userLocation }) => {
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', fontSize: '13px', color: 'var(--muted)' }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Navigation size={12} color="var(--accent)" />{route.distance}</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={12} color="var(--accent)" />{route.duration}</span>
+          {fromYou
+            ? <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--accent)', fontWeight: 700 }}><MapPin size={12} />~{fromYou.tempo} de você ({fromYou.km} km)</span>
+            : <span style={{ display: 'flex', alignItems: 'center', gap: '4px', opacity: .7 }}><MapPin size={12} />ative o GPS p/ ver distância</span>}
           <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><MessageSquare size={12} color="var(--accent)" />{comments.length} relatos</span>
         </div>
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '8px' }}>
@@ -95,25 +135,34 @@ const RouteCard = ({ route, user, userLocation }) => {
           {/* ── MINI MAPA: sua posição → destino ── */}
           <div style={{ marginBottom: '16px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border)', height: '160px' }}>
             <MapContainer
-              center={userLocation ? [userLocation.lat, userLocation.lng] : [route.destLat, route.destLng]}
-              zoom={userLocation ? 7 : 8}
+              center={[start.lat, start.lng]}
+              zoom={8}
               style={{ height: '100%', width: '100%' }}
               attributionControl={false}
               zoomControl={false}
-              dragging={false}
               scrollWheelZoom={false}
             >
               <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+
+              {/* Traçado da rota (pelas estradas) */}
+              {routeLine && <Polyline positions={routeLine} color="#e8821e" weight={4} opacity={0.95} />}
+
+              {/* Início e fim da rota */}
+              <Marker position={[start.lat, start.lng]} icon={selfIcon} />
+              <Marker position={[route.destLat, route.destLng]} icon={destIcon} />
+
+              {/* Do GPS do usuário até o início (tracejado) */}
               {userLocation && (
                 <>
                   <Marker position={[userLocation.lat, userLocation.lng]} icon={selfIcon} />
-                  <Polyline
-                    positions={[[userLocation.lat, userLocation.lng], [route.destLat, route.destLng]]}
-                    color="#f97316" weight={3} dashArray="8 6" opacity={0.8}
-                  />
+                  <Polyline positions={[[userLocation.lat, userLocation.lng], [start.lat, start.lng]]} color="#6f9a5e" weight={2.5} dashArray="6 6" opacity={0.7} />
                 </>
               )}
-              <Marker position={[route.destLat, route.destLng]} icon={destIcon} />
+
+              <FitBounds points={[
+                ...(routeLine || [[start.lat, start.lng], [route.destLat, route.destLng]]),
+                ...(userLocation ? [[userLocation.lat, userLocation.lng]] : []),
+              ]} />
             </MapContainer>
           </div>
 
