@@ -6,7 +6,7 @@ export default function SiteFooter() {
       <div className="wrap">
         <div className="foot-grid">
           <div className="foot-col">
-            <Link className="brand" href="/"><img src="/logo.png" alt="Pistaviva" style={{ height: 30, width: 'auto' }} /></Link>
+            <Link className="brand" href="/"><img src="/logo.svg" alt="Pistaviva" style={{ height: 24, width: 'auto', maxWidth: '70%' }} /></Link>
             <p>Comunidade aberta e conteúdo para o mototurismo brasileiro. Da Serra da Mantiqueira para a estrada.</p>
           </div>
           <div className="foot-col">
