@@ -1,8 +1,12 @@
 import Link from 'next/link';
 import Cover from './components/Cover';
 import InstagramEmbeds from './components/InstagramEmbeds';
+import Counter from './components/Counter';
+import Marquee from './components/Marquee';
 import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
 import { getInstagramPosts } from './lib/site';
+
+const MARQUEE = ['Serra do Rio do Rastro', 'Mantiqueira', 'Serra da Canastra', 'Pedra do Baú', 'Campos do Jordão', 'Circuito das Águas', 'Cantareira', 'Estrada Real', 'Serra do Cipó', 'Capitólio', 'Rota dos Tropeiros', 'Rastro da Serpente'];
 
 export const revalidate = 300; // ISR: revalida home a cada 5 min
 
@@ -45,7 +49,7 @@ export default async function Home() {
             <h3>Rode junto, sempre</h3>
             <p>Comboio ao vivo, mapa colaborativo, passaporte de carimbos e um feed feito pela estrada.</p>
             <div className="stat-row">
-              <div className="stat"><div className="n">+27</div><div className="l">Estados</div></div>
+              <div className="stat"><div className="n"><Counter to={27} prefix="+" /></div><div className="l">Estados</div></div>
               <div className="stat"><div className="n">GPS</div><div className="l">Comboio ao vivo</div></div>
               <div className="stat"><div className="n">Livre</div><div className="l">Comunidade</div></div>
             </div>
@@ -53,7 +57,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <hr className="divider" />
+      <Marquee items={MARQUEE} />
 
       {/* PILARES */}
       <section className="section">
@@ -64,7 +68,7 @@ export default async function Home() {
               <h2>Quatro pilares</h2>
             </div>
           </div>
-          <div className="clusters">
+          <div className="clusters bento">
             <Link className="cluster" href="/comunidade"><span className="num">01</span><h3>Comunidade</h3><p>Feed aberto de pilotos: relatos, fotos e perrengues da estrada.</p><span className="go">Explorar →</span></Link>
             <Link className="cluster" href="/rotas"><span className="num">02</span><h3>Rotas &amp; Expedições</h3><p>Roteiros do Sudeste com paradas e nível de dificuldade.</p><span className="go">Explorar →</span></Link>
             <Link className="cluster" href="/blog"><span className="num">03</span><h3>Blog</h3><p>Guias, preparação de viagem e cultura do mototurismo brasileiro.</p><span className="go">Ler →</span></Link>

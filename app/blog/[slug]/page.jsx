@@ -52,11 +52,13 @@ export default async function BlogPost({ params }) {
   // FAQPage: dentro da seção "## Perguntas frequentes", cada h3 (pergunta) + p seguinte (resposta).
   const faq = [];
   let inFaq = false;
+  let faqStart = -1;
   for (let i = 0; i < blocks.length; i++) {
     const b = blocks[i];
-    if (b.t === 'h2') inFaq = /perguntas frequentes|faq|d[úu]vidas/i.test(b.v);
+    if (b.t === 'h2') { inFaq = /perguntas frequentes|faq|d[úu]vidas/i.test(b.v); if (inFaq && faqStart < 0) faqStart = i; }
     else if (inFaq && b.t === 'h3' && blocks[i + 1]?.t === 'p') faq.push({ q: b.v, a: blocks[i + 1].v });
   }
+  const bodyBlocks = (faq.length >= 2 && faqStart >= 0) ? blocks.slice(0, faqStart) : blocks;
   const faqLd = faq.length >= 2 ? {
     '@context': 'https://schema.org', '@type': 'FAQPage',
     mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
@@ -107,12 +109,26 @@ export default async function BlogPost({ params }) {
 
         <div className="article">
           {post.excerpt && <p className="lead">{post.excerpt}</p>}
-          {blocks.map((b, i) => {
+          {bodyBlocks.map((b, i) => {
             if (b.t === 'img') return <img key={i} src={b.v} alt="" style={{ borderRadius: 12, border: '1px solid var(--line)' }} />;
             if (b.t === 'h3') return <h3 key={i}>{b.v}</h3>;
             if (b.t === 'h2') return <h2 key={i}>{b.v}</h2>;
             return <p key={i}>{b.v}</p>;
           })}
+
+          {faq.length >= 2 && (
+            <>
+              <h2>Perguntas frequentes</h2>
+              <div className="faq">
+                {faq.map((f, i) => (
+                  <details key={i}>
+                    <summary>{f.q}</summary>
+                    <div className="ans">{f.a}</div>
+                  </details>
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         <div style={{ marginTop: '3rem' }}>

@@ -3,7 +3,11 @@ import dynamic from 'next/dynamic';
 import { useAuth } from './AuthProvider';
 
 const Spinner = () => (
-  <div className="spinner-wrap"><span className="loading-spinner" /></div>
+  <div className="wrap section" style={{ paddingTop: 'clamp(24px,4vw,48px)' }}>
+    <div className="skel-grid">
+      {Array.from({ length: 6 }).map((_, i) => <div key={i} className="skeleton skel-card" />)}
+    </div>
+  </div>
 );
 
 const PAGES = {
