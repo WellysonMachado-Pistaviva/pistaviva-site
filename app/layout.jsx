@@ -8,6 +8,7 @@ import './globals.css';
 import AuthProvider from './components/AuthProvider';
 import SiteHeader from './components/SiteHeader';
 import SiteFooter from './components/SiteFooter';
+import AnnouncementBar from './components/AnnouncementBar';
 
 const display = Bricolage_Grotesque({ subsets: ['latin'], weight: ['700', '800'], variable: '--font-display', display: 'swap' });
 const serif = Newsreader({ subsets: ['latin'], weight: ['400', '500', '600'], style: ['normal', 'italic'], variable: '--font-serif', display: 'swap' });
@@ -79,6 +80,7 @@ export default function RootLayout({ children }) {
         <div className="topo" aria-hidden="true" />
         <AuthProvider>
           <div className="ed-stack">
+            <AnnouncementBar />
             <SiteHeader />
             <main id="app" style={{ flex: 1 }}>{children}</main>
             <SiteFooter />

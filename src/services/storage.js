@@ -1055,3 +1055,34 @@ export const saveSiteConfig = async (config) => {
   });
   if (error) console.error(error);
 };
+
+// ── Denúncias / abuso ─────────────────────────────────────────
+export const reportContent = async (targetType, targetId, targetLabel, reason, user) => {
+  const { error } = await supabase.from('pv_reports').insert({
+    target_type: targetType, target_id: String(targetId), target_label: targetLabel || null,
+    reason: reason || null, reporter_id: String(user?.id || ''), reporter_name: user?.nome || user?.name || null, status: 'open',
+  });
+  return !error;
+};
+export const getReportsQueue = async (status = 'open') => {
+  const { data } = await supabase.from('pv_reports').select('*').eq('status', status).order('created_at', { ascending: false }).limit(300);
+  return data || [];
+};
+export const resolveReport = async (id) => { await supabase.from('pv_reports').update({ status: 'resolved' }).eq('id', id); };
+export const deleteReport  = async (id) => { await supabase.from('pv_reports').delete().eq('id', id); };
+
+// ── Comentários (moderação global) ────────────────────────────
+export const getAllFeedComments = async () => {
+  const { data } = await supabase.from('pv_post_comments').select('*').order('created_at', { ascending: false }).limit(300);
+  return data || [];
+};
+
+// ── Banner / aviso global ─────────────────────────────────────
+export const getAnnouncement = async () => {
+  const { data } = await supabase.from('pv_site_config').select('announcement, announcement_active').eq('id', 1).maybeSingle();
+  return data || null;
+};
+export const saveAnnouncement = async (text, active) => {
+  const { error } = await supabase.from('pv_site_config').upsert({ id: 1, announcement: text, announcement_active: active, updated_at: new Date().toISOString() });
+  return !error;
+};

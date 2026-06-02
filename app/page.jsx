@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getPublishedPosts } from './lib/blog';
+import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
 
 export const revalidate = 300; // ISR: revalida home a cada 5 min
 
@@ -9,6 +9,7 @@ const RouteIcon = () => (
 
 export default async function Home() {
   const posts = await getPublishedPosts(3);
+  const featured = await getFeaturedPosts(3);
 
   return (
     <>
@@ -56,6 +57,30 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* DESTAQUES */}
+      {featured.length > 0 && (
+        <section className="section">
+          <div className="wrap">
+            <div className="section-head">
+              <div><p className="eyebrow">⭐ Destaque</p><h2>Em alta na comunidade</h2></div>
+            </div>
+            <div className="routes">
+              {featured.map(p => (
+                <article className="route" key={p.id}>
+                  <Link href={`/blog/${p.slug}`} aria-label={p.title}>
+                    <div className="thumb">
+                      {p.tags?.[0] && <span className="tag">{p.tags[0]}</span>}
+                      {p.cover_url ? <img src={p.cover_url} alt={p.title} /> : <RouteIcon />}
+                    </div>
+                    <div className="body"><h3>{p.title}</h3><p>{p.excerpt || ''}</p></div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ÚLTIMO DO BLOG */}
       {posts.length > 0 && (

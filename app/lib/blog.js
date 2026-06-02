@@ -35,6 +35,22 @@ export async function getPostBySlug(slug) {
   }
 }
 
+export async function getFeaturedPosts(limit = 3) {
+  try {
+    const sb = supabaseServer();
+    const { data, error } = await sb
+      .from('pv_blog_posts')
+      .select('id, slug, title, excerpt, cover_url, tags, author')
+      .eq('published', true).eq('featured', true)
+      .order('published_at', { ascending: false })
+      .limit(limit);
+    if (error) return [];
+    return data || [];
+  } catch {
+    return [];
+  }
+}
+
 export async function getAllSlugs() {
   try {
     const sb = supabaseServer();
