@@ -19,7 +19,6 @@ const PAGES = {
   loja:        dynamic(() => import('../../src/views/Store'), { ssr: false, loading: Spinner }),
   perfil:      dynamic(() => import('../../src/views/Profile'), { ssr: false, loading: Spinner }),
   trechos:     dynamic(() => import('../../src/views/Segments'), { ssr: false, loading: Spinner }),
-  role:        dynamic(() => import('../../src/views/RideRecorder'), { ssr: false, loading: Spinner }),
   expedicoes:  dynamic(() => import('../../src/views/Expeditions'), { ssr: false, loading: Spinner }),
   admin:       dynamic(() => import('../../src/views/AdminDashboard'), { ssr: false, loading: Spinner }),
 };

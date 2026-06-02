@@ -88,6 +88,11 @@ export const joinComboioChannel = (comboioId, user, location, onSync, onChatRece
     .on('broadcast', { event: 'chat' }, (payload) => {
       if (onChatReceived) onChatReceived(payload.payload);
     })
+    .on('broadcast', { event: 'loc' }, (payload) => {
+      // Movimento ao vivo via broadcast (confiável). Presence não propaga re-track.
+      const p = payload.payload;
+      if (onMemberUpdate && p?.user?.id) onMemberUpdate(p.user.id, { user: p.user, location: p.location });
+    })
     .subscribe(async (status) => {
       if (status === 'SUBSCRIBED') {
         await comboioChannel.track({
@@ -102,14 +107,26 @@ export const joinComboioChannel = (comboioId, user, location, onSync, onChatRece
   return comboioChannel;
 };
 
+let _lastBroadcastAt = 0;
+const BROADCAST_THROTTLE_MS = 2500; // movimento ao vivo a cada ~2,5s
+
 export const updateComboioLocation = async (location) => {
   if (!comboioChannel || !_comboioUser) return;
   _trackingLocation = location;
   const now = Date.now();
+  const me = { id: _comboioUser.id, name: _comboioUser.name || _comboioUser.nome };
+
+  // 1) Broadcast da posição — chega a todos de forma confiável (re-track de Presence não propaga).
+  if (now - _lastBroadcastAt >= BROADCAST_THROTTLE_MS) {
+    _lastBroadcastAt = now;
+    comboioChannel.send({ type: 'broadcast', event: 'loc', payload: { user: me, location } });
+  }
+
+  // 2) Presence track — mantém roster e dá a posição a quem ENTRA depois. Throttle maior.
   if (now - _lastTrackAt < TRACK_THROTTLE_MS) return;
   _lastTrackAt = now;
   await comboioChannel.track({
-    user: { id: _comboioUser.id, name: _comboioUser.name || _comboioUser.nome },
+    user: me,
     location,
     pinnedMessage: _comboioPinnedMessage,
     updatedAt: new Date().toISOString()
