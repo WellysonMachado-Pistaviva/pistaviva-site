@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
-import { MapPin, Plus, Calculator, X, Share2, Navigation, Fuel, Clock, Wallet, Map as MapIcon, TrendingUp } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { MapPin, Plus, Calculator, X, Share2, Navigation, Fuel, Clock, Wallet, Map as MapIcon, TrendingUp, Camera } from 'lucide-react';
 import { MapContainer, TileLayer, Polyline, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useWeather } from '../hooks/useWeather';
 import { addRoute, saveCurrentRoute } from '../services/storage';
+import { supabase } from '../lib/supabaseClient';
+
+// distância haversine (km)
+const distKmLL = (aLat, aLng, bLat, bLng) => {
+  const R = 6371, toR = Math.PI / 180;
+  const dLat = (bLat - aLat) * toR, dLng = (bLng - aLng) * toR;
+  const s = Math.sin(dLat / 2) ** 2 + Math.cos(aLat * toR) * Math.cos(bLat * toR) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s));
+};
+const igLink = (ig) => !ig ? null : (ig.startsWith('http') ? ig : `https://instagram.com/${ig.replace(/^@/, '')}`);
 
 const showErr = (msg) => {
   const el = document.getElementById('app-toast');
@@ -46,8 +56,25 @@ const Planner = ({ user }) => {
   const [motoName, setMotoName]   = useState('');
   const [saved, setSaved]         = useState(false);
 
+  const [photographers, setPhotographers] = useState([]);
+
   const { weather: originWeather } = useWeather(result ? origin.lat : null, result ? origin.lng : null);
   const { weather: destWeather }   = useWeather(result ? dest.lat : null, result ? dest.lng : null);
+
+  useEffect(() => {
+    supabase.from('pv_photographers').select('id, slug, nome, local, instagram, site_url, lat, lng')
+      .eq('published', true).not('lat', 'is', null)
+      .then(({ data }) => setPhotographers(data || []));
+  }, []);
+
+  // Fotógrafos a até 12 km de qualquer ponto da rota traçada.
+  const routePhotographers = useMemo(() => {
+    if (!result?.line?.length || !photographers.length) return [];
+    const line = result.line.filter((_, i) => i % 8 === 0); // amostra a linha p/ performance
+    return photographers.filter(f =>
+      line.some(([lat, lng]) => distKmLL(lat, lng, f.lat, f.lng) <= 12)
+    );
+  }, [result, photographers]);
 
   const fetchSuggestions = async (query, type) => {
     if (query.length < 3) { setSuggestions([]); return; }
@@ -246,6 +273,27 @@ const Planner = ({ user }) => {
       {/* ── CARD RESULTADO — 1 SCREENSHOT ── */}
       {result && (
         <div className="reveal visible" style={{ marginTop:'12px', overflow:'hidden', border:'1px solid var(--border)', background:'var(--bg2)' }}>
+
+          {/* FOTÓGRAFOS NA ROTA */}
+          {routePhotographers.length > 0 && (
+            <div style={{ background:'rgba(255,98,0,.08)', borderBottom:'1px solid var(--border)', padding:'14px 16px' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:10, color:'var(--accent)', fontWeight:800, fontSize:13, letterSpacing:'.5px' }}>
+                <Camera size={16} /> {routePhotographers.length} fotógrafo{routePhotographers.length>1?'s':''} na sua rota
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                {routePhotographers.map(f => (
+                  <div key={f.id} style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap', background:'var(--bg)', border:'1px solid var(--border)', borderRadius:8, padding:'8px 12px' }}>
+                    <div style={{ flex:1, minWidth:140 }}>
+                      <div style={{ fontWeight:700, fontSize:14 }}>{f.nome}</div>
+                      {f.local && <div style={{ fontSize:12, color:'var(--muted)' }}>📍 {f.local}</div>}
+                    </div>
+                    {igLink(f.instagram) && <a href={igLink(f.instagram)} target="_blank" rel="noopener noreferrer" style={{ display:'inline-flex', alignItems:'center', gap:4, fontSize:12, color:'var(--accent)', fontWeight:700 }}>📷 Instagram</a>}
+                    {f.site_url && <a href={f.site_url} target="_blank" rel="noopener noreferrer" style={{ fontSize:12, color:'var(--accent)', fontWeight:700 }}>Fotos →</a>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* MAPA — compacto */}
           {result.line && result.line.length > 0 && (
