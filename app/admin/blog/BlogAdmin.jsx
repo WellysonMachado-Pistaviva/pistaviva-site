@@ -131,12 +131,18 @@ export default function BlogAdmin() {
           </label>
         </div>
         {form.cover_url && <img src={form.cover_url} alt="" style={{ maxHeight: 140, borderRadius: 8, marginBottom: 10 }} />}
-        <div style={{ marginBottom: 8 }}>
+        <div style={{ marginBottom: 8, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <label className="btn btn--ghost" style={{ cursor: 'pointer', margin: 0, display: 'inline-flex' }}>
             🖼️ Inserir imagem no corpo
             <input type="file" accept="image/*" hidden onChange={onBodyImage} />
           </label>
+          <button type="button" className="btn btn--ghost" onClick={() => setForm(f => ({
+            ...f,
+            excerpt: f.excerpt || 'Resumo da matéria em 1 ou 2 frases — aparece nos cards e no Google.',
+            body: f.body && f.body.trim() ? f.body : `Abertura: um parágrafo forte que resume a matéria e prende o leitor logo de cara.\n\n## Primeiro tópico\nDesenvolva o ponto principal. Use parágrafos curtos e diretos.\n\n## Segundo tópico\nContinue a matéria. Você pode inserir uma imagem no corpo com o botão acima.\n\n## Dicas práticas\nListe o que o leitor precisa saber, item por item.\n\n## Conclusão\nFeche com um resumo e um convite pra comunidade Pistaviva.`,
+          }))}>📋 Usar modelo</button>
         </div>
+        <p style={{ fontSize: 11, color: 'var(--paper-mut)', marginBottom: 8, fontFamily: 'var(--mono)' }}>Formatação: linha em branco = novo parágrafo · <b>## </b>título de seção · <b>### </b>subtítulo · imagem vira <b>[img:URL]</b>.</p>
         <textarea style={{ ...inp, minHeight: 220, resize: 'vertical' }} placeholder="Corpo do post (parágrafos separados por linha em branco). Imagens viram [img:URL]." value={form.body} onChange={e => setForm(f => ({ ...f, body: e.target.value }))} />
         <label style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 14 }}>
           <input type="checkbox" checked={form.published} onChange={e => setForm(f => ({ ...f, published: e.target.checked }))} /> Publicado
