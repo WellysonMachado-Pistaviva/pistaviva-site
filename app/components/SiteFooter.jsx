@@ -23,10 +23,11 @@ export default function SiteFooter() {
             <Link href="/mapa">Mapa</Link>
             <Link href="/comboio">Comboio</Link>
             <Link href="/fotografos">Fotógrafos</Link>
+            <Link href="/fipe">Tabela FIPE</Link>
           </div>
           <div className="foot-col">
             <h5>Conecte</h5>
-            <a href="https://www.instagram.com/pistaviva" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.instagram.com/pistavivaoficial" target="_blank" rel="noopener noreferrer">Instagram</a>
             <Link href="/parceiros">Parceiros</Link>
             <Link href="/loja">Loja</Link>
           </div>
