@@ -35,6 +35,23 @@ export default async function BlogPost({ params }) {
 
   const paragraphs = String(post.body || '').split(/\n{2,}/).filter(Boolean);
 
+  // FAQPage: dentro de uma seção "## Perguntas frequentes"/"## FAQ", cada "### Pergunta?" + parágrafo seguinte vira Q&A.
+  const faq = [];
+  let inFaq = false;
+  for (let i = 0; i < paragraphs.length; i++) {
+    const p = paragraphs[i];
+    if (p.startsWith('## ')) inFaq = /perguntas frequentes|faq|d[úu]vidas/i.test(p);
+    else if (inFaq && p.startsWith('### ')) {
+      const q = p.slice(4).trim();
+      const a = (paragraphs[i + 1] && !paragraphs[i + 1].startsWith('#')) ? paragraphs[i + 1].trim() : '';
+      if (q && a) faq.push({ q, a });
+    }
+  }
+  const faqLd = faq.length >= 2 ? {
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  } : null;
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -60,6 +77,7 @@ export default async function BlogPost({ params }) {
     <article>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
       <div className="wrap">
         <nav className="crumbs"><Link href="/">Início</Link> / <Link href="/blog">Blog</Link> / <span>{post.title}</span></nav>
 

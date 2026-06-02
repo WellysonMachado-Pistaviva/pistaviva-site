@@ -139,7 +139,7 @@ export default function BlogAdmin() {
           <button type="button" className="btn btn--ghost" onClick={() => setForm(f => ({
             ...f,
             excerpt: f.excerpt || 'Resumo da matéria em 1 ou 2 frases — aparece nos cards e no Google.',
-            body: f.body && f.body.trim() ? f.body : `Abertura: um parágrafo forte que resume a matéria e prende o leitor logo de cara.\n\n## Primeiro tópico\nDesenvolva o ponto principal. Use parágrafos curtos e diretos.\n\n## Segundo tópico\nContinue a matéria. Você pode inserir uma imagem no corpo com o botão acima.\n\n## Dicas práticas\nListe o que o leitor precisa saber, item por item.\n\n## Conclusão\nFeche com um resumo e um convite pra comunidade Pistaviva.`,
+            body: f.body && f.body.trim() ? f.body : `Abertura: um parágrafo forte que resume a matéria e prende o leitor logo de cara.\n\n## Primeiro tópico\nDesenvolva o ponto principal. Use parágrafos curtos e diretos.\n\n## Segundo tópico\nContinue a matéria. Você pode inserir uma imagem no corpo com o botão acima.\n\n## Dicas práticas\nListe o que o leitor precisa saber, item por item.\n\n## Conclusão\nFeche com um resumo e um convite pra comunidade Pistaviva.\n\n## Perguntas frequentes\n### Primeira pergunta que o leitor faria?\nResposta direta e completa (vira rich result no Google).\n### Segunda pergunta?\nOutra resposta clara.`,
           }))}>📋 Usar modelo</button>
         </div>
         <p style={{ fontSize: 11, color: 'var(--paper-mut)', marginBottom: 8, fontFamily: 'var(--mono)' }}>Formatação: linha em branco = novo parágrafo · <b>## </b>título de seção · <b>### </b>subtítulo · imagem vira <b>[img:URL]</b>.</p>
