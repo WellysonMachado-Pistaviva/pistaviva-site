@@ -34,19 +34,28 @@ export default async function BlogPost({ params }) {
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  const paragraphs = String(post.body || '').split(/\n{2,}/).filter(Boolean);
+  // Parse linha a linha (robusto a 1 ou 2 quebras): blocos h2/h3/img/p.
+  const blocks = [];
+  let buf = [];
+  const flush = () => { if (buf.length) { blocks.push({ t: 'p', v: buf.join(' ') }); buf = []; } };
+  for (const raw of String(post.body || '').split('\n')) {
+    const l = raw.trim();
+    if (!l) { flush(); continue; }
+    const img = l.match(/^\[img:(.+)\]$/);
+    if (img) { flush(); blocks.push({ t: 'img', v: img[1].trim() }); continue; }
+    if (l.startsWith('### ')) { flush(); blocks.push({ t: 'h3', v: l.slice(4) }); continue; }
+    if (l.startsWith('## ')) { flush(); blocks.push({ t: 'h2', v: l.slice(3) }); continue; }
+    buf.push(l);
+  }
+  flush();
 
-  // FAQPage: dentro de uma seção "## Perguntas frequentes"/"## FAQ", cada "### Pergunta?" + parágrafo seguinte vira Q&A.
+  // FAQPage: dentro da seção "## Perguntas frequentes", cada h3 (pergunta) + p seguinte (resposta).
   const faq = [];
   let inFaq = false;
-  for (let i = 0; i < paragraphs.length; i++) {
-    const p = paragraphs[i];
-    if (p.startsWith('## ')) inFaq = /perguntas frequentes|faq|d[úu]vidas/i.test(p);
-    else if (inFaq && p.startsWith('### ')) {
-      const q = p.slice(4).trim();
-      const a = (paragraphs[i + 1] && !paragraphs[i + 1].startsWith('#')) ? paragraphs[i + 1].trim() : '';
-      if (q && a) faq.push({ q, a });
-    }
+  for (let i = 0; i < blocks.length; i++) {
+    const b = blocks[i];
+    if (b.t === 'h2') inFaq = /perguntas frequentes|faq|d[úu]vidas/i.test(b.v);
+    else if (inFaq && b.t === 'h3' && blocks[i + 1]?.t === 'p') faq.push({ q: b.v, a: blocks[i + 1].v });
   }
   const faqLd = faq.length >= 2 ? {
     '@context': 'https://schema.org', '@type': 'FAQPage',
@@ -98,12 +107,11 @@ export default async function BlogPost({ params }) {
 
         <div className="article">
           {post.excerpt && <p className="lead">{post.excerpt}</p>}
-          {paragraphs.map((para, i) => {
-            const img = para.match(/^\[img:(.+)\]$/);
-            if (img) return <img key={i} src={img[1].trim()} alt="" style={{ borderRadius: 12, border: '1px solid var(--line)' }} />;
-            if (para.startsWith('### ')) return <h3 key={i}>{para.slice(4)}</h3>;
-            if (para.startsWith('## ')) return <h2 key={i}>{para.slice(3)}</h2>;
-            return <p key={i}>{para}</p>;
+          {blocks.map((b, i) => {
+            if (b.t === 'img') return <img key={i} src={b.v} alt="" style={{ borderRadius: 12, border: '1px solid var(--line)' }} />;
+            if (b.t === 'h3') return <h3 key={i}>{b.v}</h3>;
+            if (b.t === 'h2') return <h2 key={i}>{b.v}</h2>;
+            return <p key={i}>{b.v}</p>;
           })}
         </div>
 
