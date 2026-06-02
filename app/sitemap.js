@@ -1,9 +1,10 @@
 import { getAllSlugs } from './lib/blog';
+import { getAllSpotSlugs } from './lib/spots';
 
 const BASE = 'https://moto.pistaviva.com.br';
 
 export default async function sitemap() {
-  const routes = ['', '/comunidade', '/blog', '/rotas', '/eventos', '/mapa', '/comboio', '/loja', '/parceiros', '/expedicoes', '/passaporte', '/trechos', '/pista-ao-vivo', '/calculadora'];
+  const routes = ['', '/comunidade', '/paradas', '/blog', '/rotas', '/eventos', '/mapa', '/comboio', '/loja', '/parceiros', '/expedicoes', '/passaporte', '/trechos', '/pista-ao-vivo', '/calculadora'];
   const staticEntries = routes.map(p => ({
     url: `${BASE}${p}`,
     changeFrequency: 'weekly',
@@ -19,7 +20,13 @@ export default async function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.6,
     }));
-  } catch { /* DB indisponível no build → só rotas estáticas */ }
+  } catch { /* DB indisponível no build */ }
 
-  return [...staticEntries, ...posts];
+  let paradas = [];
+  try {
+    const slugs = await getAllSpotSlugs();
+    paradas = slugs.map(s => ({ url: `${BASE}/parada/${s.slug}`, changeFrequency: 'weekly', priority: 0.6 }));
+  } catch { /* DB indisponível no build */ }
+
+  return [...staticEntries, ...posts, ...paradas];
 }
