@@ -102,7 +102,18 @@ function Analytics() {
       }
     } catch { /* vazio */ }
 
-    setD({ signups, topCat, topUf, topEvents, topPosts });
+    // mais vistas (precisa da coluna views — falha silenciosa se não existir)
+    let viewSpots = [], viewBlog = [];
+    try {
+      const { data, error } = await supabase.from('pv_spots').select('nome, views').order('views', { ascending: false }).limit(8);
+      if (!error) viewSpots = (data || []).filter(r => (r.views || 0) > 0).map(r => ({ label: r.nome, value: r.views || 0 }));
+    } catch { /* sem coluna */ }
+    try {
+      const { data, error } = await supabase.from('pv_blog_posts').select('title, views').eq('published', true).order('views', { ascending: false }).limit(8);
+      if (!error) viewBlog = (data || []).filter(r => (r.views || 0) > 0).map(r => ({ label: r.title, value: r.views || 0 }));
+    } catch { /* sem coluna */ }
+
+    setD({ signups, topCat, topUf, topEvents, topPosts, viewSpots, viewBlog });
   }, []);
   useEffect(() => { load(); }, [load]);
 
@@ -115,6 +126,8 @@ function Analytics() {
         <button className="btn btn--ghost" style={{ padding: '.4rem .9rem' }} onClick={load}>Atualizar</button>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px,1fr))', gap: 14 }}>
+        <Card title="👁️ Paradas mais vistas"><Bars data={d.viewSpots} color="var(--clay)" empty="Sem dados de visualização ainda (rode o SQL do contador)." /></Card>
+        <Card title="👁️ Matérias mais vistas"><Bars data={d.viewBlog} color="var(--moss)" empty="Sem dados de visualização ainda (rode o SQL do contador)." /></Card>
         <Card title="📅 Cadastros por mês (12 meses)"><Bars data={d.signups} color="var(--clay)" empty="Sem cadastros no período (ou chave admin ausente)." /></Card>
         <Card title="🏍️ Eventos mais confirmados"><Bars data={d.topEvents} color="var(--moss)" empty="Sem confirmações ainda." /></Card>
         <Card title="📍 Paradas por categoria"><Bars data={d.topCat} color="var(--clay)" /></Card>

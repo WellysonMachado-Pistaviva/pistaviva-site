@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Cover from '../../components/Cover';
 import { notFound } from 'next/navigation';
 import { getPostBySlug, getAllSlugs } from '../../lib/blog';
+import ViewPing from '../../components/ViewPing';
 
 export const revalidate = 300;
 
@@ -90,6 +91,7 @@ export default async function BlogPost({ params }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
+      <ViewPing kind="blog" id={post.id} />
       <div className="wrap">
         <nav className="crumbs"><Link href="/">Início</Link> / <Link href="/blog">Blog</Link> / <span>{post.title}</span></nav>
 

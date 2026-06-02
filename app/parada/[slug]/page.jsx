@@ -3,6 +3,7 @@ import Cover from '../../components/Cover';
 import { notFound } from 'next/navigation';
 import { getSpotBySlug, getAllSpotSlugs } from '../../lib/spots';
 import { SELOS, catNome } from '../../lib/spotMeta';
+import ViewPing from '../../components/ViewPing';
 
 export const revalidate = 120;
 
@@ -52,6 +53,7 @@ export default async function ParadaPage({ params }) {
     <article className="wrap" style={{ paddingTop: '1rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <ViewPing kind="spot" id={s.id} />
       <nav className="crumbs"><Link href="/">Início</Link> / <Link href="/paradas">Paradas</Link> / <span>{s.nome}</span></nav>
 
       <header className="post-hero">
