@@ -119,14 +119,14 @@ export const uploadPostImage = async (base64DataUrl, userId) => {
 // ── Posts (Supabase) ────────────────────────────────────────────────────
 export const getPosts = async (currentUserId = null) => {
   const { data, error } = await supabase.from('pv_posts').select(`
-    id, user_id, author_name, content, image_url, created_at,
+    *,
     pv_post_comments ( id, author_name, content ),
     pv_post_likes ( user_id )
   `).order('created_at', { ascending: false }).limit(50);
 
   if (error) { console.error('Error fetching posts:', error); return []; }
-  
-  return data.map(p => {
+
+  return (data || []).filter(p => p.hidden !== true).map(p => {
     let contentObj = { city: '', uf: '', category: 'viagem', comment: p.content };
     try { contentObj = JSON.parse(p.content); } catch (e) {}
     return {
@@ -951,7 +951,7 @@ const toEvent = (e) => ({
 export const getEvents = async () => {
   const { data, error } = await supabase.from('pv_events').select('*').order('created_at', { ascending: true });
   if (error || !data?.length) return [];
-  return data.map(toEvent);
+  return data.filter(e => e.hidden !== true).map(toEvent);
 };
 
 export const addEvent = async (event) => {
