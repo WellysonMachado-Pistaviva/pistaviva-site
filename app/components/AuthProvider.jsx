@@ -1,13 +1,13 @@
 'use client';
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import {
-  registerUser, loginUser, logoutUser, getCurrentUser, maskCPF, initAdminUser,
-} from '../../src/services/auth';
-import { getAvatarUrl } from '../../src/services/storage';
-import { requestNotificationPermission } from '../../src/services/notify';
 
 const GlobalTracker = dynamic(() => import('../../src/components/GlobalTracker'), { ssr: false });
+
+// maskCPF puro (inline) — evita importar src/services/auth estaticamente (que puxa supabase-js
+// pro bundle inicial de TODAS as páginas). supabase agora carrega sob demanda (dynamic import).
+const maskCPF = (v = '') => v.replace(/\D/g, '').slice(0, 11)
+  .replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
 
 const ESTADOS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
 
@@ -49,21 +49,23 @@ export default function AuthProvider({ children }) {
   const cidades = useIBGECidades(authForm.estado);
 
   useEffect(() => {
-    initAdminUser();
-    const saved = getCurrentUser();
-    if (saved) {
+    (async () => {
+      const auth = await import('../../src/services/auth');
+      auth.initAdminUser();
+      const saved = auth.getCurrentUser();
+      if (!saved) return;
       setUser(saved);
       setIsAdmin(saved.isAdmin || false);
       if (!saved.avatarUrl && saved.id) {
-        getAvatarUrl(saved.id).then(url => {
-          if (url) {
-            const updated = { ...saved, avatarUrl: url };
-            localStorage.setItem('pv_user', JSON.stringify(updated));
-            setUser(updated);
-          }
-        });
+        const { getAvatarUrl } = await import('../../src/services/storage');
+        const url = await getAvatarUrl(saved.id);
+        if (url) {
+          const updated = { ...saved, avatarUrl: url };
+          localStorage.setItem('pv_user', JSON.stringify(updated));
+          setUser(updated);
+        }
       }
-    }
+    })();
   }, []);
 
   const openAuthModal = useCallback((tab = 'login') => { setIsAuthModalOpen(true); setAuthTab(tab); setAuthError(''); }, []);
@@ -72,29 +74,37 @@ export default function AuthProvider({ children }) {
     setAuthForm({ nome: '', cpf: '', estado: '', cidade: '', senha: '', confirmSenha: '' });
   };
 
+  const notify = async () => {
+    const { requestNotificationPermission } = await import('../../src/services/notify');
+    requestNotificationPermission();
+  };
+
   const doLogin = async () => {
     setAuthLoading(true); setAuthError('');
+    const { loginUser } = await import('../../src/services/auth');
     const result = await loginUser({ cpf: authForm.cpf, senha: authForm.senha });
     setAuthLoading(false);
     if (!result.ok) { setAuthError(result.error); return; }
     setUser(result.user); setIsAdmin(result.user.isAdmin || false);
     closeAuthModal();
     showToast(`Bem-vindo de volta, ${result.user.nome || result.user.name}! 🏍️`, 'success');
-    requestNotificationPermission();
+    notify();
   };
 
   const doRegister = async () => {
     setAuthLoading(true); setAuthError('');
+    const { registerUser } = await import('../../src/services/auth');
     const result = await registerUser(authForm);
     setAuthLoading(false);
     if (!result.ok) { setAuthError(result.error); return; }
     setUser(result.user); setIsAdmin(false);
     closeAuthModal();
     showToast(`Bem-vindo ao Pista Viva, ${result.user.nome || result.user.name}! 🏍️`, 'success');
-    requestNotificationPermission();
+    notify();
   };
 
-  const doLogout = useCallback(() => {
+  const doLogout = useCallback(async () => {
+    const { logoutUser } = await import('../../src/services/auth');
     logoutUser(); setUser(null); setIsAdmin(false);
     showToast('Até logo, piloto!');
   }, []);
