@@ -6,10 +6,10 @@ import { useAuth } from './AuthProvider';
 
 const LINKS = [
   { href: '/comunidade', label: 'Comunidade' },
+  { href: '/paradas', label: 'Paradas' },
   { href: '/blog', label: 'Blog' },
   { href: '/rotas', label: 'Rotas' },
   { href: '/eventos', label: 'Eventos' },
-  { href: '/mapa', label: 'Mapa' },
 ];
 
 export default function SiteHeader() {
