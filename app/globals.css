@@ -6,40 +6,43 @@
    ========================================================= */
 
 :root{
-  /* Paleta: preto / branco / laranja (CFMoto + Yamaha) */
-  --ink:        #0a0b0d;
-  --ink-2:      #121317;
-  --ink-3:      #1a1c21;
-  --line:       #272a31;
+  /* Tokens IGNIS — laranja / preto / branco */
+  --ink:        #0c0c0d;
+  --ink-2:      #16161a;
+  --ink-3:      #1f1f24;
+  --line:       #2a2a30;        /* divisória em zonas escuras */
   --paper:      #ffffff;
-  --paper-dim:  #b6b9c2;
-  --paper-mut:  #82858f;
-  --clay:       #ff5a1f;
-  --clay-soft:  #ff7c47;
-  /* "moss" repontado p/ neutro/laranja — elimina o verde antigo sem quebrar refs */
-  --moss:       #ff5a1f;
-  --moss-deep:  #1a1c21;
+  --paper-dim:  #b6b6bb;
+  --paper-mut:  #8a8a90;
+  --clay:       #ff5a00;        /* = --accent */
+  --clay-soft:  #ff7a1a;        /* = --accent-2 */
+  --moss:       #ff5a00;
+  --moss-deep:  #16161a;
 
-  /* tons claros (seções brancas da home) */
+  /* claros (Yamaha/IGNIS) */
   --snow:       #ffffff;
-  --snow-2:     #f4f4f6;
-  --snow-line:  #e5e6ea;
-  --ink-soft:   #54575f;
+  --snow-2:     #f4f4f2;
+  --snow-line:  #e6e6e2;
+  --ink-soft:   #6f6f72;
 
-  /* === Override dos tokens do app antigo: reskin global === */
-  --bg:   #0a0b0d;
-  --bg2:  #121317;
-  --bg3:  #1a1c21;
-  --bg4:  #20232a;
-  --accent:       #ff5a1f;
-  --accent-light: #ff7c47;
-  --accent-hover: #ff7c47;
-  --accent-subtle:rgba(255,90,31,.08);
-  --accent-glow:  rgba(255,90,31,.20);
+  /* aliases IGNIS */
+  --accent:       #ff5a00;
+  --accent-2:     #ff7a1a;
+  --paper-2:      #f4f4f2;
+
+  /* === Override dos tokens do app antigo === */
+  --bg:   #0c0c0d;
+  --bg2:  #16161a;
+  --bg3:  #1f1f24;
+  --bg4:  #26262c;
+  --accent-light: #ff7a1a;
+  --accent-hover: #ff7a1a;
+  --accent-subtle:rgba(255,90,0,.08);
+  --accent-glow:  rgba(255,90,0,.20);
   --text:  #ffffff;
-  --muted: #82858f;
-  --border:       #272a31;
-  --border-hover: #3a3e47;
+  --muted: #8a8a90;
+  --border:       #2a2a30;
+  --border-hover: #3a3a42;
 
   /* Tipografia (vars vêm do next/font no <html>) */
   --display: var(--font-display), "Arial Narrow", sans-serif;
@@ -515,3 +518,126 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
 .cat p{ font-size:.92rem; color:var(--ink-soft); margin-top:.5rem; flex:1; line-height:1.55; }
 .cat-go{ margin-top:1.1rem; font-family:var(--mono); font-size:.73rem; text-transform:uppercase; letter-spacing:.08em; color:var(--clay); display:inline-flex; gap:.4rem; transition:gap .2s ease; }
 .cat:hover .cat-go{ gap:.75rem; }
+
+/* =========================================================
+   LAYOUT IGNIS — home (escopo .ignis)
+   ========================================================= */
+.ignis{ --gut: clamp(20px,5vw,72px); }
+.ignis .wrap{ max-width:1280px; }
+
+/* tipografia base IGNIS */
+.ignis h1,.ignis h2,.ignis h3{ font-family:var(--display); line-height:.92; letter-spacing:-.01em; text-transform:uppercase; font-weight:800; }
+.ig-eyebrow{ font-family:var(--mono); font-weight:700; text-transform:uppercase; letter-spacing:.22em; font-size:12px; color:var(--accent); display:inline-flex; align-items:center; gap:10px; }
+.ig-eyebrow::before{ content:""; width:26px; height:2px; background:currentColor; }
+.ig-eyebrow.on-dark{ color:var(--accent-2); }
+.ig-eyebrow.on-accent{ color:#fff; }
+.ig-title{ font-size:clamp(38px,6vw,84px); }
+
+/* botões IGNIS */
+.ig-btn{ display:inline-flex; align-items:center; gap:10px; font-family:var(--mono); font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:13.5px; padding:15px 26px; border-radius:2px; transition:.18s ease; white-space:nowrap; cursor:pointer; }
+.ig-btn .arr{ transition:transform .2s ease; }
+.ig-btn:hover .arr{ transform:translateX(4px); }
+.ig-btn--primary{ background:var(--accent); color:#fff; }
+.ig-btn--primary:hover{ background:#e84e00; }
+.ig-btn--ghost{ border:1.5px solid currentColor; color:var(--ink); }
+.ig-btn--ghost:hover{ background:var(--ink); color:#fff; }
+.ig-btn--ghost.on-dark{ color:#fff; }
+.ig-btn--ghost.on-dark:hover{ background:#fff; color:var(--ink); }
+.ig-btn--ghost.on-accent{ color:#fff; border-color:rgba(255,255,255,.85); }
+.ig-btn--ghost.on-accent:hover{ background:#fff; color:var(--accent); border-color:#fff; }
+
+/* HERO overlay */
+.ig-hero{ position:relative; background:var(--ink); color:#fff; overflow:hidden; }
+.ig-hero-media{ position:absolute; inset:0; z-index:0; background:
+    radial-gradient(60% 90% at 80% 20%, rgba(255,90,0,.18), transparent 60%),
+    url('/symbol.svg') no-repeat right -6% center/auto 86%,
+    #0c0c0d; opacity:1; }
+.ig-hero-media::after{ content:""; position:absolute; inset:0; opacity:.5; background:#0c0c0d; mix-blend-mode:multiply; }
+.ig-hero-scrim{ position:absolute; inset:0; z-index:1; background:
+    linear-gradient(90deg,rgba(8,8,9,.92) 0%,rgba(8,8,9,.6) 40%,rgba(8,8,9,.1) 72%,rgba(8,8,9,.4) 100%),
+    linear-gradient(0deg,rgba(8,8,9,.9) 0%,transparent 46%); }
+.ig-hero-inner{ position:relative; z-index:2; min-height:84vh; display:flex; flex-direction:column; justify-content:flex-end; padding-top:90px; padding-bottom:48px; }
+.ig-hero .ig-eyebrow{ margin-bottom:20px; }
+.ig-hero h1{ font-size:clamp(52px,11vw,150px); line-height:.84; letter-spacing:-.015em; }
+.ig-hero h1 .it{ font-style:italic; color:var(--accent); }
+.ig-lede{ font-family:var(--font); font-size:clamp(16px,1.6vw,20px); max-width:46ch; color:rgba(255,255,255,.8); margin-top:22px; line-height:1.45; text-transform:none; }
+.ig-actions{ display:flex; gap:14px; margin-top:32px; flex-wrap:wrap; align-items:center; }
+
+/* spec strip */
+.ig-spec-strip{ position:relative; z-index:2; border-top:1px solid rgba(255,255,255,.14); background:rgba(8,8,9,.55); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
+.ig-spec-strip .wrap{ display:flex; align-items:center; flex-wrap:wrap; }
+.ig-spec{ padding:20px 0 20px 28px; display:flex; flex-direction:column; gap:3px; flex:1; min-width:120px; border-left:1px solid rgba(255,255,255,.12); }
+.ig-spec:first-child{ border-left:none; padding-left:0; }
+.ig-spec .v{ font-family:var(--display); font-weight:700; font-size:30px; color:#fff; line-height:1; }
+.ig-spec .k{ font-family:var(--mono); text-transform:uppercase; letter-spacing:.14em; font-size:10.5px; color:rgba(255,255,255,.55); font-weight:600; }
+.ig-spec .model-name{ font-family:var(--mono); font-weight:700; text-transform:uppercase; letter-spacing:.05em; font-size:18px; color:var(--accent-2); }
+@media(max-width:680px){ .ig-spec{ flex:1 1 45%; min-width:45%; padding-left:0; border-left:none; } }
+
+/* CATEGORIAS */
+.ig-cats{ background:var(--paper); padding:clamp(64px,9vw,118px) 0 clamp(48px,7vw,88px); }
+.ig-sechead{ display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:42px; flex-wrap:wrap; }
+.ig-sechead .lead{ max-width:62%; }
+.ig-sechead .ig-eyebrow{ margin-bottom:16px; }
+.ig-sechead p{ font-family:var(--font); color:var(--muted); max-width:44ch; margin-top:14px; line-height:1.5; text-transform:none; }
+.ig-cat-rail{ display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
+@media(max-width:1024px){ .ig-cat-rail{ grid-template-columns:repeat(3,1fr); } }
+@media(max-width:640px){ .ig-cat-rail{ grid-template-columns:repeat(2,1fr); } }
+.ig-cat-card{ position:relative; aspect-ratio:3/4; overflow:hidden; background:linear-gradient(160deg,#1f1f24,#0c0c0d); color:#fff; display:flex; align-items:flex-end; border-radius:3px; isolation:isolate; transition:transform .35s cubic-bezier(.2,.7,.2,1); }
+.ig-cat-card::after{ content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(0deg,rgba(8,8,9,.92),rgba(8,8,9,.05) 62%); }
+.ig-cat-card .ig-cat-ico{ position:absolute; inset:0; display:grid; place-items:center; font-size:54px; z-index:0; opacity:.9; transition:transform .5s cubic-bezier(.2,.7,.2,1); }
+.ig-cat-card:hover{ transform:translateY(-4px); }
+.ig-cat-card:hover .ig-cat-ico{ transform:scale(1.12); }
+.ig-cat-card .lbl{ position:relative; z-index:2; padding:18px; width:100%; }
+.ig-cat-card .lbl .n{ font-family:var(--display); font-weight:700; text-transform:uppercase; font-size:24px; line-height:1; }
+.ig-cat-card .lbl .c{ font-family:var(--mono); text-transform:uppercase; letter-spacing:.12em; font-size:10.5px; color:rgba(255,255,255,.65); font-weight:600; margin-top:7px; display:flex; align-items:center; justify-content:space-between; }
+.ig-cat-card .lbl .c .arr{ color:var(--accent-2); transition:transform .25s; }
+.ig-cat-card:hover .lbl .c .arr{ transform:translateX(4px); }
+.ig-cat-card .tagn{ position:absolute; top:14px; left:16px; z-index:2; font-family:var(--display); font-weight:700; font-size:13px; color:rgba(255,255,255,.45); }
+
+/* MODELOS (mais vendidas) */
+.ig-models{ background:var(--ink); color:#fff; padding:clamp(64px,9vw,118px) 0; }
+.ig-models .ig-sechead p{ color:rgba(255,255,255,.6); }
+.ig-filters{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:34px; }
+.ig-chip{ font-family:var(--mono); font-weight:600; text-transform:uppercase; letter-spacing:.08em; font-size:12.5px; color:rgba(255,255,255,.72); padding:10px 18px; border:1.5px solid rgba(255,255,255,.18); border-radius:100px; transition:.15s; }
+.ig-chip:hover{ border-color:rgba(255,255,255,.5); color:#fff; }
+.ig-chip.active{ background:var(--accent); border-color:var(--accent); color:#fff; }
+.ig-model-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+@media(max-width:980px){ .ig-model-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:600px){ .ig-model-grid{ grid-template-columns:1fr; } }
+.ig-model{ background:var(--ink-2); border:1px solid rgba(255,255,255,.07); border-radius:4px; overflow:hidden; display:flex; flex-direction:column; transition:.25s; }
+.ig-model:hover{ transform:translateY(-4px); border-color:rgba(255,90,0,.5); }
+.ig-model .pic{ position:relative; aspect-ratio:4/3; background:linear-gradient(160deg,#1c1c20,#0a0a0b); overflow:hidden; display:grid; place-items:center; }
+.ig-model .pic-ph{ font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:26px; color:rgba(255,255,255,.12); letter-spacing:.04em; }
+.ig-model .cat-tag{ position:absolute; top:13px; left:13px; z-index:3; background:rgba(8,8,9,.7); color:var(--accent-2); font-family:var(--mono); font-weight:700; text-transform:uppercase; letter-spacing:.1em; font-size:10px; padding:6px 10px; border-radius:2px; }
+.ig-model .body{ padding:20px; display:flex; flex-direction:column; gap:4px; flex:1; }
+.ig-model .body h3{ font-size:26px; letter-spacing:0; }
+.ig-model .foot{ margin-top:auto; display:flex; align-items:flex-end; justify-content:space-between; padding-top:18px; }
+.ig-model .price{ display:flex; flex-direction:column; gap:1px; }
+.ig-model .price .from{ font-family:var(--mono); text-transform:uppercase; letter-spacing:.12em; font-size:10px; color:rgba(255,255,255,.45); font-weight:600; }
+.ig-model .price .val{ font-family:var(--display); font-weight:700; font-size:24px; }
+.ig-model .more{ font-family:var(--mono); font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:12px; color:var(--accent-2); display:inline-flex; align-items:center; gap:6px; }
+.ig-model .more .arr{ transition:transform .2s; }
+.ig-model:hover .more .arr{ transform:translateX(3px); }
+
+/* FAIXA CTA */
+.ig-band{ background:var(--accent); color:#fff; padding:clamp(48px,7vw,82px) 0; }
+.ig-band .wrap{ display:flex; align-items:center; justify-content:space-between; gap:32px; flex-wrap:wrap; }
+.ig-band h2{ font-size:clamp(34px,5vw,66px); line-height:.92; max-width:18ch; margin-top:12px; }
+
+/* NOTÍCIAS */
+.ig-news{ background:var(--paper); padding:clamp(64px,9vw,118px) 0; }
+.ig-news-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:22px; }
+@media(max-width:980px){ .ig-news-grid{ grid-template-columns:1fr 1fr; } }
+@media(max-width:600px){ .ig-news-grid{ grid-template-columns:1fr; } }
+.ig-post .pic{ position:relative; aspect-ratio:16/10; overflow:hidden; background:var(--paper-2); border-radius:4px; display:grid; place-items:center; }
+.ig-post .pic img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s cubic-bezier(.2,.7,.2,1); }
+.ig-post:hover .pic img{ transform:scale(1.04); }
+.ig-post .pic-ph{ font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:24px; color:#d7d7d2; letter-spacing:.06em; }
+.ig-post .meta{ display:flex; gap:12px; align-items:center; margin:18px 0 10px; }
+.ig-post .tag{ font-family:var(--mono); font-weight:700; text-transform:uppercase; letter-spacing:.1em; font-size:10.5px; color:var(--accent); background:rgba(255,90,0,.1); padding:5px 9px; border-radius:2px; }
+.ig-post .date{ font-family:var(--mono); text-transform:uppercase; letter-spacing:.1em; font-size:10.5px; color:var(--muted); font-weight:600; }
+.ig-post h3{ text-transform:none; font-family:var(--font); font-weight:700; line-height:1.14; font-size:21px; letter-spacing:-.01em; color:var(--ink); }
+.ig-post.feat h3{ font-family:var(--display); text-transform:uppercase; font-size:clamp(28px,3vw,36px); line-height:.98; letter-spacing:0; }
+.ig-post p{ font-family:var(--font); color:var(--muted); font-size:14px; line-height:1.5; margin-top:10px; text-transform:none; }
+.ig-post:hover h3{ color:var(--accent); }
+@media(min-width:981px){ .ig-post.feat{ grid-row:span 2; } .ig-post.feat .pic{ aspect-ratio:4/3; } }
