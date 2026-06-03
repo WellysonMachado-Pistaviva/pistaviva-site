@@ -1,4 +1,4 @@
-import { Bricolage_Grotesque, Newsreader, Space_Mono, Poppins } from 'next/font/google';
+import { Saira, Saira_Condensed, Saira_Semi_Condensed } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import '../src/index.css';
@@ -10,10 +10,11 @@ import SiteHeader from './components/SiteHeader';
 import SiteFooter from './components/SiteFooter';
 import AnnouncementBar from './components/AnnouncementBar';
 
-const display = Bricolage_Grotesque({ subsets: ['latin'], weight: ['700', '800'], variable: '--font-display', display: 'swap' });
-const serif = Newsreader({ subsets: ['latin'], weight: ['400', '500', '600'], style: ['normal', 'italic'], variable: '--font-serif', display: 'swap' });
-const mono = Space_Mono({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-mono', display: 'swap' });
-const poppins = Poppins({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-sans', display: 'swap' });
+// IGNIS spec: Saira (corpo), Saira Condensed (títulos), Saira Semi Condensed (labels/botões)
+const display = Saira_Condensed({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-display', display: 'swap' });
+const semi = Saira_Semi_Condensed({ subsets: ['latin'], weight: ['600', '700'], variable: '--font-mono', display: 'swap' });
+const poppins = Saira({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-sans', display: 'swap' });
+const serif = Saira({ subsets: ['latin'], weight: ['500'], style: ['italic'], variable: '--font-serif', display: 'swap' });
 
 const SITE_URL = 'https://moto.pistaviva.com.br';
 
@@ -85,7 +86,7 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="pt-BR" className={`${display.variable} ${serif.variable} ${mono.variable} ${poppins.variable}`}>
+    <html lang="pt-BR" className={`${display.variable} ${serif.variable} ${semi.variable} ${poppins.variable}`}>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
         <div className="topo" aria-hidden="true" />
