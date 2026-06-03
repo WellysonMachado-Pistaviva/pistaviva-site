@@ -25,7 +25,7 @@ export async function getPhotographerBySlug(slug) {
 export async function getAllPhotographerSlugs() {
   try {
     const sb = supabaseServer();
-    const { data, error } = await sb.from('pv_photographers').select('slug').eq('published', true);
+    const { data, error } = await sb.from('pv_photographers').select('slug, created_at').eq('published', true);
     if (error) return [];
     return data || [];
   } catch { return []; }

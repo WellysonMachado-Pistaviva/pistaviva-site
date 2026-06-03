@@ -199,9 +199,9 @@ const Expeditions = () => {
         <div style={{ fontSize: '11px', color: '#555', fontWeight: 700, letterSpacing: '2px', marginBottom: '6px' }}>
           PISTA<span style={{ color: '#ff6200' }}>VIVA</span> × PARCEIROS
         </div>
-        <h1 style={{ fontFamily: 'var(--display)', fontSize: '28px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1, margin: 0 }}>
+        <h2 style={{ fontFamily: 'var(--display)', fontSize: '28px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1, margin: 0 }}>
           EXPEDIÇÕES
-        </h1>
+        </h2>
         <p style={{ fontSize: '12px', color: '#555', marginTop: '6px', letterSpacing: '.3px' }}>
           Destinos épicos com operadores verificados
         </p>

@@ -42,9 +42,9 @@ export const metadata = {
     url: SITE_URL,
     title: 'Pistaviva — Mototurismo, Rotas e Cultura sobre Duas Rodas',
     description: 'Comunidade aberta de mototurismo: rotas, eventos, blog e cultura sobre duas rodas.',
-    images: [{ url: '/icon.png', width: 800, height: 800, alt: 'Pistaviva Mototurismo' }],
+    // images: gerada automaticamente por app/opengraph-image.js (1200×630)
   },
-  twitter: { card: 'summary_large_image', title: 'Pistaviva — Mototurismo no Brasil', images: ['/icon.png'] },
+  twitter: { card: 'summary_large_image', title: 'Pistaviva — Mototurismo no Brasil' },
   manifest: '/manifest.webmanifest',
   icons: { icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }, { url: '/favicon.png' }], shortcut: '/favicon.png', apple: '/apple-touch-icon.png' },
   verification: { google: 'zRMuUqP5QA7_s5uKBemw7SOXzZ17i5VNmmYAGrEi0x4' },

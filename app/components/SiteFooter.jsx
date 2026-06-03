@@ -14,6 +14,7 @@ export default function SiteFooter() {
             <Link href="/comunidade">Comunidade</Link>
             <Link href="/paradas">Paradas</Link>
             <Link href="/blog">Blog</Link>
+            <Link href="/diretorio-duas-rodas">Diretório Duas Rodas</Link>
             <Link href="/rotas">Rotas &amp; Expedições</Link>
             <Link href="/eventos">Eventos</Link>
           </div>

@@ -1,4 +1,5 @@
 import SpaPage from '../components/SpaPage';
+import SpaIntro from '../components/SpaIntro';
 
 export const metadata = {
   title: 'Mapa Colaborativo de Mototurismo',
@@ -7,5 +8,12 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <SpaPage name="mapa" />;
+  return (
+    <>
+      <SpaIntro eyebrow="Mapa vivo" title="Mapa Colaborativo de Mototurismo">
+        Mapa interativo com paradas, rotas e pontos de interesse para viagens de moto pelo Brasil. Pings, alertas de estrada e pontos da comunidade.
+      </SpaIntro>
+      <SpaPage name="mapa" />
+    </>
+  );
 }

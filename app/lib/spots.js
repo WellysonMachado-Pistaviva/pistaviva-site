@@ -33,7 +33,7 @@ export async function getSpotBySlug(slug) {
 export async function getAllSpotSlugs() {
   try {
     const sb = supabaseServer();
-    const { data, error } = await sb.from('pv_spots').select('slug').eq('published', true);
+    const { data, error } = await sb.from('pv_spots').select('slug, created_at').eq('published', true);
     if (error) return [];
     return data || [];
   } catch {

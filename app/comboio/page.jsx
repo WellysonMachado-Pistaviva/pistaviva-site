@@ -1,4 +1,5 @@
 import SpaPage from '../components/SpaPage';
+import SpaIntro from '../components/SpaIntro';
 
 export const metadata = {
   title: 'Comboio em Tempo Real',
@@ -7,5 +8,12 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <SpaPage name="comboio" />;
+  return (
+    <>
+      <SpaIntro eyebrow="Rolê em grupo" title="Comboio em Tempo Real">
+        Rode em grupo com rastreamento ao vivo, chat e localização do comboio. Acompanhe seu grupo de moto em tempo real e mantenha todos juntos.
+      </SpaIntro>
+      <SpaPage name="comboio" />
+    </>
+  );
 }

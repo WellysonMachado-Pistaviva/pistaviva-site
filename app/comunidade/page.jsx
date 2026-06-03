@@ -20,7 +20,7 @@ export default async function Comunidade() {
       <div className="section-head">
         <div>
           <p className="eyebrow eyebrow--moss">Aberta · de piloto pra piloto</p>
-          <h2>Comunidade</h2>
+          <h1>Comunidade do Mototurismo</h1>
         </div>
         <Link className="link" href="/blog">Ver o blog →</Link>
       </div>
