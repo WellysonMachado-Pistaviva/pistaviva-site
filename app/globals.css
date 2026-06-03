@@ -649,6 +649,41 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
 @media(min-width:981px){ .ig-post.feat{ grid-row:span 2; } .ig-post.feat .pic{ aspect-ratio:4/3; } }
 
 /* =========================================================
+   MOBILE — carrosséis com swipe (scroll-snap nativo, sem JS)
+   Inspirado no padrão mobile de fabricante: deslizar + espiar o próximo.
+   ========================================================= */
+@media(max-width:760px){
+  /* hero full-bleed mais alto, conteúdo em destaque */
+  .ig-hero-inner{ min-height:80vh; }
+
+  /* vira carrossel: rola na horizontal, encaixa card a card */
+  .cats, .ig-model-grid, .ig-news-grid{
+    display:flex !important; flex-wrap:nowrap; gap:12px;
+    overflow-x:auto; overflow-y:hidden;
+    scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+    scroll-padding-left:var(--gut);
+    margin-inline:calc(-1 * var(--gut)); padding:2px var(--gut) 14px;
+    scrollbar-width:none;
+  }
+  .cats::-webkit-scrollbar, .ig-model-grid::-webkit-scrollbar, .ig-news-grid::-webkit-scrollbar{ display:none; }
+
+  .cat{ scroll-snap-align:start; flex:0 0 64%; min-height:auto; }
+  .ig-cat-card{ scroll-snap-align:start; }
+  .ig-model{ scroll-snap-align:start; flex:0 0 80%; }
+  .ig-news-grid .ig-post{ scroll-snap-align:start; flex:0 0 86%; }
+  .ig-news-grid .ig-post.feat .pic{ aspect-ratio:16/10; }
+
+  /* dica visual de que dá pra arrastar */
+  .ig-sechead{ position:relative; }
+  .ig-sechead::after{ content:"deslize →"; position:absolute; right:0; bottom:-2px; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--paper-mut); opacity:.8; }
+
+  /* timeline da página sobre também desliza */
+  .sobre-timeline{ display:flex !important; overflow-x:auto; scroll-snap-type:x mandatory; gap:1px; scrollbar-width:none; margin-inline:calc(-1 * var(--gut)); padding-inline:var(--gut); }
+  .sobre-timeline::-webkit-scrollbar{ display:none; }
+  .sobre-tl-item{ scroll-snap-align:start; flex:0 0 82%; }
+}
+
+/* =========================================================
    UNIFICAÇÃO IGNIS nas telas SPA (planejador, mapa, comunidade,
    eventos, loja). Sobrescreve classes legadas — globals carrega
    por último. Tema escuro + laranja + Saira, sem glass.
