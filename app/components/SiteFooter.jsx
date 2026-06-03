@@ -27,6 +27,7 @@ export default function SiteFooter() {
           </div>
           <div className="foot-col">
             <h5>Conecte</h5>
+            <Link href="/sobre">Sobre · História</Link>
             <a href="https://www.instagram.com/pistavivaoficial" target="_blank" rel="noopener noreferrer">Instagram</a>
             <Link href="/parceiros">Parceiros</Link>
             <Link href="/loja">Loja</Link>

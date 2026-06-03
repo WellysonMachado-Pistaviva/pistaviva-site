@@ -367,6 +367,20 @@ function HeroSettings() {
     setBusy(false);
   };
 
+  // Foto da página Sobre — caminho fixo (a página /sobre aponta pra ela)
+  const onPortrait = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 6 * 1024 * 1024) { showToast('Imagem muito pesada (máx 6MB)', 'error'); return; }
+    setBusy(true);
+    try {
+      const { error } = await supabase.storage.from('post-images').upload('site/wellyson.jpg', file, { upsert: true, contentType: file.type });
+      if (error) throw error;
+      showToast('Foto da página Sobre enviada ✓ (pode levar alguns min p/ aparecer)', 'success');
+    } catch (err) { showToast('Erro: ' + err.message, 'error'); }
+    setBusy(false);
+  };
+
   if (loading) return <div className="spinner-wrap"><span className="loading-spinner" /></div>;
 
   return (
@@ -396,6 +410,18 @@ function HeroSettings() {
       <input value={url} onChange={e => setUrl(e.target.value)} placeholder="https://..."
         style={{ width: '100%', padding: '11px 13px', marginBottom: 14, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 3, color: 'var(--text)', fontFamily: 'inherit', fontSize: 14 }} />
       <button className="btn-primary" onClick={save} disabled={busy}>Salvar hero</button>
+
+      <hr style={{ border: 0, borderTop: '1px solid var(--border)', margin: '34px 0 26px' }} />
+
+      <h3 style={{ fontFamily: 'var(--display)', marginBottom: 6 }}>🧑 Foto da página “Sobre”</h3>
+      <p style={{ color: 'var(--paper-mut)', fontSize: 13, marginBottom: 14 }}>Seu retrato na página <b>/sobre</b>. Envie e pronto (não precisa salvar).</p>
+      <div style={{ background: 'rgba(255,90,0,.06)', border: '1px solid var(--border)', borderRadius: 6, padding: '12px 14px', marginBottom: 16, fontSize: 13, lineHeight: 1.7, color: 'var(--paper-dim)' }}>
+        <b style={{ color: 'var(--text)' }}>📐 Medida:</b> <b>1200 × 1500 px</b> (proporção 4:5, vertical) · JPG · até ~1 MB · rosto centralizado.
+      </div>
+      <label className="btn-primary" style={{ cursor: 'pointer', margin: 0 }}>
+        {busy ? 'Enviando…' : '📤 Enviar foto Sobre'}
+        <input type="file" accept="image/*" hidden onChange={onPortrait} disabled={busy} />
+      </label>
     </div>
   );
 }
