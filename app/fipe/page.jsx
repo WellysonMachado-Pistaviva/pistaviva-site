@@ -16,19 +16,22 @@ export default function FipePage() {
     description: 'Consulta gratuita do valor FIPE de motos por marca, modelo e ano.',
   };
   return (
-    <div className="wrap section page-light" style={{ paddingTop: 'clamp(28px,5vw,56px)' }}>
+    <div className="ignis fipe-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="section-head">
-        <div>
-          <p className="eyebrow eyebrow--moss">Ferramenta grátis</p>
-          <h2>Tabela FIPE da sua moto</h2>
+      <section className="pg-head">
+        <div className="wrap">
+          <h1>Tabela FIPE<br />da sua moto</h1>
+          <span className="eyebrow" style={{ marginTop: 16 }}>Marca, modelo e ano · valor atualizado · grátis</span>
         </div>
-        <Link className="link" href="/paradas">Ver paradas →</Link>
-      </div>
-      <p style={{ color: 'var(--paper-dim)', maxWidth: '60ch', marginBottom: '1.8rem' }}>
-        Escolha marca, modelo e ano e veja o valor atualizado da Tabela FIPE. Rápido, grátis e sem cadastro.
-      </p>
-      <FipeSearch />
+      </section>
+      <main className="pg-main">
+        <div className="wrap" style={{ maxWidth: 760, marginInline: 'auto' }}>
+          <p style={{ fontFamily: 'var(--font)', color: 'var(--paper-dim)', maxWidth: '60ch', marginBottom: '1.8rem' }}>
+            Escolha marca, modelo e ano e veja o valor atualizado da Tabela FIPE. Rápido, grátis e sem cadastro.
+          </p>
+          <FipeSearch />
+        </div>
+      </main>
     </div>
   );
 }

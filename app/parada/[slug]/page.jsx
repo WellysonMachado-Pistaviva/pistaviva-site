@@ -49,47 +49,69 @@ export default async function ParadaPage({ params }) {
     ],
   };
 
+  const mapsUrl = s.lat && s.lng ? `https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}` : null;
+  const ativos = SELOS.filter(sl => (s.selos || []).includes(sl.id));
+
   return (
-    <article className="wrap page-light" style={{ paddingTop: '1rem' }}>
+    <div className="ignis ph-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <ViewPing kind="spot" id={s.id} />
-      <nav className="crumbs"><Link href="/">Início</Link> / <Link href="/paradas">Paradas</Link> / <span>{s.nome}</span></nav>
 
-      <header className="post-hero">
-        <p className="eyebrow">{catNome(s.categoria)} · {s.cidade}/{s.uf}</p>
-        <h1>{s.nome}</h1>
-      </header>
-
-      {s.cover_url && <div className="post-cover"><Cover src={s.cover_url} alt={s.nome} sizes="100vw" priority /></div>}
-
-      <div className="article" style={{ maxWidth: '70ch' }}>
-        {s.descricao && <p className="lead">{s.descricao}</p>}
-
-        <h2>Comodidades</h2>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {SELOS.map(sl => {
-            const has = (s.selos || []).includes(sl.id);
-            return (
-              <span key={sl.id} style={{ display: 'inline-flex', gap: 8, alignItems: 'center', padding: '8px 12px', border: '1px solid var(--line)', borderRadius: 8, opacity: has ? 1 : 0.35 }}>
-                <span style={{ width: 18, height: 18, borderRadius: '50%', border: '1px solid var(--clay)', color: 'var(--clay)', fontSize: 10, fontWeight: 800, display: 'grid', placeItems: 'center', fontFamily: 'var(--mono)' }}>{sl.sigla}</span>
-                {sl.nome}
-              </span>
-            );
-          })}
+      <nav className="crumb" aria-label="Trilha">
+        <div className="wrap">
+          <Link href="/">Início</Link><span className="sep">/</span>
+          <Link href="/paradas">Paradas</Link><span className="sep">/</span>
+          <span className="here">{s.nome}</span>
         </div>
+      </nav>
 
-        <h2>Localização</h2>
-        <p>{s.cidade} · {s.uf}{s.lat && s.lng ? ` · ${s.lat.toFixed(4)}, ${s.lng.toFixed(4)}` : ''}</p>
-        {s.lat && s.lng && (
-          <p><a className="inline" href={`https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}`} target="_blank" rel="noopener noreferrer">Abrir no Google Maps →</a></p>
-        )}
-        {s.author && <p style={{ color: 'var(--paper-mut)', fontFamily: 'var(--mono)', fontSize: 13 }}>Cadastrado por {s.author}</p>}
-      </div>
+      <main className="ph-prof">
+        <div className="wrap">
+          <span className="eyebrow">📍 {catNome(s.categoria)} · {s.cidade}/{s.uf}</span>
+          <h1>{s.nome}</h1>
 
-      <div style={{ margin: '2.5rem 0' }}>
-        <Link className="btn btn--ghost" href="/paradas">← Todas as paradas</Link>
-      </div>
-    </article>
+          <div className="ph-layout">
+            <div>
+              <div className="ph-heroph">
+                {s.cover_url ? <Cover src={s.cover_url} alt={s.nome} sizes="(max-width:900px) 100vw, 680px" priority /> : <span className="pic-ph">📍</span>}
+              </div>
+              <div className="ph-bio">
+                {s.descricao && <p>{s.descricao}</p>}
+                <div className="place"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></svg> {[s.cidade, s.uf].filter(Boolean).join(' · ')}</div>
+                <div className="ph-actions">
+                  {mapsUrl && <a className="ig-btn ig-btn--primary" href={mapsUrl} target="_blank" rel="noopener noreferrer">Abrir no Google Maps</a>}
+                  <Link className="ig-btn ig-btn--ghost" href="/paradas">Todas as paradas</Link>
+                </div>
+                {s.author && <p style={{ marginTop: 18, fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--ink-soft)', textTransform: 'uppercase', letterSpacing: '.06em' }}>Cadastrado por {s.author}</p>}
+              </div>
+            </div>
+
+            <aside className="ph-side">
+              <div className="ph-panel">
+                <div className="ph"><h3>Comodidades</h3></div>
+                <div className="pb" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {ativos.length === 0 ? <span style={{ color: 'var(--ink-soft)', fontSize: 13 }}>Não informado.</span> : ativos.map(sl => (
+                    <span key={sl.id} style={{ display: 'inline-flex', gap: 8, alignItems: 'center', padding: '8px 12px', border: '1px solid var(--snow-line)', borderRadius: 8 }}>
+                      <span style={{ width: 18, height: 18, borderRadius: '50%', border: '1px solid var(--clay)', color: 'var(--clay)', fontSize: 10, fontWeight: 800, display: 'grid', placeItems: 'center', fontFamily: 'var(--mono)' }}>{sl.sigla}</span>
+                      <span style={{ fontSize: 13, color: 'var(--ink)' }}>{sl.nome}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="ph-panel">
+                <div className="ph"><h3>Localização</h3></div>
+                <div className="pb">
+                  <div className="rate"><span className="k">Cidade</span><span className="v">{[s.cidade, s.uf].filter(Boolean).join('/')}</span></div>
+                  <div className="rate"><span className="k">Categoria</span><span className="v">{catNome(s.categoria)}</span></div>
+                </div>
+                {mapsUrl && <a className="ph-openmap" href={mapsUrl} target="_blank" rel="noopener noreferrer">Abrir no mapa →</a>}
+              </div>
+            </aside>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }
