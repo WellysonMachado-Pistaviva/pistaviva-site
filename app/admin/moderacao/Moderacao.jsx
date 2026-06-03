@@ -229,7 +229,237 @@ function InstagramEditor() {
   );
 }
 
+// ════════════════════════════════════════════════════════════
+// BANNERS ROTATIVOS DA HOME (tabela pv_banners)
+// ════════════════════════════════════════════════════════════
+const KINDS = [
+  { v: 'lancamento', l: '🟧 Lançamento' },
+  { v: 'oferta', l: '⬛ Oferta' },
+  { v: 'evento', l: '⬜ Evento' },
+  { v: 'aviso', l: '🟨 Aviso' },
+];
+
+// Tipos de destino do link — cada um sabe carregar opções e montar o href.
+const LINK_TYPES = [
+  { v: 'blog', l: 'Matéria (blog)', table: 'pv_blog_posts', name: 'title', href: r => `/blog/${r.slug}` },
+  { v: 'parada', l: 'Parada', table: 'pv_spots', name: 'nome', href: r => `/parada/${r.slug}` },
+  { v: 'fotografo', l: 'Fotógrafo', table: 'pv_photographers', name: 'nome', href: r => `/fotografo/${r.slug}` },
+  { v: 'evento', l: 'Eventos (página)', fixed: '/eventos' },
+  { v: 'pagina', l: 'Página do site', pages: ['/rotas', '/paradas', '/comboio', '/mapa', '/fotografos', '/fipe', '/comunidade', '/loja', '/expedicoes', '/trechos', '/calculadora', '/parceiros'] },
+  { v: 'url', l: 'URL livre' },
+];
+
+// Mini-seletor de destino: escolhe tipo + item e devolve o href via onPick.
+function LinkPicker({ onPick }) {
+  const [type, setType] = useState('');
+  const [opts, setOpts] = useState([]);
+
+  useEffect(() => {
+    const t = LINK_TYPES.find(x => x.v === type);
+    if (!t?.table) { setOpts([]); return; }
+    supabase.from(t.table).select(`slug, ${t.name}`).order(t.name, { ascending: true }).limit(300)
+      .then(({ data }) => setOpts(data || []));
+  }, [type]);
+
+  const t = LINK_TYPES.find(x => x.v === type);
+  const sel = { width: '100%', padding: '9px 11px', marginBottom: 9, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)', fontFamily: 'inherit', fontSize: 14 };
+
+  return (
+    <div style={{ background: 'rgba(255,90,0,.05)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 12px', marginBottom: 10 }}>
+      <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Apontar para…</label>
+      <select style={sel} value={type} onChange={e => { setType(e.target.value); const x = LINK_TYPES.find(o => o.v === e.target.value); if (x?.fixed) onPick(x.fixed); }}>
+        <option value="">— escolha o tipo —</option>
+        {LINK_TYPES.map(o => <option key={o.v} value={o.v}>{o.l}</option>)}
+      </select>
+      {t?.table && (
+        <select style={sel} defaultValue="" onChange={e => { const r = opts.find(o => o.slug === e.target.value); if (r) onPick(t.href(r), r[t.name]); }}>
+          <option value="">— escolha o item —</option>
+          {opts.map(o => <option key={o.slug} value={o.slug}>{o[t.name]}</option>)}
+        </select>
+      )}
+      {t?.pages && (
+        <select style={sel} defaultValue="" onChange={e => e.target.value && onPick(e.target.value)}>
+          <option value="">— escolha a página —</option>
+          {t.pages.map(p => <option key={p} value={p}>{p}</option>)}
+        </select>
+      )}
+      {t?.v === 'url' && <p style={{ fontSize: 11, color: 'var(--paper-mut)' }}>Digite a URL completa no campo abaixo.</p>}
+    </div>
+  );
+}
+
+const EMPTY_BANNER = { kind: 'lancamento', tag_label: '', title: '', subtitle: '', image_url: '', cta_label: '', cta_href: '', cta2_label: '', cta2_href: '', active: true, sort_order: 0 };
+
+function BannersEditor() {
+  const [rows, setRows] = useState(null);
+  const [editing, setEditing] = useState(null); // objeto banner (novo ou existente)
+  const [busy, setBusy] = useState(false);
+
+  const load = useCallback(async () => {
+    const { data } = await supabase.from('pv_banners').select('*').order('sort_order', { ascending: true }).order('created_at', { ascending: true });
+    setRows(data || []);
+  }, []);
+  useEffect(() => { load(); }, [load]);
+
+  const save = async () => {
+    const b = editing;
+    if (!b.title?.trim()) return showToast('Dê um título ao banner.', 'error');
+    if (!b.image_url?.trim()) return showToast('Envie a imagem do banner.', 'error');
+    setBusy(true);
+    const payload = {
+      kind: b.kind, tag_label: b.tag_label || null, title: b.title, subtitle: b.subtitle || null,
+      image_url: b.image_url, cta_label: b.cta_label || null, cta_href: b.cta_href || null,
+      cta2_label: b.cta2_label || null, cta2_href: b.cta2_href || null, active: b.active,
+      sort_order: b.sort_order ?? 0, updated_at: new Date().toISOString(),
+    };
+    const res = b.id
+      ? await supabase.from('pv_banners').update(payload).eq('id', b.id)
+      : await supabase.from('pv_banners').insert({ ...payload, sort_order: rows?.length || 0 });
+    setBusy(false);
+    if (res.error) return showToast('Erro: ' + res.error.message, 'error');
+    showToast('Banner salvo ✓', 'success'); setEditing(null); load();
+  };
+
+  const remove = async (row) => {
+    if (!confirm(`Excluir banner "${row.title}"?`)) return;
+    const { error } = await supabase.from('pv_banners').delete().eq('id', row.id);
+    if (error) return showToast('Erro: ' + error.message, 'error');
+    showToast('Excluído', 'success'); load();
+  };
+
+  const toggleActive = async (row) => {
+    const { error } = await supabase.from('pv_banners').update({ active: !row.active }).eq('id', row.id);
+    if (error) return showToast('Erro: ' + error.message, 'error');
+    load();
+  };
+
+  // reordena trocando sort_order com o vizinho
+  const move = async (idx, dir) => {
+    const j = idx + dir;
+    if (j < 0 || j >= rows.length) return;
+    const a = rows[idx], b = rows[j];
+    await Promise.all([
+      supabase.from('pv_banners').update({ sort_order: b.sort_order }).eq('id', a.id),
+      supabase.from('pv_banners').update({ sort_order: a.sort_order }).eq('id', b.id),
+    ]);
+    load();
+  };
+
+  const onFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 6 * 1024 * 1024) return showToast('Imagem muito pesada (máx 6MB)', 'error');
+    setBusy(true);
+    try {
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+      const path = `banners/banner-${Date.now()}.${ext}`;
+      const { error } = await supabase.storage.from('post-images').upload(path, file, { upsert: true, contentType: file.type });
+      if (error) throw error;
+      const { data } = supabase.storage.from('post-images').getPublicUrl(path);
+      setEditing(ed => ({ ...ed, image_url: data.publicUrl }));
+      showToast('Imagem enviada ✓', 'success');
+    } catch (err) { showToast('Erro no upload: ' + err.message, 'error'); }
+    setBusy(false);
+  };
+
+  const inp = { width: '100%', padding: '9px 11px', marginBottom: 9, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)', fontFamily: 'inherit', fontSize: 14 };
+  const set = (k, v) => setEditing(ed => ({ ...ed, [k]: v }));
+
+  if (rows === null) return <div className="spinner-wrap"><span className="loading-spinner" /></div>;
+
+  return (
+    <div>
+      <div className="section-head" style={{ marginBottom: 14 }}>
+        <div><h3 style={{ fontFamily: 'var(--display)' }}>🖼️ Banners da home</h3><p style={{ fontSize: 13, color: 'var(--paper-mut)' }}>Carrossel rotativo no topo da home. Arraste a ordem com ▲▼. Some na home em ~5 min.</p></div>
+        <button className="btn btn--primary" onClick={() => setEditing({ ...EMPTY_BANNER })}>+ Novo banner</button>
+      </div>
+
+      {rows.length === 0 && <p style={{ color: 'var(--paper-dim)' }}>Nenhum banner ainda. Crie o primeiro.</p>}
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {rows.map((row, idx) => (
+          <div key={row.id} style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 12px', opacity: row.active ? 1 : 0.5 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <button className="btn btn--ghost" style={{ padding: '2px 7px', fontSize: 11 }} disabled={idx === 0} onClick={() => move(idx, -1)}>▲</button>
+              <button className="btn btn--ghost" style={{ padding: '2px 7px', fontSize: 11 }} disabled={idx === rows.length - 1} onClick={() => move(idx, 1)}>▼</button>
+            </div>
+            <div style={{ width: 72, height: 42, borderRadius: 5, overflow: 'hidden', flex: '0 0 auto', background: 'var(--bg3,#222)' }}>
+              {row.image_url && <img src={row.image_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {KINDS.find(k => k.v === row.kind)?.l.split(' ')[0]} {row.title}
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--paper-mut)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.cta_href || 'sem link'}</div>
+            </div>
+            <button className="btn btn--ghost" style={{ padding: '.45rem .8rem', color: row.active ? 'var(--moss)' : 'var(--paper-mut)', borderColor: row.active ? 'var(--moss)' : 'var(--border)' }} onClick={() => toggleActive(row)}>{row.active ? 'Ativo' : 'Oculto'}</button>
+            <button className="btn btn--ghost" style={{ padding: '.45rem .8rem' }} onClick={() => setEditing(row)}>Editar</button>
+            <button className="btn btn--ghost" style={{ padding: '.45rem .8rem', borderColor: 'var(--danger)', color: 'var(--danger)' }} onClick={() => remove(row)}>Excluir</button>
+          </div>
+        ))}
+      </div>
+
+      {editing && (
+        <div className="modal-overlay" onClick={() => setEditing(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 520, maxHeight: '90vh', overflowY: 'auto', padding: 24 }}>
+            <button className="modal-close" onClick={() => setEditing(null)}>×</button>
+            <h3 style={{ fontFamily: 'var(--display)', marginBottom: 14 }}>{editing.id ? 'Editar banner' : 'Novo banner'}</h3>
+
+            <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Tipo (cor da tag)</label>
+            <select style={inp} value={editing.kind} onChange={e => set('kind', e.target.value)}>
+              {KINDS.map(k => <option key={k.v} value={k.v}>{k.l}</option>)}
+            </select>
+
+            <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Texto da tag (opcional — padrão pelo tipo)</label>
+            <input style={inp} value={editing.tag_label || ''} onChange={e => set('tag_label', e.target.value)} placeholder="Ex: Lançamento" />
+
+            <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Título *</label>
+            <input style={inp} value={editing.title} onChange={e => set('title', e.target.value)} placeholder="Ex: IGNIS Track Day Etapa 2" />
+
+            <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Descrição</label>
+            <textarea style={{ ...inp, minHeight: 64 }} value={editing.subtitle || ''} onChange={e => set('subtitle', e.target.value)} />
+
+            <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Imagem * (ideal 2400×960, 16:6.4)</label>
+            {editing.image_url && <img src={editing.image_url} alt="" style={{ width: '100%', aspectRatio: '16/6.4', objectFit: 'cover', borderRadius: 6, marginBottom: 8, border: '1px solid var(--border)' }} />}
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 9 }}>
+              <label className="btn btn--ghost" style={{ cursor: 'pointer', margin: 0, padding: '.5rem .9rem' }}>
+                {busy ? 'Enviando…' : '📤 Enviar imagem'}
+                <input type="file" accept="image/*" hidden onChange={onFile} disabled={busy} />
+              </label>
+              <span style={{ fontSize: 12, color: 'var(--paper-mut)' }}>ou cole URL:</span>
+            </div>
+            <input style={inp} value={editing.image_url} onChange={e => set('image_url', e.target.value)} placeholder="https://..." />
+
+            <hr style={{ border: 0, borderTop: '1px solid var(--border)', margin: '14px 0' }} />
+            <p style={{ fontWeight: 700, marginBottom: 8 }}>Botão principal</p>
+            <LinkPicker onPick={(href, label) => setEditing(ed => ({ ...ed, cta_href: href, cta_label: ed.cta_label || (label ? 'Saiba mais' : ed.cta_label) }))} />
+            <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Texto do botão</label>
+            <input style={inp} value={editing.cta_label || ''} onChange={e => set('cta_label', e.target.value)} placeholder="Ex: Garantir vaga" />
+            <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Link do botão</label>
+            <input style={inp} value={editing.cta_href || ''} onChange={e => set('cta_href', e.target.value)} placeholder="/eventos ou https://..." />
+
+            <hr style={{ border: 0, borderTop: '1px solid var(--border)', margin: '14px 0' }} />
+            <p style={{ fontWeight: 700, marginBottom: 8 }}>Botão secundário (opcional)</p>
+            <LinkPicker onPick={(href) => setEditing(ed => ({ ...ed, cta2_href: href }))} />
+            <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Texto do botão 2</label>
+            <input style={inp} value={editing.cta2_label || ''} onChange={e => set('cta2_label', e.target.value)} placeholder="Ex: Ver calendário" />
+            <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Link do botão 2</label>
+            <input style={inp} value={editing.cta2_href || ''} onChange={e => set('cta2_href', e.target.value)} placeholder="/eventos ou https://..." />
+
+            <label style={{ display: 'flex', gap: 8, alignItems: 'center', margin: '12px 0 16px' }}>
+              <input type="checkbox" checked={editing.active} onChange={e => set('active', e.target.checked)} /> Banner ativo (aparece na home)
+            </label>
+
+            <button className="btn btn--primary" onClick={save} disabled={busy}>{busy ? 'Salvando…' : 'Salvar banner'}</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const EXTRA_TABS = [
+  { id: 'banners', label: 'Banners' },
   { id: 'denuncias', label: 'Denúncias' },
   { id: 'comentarios', label: 'Coment. Trechos' },
   { id: 'aviso', label: 'Aviso/Banner' },
@@ -252,6 +482,7 @@ export default function Moderacao() {
         ))}
       </div>
       {cfg ? <Section key={cfg.id} cfg={cfg} />
+        : tab === 'banners' ? <BannersEditor />
         : tab === 'denuncias' ? <ReportsQueue />
         : tab === 'comentarios' ? <CommentsMod />
         : tab === 'aviso' ? <BannerEditor />

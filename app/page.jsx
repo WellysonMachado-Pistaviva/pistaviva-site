@@ -3,8 +3,9 @@ import Cover from './components/Cover';
 import Counter from './components/Counter';
 import CoolMode from './components/CoolMode';
 import MotosFilter from './components/MotosFilter';
+import HomeBanner from './components/HomeBanner';
 import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
-import { getHeroImage } from './lib/site';
+import { getHeroImage, getBanners } from './lib/site';
 
 export const revalidate = 300;
 
@@ -42,10 +43,14 @@ export default async function Home() {
   const posts = await getPublishedPosts(3);
   const featured = await getFeaturedPosts(1);
   const heroImg = await getHeroImage();
+  const banners = await getBanners();
   const news = [...(featured || []), ...posts.filter(p => !featured?.some(f => f.id === p.id))].slice(0, 3);
 
   return (
     <div className="ignis">
+      {/* ===== BANNERS ROTATIVOS (admin) ===== */}
+      <HomeBanner banners={banners} />
+
       {/* ===== HERO ===== */}
       <section className="ig-hero">
         <div className="ig-hero-media" aria-hidden="true" style={heroImg ? { backgroundImage: `radial-gradient(58% 90% at 82% 28%, rgba(255,90,0,.14), transparent 60%), url(${heroImg})`, backgroundSize: 'auto, cover', backgroundPosition: 'center, center', backgroundRepeat: 'no-repeat, no-repeat' } : undefined} />
