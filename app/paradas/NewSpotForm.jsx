@@ -38,8 +38,8 @@ export default function NewSpotForm() {
     return (
       <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '1.4rem', textAlign: 'center' }}>
         <h3 style={{ fontFamily: 'var(--display)', marginBottom: 8 }}>Conhece um bom ponto?</h3>
-        <p style={{ color: 'var(--paper-dim)', marginBottom: 14 }}>Entre para cadastrar paradas e indicar comodidades pra comunidade.</p>
-        <button className="btn btn--primary" onClick={() => auth?.openAuthModal('login')}>Entrar para cadastrar</button>
+        <p style={{ color: 'var(--paper-dim)', marginBottom: 14 }}>Identifique-se para cadastrar paradas e indicar comodidades pra comunidade.</p>
+        <button className="btn btn--primary" onClick={() => auth?.openAuthModal('login')}>Identificar-se para cadastrar</button>
       </div>
     );
   }

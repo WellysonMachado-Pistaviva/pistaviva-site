@@ -445,7 +445,7 @@ export default function Dashboard() {
         ) : (
           <>
             <p className="text-muted" style={{ marginBottom: 18 }}>Entre com seu e-mail e senha de administrador.</p>
-            <button className="btn btn--primary" onClick={() => auth?.openAuthModal?.('login')}>Entrar</button>
+            <button className="btn btn--primary" onClick={() => auth?.openAdminLogin?.()}>Entrar</button>
           </>
         )}
       </div>

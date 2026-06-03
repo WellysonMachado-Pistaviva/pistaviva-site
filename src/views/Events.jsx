@@ -278,7 +278,7 @@ const Events = ({ user, openAuthModal }) => {
                     <X size={16} /> Não vou
                   </button>
                 </div>
-                {!user && <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--muted)', marginTop: '10px' }}>Faça login para confirmar presença</p>}
+                {!user && <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--muted)', marginTop: '10px' }}>Identifique-se para confirmar presença</p>}
               </div>
             </div>
           </div>

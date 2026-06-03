@@ -277,10 +277,10 @@ const Comboio = ({ user, openAuthModal }) => {
         <ShieldCheck size={48} color="var(--accent)" style={{ margin: '0 auto 16px' }} />
         <h2 style={{ fontFamily: 'var(--display)', marginBottom: '8px' }}>Comboios</h2>
         <p className="text-muted" style={{ marginBottom: '24px' }}>
-          Você precisa estar logado para criar ou participar de um Comboio.
+          Identifique-se com seu nome para criar ou participar de um Comboio.
         </p>
         <button className="btn-primary" onClick={() => openAuthModal('login')} style={{ margin: '0 auto' }}>
-          FAZER LOGIN
+          IDENTIFICAR-SE
         </button>
       </div>
     );

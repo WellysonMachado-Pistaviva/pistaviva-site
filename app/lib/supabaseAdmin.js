@@ -14,7 +14,11 @@ export function supabaseAdmin() {
   return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 }
 
-export const ADMIN_EMAILS = ['contatopively@gmail.com'];
+// Emails admin — lidos de variável de ambiente (NÃO ficam no bundle do navegador).
+// Defina ADMIN_EMAILS no Vercel/.env (separados por vírgula). Fallback mantém o
+// acesso atual caso a env ainda não esteja configurada.
+export const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || 'contatopively@gmail.com')
+  .split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
 
 // Valida o token Bearer recebido do client e confirma que é admin.
 // Retorna { ok, user } ou { ok:false, status, error }.

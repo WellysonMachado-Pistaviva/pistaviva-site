@@ -25,7 +25,7 @@ const Passport = ({ user }) => {
   };
 
   const handleCheckIn = () => {
-    if (!user) return setMessage('Faça login para registrar selos.');
+    if (!user) return setMessage('Identifique-se para registrar selos.');
     if (!navigator.geolocation) return setMessage('GPS não suportado no seu navegador.');
 
     setLoading(true);
