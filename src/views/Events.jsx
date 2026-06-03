@@ -149,35 +149,34 @@ const Events = ({ user, openAuthModal }) => {
           const mine = myStatus(event.id);
           const go = goingCount(event.id), no = noCount(event.id);
           return (
-            <div key={event.id} onClick={() => setSelectedEvent(event)}
-              style={{ background: 'var(--bg2)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', borderLeft: `4px solid ${status.color}`, cursor: 'pointer', transition: 'var(--transition)', overflow: 'hidden' }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}>
-              {event.imageUrl && <img src={event.imageUrl} alt={event.title} style={{ width: '100%', height: 150, objectFit: 'cover' }} />}
-              <div style={{ padding: '20px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
-                  <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '9px', fontWeight: '800', letterSpacing: '1px', background: status.bg, color: status.color, border: '1px solid currentColor' }}>{status.label}</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ fontSize: '11px', color: 'var(--muted)', fontWeight: '600' }}>{event.category}</span>
-                    <ChevronRight size={14} color="var(--muted)" />
+            <div key={event.id} onClick={() => setSelectedEvent(event)} className="ig-evcard"
+              style={{ background: 'var(--ink-2)', borderRadius: 4, border: '1px solid var(--border)', cursor: 'pointer', transition: 'transform .25s ease, border-color .25s ease', overflow: 'hidden' }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.borderColor = 'var(--border)'; }}>
+              {event.imageUrl && <img src={event.imageUrl} alt={event.title} style={{ width: '100%', height: 160, objectFit: 'cover' }} />}
+              <div style={{ padding: '22px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                  <span style={{ padding: '5px 11px', borderRadius: 2, fontSize: '10px', fontWeight: '700', letterSpacing: '.1em', textTransform: 'uppercase', fontFamily: 'var(--mono)', background: status.color, color: '#fff' }}>{status.label}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '.1em', fontSize: '11px', color: 'var(--accent-2)', fontWeight: 600 }}>
+                    {event.category}<ChevronRight size={14} />
                   </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <h3 style={{ fontSize: '17px', fontWeight: '800', lineHeight: 1.25, flex: 1 }}>{event.title}</h3>
-                  <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: '12px' }}>
-                    <div style={{ fontSize: '13px', fontWeight: '900', color: 'var(--accent)' }}>{event.date}</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+                  <h3 style={{ fontFamily: 'var(--display)', fontSize: '26px', fontWeight: 800, textTransform: 'uppercase', lineHeight: .98, letterSpacing: '-.01em', flex: 1 }}>{event.title}</h3>
+                  <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                    <div style={{ fontFamily: 'var(--display)', fontSize: '15px', fontWeight: 700, color: 'var(--accent)' }}>{event.date}</div>
                     <div style={{ marginTop: '4px' }}><CountdownBadge dateStr={event.date} /></div>
                   </div>
                 </div>
-                <div style={{ display: 'flex', gap: '14px', color: 'var(--muted)', fontSize: '13px', marginTop: '10px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '16px', color: 'var(--paper-mut)', fontSize: '13px', marginTop: '12px', flexWrap: 'wrap', fontFamily: 'var(--font)' }}>
                   {event.local && <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><MapPin size={13} />{event.local}</div>}
                   {event.time && <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Clock size={13} />{event.time}</div>}
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '14px', paddingTop: '12px', borderTop: '1px solid var(--border)', fontSize: '13px' }}>
-                  <span style={{ color: 'var(--success)', fontWeight: 700 }}>✅ {go} vão</span>
-                  <span style={{ color: 'var(--danger)', fontWeight: 700 }}>❌ {no} não vão</span>
-                  {mine === 'going' && <span style={{ marginLeft: 'auto', color: 'var(--success)', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}><CheckCircle size={14} /> Você vai!</span>}
-                  {mine === 'no' && <span style={{ marginLeft: 'auto', color: 'var(--danger)', fontSize: 12, fontWeight: 700 }}>Você não vai</span>}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginTop: '16px', paddingTop: '14px', borderTop: '1px solid var(--border)', fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '.06em', fontSize: '11px' }}>
+                  <span style={{ color: 'var(--paper-dim)', fontWeight: 700 }}><b style={{ color: '#fff' }}>{go}</b> confirmados</span>
+                  <span style={{ color: 'var(--paper-mut)', fontWeight: 700 }}>{no} não vão</span>
+                  {mine === 'going' && <span style={{ marginLeft: 'auto', color: 'var(--accent-2)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 5 }}><CheckCircle size={13} /> Você vai</span>}
+                  {mine === 'no' && <span style={{ marginLeft: 'auto', color: 'var(--paper-mut)', fontWeight: 700 }}>Você não vai</span>}
                 </div>
               </div>
             </div>
@@ -232,10 +231,10 @@ const Events = ({ user, openAuthModal }) => {
               </div>
               <div style={{ padding: '0 24px 28px' }}>
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '14px', flexWrap: 'wrap' }}>
-                  <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '10px', fontWeight: '800', letterSpacing: '1px', background: status.bg, color: status.color, border: '1px solid currentColor' }}>{status.label}</span>
-                  <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '10px', fontWeight: '700', background: 'var(--bg3)', color: 'var(--muted)', border: '1px solid var(--border)' }}>{ev.category?.toUpperCase()}</span>
+                  <span style={{ padding: '5px 12px', borderRadius: 2, fontSize: '10px', fontWeight: 700, letterSpacing: '.1em', fontFamily: 'var(--mono)', textTransform: 'uppercase', background: status.color, color: '#fff' }}>{status.label}</span>
+                  <span style={{ padding: '5px 12px', borderRadius: 2, fontSize: '10px', fontWeight: 700, letterSpacing: '.1em', fontFamily: 'var(--mono)', textTransform: 'uppercase', background: 'transparent', color: 'var(--accent-2)', border: '1px solid var(--border)' }}>{ev.category?.toUpperCase()}</span>
                 </div>
-                <h2 style={{ fontFamily: 'var(--display)', fontSize: '26px', fontWeight: '900', lineHeight: 1.15, marginBottom: '20px' }}>{ev.title}</h2>
+                <h2 style={{ fontFamily: 'var(--display)', fontSize: '34px', fontWeight: 800, textTransform: 'uppercase', lineHeight: .98, letterSpacing: '-.01em', marginBottom: '22px' }}>{ev.title}</h2>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
                   {[
                     { icon: <Calendar size={16} />, label: 'Data', value: ev.date },
@@ -252,19 +251,19 @@ const Events = ({ user, openAuthModal }) => {
                 {ev.description && <p style={{ fontSize: '15px', lineHeight: '1.7', color: 'var(--muted)', marginBottom: '20px' }}>{ev.description}</p>}
                 {tags.length > 0 && (
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '24px' }}>
-                    {tags.map(tag => <span key={tag} style={{ padding: '4px 12px', borderRadius: '999px', fontSize: '11px', fontWeight: '700', background: 'var(--accent-subtle)', color: 'var(--accent)', border: '1px solid rgba(249,115,22,.2)' }}>#{tag}</span>)}
+                    {tags.map(tag => <span key={tag} style={{ padding: '5px 11px', borderRadius: 2, fontSize: '11px', fontWeight: 700, fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '.06em', background: 'rgba(255,90,0,.1)', color: 'var(--accent)' }}>{tag}</span>)}
                   </div>
                 )}
 
                 {/* Contadores */}
-                <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
-                  <div style={{ flex: 1, background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)', borderRadius: 'var(--radius-sm)', padding: '12px 14px', textAlign: 'center' }}>
-                    <div style={{ fontSize: 22, fontWeight: 900, color: 'var(--success)' }}>{go}</div>
-                    <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 1 }}>vão</div>
+                <div style={{ display: 'flex', border: '1px solid var(--border)', borderRadius: 4, overflow: 'hidden', marginBottom: 16 }}>
+                  <div style={{ flex: 1, background: 'var(--ink-2)', padding: '16px', textAlign: 'center' }}>
+                    <div style={{ fontFamily: 'var(--display)', fontSize: 30, fontWeight: 800, color: 'var(--accent)', lineHeight: 1 }}>{go}</div>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--paper-mut)', textTransform: 'uppercase', letterSpacing: '.14em', marginTop: 5 }}>Confirmados</div>
                   </div>
-                  <div style={{ flex: 1, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 'var(--radius-sm)', padding: '12px 14px', textAlign: 'center' }}>
-                    <div style={{ fontSize: 22, fontWeight: 900, color: 'var(--danger)' }}>{no}</div>
-                    <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 1 }}>não vão</div>
+                  <div style={{ flex: 1, background: 'var(--ink-2)', padding: '16px', textAlign: 'center', borderLeft: '1px solid var(--border)' }}>
+                    <div style={{ fontFamily: 'var(--display)', fontSize: 30, fontWeight: 800, color: 'var(--paper-dim)', lineHeight: 1 }}>{no}</div>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--paper-mut)', textTransform: 'uppercase', letterSpacing: '.14em', marginTop: 5 }}>Não vão</div>
                   </div>
                 </div>
 
