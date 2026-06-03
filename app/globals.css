@@ -641,3 +641,32 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
 .ig-post p{ font-family:var(--font); color:var(--muted); font-size:14px; line-height:1.5; margin-top:10px; text-transform:none; }
 .ig-post:hover h3{ color:var(--accent); }
 @media(min-width:981px){ .ig-post.feat{ grid-row:span 2; } .ig-post.feat .pic{ aspect-ratio:4/3; } }
+
+/* =========================================================
+   UNIFICAÇÃO IGNIS nas telas SPA (planejador, mapa, comunidade,
+   eventos, loja). Sobrescreve classes legadas — globals carrega
+   por último. Tema escuro + laranja + Saira, sem glass.
+   ========================================================= */
+/* títulos de página → condensado uppercase IGNIS */
+.page-header{ padding:clamp(28px,5vw,46px) 0 14px; margin-bottom:18px; border-bottom:1px solid var(--border); }
+.page-title{ font-family:var(--display) !important; font-weight:800 !important; text-transform:uppercase; letter-spacing:-.01em; line-height:.94; font-size:clamp(30px,5vw,56px) !important; color:var(--text); }
+.page-subtitle{ font-family:var(--mono); text-transform:uppercase; letter-spacing:.1em; font-size:11px !important; color:var(--accent-2); margin-top:8px; }
+
+/* botões IGNIS (cantos retos, Saira semi) */
+.btn-primary{ background:var(--accent) !important; color:#fff !important; border:none !important; border-radius:2px !important; font-family:var(--mono); font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:13px; padding:14px 24px; transition:.18s ease; }
+.btn-primary:hover{ background:#e84e00 !important; }
+.btn-outline{ background:transparent; border:1.5px solid currentColor !important; color:var(--text); border-radius:2px !important; font-family:var(--mono); font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:13px; padding:13px 22px; transition:.18s ease; }
+.btn-outline:hover{ background:var(--text) !important; color:var(--ink) !important; }
+
+/* chips de filtro → pill IGNIS */
+.filter-chip{ font-family:var(--mono); font-weight:600; text-transform:uppercase; letter-spacing:.08em; font-size:12px; padding:9px 16px; border:1.5px solid var(--border); border-radius:100px; color:var(--paper-dim); background:transparent; transition:.15s; }
+.filter-chip:hover{ border-color:var(--paper-mut); color:var(--text); }
+.filter-chip.active{ background:var(--accent) !important; border-color:var(--accent) !important; color:#fff !important; }
+
+/* cards → sem glass (sólido) */
+.glass{ background:var(--ink-2) !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important; border:1px solid var(--border) !important; border-radius:4px !important; }
+.calc-card{ background:var(--ink-2); border:1px solid var(--border); border-radius:4px; }
+
+/* inputs consistentes */
+.calc-field input, .calc-field select, .calc-field textarea{ border-radius:3px; }
+.calc-field label{ font-family:var(--mono); text-transform:uppercase; letter-spacing:.08em; font-size:11px; color:var(--paper-mut); }
