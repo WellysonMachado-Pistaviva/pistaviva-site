@@ -16,7 +16,7 @@ const semi = Saira_Semi_Condensed({ subsets: ['latin'], weight: ['600', '700'], 
 const poppins = Saira({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-sans', display: 'swap' });
 const serif = Saira({ subsets: ['latin'], weight: ['500'], style: ['italic'], variable: '--font-serif', display: 'swap' });
 
-const SITE_URL = 'https://moto.pistaviva.com.br';
+const SITE_URL = 'https://www.pistavivamototurismo.com.br';
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),

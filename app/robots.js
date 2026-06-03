@@ -1,5 +1,5 @@
 export default function robots() {
-  const BASE = 'https://moto.pistaviva.com.br';
+  const BASE = 'https://www.pistavivamototurismo.com.br';
   return {
     rules: [{ userAgent: '*', allow: '/', disallow: ['/admin', '/perfil'] }],
     sitemap: `${BASE}/sitemap.xml`,

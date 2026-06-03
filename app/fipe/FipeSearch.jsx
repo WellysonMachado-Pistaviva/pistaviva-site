@@ -76,7 +76,7 @@ export default function FipeSearch() {
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
               <CoolMode>
                 <a className="btn btn--primary ihb" target="_blank" rel="noopener noreferrer"
-                  href={`https://wa.me/?text=${encodeURIComponent(`💰 FIPE ${res.Marca} ${res.Modelo} (${res.AnoModelo === 32000 ? '0km' : res.AnoModelo}): ${res.Valor}\n\nConsulta grátis no Pistaviva: https://moto.pistaviva.com.br/fipe`)}`}>
+                  href={`https://wa.me/?text=${encodeURIComponent(`💰 FIPE ${res.Marca} ${res.Modelo} (${res.AnoModelo === 32000 ? '0km' : res.AnoModelo}): ${res.Valor}\n\nConsulta grátis no Pistaviva: https://www.pistavivamototurismo.com.br/fipe`)}`}>
                   <span>Compartilhar no WhatsApp</span>
                 </a>
               </CoolMode>
