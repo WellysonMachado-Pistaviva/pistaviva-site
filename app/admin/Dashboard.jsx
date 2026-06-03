@@ -331,6 +331,76 @@ function Users({ onStats }) {
 }
 
 // ════════════════════════════════════════════════════════════
+// APARÊNCIA — imagem do hero da home
+// ════════════════════════════════════════════════════════════
+function HeroSettings() {
+  const [url, setUrl] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    supabase.from('pv_site_config').select('hero_bg_image').eq('id', 1).maybeSingle()
+      .then(({ data }) => { setUrl(data?.hero_bg_image || ''); setLoading(false); });
+  }, []);
+
+  const onFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 6 * 1024 * 1024) { showToast('Imagem muito pesada (máx 6MB)', 'error'); return; }
+    setBusy(true);
+    try {
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+      const path = `site/hero-${Date.now()}.${ext}`;
+      const { error } = await supabase.storage.from('post-images').upload(path, file, { upsert: true, contentType: file.type });
+      if (error) throw error;
+      const { data } = supabase.storage.from('post-images').getPublicUrl(path);
+      setUrl(data.publicUrl);
+      showToast('Imagem enviada ✓ Clique em Salvar.', 'success');
+    } catch (err) { showToast('Erro no upload: ' + err.message, 'error'); }
+    setBusy(false);
+  };
+
+  const save = async () => {
+    setBusy(true);
+    const { error } = await supabase.from('pv_site_config').update({ hero_bg_image: url || null, updated_at: new Date().toISOString() }).eq('id', 1);
+    showToast(error ? 'Erro: ' + error.message : 'Hero salvo ✓ (atualiza na home em ~5 min)', error ? 'error' : 'success');
+    setBusy(false);
+  };
+
+  if (loading) return <div className="spinner-wrap"><span className="loading-spinner" /></div>;
+
+  return (
+    <div style={{ maxWidth: 680 }}>
+      <h3 style={{ fontFamily: 'var(--display)', marginBottom: 6 }}>🖼️ Imagem do Hero (capa da home)</h3>
+      <p style={{ color: 'var(--paper-mut)', fontSize: 13, marginBottom: 16 }}>A foto grande do topo da home. Troque quando quiser.</p>
+
+      <div style={{ background: 'rgba(255,90,0,.06)', border: '1px solid var(--border)', borderRadius: 6, padding: '14px 16px', marginBottom: 18, fontSize: 13, lineHeight: 1.7, color: 'var(--paper-dim)' }}>
+        <b style={{ color: 'var(--text)' }}>📐 Medida ideal:</b><br />
+        • <b>2400 × 1350 px</b> (proporção 16:9, horizontal) — mínimo 1920×1080<br />
+        • Formato <b>JPG</b>, até ~1,5 MB (comprima pra carregar rápido)<br />
+        • <b>Deixe o lado esquerdo mais “limpo”</b> — o título fica por cima dele. Motivo/piloto melhor à direita.<br />
+        • A foto escurece automático (degradê) pro texto branco ficar legível.
+      </div>
+
+      {url && <div style={{ position: 'relative', marginBottom: 14, borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)' }}>
+        <img src={url} alt="" style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', display: 'block' }} />
+      </div>}
+
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginBottom: 12 }}>
+        <label className="btn-primary" style={{ cursor: 'pointer', margin: 0 }}>
+          {busy ? 'Enviando…' : '📤 Enviar foto'}
+          <input type="file" accept="image/*" hidden onChange={onFile} disabled={busy} />
+        </label>
+        <span style={{ fontSize: 12, color: 'var(--paper-mut)' }}>ou cole uma URL:</span>
+      </div>
+      <input value={url} onChange={e => setUrl(e.target.value)} placeholder="https://..."
+        style={{ width: '100%', padding: '11px 13px', marginBottom: 14, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 3, color: 'var(--text)', fontFamily: 'inherit', fontSize: 14 }} />
+      <button className="btn-primary" onClick={save} disabled={busy}>Salvar hero</button>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════
 export default function Dashboard() {
   const auth = useAuth();
   const [tab, setTab] = useState('stats');
@@ -362,7 +432,7 @@ export default function Dashboard() {
 
       {/* sub-abas */}
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 22 }}>
-        {[['stats', 'Estatísticas'], ['analytics', 'Análises'], ['users', 'Usuários']].map(([k, l]) => (
+        {[['stats', 'Estatísticas'], ['analytics', 'Análises'], ['users', 'Usuários'], ['aparencia', 'Aparência']].map(([k, l]) => (
           <button key={k} onClick={() => setTab(k)} style={{ fontFamily: 'var(--mono)', fontSize: 12, padding: '8px 16px', borderRadius: 6, border: '1px solid var(--border)', textTransform: 'uppercase', letterSpacing: '.06em', cursor: 'pointer', color: tab === k ? 'var(--ink)' : 'var(--paper-dim)', background: tab === k ? 'var(--clay)' : 'transparent' }}>{l}</button>
         ))}
       </div>
@@ -370,6 +440,7 @@ export default function Dashboard() {
       <div style={{ display: tab === 'stats' ? 'block' : 'none' }}><Stats userStats={userStats} /></div>
       {tab === 'analytics' && <Analytics />}
       <div style={{ display: tab === 'users' ? 'block' : 'none' }}><Users onStats={setUserStats} /></div>
+      {tab === 'aparencia' && <HeroSettings />}
     </div>
   );
 }
