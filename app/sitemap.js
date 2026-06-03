@@ -5,11 +5,11 @@ import { getAllPhotographerSlugs } from './lib/photographers';
 const BASE = 'https://moto.pistaviva.com.br';
 
 export default async function sitemap() {
-  const routes = ['', '/comunidade', '/paradas', '/fotografos', '/fipe', '/blog', '/rotas', '/eventos', '/mapa', '/comboio', '/loja', '/parceiros', '/expedicoes', '/trechos', '/pista-ao-vivo', '/calculadora'];
+  const routes = ['', '/sobre', '/comunidade', '/paradas', '/fotografos', '/fipe', '/blog', '/rotas', '/eventos', '/mapa', '/comboio', '/loja', '/parceiros', '/expedicoes', '/trechos', '/pista-ao-vivo', '/calculadora'];
   const staticEntries = routes.map(p => ({
     url: `${BASE}${p}`,
     changeFrequency: 'weekly',
-    priority: p === '' ? 1 : 0.7,
+    priority: p === '' ? 1 : (p === '/sobre' ? 0.9 : 0.7),
   }));
 
   let posts = [];

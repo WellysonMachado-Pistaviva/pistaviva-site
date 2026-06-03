@@ -12,6 +12,7 @@ const LINKS = [
   { href: '/comunidade', label: 'Comunidade' },
   { href: '/blog', label: 'Blog' },
   { href: '/eventos', label: 'Eventos' },
+  { href: '/sobre', label: 'Sobre' },
 ];
 
 export default function SiteHeader() {
