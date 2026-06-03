@@ -548,14 +548,20 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
 
 /* HERO overlay */
 .ig-hero{ position:relative; background:var(--ink); color:#fff; overflow:hidden; }
-.ig-hero-media{ position:absolute; inset:0; z-index:0; background:
-    radial-gradient(58% 90% at 82% 28%, rgba(255,90,0,.16), transparent 60%),
-    #0c0c0d; }
-.ig-hero-media::before{ content:""; position:absolute; right:-3%; top:46%; transform:translateY(-50%); width:min(50vw,600px); aspect-ratio:753/523; background:url('/symbol.svg') center/contain no-repeat; opacity:.09; }
-@media(max-width:820px){ .ig-hero-media::before{ opacity:.06; right:-12%; } }
+.ig-hero-media{ position:absolute; inset:0; z-index:0;
+  background-color:#0c0c0d;
+  background-image:
+    radial-gradient(58% 90% at 82% 28%, rgba(255,90,0,.14), transparent 60%),
+    url('/hero.jpg');                 /* solte sua foto licenciada aqui */
+  background-size:auto, cover;
+  background-position:center, center;
+  background-repeat:no-repeat, no-repeat; }
+/* silhueta só aparece quando NÃO há foto (fallback) */
+.ig-hero-media::before{ content:""; position:absolute; right:-3%; top:46%; transform:translateY(-50%); width:min(50vw,600px); aspect-ratio:753/523; background:url('/symbol.svg') center/contain no-repeat; opacity:.07; z-index:-1; }
+@media(max-width:820px){ .ig-hero-media::before{ opacity:.05; right:-12%; } }
 .ig-hero-scrim{ position:absolute; inset:0; z-index:1; background:
-    linear-gradient(90deg,rgba(8,8,9,.92) 0%,rgba(8,8,9,.6) 40%,rgba(8,8,9,.1) 72%,rgba(8,8,9,.4) 100%),
-    linear-gradient(0deg,rgba(8,8,9,.9) 0%,transparent 46%); }
+    linear-gradient(90deg,rgba(8,8,9,.94) 0%,rgba(8,8,9,.66) 42%,rgba(8,8,9,.2) 74%,rgba(8,8,9,.45) 100%),
+    linear-gradient(0deg,rgba(8,8,9,.92) 0%,rgba(8,8,9,.15) 50%,transparent 70%); }
 .ig-hero-inner{ position:relative; z-index:2; min-height:74vh; display:flex; flex-direction:column; justify-content:flex-end; padding-top:96px; padding-bottom:46px; }
 .ig-hero .ig-eyebrow{ margin-bottom:20px; }
 .ig-hero h1{ font-size:clamp(52px,11vw,150px); line-height:.84; letter-spacing:-.015em; }
