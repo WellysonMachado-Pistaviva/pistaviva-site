@@ -459,19 +459,9 @@ const Planner = ({ user }) => {
                   {origin.name.split(',')[0]} <span style={{ color: 'var(--accent)' }}>→</span> {dest.name.split(',')[0]}
                 </div>
                 <div className="mid" />
-                <div className="elev">
-                  <div className="et"><span className="k">Altimetria</span><span className="v">+{story.elev.toLocaleString('pt-BR')} m</span></div>
-                  <svg viewBox="0 0 300 42" preserveAspectRatio="none">
-                    <defs><linearGradient id="elevg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ff5a00" stopOpacity=".55" /><stop offset="1" stopColor="#ff5a00" stopOpacity="0" /></linearGradient></defs>
-                    <path d="M0 42 L0 30 L24 26 L44 32 L66 18 L92 24 L120 8 L150 20 L178 12 L210 28 L240 16 L270 26 L300 14 L300 42 Z" fill="url(#elevg)" />
-                    <path d="M0 30 L24 26 L44 32 L66 18 L92 24 L120 8 L150 20 L178 12 L210 28 L240 16 L270 26 L300 14" fill="none" stroke="#ff7a1a" strokeWidth="2" strokeLinejoin="round" />
-                  </svg>
-                </div>
                 <div className="sgrid">
                   <div className="st accent"><div className="k">Distância</div><div className="v">{result.distance} <small>km</small></div></div>
-                  <div className="st"><div className="k">Altimetria</div><div className="v">+{story.elev.toLocaleString('pt-BR')} <small>m</small></div></div>
-                  <div className="st"><div className="k">Tempo em movimento</div><div className="v">{story.time}</div></div>
-                  <div className="st"><div className="k">Curvas no total</div><div className="v">{story.curves}</div></div>
+                  <div className="st"><div className="k">Total de curvas</div><div className="v">{story.curves}</div></div>
                   <div className="st"><div className="k">↰ Curvas à esquerda</div><div className="v">{story.curvesL}</div></div>
                   <div className="st accent"><div className="k">Curvas à direita ↱</div><div className="v">{story.curvesR}</div></div>
                 </div>
