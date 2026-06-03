@@ -54,6 +54,7 @@ export default function AuthProvider({ children }) {
   const [form, setForm] = useState({ nome: '', email: '', senha: '' });
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
+  const [forgotMode, setForgotMode] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => { buildUser(data.session?.user).then(u => u && setUser(u)); });
@@ -66,8 +67,8 @@ export default function AuthProvider({ children }) {
   }, []);
 
   const isAdmin = !!user?.isAdmin;
-  const openAuthModal = useCallback((tab = 'login') => { setIsAuthModalOpen(true); setAuthTab(tab); setAuthError(''); }, []);
-  const closeAuthModal = () => { setIsAuthModalOpen(false); setAuthError(''); setForm({ nome: '', email: '', senha: '' }); };
+  const openAuthModal = useCallback((tab = 'login') => { setIsAuthModalOpen(true); setAuthTab(tab); setAuthError(''); setForgotMode(false); }, []);
+  const closeAuthModal = () => { setIsAuthModalOpen(false); setAuthError(''); setForgotMode(false); setForm({ nome: '', email: '', senha: '' }); };
 
   const doLoginEmail = async () => {
     setAuthLoading(true); setAuthError('');
@@ -75,6 +76,20 @@ export default function AuthProvider({ children }) {
     setAuthLoading(false);
     if (error) { setAuthError('E-mail ou senha incorretos.'); return; }
     showToast('Bem-vindo de volta! 🏍️', 'success');
+  };
+
+  const doForgotPassword = async () => {
+    const email = form.email.trim();
+    if (!email) { setAuthError('Informe seu e-mail para recuperar a senha.'); return; }
+    setAuthLoading(true); setAuthError('');
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/` : undefined,
+    });
+    setAuthLoading(false);
+    if (error) { setAuthError(error.message); return; }
+    showToast('Link de recuperação enviado! Verifique seu e-mail.', 'success');
+    setForgotMode(false);
+    closeAuthModal();
   };
 
   const doRegisterEmail = async () => {
@@ -119,15 +134,38 @@ export default function AuthProvider({ children }) {
                 <input style={inp} type="text" placeholder="Seu nome" value={form.nome} autoComplete="name" onChange={e => setForm({ ...form, nome: e.target.value })} />
               )}
               <input style={inp} type="email" placeholder="E-mail" value={form.email} autoComplete="email" onChange={e => setForm({ ...form, email: e.target.value })} />
-              <input style={inp} type="password" placeholder={authTab === 'login' ? 'Senha' : 'Senha (mín. 6)'} value={form.senha} onChange={e => setForm({ ...form, senha: e.target.value })} onKeyDown={e => e.key === 'Enter' && (authTab === 'login' ? doLoginEmail() : doRegisterEmail())} />
 
-              {authError && (
-                <p style={{ color: 'var(--danger)', fontSize: '13px', textAlign: 'center', background: 'rgba(239,68,68,.08)', padding: '10px', borderRadius: '8px', border: '1px solid rgba(239,68,68,.2)' }}>{authError}</p>
+              {forgotMode ? (
+                <>
+                  {authError && (
+                    <p style={{ color: 'var(--danger)', fontSize: '13px', textAlign: 'center', background: 'rgba(239,68,68,.08)', padding: '10px', borderRadius: '8px', border: '1px solid rgba(239,68,68,.2)' }}>{authError}</p>
+                  )}
+                  <button className="btn-primary" onClick={doForgotPassword} disabled={authLoading}>
+                    {authLoading ? <span className="loading-spinner" /> : 'ENVIAR LINK DE RECUPERAÇÃO'}
+                  </button>
+                  <p style={{ textAlign: 'center', fontSize: 13, marginTop: 8 }}>
+                    <button type="button" onClick={() => { setForgotMode(false); setAuthError(''); }} style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, textDecoration: 'underline' }}>Voltar ao login</button>
+                  </p>
+                </>
+              ) : (
+                <>
+                  <input style={inp} type="password" placeholder={authTab === 'login' ? 'Senha' : 'Senha (mín. 6)'} value={form.senha} onChange={e => setForm({ ...form, senha: e.target.value })} onKeyDown={e => e.key === 'Enter' && (authTab === 'login' ? doLoginEmail() : doRegisterEmail())} />
+
+                  {authError && (
+                    <p style={{ color: 'var(--danger)', fontSize: '13px', textAlign: 'center', background: 'rgba(239,68,68,.08)', padding: '10px', borderRadius: '8px', border: '1px solid rgba(239,68,68,.2)' }}>{authError}</p>
+                  )}
+
+                  <button className="btn-primary" onClick={authTab === 'login' ? doLoginEmail : doRegisterEmail} disabled={authLoading}>
+                    {authLoading ? <span className="loading-spinner" /> : authTab === 'login' ? 'ENTRAR' : 'CRIAR CONTA'}
+                  </button>
+
+                  {authTab === 'login' && (
+                    <p style={{ textAlign: 'center', fontSize: 13, marginTop: 8, marginBottom: 0 }}>
+                      <button type="button" onClick={() => { setForgotMode(true); setAuthError(''); }} style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, textDecoration: 'underline' }}>Esqueci minha senha</button>
+                    </p>
+                  )}
+                </>
               )}
-
-              <button className="btn-primary" onClick={authTab === 'login' ? doLoginEmail : doRegisterEmail} disabled={authLoading}>
-                {authLoading ? <span className="loading-spinner" /> : authTab === 'login' ? 'ENTRAR' : 'CRIAR CONTA'}
-              </button>
             </div>
           </div>
         </div>

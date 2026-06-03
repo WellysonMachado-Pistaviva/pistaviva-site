@@ -4,7 +4,7 @@ import { requireAdmin } from '../../../lib/supabaseAdmin';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-const MODEL = 'gemini-2.5-flash';
+const MODEL = 'gemini-2.0-flash';
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
 async function gemini(prompt, schema) {
@@ -22,7 +22,10 @@ async function gemini(prompt, schema) {
     body: JSON.stringify(body),
   });
   const json = await res.json();
-  if (!res.ok) return { error: json?.error?.message || 'Erro Gemini.' };
+  if (!res.ok) {
+    console.error('[Gemini] Erro na API:', res.status, JSON.stringify(json?.error || json));
+    return { error: json?.error?.message || `Erro Gemini (${res.status}).` };
+  }
   const text = json?.candidates?.[0]?.content?.parts?.[0]?.text || '';
   return { text };
 }
@@ -53,7 +56,7 @@ const BLOG_SCHEMA = {
     tags: { type: 'array', items: { type: 'string' } },
     body: { type: 'string' },
   },
-  required: ['title', 'excerpt', 'tags', 'body'],
+  required: ['title', 'slug', 'excerpt', 'tags', 'body'],
 };
 
 function blogPrompt({ tema, keyword, refText }) {
@@ -118,17 +121,17 @@ export async function POST(req) {
     }
     const tema = args.tema?.trim() || 'gere o tema a partir do material de referência';
     const { text, error } = await gemini(blogPrompt({ ...args, tema, refText }), BLOG_SCHEMA);
-    if (error) return NextResponse.json({ error }, { status: 502 });
+    if (error) { console.error('[Gemini] blog error:', error); return NextResponse.json({ error }, { status: 502 }); }
     try { return NextResponse.json({ result: JSON.parse(text) }); }
-    catch { return NextResponse.json({ error: 'Resposta inválida da IA.' }, { status: 502 }); }
+    catch (e) { console.error('[Gemini] JSON parse falhou:', e.message, 'text:', text?.slice(0, 300)); return NextResponse.json({ error: 'Resposta inválida da IA.' }, { status: 502 }); }
   }
 
   if (task === 'parada') {
     if (!args.nome?.trim()) return NextResponse.json({ error: 'Informe o nome da parada.' }, { status: 400 });
     const { text, error } = await gemini(paradaPrompt(args), PARADA_SCHEMA);
-    if (error) return NextResponse.json({ error }, { status: 502 });
+    if (error) { console.error('[Gemini] parada error:', error); return NextResponse.json({ error }, { status: 502 }); }
     try { return NextResponse.json({ result: JSON.parse(text) }); }
-    catch { return NextResponse.json({ error: 'Resposta inválida da IA.' }, { status: 502 }); }
+    catch (e) { console.error('[Gemini] JSON parse falhou:', e.message, 'text:', text?.slice(0, 300)); return NextResponse.json({ error: 'Resposta inválida da IA.' }, { status: 502 }); }
   }
 
   return NextResponse.json({ error: 'Tarefa desconhecida.' }, { status: 400 });
