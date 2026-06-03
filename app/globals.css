@@ -670,3 +670,12 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
 /* inputs consistentes */
 .calc-field input, .calc-field select, .calc-field textarea{ border-radius:3px; }
 .calc-field label{ font-family:var(--mono); text-transform:uppercase; letter-spacing:.08em; font-size:11px; color:var(--paper-mut); }
+
+/* FEED / Comunidade → IGNIS */
+.dest-card{ background:var(--ink-2) !important; border:1px solid var(--border) !important; border-radius:4px !important; transition:transform .25s ease, border-color .25s ease; box-shadow:none !important; }
+.dest-card:hover{ transform:translateY(-3px); border-color:var(--accent); }
+.badge{ background:rgba(255,90,0,.1) !important; color:var(--accent) !important; border:none !important; border-radius:2px !important; font-family:var(--mono); font-weight:700; text-transform:uppercase; letter-spacing:.08em; font-size:10px; padding:5px 10px; }
+.post-action-btn{ border-radius:2px; font-family:var(--mono); }
+.comment-box{ border-top:1px solid var(--border); }
+.comment-box input{ border-radius:3px; }
+.autocomplete-list{ border-radius:4px; }

@@ -155,7 +155,7 @@ const Feed = ({ openAuthModal, user }) => {
           <button
             onClick={() => user ? setIsPosting(true) : openAuthModal()}
             style={{
-              width: '100%', padding: '18px 24px', borderRadius: 'var(--radius)',
+              width: '100%', padding: '18px 24px', borderRadius: '4px',
               background: 'var(--bg2)', border: '1px solid var(--border)',
               color: 'var(--muted)', textAlign: 'left', cursor: 'pointer',
               display: 'flex', alignItems: 'center', gap: '12px', transition: 'var(--transition)',
@@ -231,11 +231,12 @@ const Feed = ({ openAuthModal, user }) => {
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 {Object.entries(categoryLabels).map(([k, v]) => (
                   <button key={k} onClick={() => setNewPost({ ...newPost, category: k })} style={{
-                    padding: '8px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 700,
+                    padding: '8px 14px', borderRadius: '100px', fontSize: '12px', fontWeight: 600,
+                    fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '.06em',
                     border: `1.5px solid ${newPost.category === k ? 'var(--accent)' : 'var(--border)'}`,
-                    background: newPost.category === k ? 'var(--accent-subtle)' : 'transparent',
-                    color: newPost.category === k ? 'var(--accent)' : 'var(--muted)',
-                    cursor: 'pointer', transition: 'var(--transition)'
+                    background: newPost.category === k ? 'var(--accent)' : 'transparent',
+                    color: newPost.category === k ? '#fff' : 'var(--paper-dim)',
+                    cursor: 'pointer', transition: '.15s'
                   }}>{v}</button>
                 ))}
               </div>
