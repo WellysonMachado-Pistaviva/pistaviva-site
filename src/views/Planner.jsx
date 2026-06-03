@@ -179,14 +179,25 @@ const Planner = ({ user }) => {
   const dateStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
 
   return (
-    <div className="planner-page">
-      <div className="page-header">
-        <h2 className="page-title">PLANEJADOR</h2>
-        <p className="page-subtitle">Calcule sua rota com clima e custo em tempo real</p>
-      </div>
+    <div className="planner-ig">
+      <section className="pg-head">
+        <div className="wrap">
+          <h1>Planejador<br />de rotas</h1>
+          <span className="eyebrow" style={{ marginTop: 16 }}>Calcule rota, clima e custo em tempo real</span>
+        </div>
+      </section>
 
-      {/* ── FORMULÁRIO ── */}
-      <div className="calc-card glass">
+      <main className="pg-main">
+        <div className="wrap">
+          <div className="pg-grid">
+
+      {/* ── FORMULÁRIO (coluna esquerda) ── */}
+      <section className="pg-panel">
+        <div className="pg-ph">
+          <span className="ic"><MapPin size={20} /></span>
+          <h2>Trajeto</h2>
+        </div>
+        <div className="pg-pb">
         {/* ORIGIN */}
         <div className="calc-field" style={{ position: 'relative' }}>
           <label>Origem</label>
@@ -256,23 +267,28 @@ const Planner = ({ user }) => {
         </div>
 
         {/* ROUND TRIP */}
-        <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', marginBottom: '24px', padding: '14px', borderRadius: 'var(--radius-sm)', background: isRoundtrip ? 'var(--accent-subtle)' : 'transparent', border: `1px solid ${isRoundtrip ? 'rgba(249,115,22,.3)' : 'transparent'}`, transition: 'var(--transition)' }}>
-          <input type="checkbox" checked={isRoundtrip} onChange={e => setIsRoundtrip(e.target.checked)}
-            style={{ width: '20px', height: '20px', accentColor: 'var(--accent)', flexShrink: 0 }} />
-          <div>
-            <div style={{ fontWeight: 700, fontSize: '14px' }}>Bate e Volta</div>
-            <div style={{ fontSize: '12px', color: 'var(--muted)' }}>Dobra a distância e o custo automaticamente</div>
-          </div>
+        <label className={`pg-toggle${isRoundtrip ? ' on' : ''}`}>
+          <input type="checkbox" checked={isRoundtrip} onChange={e => setIsRoundtrip(e.target.checked)} hidden />
+          <span className="box">{isRoundtrip && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.2"><path d="m5 12 5 5 9-10" /></svg>}</span>
+          <span className="tt"><b>Bate e Volta</b><span>Dobra a distância e o custo automaticamente</span></span>
         </label>
 
-        <button className="btn-primary" onClick={handleCalculate} disabled={loading || !origin.lat || !dest.lat}>
+        <button className="btn-primary pg-gen" onClick={handleCalculate} disabled={loading || !origin.lat || !dest.lat}>
           {loading ? <><span className="loading-spinner" /> CALCULANDO...</> : <><Calculator size={18} /> GERAR ROTEIRO</>}
         </button>
-      </div>
+        </div>
+      </section>
 
-      {/* ── CARD RESULTADO — 1 SCREENSHOT ── */}
+      {/* ── RESULTADO (coluna direita) ── */}
+      <div className="pg-result">
+      {!result && (
+        <div className="pg-placeholder">
+          <div className="big"><MapIcon size={26} /></div>
+          <p>Preencha o trajeto e toque em <b>Gerar roteiro</b> pra ver distância, tempo, custo de combustível e o clima nas pontas da viagem.</p>
+        </div>
+      )}
       {result && (
-        <div className="reveal visible" style={{ marginTop:'12px', overflow:'hidden', border:'1px solid var(--border)', background:'var(--bg2)' }}>
+        <div className="reveal visible" style={{ overflow:'hidden', border:'1px solid var(--border)', background:'var(--bg2)', borderRadius:5 }}>
 
           {/* FOTÓGRAFOS NA ROTA */}
           {routePhotographers.length > 0 && (
@@ -385,8 +401,13 @@ const Planner = ({ user }) => {
           </div>
         </div>
       )}
+            </div>{/* .pg-result */}
 
-            <style>{`
+          </div>{/* .pg-grid */}
+        </div>{/* .wrap */}
+      </main>
+
+      <style>{`
         .leaflet-div-icon { background: transparent !important; border: none !important; }
       `}</style>
     </div>

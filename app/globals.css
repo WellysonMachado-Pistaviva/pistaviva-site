@@ -827,6 +827,40 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
 @media(max-width:1180px){ .site-head .nav{ gap:.95rem; } .brand-logo{ height:16px; max-width:210px; } }
 @media(max-width:768px){ .brand img, .brand-logo{ height:22px !important; max-width:60vw; } }
 
+/* =========================================================
+   PLANEJADOR — layout IGNIS (dark, 2 colunas) · função real
+   ========================================================= */
+.pg-head{ position:relative; overflow:hidden; padding:clamp(34px,5vw,56px) 0 clamp(22px,3vw,30px); border-bottom:1px solid var(--border); }
+.pg-head::before{ content:""; position:absolute; inset:0; background:radial-gradient(120% 80% at 100% 0, rgba(255,90,0,.14), transparent 55%); pointer-events:none; }
+.pg-head .wrap{ position:relative; }
+.pg-head h1{ font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:clamp(40px,7vw,86px); line-height:.86; letter-spacing:-.01em; color:#fff; }
+.pg-head .eyebrow{ font-family:var(--mono); font-weight:700; text-transform:uppercase; letter-spacing:.22em; font-size:12px; color:var(--accent); display:inline-flex; align-items:center; gap:10px; }
+.pg-head .eyebrow::before{ content:""; width:26px; height:2px; background:var(--accent); }
+
+.pg-main{ padding:clamp(26px,4vw,40px) 0 clamp(56px,8vw,90px); }
+.pg-grid{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:22px; align-items:start; }
+@media(max-width:980px){ .pg-grid{ grid-template-columns:1fr; } }
+
+.pg-panel{ background:var(--ink-2); border:1px solid var(--border); border-radius:5px; overflow:hidden; }
+.pg-ph{ display:flex; align-items:center; gap:10px; padding:18px 22px; border-bottom:1px solid var(--border); }
+.pg-ph .ic{ color:var(--accent); display:inline-grid; place-items:center; }
+.pg-ph h2{ font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:19px; letter-spacing:.02em; color:#fff; }
+.pg-pb{ padding:22px; }
+
+.pg-toggle{ display:flex; gap:14px; align-items:flex-start; border:1px solid var(--accent); background:rgba(255,90,0,.08); border-radius:4px; padding:16px 18px; margin:20px 0 22px; cursor:pointer; transition:.15s; }
+.pg-toggle:hover{ background:rgba(255,90,0,.13); }
+.pg-toggle .box{ width:24px; height:24px; border-radius:3px; border:2px solid var(--accent); display:grid; place-items:center; flex-shrink:0; margin-top:1px; transition:.15s; }
+.pg-toggle.on .box{ background:var(--accent); }
+.pg-toggle .tt b{ font-family:var(--mono); font-weight:700; font-size:15px; display:block; text-transform:uppercase; letter-spacing:.04em; color:#fff; }
+.pg-toggle .tt span{ color:var(--paper-mut); font-size:13.5px; line-height:1.35; display:block; margin-top:2px; }
+.pg-gen{ width:100%; padding:18px; }
+
+.pg-result{ display:flex; flex-direction:column; gap:18px; }
+.pg-placeholder{ background:var(--ink-2); border:1px dashed var(--border-hover); border-radius:5px; padding:54px 30px; text-align:center; color:var(--paper-mut); }
+.pg-placeholder .big{ width:58px; height:58px; border-radius:50%; border:1.5px solid var(--border-hover); display:grid; place-items:center; margin:0 auto 18px; color:var(--accent); }
+.pg-placeholder p{ font-family:var(--font); font-size:14.5px; line-height:1.5; max-width:36ch; margin:0 auto; }
+.pg-placeholder b{ color:#fff; }
+
 /* PÁGINA APOIE */
 .apoie-cta{ background:var(--ink); }
 .apoie-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
