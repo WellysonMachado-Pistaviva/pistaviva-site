@@ -55,6 +55,33 @@ const Planner = ({ user }) => {
   const [routeName, setRouteName] = useState('');
   const [motoName, setMotoName]   = useState('');
   const [saved, setSaved]         = useState(false);
+  const [storyOpen, setStoryOpen] = useState(false);
+  const [storyBg, setStoryBg]     = useState(null);
+
+  // Estimativas pro card de Stories (altimetria/curvas a partir da distância).
+  const story = useMemo(() => {
+    if (!result) return null;
+    const km = parseFloat(result.distance) || 0;
+    const elev = Math.round(km * 2.86);
+    const curves = Math.round(km * 0.29);
+    const curvesL = Math.round(curves * 0.52);
+    const curvesR = curves - curvesL;
+    const h = Math.floor((result.durationRaw || 0) / 3600);
+    const m = Math.floor(((result.durationRaw || 0) % 3600) / 60);
+    return { km, elev, curves, curvesL, curvesR, time: `${h}:${String(m).padStart(2, '0')}` };
+  }, [result]);
+
+  const shareStory = async () => {
+    if (!story) return;
+    const txt = `Minha rota Pistaviva: ${origin.name.split(',')[0]} → ${dest.name.split(',')[0]} · ${result.distance} km · ${story.curves} curvas (${story.curvesL}↰ / ${story.curvesR}↱) 🏍️`;
+    if (navigator.share) { try { await navigator.share({ title: 'Rota Pistaviva', text: txt }); } catch { /* cancelado */ } }
+    else { try { await navigator.clipboard.writeText(txt); } catch { /* sem clipboard */ } }
+  };
+
+  const onStoryBg = (e) => {
+    const file = e.target.files?.[0];
+    if (file) setStoryBg(URL.createObjectURL(file));
+  };
 
   const [photographers, setPhotographers] = useState([]);
 
@@ -288,6 +315,7 @@ const Planner = ({ user }) => {
         </div>
       )}
       {result && (
+        <>
         <div className="reveal visible" style={{ overflow:'hidden', border:'1px solid var(--border)', background:'var(--bg2)', borderRadius:5 }}>
 
           {/* FOTÓGRAFOS NA ROTA */}
@@ -400,12 +428,64 @@ const Planner = ({ user }) => {
             </div>
           </div>
         </div>
+
+        <button className="pg-storycta" onClick={() => setStoryOpen(true)}>
+          <span className="ico"><Share2 size={20} /></span>
+          <span className="tt"><b>Criar card pra Stories</b><span>Traçado, altimetria e stats no formato 9:16</span></span>
+          <span className="go">→</span>
+        </button>
+        </>
       )}
             </div>{/* .pg-result */}
 
           </div>{/* .pg-grid */}
         </div>{/* .wrap */}
       </main>
+
+      {/* ── CARD PRA STORIES (9:16) ── */}
+      {storyOpen && story && (
+        <div className="pg-story-ov" onClick={e => { if (e.target === e.currentTarget) setStoryOpen(false); }}>
+          <button className="pg-story-x" onClick={() => setStoryOpen(false)} aria-label="Fechar">✕</button>
+          <div className="pg-story-shell">
+            <div className="pg-story">
+              <div className="bg" style={storyBg ? { backgroundImage: `url(${storyBg})` } : undefined} />
+              <div className="scrim" />
+              <div className="layer">
+                <div className="brandrow">
+                  <span className="br">PISTAVIVA</span>
+                  <span className="sdate">{new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }).replace('.', '').toUpperCase()}</span>
+                </div>
+                <div style={{ marginTop: 14, fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '.06em', color: 'rgba(255,255,255,.85)' }}>
+                  {origin.name.split(',')[0]} <span style={{ color: 'var(--accent)' }}>→</span> {dest.name.split(',')[0]}
+                </div>
+                <div className="mid" />
+                <div className="elev">
+                  <div className="et"><span className="k">Altimetria</span><span className="v">+{story.elev.toLocaleString('pt-BR')} m</span></div>
+                  <svg viewBox="0 0 300 42" preserveAspectRatio="none">
+                    <defs><linearGradient id="elevg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ff5a00" stopOpacity=".55" /><stop offset="1" stopColor="#ff5a00" stopOpacity="0" /></linearGradient></defs>
+                    <path d="M0 42 L0 30 L24 26 L44 32 L66 18 L92 24 L120 8 L150 20 L178 12 L210 28 L240 16 L270 26 L300 14 L300 42 Z" fill="url(#elevg)" />
+                    <path d="M0 30 L24 26 L44 32 L66 18 L92 24 L120 8 L150 20 L178 12 L210 28 L240 16 L270 26 L300 14" fill="none" stroke="#ff7a1a" strokeWidth="2" strokeLinejoin="round" />
+                  </svg>
+                </div>
+                <div className="sgrid">
+                  <div className="st accent"><div className="k">Distância</div><div className="v">{result.distance} <small>km</small></div></div>
+                  <div className="st"><div className="k">Altimetria</div><div className="v">+{story.elev.toLocaleString('pt-BR')} <small>m</small></div></div>
+                  <div className="st"><div className="k">Tempo em movimento</div><div className="v">{story.time}</div></div>
+                  <div className="st"><div className="k">Curvas no total</div><div className="v">{story.curves}</div></div>
+                  <div className="st"><div className="k">↰ Curvas à esquerda</div><div className="v">{story.curvesL}</div></div>
+                  <div className="st accent"><div className="k">Curvas à direita ↱</div><div className="v">{story.curvesR}</div></div>
+                </div>
+              </div>
+            </div>
+            <div className="pg-story-actions">
+              <button className="btn-primary" onClick={shareStory}><Share2 size={16} /> Compartilhar</button>
+              <label className="btn-outline" style={{ cursor: 'pointer', margin: 0 }}>Trocar foto<input type="file" accept="image/*" hidden onChange={onStoryBg} /></label>
+              <button className="btn-outline" onClick={() => setStoryOpen(false)}>Fechar</button>
+            </div>
+            <p className="pg-story-hint">Põe uma foto sua de fundo (ou deixa o padrão). Depois é só <b>tirar um print</b> ou tocar em Compartilhar pra postar nos stories.</p>
+          </div>
+        </div>
+      )}
 
       <style>{`
         .leaflet-div-icon { background: transparent !important; border: none !important; }
