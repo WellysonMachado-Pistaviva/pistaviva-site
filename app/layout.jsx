@@ -1,6 +1,10 @@
 import { Saira, Saira_Condensed, Saira_Semi_Condensed } from 'next/font/google';
+import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;        // ex: G-XXXXXXXXXX
+const ADSENSE_ID = process.env.NEXT_PUBLIC_ADSENSE_ID; // ex: ca-pub-0000000000000000
 import '../src/index.css';
 import '../src/App.css';
 import 'leaflet/dist/leaflet.css';
@@ -30,7 +34,7 @@ export const metadata = {
   keywords: ['mototurismo', 'big trail', 'rotas de moto', 'tabela fipe moto', 'Serra da Mantiqueira', 'viagem de moto', 'comunidade motociclista'],
   authors: [{ name: 'Pistaviva' }],
   alternates: { canonical: '/' },
-  robots: { index: true, follow: true, 'max-image-preview': 'large' },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, maxImagePreview: 'large', maxSnippet: -1, maxVideoPreview: -1 } },
   openGraph: {
     type: 'website',
     siteName: 'Pistaviva',
@@ -43,7 +47,7 @@ export const metadata = {
   twitter: { card: 'summary_large_image', title: 'Pistaviva — Mototurismo no Brasil', images: ['/icon.png'] },
   manifest: '/manifest.webmanifest',
   icons: { icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }, { url: '/favicon.png' }], shortcut: '/favicon.png', apple: '/apple-touch-icon.png' },
-  verification: { google: '3dZUKqyMzKSjim6TjsEW-9JgEhf-JyVBHef_SU7hFUI' },
+  verification: { google: 'zRMuUqP5QA7_s5uKBemw7SOXzZ17i5VNmmYAGrEi0x4' },
 };
 
 export const viewport = {
@@ -100,6 +104,19 @@ export default function RootLayout({ children }) {
         </AuthProvider>
         <Analytics />
         <SpeedInsights />
+
+        {GA_ID && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+            <Script id="ga4" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
+            </Script>
+          </>
+        )}
+        {ADSENSE_ID && (
+          <Script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
+            strategy="afterInteractive" crossOrigin="anonymous" />
+        )}
       </body>
     </html>
   );

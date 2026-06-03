@@ -7,6 +7,24 @@ import ReadingProgress from '../../components/ReadingProgress';
 
 export const revalidate = 300;
 
+// Renderiza markdown inline: [texto](/link) vira <a>/<Link>, **negrito** vira <strong>.
+function renderInline(text) {
+  const out = []; const re = /\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*/g;
+  let i = 0, m, k = 0;
+  while ((m = re.exec(text))) {
+    if (m.index > i) out.push(text.slice(i, m.index));
+    if (m[1] !== undefined) {
+      const href = m[2];
+      out.push(href.startsWith('/')
+        ? <Link key={k++} className="inl" href={href}>{m[1]}</Link>
+        : <a key={k++} className="inl" href={href} target="_blank" rel="noopener noreferrer">{m[1]}</a>);
+    } else { out.push(<strong key={k++}>{m[3]}</strong>); }
+    i = re.lastIndex;
+  }
+  if (i < text.length) out.push(text.slice(i));
+  return out;
+}
+
 export async function generateStaticParams() {
   const slugs = await getAllSlugs();
   return slugs.map(s => ({ slug: s.slug }));
@@ -147,7 +165,7 @@ export default async function BlogPost({ params }) {
               if (b.t === 'img') return <figure key={i} className="art-inline"><img src={b.v} alt="" /></figure>;
               if (b.t === 'h3') return <h3 key={i}>{b.v}</h3>;
               if (b.t === 'h2') return <h2 key={i}>{b.v}</h2>;
-              return <p key={i}>{b.v}</p>;
+              return <p key={i}>{renderInline(b.v)}</p>;
             })}
 
             {faq.length >= 2 && (
