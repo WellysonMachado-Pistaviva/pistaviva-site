@@ -19,7 +19,7 @@ export default async function BlogList() {
   const posts = await getPublishedPosts(60);
 
   return (
-    <section className="section">
+    <section className="section page-light">
       <div className="wrap">
         <div className="section-head">
           <div>

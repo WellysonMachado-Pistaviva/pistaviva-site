@@ -25,7 +25,7 @@ export default async function Busca({ searchParams }) {
   const total = posts.length + spots.length + fotos.length;
 
   return (
-    <div className="wrap section" style={{ paddingTop: 'clamp(28px,5vw,56px)' }}>
+    <div className="wrap section page-light" style={{ paddingTop: 'clamp(28px,5vw,56px)' }}>
       <div className="section-head"><div><p className="eyebrow eyebrow--moss">Busca</p><h2>Buscar no Pistaviva</h2></div></div>
 
       <form action="/busca" method="get" style={{ display: 'flex', gap: 8, marginBottom: '2rem', maxWidth: 520 }}>

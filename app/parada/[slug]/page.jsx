@@ -50,7 +50,7 @@ export default async function ParadaPage({ params }) {
   };
 
   return (
-    <article className="wrap" style={{ paddingTop: '1rem' }}>
+    <article className="wrap page-light" style={{ paddingTop: '1rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <ViewPing kind="spot" id={s.id} />

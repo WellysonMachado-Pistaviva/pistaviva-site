@@ -16,7 +16,7 @@ export default function FipePage() {
     description: 'Consulta gratuita do valor FIPE de motos por marca, modelo e ano.',
   };
   return (
-    <div className="wrap section" style={{ paddingTop: 'clamp(28px,5vw,56px)' }}>
+    <div className="wrap section page-light" style={{ paddingTop: 'clamp(28px,5vw,56px)' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="section-head">
         <div>
