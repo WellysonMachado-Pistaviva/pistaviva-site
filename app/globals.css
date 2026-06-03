@@ -678,9 +678,9 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
   .ig-sechead::after{ content:"deslize →"; position:absolute; right:0; bottom:-2px; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--paper-mut); opacity:.8; }
 
   /* timeline da página sobre também desliza */
-  .sobre-timeline{ display:flex !important; overflow-x:auto; scroll-snap-type:x mandatory; gap:1px; scrollbar-width:none; margin-inline:calc(-1 * var(--gut)); padding-inline:var(--gut); }
+  .sobre-timeline{ display:flex !important; flex-wrap:nowrap; overflow-x:auto; overflow-y:hidden; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; gap:10px; scrollbar-width:none; border:0; background:transparent; scroll-padding-left:var(--gut); margin-inline:calc(-1 * var(--gut)); padding:2px var(--gut) 14px; }
   .sobre-timeline::-webkit-scrollbar{ display:none; }
-  .sobre-tl-item{ scroll-snap-align:start; flex:0 0 82%; }
+  .sobre-tl-item{ scroll-snap-align:start; flex:0 0 82%; border:1px solid var(--snow-line); border-radius:4px; }
 }
 
 /* =========================================================
@@ -728,6 +728,15 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
 .sobre-tl-loc{ font-family:var(--mono); text-transform:uppercase; letter-spacing:.1em; font-size:10.5px; color:var(--accent-2); font-weight:600; display:block; margin:6px 0 8px; }
 .sobre-tl-item p{ font-family:var(--font); font-size:13.5px; color:var(--ink-soft); line-height:1.5; }
 
+/* números / impacto */
+.sobre-nums{ background:#0c0e11; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.sobre-nums .wrap{ display:grid; grid-template-columns:repeat(4,1fr); }
+.sobre-num{ padding:26px 16px 24px; text-align:center; border-left:1px solid var(--line); }
+.sobre-num:first-child{ border-left:0; }
+.sobre-num b{ display:block; font-family:var(--display); font-weight:800; font-size:clamp(28px,4vw,46px); color:var(--accent); line-height:1; letter-spacing:-.02em; }
+.sobre-num span{ display:block; margin-top:8px; font-family:var(--mono); text-transform:uppercase; letter-spacing:.1em; font-size:10.5px; color:var(--paper-mut); line-height:1.4; }
+@media(max-width:680px){ .sobre-nums .wrap{ grid-template-columns:1fr 1fr; } .sobre-num:nth-child(odd){ border-left:0; } .sobre-num:nth-child(n+3){ border-top:1px solid var(--line); } }
+
 /* bio */
 .sobre-bio{ background:var(--ink); }
 .sobre-bio-grid{ display:grid; grid-template-columns:minmax(0,42%) minmax(0,58%); gap:clamp(28px,5vw,56px); align-items:center; }
@@ -740,6 +749,17 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
 .sobre-bio-txt p{ font-family:var(--font); color:rgba(255,255,255,.74); font-size:15.5px; line-height:1.65; margin-bottom:14px; }
 .sobre-bio-txt p b{ color:#fff; }
 .sobre-cta{ display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
+
+/* PÁGINA APOIE */
+.apoie-cta{ background:var(--ink); }
+.apoie-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+@media(max-width:900px){ .apoie-grid{ grid-template-columns:1fr 1fr; } }
+@media(max-width:520px){ .apoie-grid{ grid-template-columns:1fr; } }
+.apoie-card{ background:var(--snow); border:1px solid var(--snow-line); border-radius:6px; padding:24px 20px; transition:transform .25s ease, border-color .25s ease; }
+.apoie-card:hover{ transform:translateY(-4px); border-color:var(--accent); }
+.apoie-ico{ font-size:30px; display:block; margin-bottom:12px; }
+.apoie-card h3{ font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:18px; letter-spacing:-.01em; color:var(--ink); }
+.apoie-card p{ font-family:var(--font); font-size:13.5px; color:var(--ink-soft); line-height:1.55; margin-top:8px; }
 
 /* FEED / Comunidade → IGNIS */
 .dest-card{ background:var(--ink-2) !important; border:1px solid var(--border) !important; border-radius:4px !important; transition:transform .25s ease, border-color .25s ease; box-shadow:none !important; }

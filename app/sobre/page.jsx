@@ -36,8 +36,8 @@ const TIMELINE = [
   { n: '08', t: 'BMW 102 anos', l: 'Celebração oficial', d: 'Encontro comemorativo dos 102 anos da BMW.' },
   { n: '09', t: 'Recanto do Morango', l: 'Serra da Mantiqueira', d: 'Parada queridinha entre as curvas da serra.' },
   { n: '10', t: '1.000 motos · Garganta do Registro', l: 'Itamonte, MG', d: 'Dia histórico: mil motos reunidas num café de domingo nas alturas.' },
-  { n: '11', t: 'Rota 68', l: 'São José do Barreiro, SP', d: 'Desbravando caminhos no lado paulista da Mantiqueira.' },
-  { n: '12', t: 'Motosul 2026', l: 'Serra da Mantiqueira', d: 'A explosão do movimento — cada dia maior.' },
+  { n: '11', t: 'Rota 68', l: 'São José do Barreiro, SP', d: '800 motos num único domingo desbravando o lado paulista da Mantiqueira.' },
+  { n: '12', t: 'Motosul 2026', l: 'Serra da Mantiqueira', d: 'A explosão do movimento: 5 mil motos e mais de R$ 2 milhões de impacto na cidade em um fim de semana.' },
 ];
 
 export default function SobrePage() {
@@ -83,6 +83,20 @@ export default function SobrePage() {
           <span className="ig-eyebrow on-dark">Mantiqueira em duas rodas</span>
           <h1>De um café<br />de domingo a um <span className="it">movimento</span></h1>
           <p className="ig-lede">Tudo começou simples: reunir os amigos pra um café na Venda do Chico, em Três Corações. Aquele bate-volta despretensioso acendeu uma faísca — e virou o maior movimento de mototurismo da Serra da Mantiqueira.</p>
+        </div>
+      </section>
+
+      {/* NÚMEROS / IMPACTO */}
+      <section className="sobre-nums">
+        <div className="wrap">
+          {[
+            ['5 mil', 'Motos no Motosul 2026'],
+            ['R$ 2 mi+', 'Impacto na cidade num fim de semana'],
+            ['1.000', 'Motos na Garganta do Registro'],
+            ['800', 'Motos na Rota 68 (1 domingo)'],
+          ].map(([v, k]) => (
+            <div key={k} className="sobre-num"><b>{v}</b><span>{k}</span></div>
+          ))}
         </div>
       </section>
 
