@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import Cover from '../../components/Cover';
 import { notFound } from 'next/navigation';
-import { getPostBySlug, getAllSlugs } from '../../lib/blog';
+import { getPostBySlug, getAllSlugs, getPublishedPosts } from '../../lib/blog';
 import ViewPing from '../../components/ViewPing';
+import ReadingProgress from '../../components/ReadingProgress';
 
 export const revalidate = 300;
 
@@ -86,57 +87,122 @@ export default async function BlogPost({ params }) {
     ],
   };
 
+  const words = String(post.body || '').split(/\s+/).filter(Boolean).length;
+  const readMin = Math.max(2, Math.round(words / 200));
+  const author = post.author || 'Pistaviva';
+  const initials = author.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  const dateFmt = post.published_at ? new Date(post.published_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }) : null;
+  const related = (await getPublishedPosts(4)).filter(p => p.slug !== slug).slice(0, 3);
+  const url = `https://moto.pistaviva.com.br/blog/${slug}`;
+  const share = {
+    wa: `https://wa.me/?text=${encodeURIComponent(post.title + ' ' + url)}`,
+    x: `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(url)}`,
+    fb: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+  };
+
   return (
-    <article className="page-light">
+    <article className="ignis art">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
       <ViewPing kind="blog" id={post.id} />
-      <div className="wrap">
-        <nav className="crumbs"><Link href="/">Início</Link> / <Link href="/blog">Blog</Link> / <span>{post.title}</span></nav>
+      <ReadingProgress />
 
-        <header className="post-hero">
-          {post.tags?.[0] && <p className="eyebrow">{post.tags[0]}</p>}
-          <h1>{post.title}</h1>
-          <div className="post-meta">
-            {post.author && <span>Por <b>{post.author}</b></span>}
-            {post.published_at && <span>{new Date(post.published_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</span>}
-            {post.tags?.length > 0 && <span>{post.tags.join(' · ')}</span>}
-          </div>
-        </header>
-
-        {post.cover_url && (
-          <div className="post-cover"><Cover src={post.cover_url} alt={post.title} sizes="100vw" priority /></div>
-        )}
-
-        <div className="article">
-          {post.excerpt && <p className="lead">{post.excerpt}</p>}
-          {bodyBlocks.map((b, i) => {
-            if (b.t === 'img') return <img key={i} src={b.v} alt="" style={{ borderRadius: 12, border: '1px solid var(--line)' }} />;
-            if (b.t === 'h3') return <h3 key={i}>{b.v}</h3>;
-            if (b.t === 'h2') return <h2 key={i}>{b.v}</h2>;
-            return <p key={i}>{b.v}</p>;
-          })}
-
-          {faq.length >= 2 && (
-            <>
-              <h2>Perguntas frequentes</h2>
-              <div className="faq">
-                {faq.map((f, i) => (
-                  <details key={i}>
-                    <summary>{f.q}</summary>
-                    <div className="ans">{f.a}</div>
-                  </details>
-                ))}
-              </div>
-            </>
-          )}
+      {/* breadcrumb */}
+      <nav className="art-crumb" aria-label="Trilha">
+        <div className="wrap">
+          <Link href="/">Início</Link><span className="sep">/</span>
+          <Link href="/blog">Blog</Link><span className="sep">/</span>
+          <span className="here">{post.tags?.[0] || 'Matéria'}</span>
         </div>
+      </nav>
 
-        <div style={{ marginTop: '3rem' }}>
-          <Link className="btn btn--ghost" href="/blog">← Voltar ao blog</Link>
+      {/* hero da matéria */}
+      <header className="art-hero">
+        <div className="wrap">
+          <div className="art-meta">
+            {post.tags?.[0] && <span className="tag">{post.tags[0]}</span>}
+            {dateFmt && <span className="date">{dateFmt}</span>}
+            <span className="dot" /><span className="read">{readMin} min de leitura</span>
+          </div>
+          <h1>{post.title}</h1>
+          {post.excerpt && <p className="sub">{post.excerpt}</p>}
+          <div className="art-byline">
+            <span className="av">{initials}</span>
+            <span className="who"><b>{author}</b><span>Pistaviva · Mototurismo</span></span>
+          </div>
+        </div>
+      </header>
+
+      {/* imagem principal */}
+      {post.cover_url && (
+        <figure className="art-lead"><Cover src={post.cover_url} alt={post.title} sizes="100vw" priority /></figure>
+      )}
+
+      {/* corpo */}
+      <div className="art-body">
+        <div className="wrap">
+          <div className="art-col">
+            {bodyBlocks.map((b, i) => {
+              if (b.t === 'img') return <figure key={i} className="art-inline"><img src={b.v} alt="" /></figure>;
+              if (b.t === 'h3') return <h3 key={i}>{b.v}</h3>;
+              if (b.t === 'h2') return <h2 key={i}>{b.v}</h2>;
+              return <p key={i}>{b.v}</p>;
+            })}
+
+            {faq.length >= 2 && (
+              <>
+                <h2>Perguntas frequentes</h2>
+                <div className="faq">
+                  {faq.map((f, i) => (
+                    <details key={i}><summary>{f.q}</summary><div className="ans">{f.a}</div></details>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* share + tags */}
+            <div className="art-share">
+              <span className="lbl">Compartilhar</span>
+              <a href={share.wa} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WA</a>
+              <a href={share.x} target="_blank" rel="noopener noreferrer" aria-label="X">X</a>
+              <a href={share.fb} target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
+            </div>
+            {post.tags?.length > 0 && (
+              <div className="art-tags">{post.tags.map(t => <span key={t} className="t">{t}</span>)}</div>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* relacionadas */}
+      {related.length > 0 && (
+        <section className="art-related">
+          <div className="wrap">
+            <div className="head">
+              <div><span className="ig-eyebrow">Continue lendo</span><h2 className="ig-title">Leia também</h2></div>
+              <Link href="/blog" className="ig-btn ig-btn--ghost">Todas as matérias</Link>
+            </div>
+            <div className="rel-grid">
+              {related.map(p => (
+                <Link key={p.id} className="rel" href={`/blog/${p.slug}`}>
+                  <div className="pic">{p.cover_url ? <Cover src={p.cover_url} alt={p.title} sizes="(max-width:600px) 100vw, 380px" /> : <span className="pic-ph">PISTAVIVA</span>}</div>
+                  <div className="m">{p.tags?.[0] && <span className="tag">{p.tags[0]}</span>}{p.published_at && <span className="date">{new Date(p.published_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}</span>}</div>
+                  <h3>{p.title}</h3>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* band CTA */}
+      <section className="ig-band">
+        <div className="wrap">
+          <div><span className="ig-eyebrow on-accent">Bora rodar junto?</span><h2>Entre na comunidade do Pistaviva.</h2></div>
+          <Link href="/comunidade" className="ig-btn ig-btn--ghost on-accent">Entrar agora <span className="arr">→</span></Link>
+        </div>
+      </section>
     </article>
   );
 }
