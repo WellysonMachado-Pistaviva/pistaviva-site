@@ -750,6 +750,14 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
 .sobre-bio-txt p b{ color:#fff; }
 .sobre-cta{ display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
 
+/* LOGO + NAV — respiro no desktop (logo largo + 9 itens) */
+.brand-logo{ height:17px; width:auto; max-width:240px; display:block; }
+.site-head .brand{ margin-right:clamp(1rem,3vw,2.4rem); flex:0 0 auto; }
+.site-head .nav{ gap:1.15rem; }
+.site-head .nav a{ font-size:.72rem; letter-spacing:.06em; }
+@media(max-width:1180px){ .site-head .nav{ gap:.95rem; } .brand-logo{ height:16px; max-width:210px; } }
+@media(max-width:768px){ .brand img, .brand-logo{ height:22px !important; max-width:60vw; } }
+
 /* PÁGINA APOIE */
 .apoie-cta{ background:var(--ink); }
 .apoie-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
