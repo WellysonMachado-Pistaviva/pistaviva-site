@@ -132,7 +132,7 @@ const Feed = ({ openAuthModal, user }) => {
   return (
     <div className="feed-page">
       <div className="page-header">
-        <h2 className="page-title">COMUNIDADE</h2>
+        <h1 className="page-title">COMUNIDADE</h1>
         <p className="page-subtitle">Aventuras compartilhadas pelos membros</p>
       </div>
 

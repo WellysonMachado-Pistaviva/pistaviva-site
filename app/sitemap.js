@@ -5,7 +5,7 @@ import { getAllPhotographerSlugs } from './lib/photographers';
 const BASE = 'https://www.pistavivamototurismo.com.br';
 
 export default async function sitemap() {
-  const routes = ['', '/sobre', '/apoie', '/comunidade', '/paradas', '/fotografos', '/fipe', '/blog', '/rotas', '/eventos', '/mapa', '/comboio', '/loja', '/parceiros', '/expedicoes', '/trechos', '/pista-ao-vivo', '/calculadora'];
+  const routes = ['', '/sobre', '/apoie', '/contato', '/privacidade', '/termos', '/comunidade', '/paradas', '/fotografos', '/fipe', '/blog', '/rotas', '/eventos', '/mapa', '/comboio', '/loja', '/parceiros', '/expedicoes', '/trechos', '/pista-ao-vivo', '/calculadora'];
   const staticEntries = routes.map(p => ({
     url: `${BASE}${p}`,
     changeFrequency: 'weekly',

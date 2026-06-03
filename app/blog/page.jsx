@@ -19,40 +19,44 @@ export default async function BlogList() {
   const posts = await getPublishedPosts(60);
 
   return (
-    <section className="section page-light">
-      <div className="wrap">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow eyebrow--moss">Leituras de estrada</p>
-            <h2>Blog Pistaviva</h2>
+    <div className="ignis ph-list">
+      <section className="ph-intro">
+        <div className="wrap">
+          <div className="head">
+            <div>
+              <span className="ig-eyebrow" style={{ color: 'var(--ink-soft)' }}>Leituras de estrada</span>
+              <h1>Blog Pistaviva</h1>
+            </div>
           </div>
+          <p className="lede">Guias de rotas, preparação de viagem, garagem e a cultura do mototurismo brasileiro — conteúdo de quem pega estrada.</p>
         </div>
+      </section>
 
+      <div className="wrap">
         {posts.length === 0 ? (
-          <p style={{ color: 'var(--paper-dim)' }}>Ainda não há posts publicados. Volte em breve — conteúdo novo toda semana.</p>
+          <p style={{ color: 'var(--ink-soft)', padding: '10px 0 30px' }}>Ainda não há posts publicados. Volte em breve — conteúdo novo toda semana.</p>
         ) : (
-          <div className="routes">
+          <div className="ph-grid">
             {posts.map(p => (
-              <article className="route" key={p.id}>
-                <Link href={`/blog/${p.slug}`} aria-label={p.title}>
-                  <div className="thumb">
-                    {p.tags?.[0] && <span className="tag">{p.tags[0]}</span>}
-                    {p.cover_url ? <Cover src={p.cover_url} alt={p.title} sizes="(max-width:600px) 100vw, 380px" /> : <Icon />}
+              <Link className="ph-card" key={p.id} href={`/blog/${p.slug}`}>
+                <div className="pic">
+                  {p.tags?.[0] && <span className="spot">{p.tags[0]}</span>}
+                  {p.cover_url ? <Cover src={p.cover_url} alt={p.title} sizes="(max-width:600px) 100vw, 380px" /> : <span className="pic-ph">📖</span>}
+                </div>
+                <div className="body">
+                  <h3 style={{ fontSize: 22 }}>{p.title}</h3>
+                  <p className="desc">{p.excerpt || ''}</p>
+                  <div className="foot">
+                    <span className="loc">{p.author || 'Pistaviva'}</span>
+                    {p.published_at && <span className="loc">{new Date(p.published_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: '2-digit' })}</span>}
                   </div>
-                  <div className="body">
-                    <h3>{p.title}</h3>
-                    <p>{p.excerpt || ''}</p>
-                    <div className="meta">
-                      {p.author && <span><b>{p.author}</b></span>}
-                      {p.published_at && <span>{new Date(p.published_at).toLocaleDateString('pt-BR')}</span>}
-                    </div>
-                  </div>
-                </Link>
-              </article>
+                </div>
+              </Link>
             ))}
           </div>
         )}
       </div>
-    </section>
+      <div style={{ height: 'clamp(40px,6vw,72px)' }} />
+    </div>
   );
 }

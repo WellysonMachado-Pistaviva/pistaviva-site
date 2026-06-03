@@ -378,7 +378,7 @@ const MapPage = ({ user }) => {
   return (
     <div className="map-page">
       <div className="page-header" style={{ marginBottom: '8px' }}>
-        <h2 className="page-title">MAPA INTERATIVO</h2>
+        <h1 className="page-title">MAPA INTERATIVO</h1>
         <p className="page-subtitle">Pings da comunidade e 34 Monumentos Rota Biker</p>
       </div>
 

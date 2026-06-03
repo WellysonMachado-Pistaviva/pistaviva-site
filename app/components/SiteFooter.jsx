@@ -34,9 +34,16 @@ export default function SiteFooter() {
             <Link href="/loja">Loja</Link>
           </div>
         </div>
+        <div className="foot-legal">
+          <Link href="/sobre">Sobre</Link>
+          <Link href="/contato">Contato</Link>
+          <Link href="/privacidade">Privacidade</Link>
+          <Link href="/termos">Termos</Link>
+          <Link href="/apoie">Apoie</Link>
+        </div>
         <div className="foot-base">
           <span>© {new Date().getFullYear()} Pistaviva · Comunidade de Mototurismo</span>
-          <span>Feito na curva, não no escritório · Desenvolvido com Next.js e Supabase</span>
+          <span>Feito na curva, não no escritório</span>
         </div>
       </div>
     </footer>
