@@ -13,6 +13,7 @@ const LINKS = [
   { href: '/blog', label: 'Blog' },
   { href: '/eventos', label: 'Eventos' },
   { href: '/sobre', label: 'Sobre' },
+  { href: '/apoie', label: 'Apoie' },
 ];
 
 export default function SiteHeader() {
