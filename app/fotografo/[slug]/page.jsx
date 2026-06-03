@@ -43,7 +43,7 @@ export default async function FotografoPage({ params }) {
   };
 
   return (
-    <article className="wrap" style={{ paddingTop: '1rem' }}>
+    <article className="wrap page-light" style={{ paddingTop: '1rem' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <nav className="crumbs"><Link href="/">Início</Link> / <Link href="/fotografos">Fotógrafos</Link> / <span>{f.nome}</span></nav>

@@ -15,7 +15,7 @@ export const metadata = {
 export default async function Fotografos() {
   const fotos = await getPhotographers();
   return (
-    <div className="wrap section" style={{ paddingTop: 'clamp(28px,5vw,56px)' }}>
+    <div className="wrap section page-light" style={{ paddingTop: 'clamp(28px,5vw,56px)' }}>
       <div className="section-head">
         <div>
           <p className="eyebrow eyebrow--moss">Fotógrafos de estrada</p>
