@@ -74,7 +74,7 @@ export default async function Home() {
       </section>
 
       {/* MOTOS MAIS VENDIDAS */}
-      <section className="section section--dark">
+      <section className="section section--light section--soft">
         <div className="wrap">
           <div className="section-head">
             <div>
@@ -88,22 +88,22 @@ export default async function Home() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px,1fr))', gap: '16px' }}>
             {RANKINGS.map(r => (
-              <div key={r.cat} style={{ background: 'var(--ink-2)', border: '1px solid var(--line)', borderRadius: 12, overflow: 'hidden' }}>
-                <div style={{ background: 'var(--ink)', borderBottom: '2px solid var(--clay)', padding: '12px 16px', fontFamily: 'var(--display)', fontWeight: 800, fontSize: 14, textTransform: 'uppercase', letterSpacing: '.04em' }}>{r.cat}</div>
+              <div key={r.cat} style={{ background: 'var(--snow)', border: '1px solid var(--snow-line)', borderRadius: 12, overflow: 'hidden' }}>
+                <div style={{ background: 'var(--ink)', color: '#fff', borderBottom: '2px solid var(--clay)', padding: '12px 16px', fontFamily: 'var(--display)', fontWeight: 800, fontSize: 14, textTransform: 'uppercase', letterSpacing: '.04em' }}>{r.cat}</div>
                 <div>
                   {r.items.map(([nome, un], i) => (
-                    <div key={nome} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: i < r.items.length - 1 ? '1px solid var(--line)' : 'none' }}>
-                      <span style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: '1.4rem', color: i === 0 ? 'var(--clay)' : 'var(--paper-mut)', minWidth: 30 }}>{i + 1}º</span>
-                      <span style={{ flex: 1, fontWeight: 600, fontSize: 14 }}>{nome}</span>
-                      <span style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--paper-dim)' }}>{un}</span>
+                    <div key={nome} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: i < r.items.length - 1 ? '1px solid var(--snow-line)' : 'none' }}>
+                      <span style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: '1.4rem', color: i === 0 ? 'var(--clay)' : '#a2a5ac', minWidth: 30 }}>{i + 1}º</span>
+                      <span style={{ flex: 1, fontWeight: 600, fontSize: 14, color: 'var(--ink)' }}>{nome}</span>
+                      <span style={{ fontFamily: 'var(--mono)', fontSize: 13, color: '#6b6e76' }}>{un}</span>
                     </div>
                   ))}
                 </div>
-                <Link href="/fipe" style={{ display: 'block', textAlign: 'center', padding: '10px', fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--clay)', textTransform: 'uppercase', letterSpacing: '.08em', borderTop: '1px solid var(--line)' }}>Ver FIPE →</Link>
+                <Link href="/fipe" style={{ display: 'block', textAlign: 'center', padding: '10px', fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--clay)', textTransform: 'uppercase', letterSpacing: '.08em', borderTop: '1px solid var(--snow-line)' }}>Ver FIPE →</Link>
               </div>
             ))}
           </div>
-          <p style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-mut)', marginTop: 14 }}>Dados públicos de emplacamentos (Brasil), atualização periódica. Consulte o valor atual na <Link href="/fipe" style={{ color: 'var(--clay)' }}>Tabela FIPE</Link>.</p>
+          <p style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--ink-soft)', marginTop: 14 }}>Dados públicos de emplacamentos (Brasil), atualização periódica. Consulte o valor atual na <Link href="/fipe" style={{ color: 'var(--clay)' }}>Tabela FIPE</Link>.</p>
         </div>
       </section>
 
@@ -133,7 +133,7 @@ export default async function Home() {
 
       {/* ÚLTIMO DO BLOG */}
       {posts.length > 0 && (
-        <section className="section section--light">
+        <section className="section section--light section--soft">
           <div className="wrap">
             <div className="section-head">
               <div>
@@ -165,7 +165,7 @@ export default async function Home() {
 
       {/* INSTAGRAM */}
       {ig.length > 0 && (
-        <section className="section section--dark">
+        <section className="section section--light">
           <div className="wrap">
             <div className="section-head">
               <div><p className="eyebrow">@pistavivaoficial</p><h2>No nosso Instagram</h2></div>
