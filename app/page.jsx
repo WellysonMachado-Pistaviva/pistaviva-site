@@ -35,29 +35,21 @@ export default async function Home() {
     <div className="home">
       {/* HERO */}
       <section className="hero">
-        <div className="wrap hero-grid">
-          <div>
-            <p className="eyebrow">Comunidade aberta · Mototurismo no Brasil</p>
-            <h1>A estrada<br />é só o<br /><span className="li">começo</span></h1>
-            <p className="lede">Rotas que a gente já rodou, piloto trocando ideia de verdade e a cultura de quem vive em cima da moto. Aqui o conteúdo vem de quem pega estrada — não de quem só pesquisou.</p>
-            <div className="cta-row">
-              <Link className="btn btn--primary ihb" href="/rotas"><span>Explorar rotas →</span></Link>
-              <Link className="btn btn--ghost" href="/comunidade">Entrar na comunidade</Link>
-            </div>
+        <div className="wrap hero-lead">
+          <p className="eyebrow">Comunidade aberta · Mototurismo no Brasil</p>
+          <h1>A estrada<br />é só o <span className="li">começo</span></h1>
+          <p className="lede">Rotas que a gente já rodou, piloto trocando ideia de verdade e a cultura de quem vive em cima da moto. Conteúdo de quem pega estrada — não de quem só pesquisou.</p>
+          <div className="cta-row">
+            <Link className="btn btn--primary ihb" href="/rotas"><span>Explorar rotas →</span></Link>
+            <Link className="btn btn--ghost" href="/comunidade">Entrar na comunidade</Link>
+            <CoolMode><span className="cool-moto" title="clica! 🏍️">🏍️</span></CoolMode>
           </div>
-          <aside className="hero-card" aria-label="Destaque">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <p className="eyebrow">Comunidade Pistaviva</p>
-              <CoolMode><span className="cool-moto" title="clica! 🏍️">🏍️</span></CoolMode>
-            </div>
-            <h3>Rode junto</h3>
-            <p>Comboio ao vivo no mapa, passaporte de carimbos e um feed que é só estrada. Sobe teu rolê, acha o próximo.</p>
-            <div className="stat-row">
-              <div className="stat"><div className="n"><Counter to={27} prefix="+" /></div><div className="l">Estados</div></div>
-              <div className="stat"><div className="n">GPS</div><div className="l">Comboio ao vivo</div></div>
-              <div className="stat"><div className="n">Livre</div><div className="l">Comunidade</div></div>
-            </div>
-          </aside>
+        </div>
+        <div className="wrap hero-stats">
+          <div className="hstat"><b><Counter to={27} prefix="+" /></b><span>Estados na comunidade</span></div>
+          <div className="hstat"><b>GPS</b><span>Comboio ao vivo</span></div>
+          <div className="hstat"><b>Livre</b><span>Comunidade aberta</span></div>
+          <div className="hstat"><b>FIPE</b><span>Consulta grátis</span></div>
         </div>
       </section>
 
@@ -69,14 +61,14 @@ export default async function Home() {
           <div className="section-head">
             <div>
               <p className="eyebrow eyebrow--moss">Por onde navegar</p>
-              <h2>Quatro pilares</h2>
+              <h2>Explore o Pistaviva</h2>
             </div>
           </div>
-          <div className="clusters bento">
-            <Link className="cluster" href="/comunidade"><span className="num">01</span><h3>Comunidade</h3><p>Feed dos pilotos: relato sincero, foto da paisagem e o perrengue que virou história.</p><span className="go">Explorar →</span></Link>
-            <Link className="cluster" href="/rotas"><span className="num">02</span><h3>Rotas &amp; Expedições</h3><p>Roteiros do Sudeste com as paradas certas e o nível real da curva.</p><span className="go">Explorar →</span></Link>
-            <Link className="cluster" href="/blog"><span className="num">03</span><h3>Blog</h3><p>Guia de viagem, preparo da moto e a cultura do mototurismo brasileiro.</p><span className="go">Ler →</span></Link>
-            <Link className="cluster" href="/loja"><span className="num">04</span><h3>Loja Pistaviva</h3><p>Roupa técnica e casual pra quem passa o dia no banco da moto.</p><span className="go">Comprar →</span></Link>
+          <div className="cats">
+            <Link className="cat" href="/comunidade"><span className="cat-idx">01</span><div className="cat-ico">📣</div><h3>Comunidade</h3><p>Feed dos pilotos: relato sincero, foto da paisagem e o perrengue que virou história.</p><span className="cat-go">Explorar →</span></Link>
+            <Link className="cat" href="/rotas"><span className="cat-idx">02</span><div className="cat-ico">🗺️</div><h3>Rotas &amp; Expedições</h3><p>Roteiros do Sudeste com as paradas certas e o nível real da curva.</p><span className="cat-go">Explorar →</span></Link>
+            <Link className="cat" href="/blog"><span className="cat-idx">03</span><div className="cat-ico">📖</div><h3>Blog</h3><p>Guia de viagem, preparo da moto e a cultura do mototurismo brasileiro.</p><span className="cat-go">Ler →</span></Link>
+            <Link className="cat" href="/loja"><span className="cat-idx">04</span><div className="cat-ico">🧥</div><h3>Loja Pistaviva</h3><p>Roupa técnica e casual pra quem passa o dia no banco da moto.</p><span className="cat-go">Comprar →</span></Link>
           </div>
         </div>
       </section>
