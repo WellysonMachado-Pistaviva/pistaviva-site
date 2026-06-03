@@ -169,7 +169,7 @@ const Planner = ({ user }) => {
             <div style={{ fontSize: '11px', color: 'var(--muted)' }}>{weather.label}</div>
           </div>
         </div>
-        <div style={{ display: 'inline-flex', alignItems: 'center', marginTop: '6px', padding: '2px 8px', borderRadius: '999px', background: `${weather.color}18`, color: weather.color, fontSize: '10px', fontWeight: 800, letterSpacing: '1px' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', marginTop: '8px', padding: '3px 9px', borderRadius: '2px', background: `${weather.color}1e`, color: weather.color, fontSize: '10px', fontWeight: 700, letterSpacing: '.1em', fontFamily: 'var(--mono)', textTransform: 'uppercase' }}>
           {weather.riding}
         </div>
       </div>
