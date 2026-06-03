@@ -20,7 +20,6 @@ const PAGES = {
   parceiros:   dynamic(() => import('../../src/views/Partners'), { ssr: false, loading: Spinner }),
   comboio:     dynamic(() => import('../../src/views/Comboio'), { ssr: false, loading: Spinner }),
   loja:        dynamic(() => import('../../src/views/Store'), { ssr: false, loading: Spinner }),
-  perfil:      dynamic(() => import('../../src/views/Profile'), { ssr: false, loading: Spinner }),
   trechos:     dynamic(() => import('../../src/views/Segments'), { ssr: false, loading: Spinner }),
   expedicoes:  dynamic(() => import('../../src/views/Expeditions'), { ssr: false, loading: Spinner }),
   admin:       dynamic(() => import('../../src/views/AdminDashboard'), { ssr: false, loading: Spinner }),
@@ -41,5 +40,14 @@ export default function SpaPage({ name }) {
     );
   }
 
-  return <Comp user={auth?.user} openAuthModal={auth?.openAuthModal} />;
+  return (
+    <Comp
+      user={auth?.user}
+      openAuthModal={auth?.openAuthModal}
+      promptIdentity={auth?.promptIdentity}
+      identity={auth?.identity}
+      deviceId={auth?.deviceId}
+      isAdmin={auth?.isAdmin}
+    />
+  );
 }

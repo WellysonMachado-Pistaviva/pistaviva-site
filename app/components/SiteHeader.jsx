@@ -1,8 +1,6 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useAuth } from './AuthProvider';
 
 const LINKS = [
   { href: '/calculadora', label: 'Planejador' },
@@ -18,9 +16,6 @@ const LINKS = [
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const auth = useAuth();
-  const router = useRouter();
-  const user = auth?.user;
   const close = () => setOpen(false);
 
   return (
@@ -35,19 +30,6 @@ export default function SiteHeader() {
             <Link key={l.href} href={l.href} onClick={close}>{l.label}</Link>
           ))}
           <Link className="shop" href="/loja" onClick={close}>Loja</Link>
-
-          {user ? (
-            <a onClick={() => { close(); router.push('/perfil'); }} style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-              <span style={{ width: 30, height: 30, borderRadius: 6, background: 'var(--clay)', color: 'var(--ink)', display: 'grid', placeItems: 'center', fontWeight: 800, overflow: 'hidden' }}>
-                {user.avatarUrl
-                  ? <img src={user.avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  : (user.nome || user.name || '?')[0].toUpperCase()}
-              </span>
-              Perfil
-            </a>
-          ) : (
-            <a onClick={() => { close(); auth?.openAuthModal('login'); }}>Entrar</a>
-          )}
         </nav>
 
         <button className="menu-btn" aria-label="Abrir menu" aria-expanded={open} onClick={() => setOpen(o => !o)}>≡</button>

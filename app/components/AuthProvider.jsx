@@ -1,11 +1,6 @@
 'use client';
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import dynamic from 'next/dynamic';
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../../src/lib/supabaseClient';
-
-const GlobalTracker = dynamic(() => import('../../src/components/GlobalTracker'), { ssr: false });
-
-const ADMIN_EMAILS = ['contatopively@gmail.com'];
 
 const AuthCtx = createContext(null);
 export const useAuth = () => useContext(AuthCtx);
@@ -22,148 +17,181 @@ export const showToast = (msg, type = '') => {
   toastTimeout = setTimeout(() => { el.style.display = 'none'; }, 3000);
 };
 
-// Monta o objeto user no MESMO formato que o resto do site usa (id, nome, name, isAdmin, avatarUrl).
-async function buildUser(authUser) {
-  if (!authUser) return null;
-  const meta = authUser.user_metadata || {};
-  let profile = null;
+// Device id anônimo (NÃO é conta/login) — só um handle técnico pra dedup de
+// curtidas e presença ao vivo. Persistente no navegador.
+function getDeviceId() {
+  if (typeof window === 'undefined') return 'anon';
   try {
-    const { data } = await supabase.from('pv_profiles').select('nome, avatar_url, cidade, uf, moto, is_admin').eq('id', authUser.id).maybeSingle();
-    profile = data;
-    // Garante a linha de perfil (caso o trigger não tenha rodado)
-    if (!profile) {
-      await supabase.from('pv_profiles').upsert({ id: authUser.id, nome: meta.full_name || meta.name || authUser.email?.split('@')[0], avatar_url: meta.avatar_url || meta.picture || null }, { onConflict: 'id' });
-    }
-  } catch { /* ignore */ }
-  const nome = profile?.nome || meta.full_name || meta.name || authUser.email?.split('@')[0] || 'Piloto';
-  const isAdmin = !!profile?.is_admin || ADMIN_EMAILS.includes((authUser.email || '').toLowerCase());
-  return {
-    id: authUser.id,
-    email: authUser.email,
-    nome, name: nome,
-    isAdmin,
-    avatarUrl: profile?.avatar_url || meta.avatar_url || meta.picture || null,
-    cidade: profile?.cidade || null, uf: profile?.uf || null, moto: profile?.moto || null,
-  };
+    let id = localStorage.getItem('pv_device');
+    if (!id) { id = (crypto?.randomUUID?.() || ('dev-' + Date.now() + '-' + Math.random().toString(36).slice(2))); localStorage.setItem('pv_device', id); }
+    return id;
+  } catch { return 'anon'; }
+}
+
+// Última identificação usada (nome/cidade/UF) — só pra pré-preencher o modal.
+function readLastIdentity() {
+  if (typeof window === 'undefined') return { nome: '', cidade: '', uf: '' };
+  try { return JSON.parse(sessionStorage.getItem('pv_last_identity') || 'null') || { nome: '', cidade: '', uf: '' }; }
+  catch { return { nome: '', cidade: '', uf: '' }; }
 }
 
 export default function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authTab, setAuthTab] = useState('login');
-  const [form, setForm] = useState({ nome: '', email: '', senha: '' });
-  const [authError, setAuthError] = useState('');
-  const [authLoading, setAuthLoading] = useState(false);
-  const [forgotMode, setForgotMode] = useState(false);
+  const [deviceId, setDeviceId] = useState('anon');
+  const [identity, setIdentity] = useState(null); // {nome, cidade, uf} da última identificação na sessão
+
+  // ── Modal de identificação pública (nome + cidade/UF) ──
+  const [identOpen, setIdentOpen] = useState(false);
+  const [identForm, setIdentForm] = useState({ nome: '', cidade: '', uf: '' });
+  const identResolver = useRef(null);
+
+  // ── Admin (Supabase email/senha — só no /admin) ──
+  const [adminEmail, setAdminEmail] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminOpen, setAdminOpen] = useState(false);
+  const [adminForm, setAdminForm] = useState({ email: '', senha: '' });
+  const [adminErr, setAdminErr] = useState('');
+  const [adminBusy, setAdminBusy] = useState(false);
+  const [forgot, setForgot] = useState(false);
+
+  // Pergunta ao SERVIDOR se a sessão é admin (o email admin nunca vem pro cliente).
+  const verifyAdmin = useCallback(async (session) => {
+    if (!session?.access_token) { setIsAdmin(false); return; }
+    try {
+      const res = await fetch('/api/admin/check', { headers: { Authorization: `Bearer ${session.access_token}` } });
+      const j = await res.json();
+      setIsAdmin(!!j.isAdmin);
+    } catch { setIsAdmin(false); }
+  }, []);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => { buildUser(data.session?.user).then(u => u && setUser(u)); });
-    const { data: sub } = supabase.auth.onAuthStateChange(async (_e, session) => {
-      const u = await buildUser(session?.user);
-      setUser(u);
-      if (u) setIsAuthModalOpen(false);
+    setDeviceId(getDeviceId());
+    supabase.auth.getSession().then(({ data }) => {
+      setAdminEmail(data.session?.user?.email || null);
+      verifyAdmin(data.session);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setAdminEmail(session?.user?.email || null);
+      verifyAdmin(session);
+      if (session?.user) setAdminOpen(false);
     });
     return () => sub.subscription.unsubscribe();
+  }, [verifyAdmin]);
+
+  // Abre o modal de identificação e resolve com {nome,cidade,uf} ou null se cancelar.
+  const promptIdentity = useCallback(() => {
+    return new Promise((resolve) => {
+      identResolver.current = resolve;
+      setIdentForm(readLastIdentity());
+      setIdentOpen(true);
+    });
   }, []);
+  // Alias de compatibilidade: telas antigas chamavam openAuthModal('login').
+  const openAuthModal = useCallback(() => { promptIdentity(); }, [promptIdentity]);
 
-  const isAdmin = !!user?.isAdmin;
-  const openAuthModal = useCallback((tab = 'login') => { setIsAuthModalOpen(true); setAuthTab(tab); setAuthError(''); setForgotMode(false); }, []);
-  const closeAuthModal = () => { setIsAuthModalOpen(false); setAuthError(''); setForgotMode(false); setForm({ nome: '', email: '', senha: '' }); };
-
-  const doLoginEmail = async () => {
-    setAuthLoading(true); setAuthError('');
-    const { error } = await supabase.auth.signInWithPassword({ email: form.email.trim(), password: form.senha });
-    setAuthLoading(false);
-    if (error) { setAuthError('E-mail ou senha incorretos.'); return; }
-    showToast('Bem-vindo de volta! 🏍️', 'success');
+  const submitIdentity = () => {
+    const nome = identForm.nome.trim();
+    if (!nome) { showToast('Digite seu nome.', 'error'); return; }
+    const val = { nome, cidade: identForm.cidade.trim(), uf: identForm.uf.trim().toUpperCase() };
+    try { sessionStorage.setItem('pv_last_identity', JSON.stringify(val)); } catch { /* ok */ }
+    setIdentity(val);
+    setIdentOpen(false);
+    identResolver.current?.(val);
+    identResolver.current = null;
+  };
+  const cancelIdentity = () => {
+    setIdentOpen(false);
+    identResolver.current?.(null);
+    identResolver.current = null;
   };
 
-  const doForgotPassword = async () => {
-    const email = form.email.trim();
-    if (!email) { setAuthError('Informe seu e-mail para recuperar a senha.'); return; }
-    setAuthLoading(true); setAuthError('');
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/` : undefined,
-    });
-    setAuthLoading(false);
-    if (error) { setAuthError(error.message); return; }
-    showToast('Link de recuperação enviado! Verifique seu e-mail.', 'success');
-    setForgotMode(false);
-    closeAuthModal();
-  };
+  // ── Admin login ──
+  const openAdminLogin = useCallback(() => { setAdminOpen(true); setAdminErr(''); setForgot(false); }, []);
+  const closeAdmin = () => { setAdminOpen(false); setAdminErr(''); setForgot(false); setAdminForm({ email: '', senha: '' }); };
 
-  const doRegisterEmail = async () => {
-    if (!form.nome.trim()) { setAuthError('Informe seu nome.'); return; }
-    if (form.senha.length < 6) { setAuthError('Senha mínima de 6 caracteres.'); return; }
-    setAuthLoading(true); setAuthError('');
-    const { data, error } = await supabase.auth.signUp({
-      email: form.email.trim(), password: form.senha,
-      options: { data: { full_name: form.nome.trim() } },
-    });
-    setAuthLoading(false);
-    if (error) { setAuthError(error.message); return; }
-    if (data.session) showToast(`Bem-vindo ao Pista Viva, ${form.nome}! 🏍️`, 'success');
-    else { setAuthError(''); showToast('Confirme seu e-mail para entrar.', 'success'); closeAuthModal(); }
+  const doAdminLogin = async () => {
+    setAdminBusy(true); setAdminErr('');
+    const { error } = await supabase.auth.signInWithPassword({ email: adminForm.email.trim(), password: adminForm.senha });
+    setAdminBusy(false);
+    if (error) { setAdminErr('E-mail ou senha incorretos.'); return; }
+    showToast('Bem-vindo, admin.', 'success');
   };
-
+  const doForgot = async () => {
+    const email = adminForm.email.trim();
+    if (!email) { setAdminErr('Informe o e-mail.'); return; }
+    setAdminBusy(true); setAdminErr('');
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/admin` : undefined });
+    setAdminBusy(false);
+    if (error) { setAdminErr(error.message); return; }
+    showToast('Link de recuperação enviado.', 'success'); setForgot(false); closeAdmin();
+  };
   const doLogout = useCallback(async () => {
     await supabase.auth.signOut();
-    setUser(null);
-    showToast('Até logo, piloto!');
+    setAdminEmail(null);
+    setIsAdmin(false);
+    showToast('Sessão admin encerrada.');
   }, []);
+
+  // `user` derivado da identificação anônima (não é conta/login). Mantém o
+  // mesmo formato que as telas antigas esperam (id/nome/name/cidade/uf), pra
+  // que o código existente funcione assim que a pessoa se identifica.
+  const user = identity ? { id: deviceId, nome: identity.nome, name: identity.nome, cidade: identity.cidade, uf: identity.uf } : null;
 
   const inp = { width: '100%', padding: '12px 14px', marginBottom: 10, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)', fontFamily: 'inherit', fontSize: 15 };
 
   return (
-    <AuthCtx.Provider value={{ user, isAdmin, openAuthModal, doLogout, showToast }}>
+    <AuthCtx.Provider value={{ user, deviceId, identity, promptIdentity, openAuthModal, isAdmin, adminEmail, openAdminLogin, doLogout, showToast }}>
       {children}
 
-      {isAuthModalOpen && (
-        <div className="modal-overlay" onClick={closeAuthModal}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '400px', padding: '28px 24px' }}>
-            <button className="modal-close" onClick={closeAuthModal}>×</button>
+      {/* Modal de identificação da comunidade — sem login, só nome + cidade/UF */}
+      {identOpen && (
+        <div className="modal-overlay" onClick={cancelIdentity}>
+          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 380, padding: '26px 22px' }}>
+            <button className="modal-close" onClick={cancelIdentity}>×</button>
+            <div className="auth-logo" style={{ marginBottom: 6 }}>PISTA<span style={{ color: 'var(--accent)' }}>VIVA</span></div>
+            <p style={{ textAlign: 'center', color: 'var(--paper-mut)', fontSize: 14, marginBottom: 16 }}>Identifique-se pra postar na comunidade.</p>
+            <input style={inp} type="text" placeholder="Seu nome" value={identForm.nome} autoFocus autoComplete="name"
+              onChange={e => setIdentForm(f => ({ ...f, nome: e.target.value }))}
+              onKeyDown={e => e.key === 'Enter' && submitIdentity()} />
+            <div style={{ display: 'flex', gap: 10 }}>
+              <input style={{ ...inp, flex: 1 }} type="text" placeholder="Cidade" value={identForm.cidade}
+                onChange={e => setIdentForm(f => ({ ...f, cidade: e.target.value }))} />
+              <input style={{ ...inp, width: 80 }} type="text" placeholder="UF" maxLength={2} value={identForm.uf}
+                onChange={e => setIdentForm(f => ({ ...f, uf: e.target.value }))}
+                onKeyDown={e => e.key === 'Enter' && submitIdentity()} />
+            </div>
+            <button className="btn-primary" onClick={submitIdentity}>Continuar</button>
+            <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--paper-mut)', marginTop: 10, marginBottom: 0 }}>Sem cadastro, sem senha. Comunidade aberta.</p>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de login do ADMIN (email/senha) — usado só em /admin */}
+      {adminOpen && (
+        <div className="modal-overlay" onClick={closeAdmin}>
+          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 400, padding: '28px 24px' }}>
+            <button className="modal-close" onClick={closeAdmin}>×</button>
             <div className="auth-form">
-              <div className="auth-logo">PISTA<span style={{ color: 'var(--accent)' }}>VIVA</span></div>
-
-              <div className="auth-tabs">
-                <button className={`auth-tab ${authTab === 'login' ? 'active' : ''}`} onClick={() => { setAuthTab('login'); setAuthError(''); }}>Entrar</button>
-                <button className={`auth-tab ${authTab === 'register' ? 'active' : ''}`} onClick={() => { setAuthTab('register'); setAuthError(''); }}>Cadastrar</button>
-              </div>
-
-              {authTab === 'register' && (
-                <input style={inp} type="text" placeholder="Seu nome" value={form.nome} autoComplete="name" onChange={e => setForm({ ...form, nome: e.target.value })} />
-              )}
-              <input style={inp} type="email" placeholder="E-mail" value={form.email} autoComplete="email" onChange={e => setForm({ ...form, email: e.target.value })} />
-
-              {forgotMode ? (
+              <div className="auth-logo">PISTA<span style={{ color: 'var(--accent)' }}>VIVA</span> · Admin</div>
+              <input style={inp} type="email" placeholder="E-mail" value={adminForm.email} autoComplete="email"
+                onChange={e => setAdminForm({ ...adminForm, email: e.target.value })} />
+              {forgot ? (
                 <>
-                  {authError && (
-                    <p style={{ color: 'var(--danger)', fontSize: '13px', textAlign: 'center', background: 'rgba(239,68,68,.08)', padding: '10px', borderRadius: '8px', border: '1px solid rgba(239,68,68,.2)' }}>{authError}</p>
-                  )}
-                  <button className="btn-primary" onClick={doForgotPassword} disabled={authLoading}>
-                    {authLoading ? <span className="loading-spinner" /> : 'ENVIAR LINK DE RECUPERAÇÃO'}
-                  </button>
+                  {adminErr && <p style={{ color: 'var(--danger)', fontSize: 13, textAlign: 'center', background: 'rgba(239,68,68,.08)', padding: 10, borderRadius: 8 }}>{adminErr}</p>}
+                  <button className="btn-primary" onClick={doForgot} disabled={adminBusy}>{adminBusy ? <span className="loading-spinner" /> : 'ENVIAR LINK'}</button>
                   <p style={{ textAlign: 'center', fontSize: 13, marginTop: 8 }}>
-                    <button type="button" onClick={() => { setForgotMode(false); setAuthError(''); }} style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, textDecoration: 'underline' }}>Voltar ao login</button>
+                    <button type="button" onClick={() => { setForgot(false); setAdminErr(''); }} style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, textDecoration: 'underline' }}>Voltar</button>
                   </p>
                 </>
               ) : (
                 <>
-                  <input style={inp} type="password" placeholder={authTab === 'login' ? 'Senha' : 'Senha (mín. 6)'} value={form.senha} onChange={e => setForm({ ...form, senha: e.target.value })} onKeyDown={e => e.key === 'Enter' && (authTab === 'login' ? doLoginEmail() : doRegisterEmail())} />
-
-                  {authError && (
-                    <p style={{ color: 'var(--danger)', fontSize: '13px', textAlign: 'center', background: 'rgba(239,68,68,.08)', padding: '10px', borderRadius: '8px', border: '1px solid rgba(239,68,68,.2)' }}>{authError}</p>
-                  )}
-
-                  <button className="btn-primary" onClick={authTab === 'login' ? doLoginEmail : doRegisterEmail} disabled={authLoading}>
-                    {authLoading ? <span className="loading-spinner" /> : authTab === 'login' ? 'ENTRAR' : 'CRIAR CONTA'}
-                  </button>
-
-                  {authTab === 'login' && (
-                    <p style={{ textAlign: 'center', fontSize: 13, marginTop: 8, marginBottom: 0 }}>
-                      <button type="button" onClick={() => { setForgotMode(true); setAuthError(''); }} style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, textDecoration: 'underline' }}>Esqueci minha senha</button>
-                    </p>
-                  )}
+                  <input style={inp} type="password" placeholder="Senha" value={adminForm.senha}
+                    onChange={e => setAdminForm({ ...adminForm, senha: e.target.value })}
+                    onKeyDown={e => e.key === 'Enter' && doAdminLogin()} />
+                  {adminErr && <p style={{ color: 'var(--danger)', fontSize: 13, textAlign: 'center', background: 'rgba(239,68,68,.08)', padding: 10, borderRadius: 8 }}>{adminErr}</p>}
+                  <button className="btn-primary" onClick={doAdminLogin} disabled={adminBusy}>{adminBusy ? <span className="loading-spinner" /> : 'ENTRAR'}</button>
+                  <p style={{ textAlign: 'center', fontSize: 13, marginTop: 8, marginBottom: 0 }}>
+                    <button type="button" onClick={() => { setForgot(true); setAdminErr(''); }} style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, textDecoration: 'underline' }}>Esqueci minha senha</button>
+                  </p>
                 </>
               )}
             </div>
@@ -172,7 +200,6 @@ export default function AuthProvider({ children }) {
       )}
 
       <div id="app-toast" className="toast hidden" />
-      {user && <GlobalTracker user={user} />}
     </AuthCtx.Provider>
   );
 }

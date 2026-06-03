@@ -24,11 +24,11 @@ const FEED_FILTERS = [
   { key: 'evento',    label: '🎉 Evento' },
 ];
 
-const Feed = ({ openAuthModal, user }) => {
+const Feed = ({ deviceId = 'anon', identity, promptIdentity }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isPosting, setIsPosting] = useState(false);
-  const [newPost, setNewPost] = useState({ city: '', uf: '', category: 'viagem', comment: '', image: '' });
+  const [newPost, setNewPost] = useState({ name: identity?.nome || '', originCity: identity?.cidade || '', originUf: identity?.uf || '', city: '', uf: '', category: 'viagem', comment: '', image: '' });
   const [commentInputs, setCommentInputs] = useState({});
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -41,16 +41,11 @@ const Feed = ({ openAuthModal, user }) => {
 
   const loadPosts = async () => {
     setLoading(true);
-    const data = await getPosts(user?.id || null);
+    const data = await getPosts(deviceId);
     setPosts(data);
-    // Rebuild liked state from Supabase data
-    if (user) {
-      const liked = {};
-      data.forEach(p => {
-        if (p.likedByCurrentUser) liked[p.id] = true;
-      });
-      setLikedPosts(liked);
-    }
+    const liked = {};
+    data.forEach(p => { if (p.likedByCurrentUser) liked[p.id] = true; });
+    setLikedPosts(liked);
     setLoading(false);
   };
 
@@ -71,15 +66,17 @@ const Feed = ({ openAuthModal, user }) => {
   };
 
   const handlePost = async () => {
-    if (!newPost.city || !newPost.comment || !newPost.image) return;
+    if (!newPost.name || !newPost.city || !newPost.comment || !newPost.image) return;
     setIsPosting(false); // Hide immediately for better UX
     let imageUrl = newPost.image;
     if (imageUrl.startsWith('data:')) {
-      imageUrl = (await uploadPostImage(imageUrl, user?.id)) || imageUrl;
+      imageUrl = (await uploadPostImage(imageUrl, deviceId)) || imageUrl;
     }
-    const result = await addPost({ ...newPost, image: imageUrl, user: user?.nome || user?.name || 'Visitante' }, user?.id || 'anon');
+    const origin = [newPost.originCity?.trim(), newPost.originUf?.trim()].filter(Boolean).join('/');
+    const signature = origin ? `${newPost.name.trim()} · ${origin}` : newPost.name.trim();
+    const result = await addPost({ ...newPost, image: imageUrl, user: signature }, deviceId);
     if (result?.ok) {
-      setNewPost({ city: '', uf: '', category: 'viagem', comment: '', image: '' });
+      setNewPost({ name: newPost.name, originCity: newPost.originCity, originUf: newPost.originUf, city: '', uf: '', category: 'viagem', comment: '', image: '' });
       loadPosts(); // Refresh feed
     } else {
       showErr('Erro ao publicar. Verifique sua conexão e tente novamente.');
@@ -88,39 +85,38 @@ const Feed = ({ openAuthModal, user }) => {
   };
 
   const handleLike = async (id) => {
-    if (!user) return openAuthModal('login');
-    
     const isLiked = likedPosts[id];
-    
+
     // Optimistic UI update
     setPosts(prev => prev.map(p => p.id === id ? { ...p, likes: p.likes + (isLiked ? -1 : 1) } : p));
     setLikedPosts(prev => ({ ...prev, [id]: !isLiked }));
-    
-    await likePost(id, user.id);
+
+    await likePost(id, deviceId);
   };
 
   const handleReport = async (post) => {
-    if (!user) return openAuthModal('login');
     const reason = window.prompt('Por que está denunciando este post? (spam, ofensa, etc.)');
     if (reason === null) return;
-    const ok = await reportContent('post', post.id, `${post.user}: ${(post.comment || '').slice(0, 50)}`, reason, user);
+    const ok = await reportContent('post', post.id, `${post.user}: ${(post.comment || '').slice(0, 50)}`, reason, { id: deviceId, nome: identity?.nome || 'Anônimo' });
     const el = document.getElementById('app-toast');
     if (el) { el.textContent = ok ? 'Denúncia enviada. Obrigado!' : 'Erro ao denunciar.'; el.className = `toast ${ok ? 'success' : 'error'}`; el.style.display = 'block'; setTimeout(() => { el.style.display = 'none'; }, 3000); }
   };
 
   const handleAddComment = async (postId) => {
-    if (!user) return openAuthModal('login');
     const text = (commentInputs[postId] || '').trim();
     if (!text) return;
-    
+    // Pega um nome: identidade da sessão ou pede na hora.
+    let nome = identity?.nome;
+    if (!nome) { const id = await promptIdentity?.(); if (!id) return; nome = id.nome; }
+
     // Optimistic UI update
     setPosts(prev => prev.map(p => {
       if (p.id !== postId) return p;
-      return { ...p, comments: [...p.comments, { id: Date.now(), user: user.name || user.nome, text }] };
+      return { ...p, comments: [...p.comments, { id: Date.now(), user: nome, text }] };
     }));
     setCommentInputs(prev => ({ ...prev, [postId]: '' }));
-    
-    await addComment(postId, user.id, user.name || user.nome, text);
+
+    await addComment(postId, deviceId, nome, text);
   };
 
   const categoryLabels = { viagem: '🏍️ Viagem', bateevolta: '↩️ Bate e Volta', trilha: '🌿 Trilha', evento: '🎉 Evento' };
@@ -153,7 +149,7 @@ const Feed = ({ openAuthModal, user }) => {
         {/* Post CTA */}
         {!isPosting ? (
           <button
-            onClick={() => user ? setIsPosting(true) : openAuthModal()}
+            onClick={() => setIsPosting(true)}
             style={{
               width: '100%', padding: '18px 24px', borderRadius: '4px',
               background: 'var(--bg2)', border: '1px solid var(--border)',
@@ -208,9 +204,25 @@ const Feed = ({ openAuthModal, user }) => {
               </div>
             </div>
 
+            {/* Identificação — nome + de onde é (sem login) */}
+            <div className="calc-field">
+              <label>Seu nome</label>
+              <input type="text" placeholder="Como assinar o post" value={newPost.name}
+                onChange={e => setNewPost({ ...newPost, name: e.target.value })} />
+            </div>
+            <div className="calc-field">
+              <label>De onde você é <span style={{ color: 'var(--muted)', fontWeight: 400 }}>(opcional)</span></label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <input type="text" placeholder="Cidade" style={{ flex: 1 }} value={newPost.originCity || ''}
+                  onChange={e => setNewPost({ ...newPost, originCity: e.target.value })} />
+                <input type="text" placeholder="UF" maxLength={2} style={{ width: 70 }} value={newPost.originUf || ''}
+                  onChange={e => setNewPost({ ...newPost, originUf: e.target.value.toUpperCase() })} />
+              </div>
+            </div>
+
             {/* Location */}
             <div className="calc-field" style={{ position: 'relative' }}>
-              <label>Localização</label>
+              <label>Localização da viagem</label>
               <div style={{ position: 'relative' }}>
                 <input type="text" placeholder="Ex: Tiradentes, MG"
                   value={newPost.city}
@@ -253,7 +265,7 @@ const Feed = ({ openAuthModal, user }) => {
               />
             </div>
 
-            <button className="btn-primary" onClick={handlePost} disabled={!newPost.city || !newPost.image || !newPost.comment}>
+            <button className="btn-primary" onClick={handlePost} disabled={!newPost.name || !newPost.city || !newPost.image || !newPost.comment}>
               <Camera size={16} /> PUBLICAR NO FEED
             </button>
           </div>

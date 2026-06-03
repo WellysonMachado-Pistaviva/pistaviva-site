@@ -389,8 +389,8 @@ const Segments = ({ user, openAuthModal }) => {
 
       {!user && (
         <div style={{ marginTop:'24px', padding:'20px', borderRadius:'var(--radius)', background:'var(--bg2)', border:'1px solid var(--border)', textAlign:'center' }}>
-          <p style={{ color:'var(--muted)', fontSize:'14px', marginBottom:'16px' }}>Faça login para entrar no ranking e deixar relatos.</p>
-          <button className="btn-primary" style={{ margin:'0 auto' }} onClick={() => openAuthModal('login')}>ENTRAR / CADASTRAR</button>
+          <p style={{ color:'var(--muted)', fontSize:'14px', marginBottom:'16px' }}>Identifique-se para entrar no ranking e deixar relatos.</p>
+          <button className="btn-primary" style={{ margin:'0 auto' }} onClick={() => openAuthModal('login')}>IDENTIFICAR-SE</button>
         </div>
       )}
     </div>

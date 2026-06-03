@@ -257,7 +257,7 @@ const MapPage = ({ user }) => {
   const handleCheckin = () => {
     if (!user) {
       const el = document.getElementById('app-toast');
-      if (el) { el.textContent = 'Faça login para registrar sua parada.'; el.className = 'toast error'; el.style.display = 'block'; setTimeout(() => { el.style.display = 'none'; }, 3000); }
+      if (el) { el.textContent = 'Identifique-se para registrar sua parada.'; el.className = 'toast error'; el.style.display = 'block'; setTimeout(() => { el.style.display = 'none'; }, 3000); }
       return;
     }
     if (!navigator.geolocation) return;
