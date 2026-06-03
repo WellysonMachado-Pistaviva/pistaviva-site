@@ -12,6 +12,23 @@ export async function getHeroImage() {
   }
 }
 
+// Banners rotativos da home (tabela pv_banners) — só os ativos, na ordem definida no admin.
+export async function getBanners() {
+  try {
+    const sb = supabaseServer();
+    const { data, error } = await sb
+      .from('pv_banners')
+      .select('id, kind, tag_label, title, subtitle, image_url, cta_label, cta_href, cta2_label, cta2_href, sort_order')
+      .eq('active', true)
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true });
+    if (error) return [];
+    return data || [];
+  } catch {
+    return [];
+  }
+}
+
 // Lista de permalinks do Instagram (posts/reels) exibidos na home, na ordem definida no admin.
 export async function getInstagramPosts() {
   try {
