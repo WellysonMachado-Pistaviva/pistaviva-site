@@ -1,4 +1,5 @@
 import SpaPage from '../components/SpaPage';
+import SpaIntro from '../components/SpaIntro';
 
 export const metadata = {
   title: 'Minhas Rotas e Roteiros',
@@ -7,5 +8,12 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <SpaPage name="rotas" />;
+  return (
+    <>
+      <SpaIntro eyebrow="Roteiros" title="Rotas e Roteiros de Moto">
+        Monte, salve e compartilhe roteiros de mototurismo com paradas, distância e nível de dificuldade. Planeje sua próxima viagem de moto pelo Brasil.
+      </SpaIntro>
+      <SpaPage name="rotas" />
+    </>
+  );
 }

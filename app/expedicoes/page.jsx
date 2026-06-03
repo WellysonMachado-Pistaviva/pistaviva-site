@@ -1,4 +1,5 @@
 import SpaPage from '../components/SpaPage';
+import SpaIntro from '../components/SpaIntro';
 
 export const metadata = {
   title: 'Expedições Pistaviva',
@@ -7,5 +8,12 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <SpaPage name="expedicoes" />;
+  return (
+    <>
+      <SpaIntro eyebrow="Grandes viagens" title="Expedições de Moto pelo Brasil">
+        Roteiros épicos e travessias de Big Trail. Grandes expedições de mototurismo, relatos e inspiração para a próxima aventura sobre duas rodas.
+      </SpaIntro>
+      <SpaPage name="expedicoes" />
+    </>
+  );
 }

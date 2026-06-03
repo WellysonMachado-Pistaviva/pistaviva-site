@@ -433,7 +433,23 @@ export default function Dashboard() {
   const [userStats, setUserStats] = useState(null);
 
   if (!auth?.isAdmin) {
-    return <div className="wrap section" style={{ textAlign: 'center' }}><div style={{ fontSize: 48 }}>🔒</div><h2 style={{ fontFamily: 'var(--display)' }}>Acesso Restrito</h2><p className="text-muted">Apenas o administrador.</p></div>;
+    // Deslogado → mostra botão de login (abre o modal email/senha).
+    // Logado mas sem permissão → conta não é admin.
+    const logged = !!auth?.user;
+    return (
+      <div className="wrap section" style={{ textAlign: 'center', paddingTop: 'clamp(48px,8vw,96px)', paddingBottom: 100 }}>
+        <div style={{ fontSize: 48 }}>🔒</div>
+        <h2 style={{ fontFamily: 'var(--display)' }}>Painel Admin</h2>
+        {logged ? (
+          <p className="text-muted">Esta conta ({auth.user.email}) não tem acesso de administrador.</p>
+        ) : (
+          <>
+            <p className="text-muted" style={{ marginBottom: 18 }}>Entre com seu e-mail e senha de administrador.</p>
+            <button className="btn btn--primary" onClick={() => auth?.openAuthModal?.('login')}>Entrar</button>
+          </>
+        )}
+      </div>
+    );
   }
 
   const NAV = [

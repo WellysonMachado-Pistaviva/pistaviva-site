@@ -129,7 +129,7 @@ const Events = ({ user, openAuthModal }) => {
     <div className="events-page">
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h1 className="page-title">EVENTOS</h1>
+          <h2 className="page-title">EVENTOS</h2>
           <p className="page-subtitle">Acompanhe e crie eventos da comunidade</p>
         </div>
         <button className="btn-primary" style={{ maxWidth: 200 }} onClick={() => (user ? setCreating(true) : openAuthModal?.('login'))}>
