@@ -4,7 +4,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;        // ex: G-XXXXXXXXXX
-const ADSENSE_ID = process.env.NEXT_PUBLIC_ADSENSE_ID; // ex: ca-pub-0000000000000000
+const ADSENSE_ID = 'ca-pub-3461762705627085';
 import '../src/index.css';
 import '../src/App.css';
 import 'leaflet/dist/leaflet.css';
@@ -48,6 +48,7 @@ export const metadata = {
   manifest: '/manifest.webmanifest',
   icons: { icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }, { url: '/favicon.png' }], shortcut: '/favicon.png', apple: '/apple-touch-icon.png' },
   verification: { google: 'zRMuUqP5QA7_s5uKBemw7SOXzZ17i5VNmmYAGrEi0x4' },
+  other: { 'google-adsense-account': 'ca-pub-3461762705627085' },
 };
 
 export const viewport = {
@@ -113,10 +114,8 @@ export default function RootLayout({ children }) {
             </Script>
           </>
         )}
-        {ADSENSE_ID && (
-          <Script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
-            strategy="afterInteractive" crossOrigin="anonymous" />
-        )}
+        <Script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
+          strategy="afterInteractive" crossOrigin="anonymous" />
       </body>
     </html>
   );
