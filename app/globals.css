@@ -465,3 +465,40 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
 /* Chips/filtros claros */
 .page-light .filter-chip{ background:var(--snow-2); border:1px solid var(--snow-line); color:var(--ink-soft); }
 .page-light .filter-chip.active{ background:var(--clay); border-color:var(--clay); color:#fff; }
+
+/* =========================================================
+   HOME estilo fabricante (Yamaha) — SEM glass, bold e limpo
+   ========================================================= */
+/* Hero single-column bold + faixa de stats sólida (zero glass) */
+.home .hero .hero-lead{ max-width:var(--maxw); }
+.home .hero h1{ max-width:15ch; }
+.home .hero .lede{ max-width:56ch; }
+.home .hero .cta-row{ align-items:center; }
+.home .hero .cool-moto{ margin-left:.3rem; }
+
+.hero-stats{ display:grid; grid-template-columns:repeat(4,1fr); margin-top:clamp(34px,6vw,64px); border:1px solid var(--line); border-radius:6px; overflow:hidden; }
+.hstat{ padding:1.3rem 1.4rem; display:flex; flex-direction:column; gap:.35rem; border-left:1px solid var(--line); }
+.hstat:first-child{ border-left:0; }
+.hstat b{ font-family:var(--display); font-weight:800; font-size:clamp(1.7rem,3vw,2.5rem); color:var(--clay); line-height:1; letter-spacing:-.02em; }
+.hstat span{ font-family:var(--mono); font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:var(--paper-mut); }
+@media(max-width:680px){
+  .hero-stats{ grid-template-columns:1fr 1fr; }
+  .hstat:nth-child(odd){ border-left:0; }
+  .hstat:nth-child(n+3){ border-top:1px solid var(--line); }
+}
+
+/* Tiles de categoria — sólidos, premium, sem glass */
+.cats{ display:grid; grid-template-columns:repeat(4,1fr); gap:1.1rem; }
+@media(max-width:900px){ .cats{ grid-template-columns:1fr 1fr; } }
+@media(max-width:520px){ .cats{ grid-template-columns:1fr; } }
+.cat{ position:relative; display:flex; flex-direction:column; min-height:236px; padding:1.7rem 1.4rem 1.5rem; background:var(--snow); border:1px solid var(--snow-line); border-radius:6px; overflow:hidden; transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+.cat::before{ content:""; position:absolute; left:0; top:0; width:100%; height:4px; background:var(--clay); transform:scaleX(0); transform-origin:left; transition:transform .3s ease; }
+.cat:hover{ transform:translateY(-5px); box-shadow:0 20px 44px rgba(10,11,13,.15); border-color:var(--clay); }
+.cat:hover::before{ transform:scaleX(1); }
+.cat-idx{ font-family:var(--display); font-weight:800; font-size:2.3rem; line-height:1; color:var(--snow-line); transition:color .25s ease; }
+.cat:hover .cat-idx{ color:var(--clay); }
+.cat-ico{ font-size:1.9rem; margin:.5rem 0 .7rem; }
+.cat h3{ font-family:var(--display); font-size:1.32rem; letter-spacing:-.01em; color:var(--ink); }
+.cat p{ font-size:.92rem; color:var(--ink-soft); margin-top:.5rem; flex:1; line-height:1.55; }
+.cat-go{ margin-top:1.1rem; font-family:var(--mono); font-size:.73rem; text-transform:uppercase; letter-spacing:.08em; color:var(--clay); display:inline-flex; gap:.4rem; transition:gap .2s ease; }
+.cat:hover .cat-go{ gap:.75rem; }
