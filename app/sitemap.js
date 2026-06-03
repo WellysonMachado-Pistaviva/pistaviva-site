@@ -2,7 +2,7 @@ import { getAllSlugs } from './lib/blog';
 import { getAllSpotSlugs } from './lib/spots';
 import { getAllPhotographerSlugs } from './lib/photographers';
 
-const BASE = 'https://moto.pistaviva.com.br';
+const BASE = 'https://www.pistavivamototurismo.com.br';
 
 export default async function sitemap() {
   const routes = ['', '/sobre', '/apoie', '/comunidade', '/paradas', '/fotografos', '/fipe', '/blog', '/rotas', '/eventos', '/mapa', '/comboio', '/loja', '/parceiros', '/expedicoes', '/trechos', '/pista-ao-vivo', '/calculadora'];

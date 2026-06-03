@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-const SITE_URL = 'https://moto.pistaviva.com.br';
+const SITE_URL = 'https://www.pistavivamototurismo.com.br';
 const CHECKOUT = 'https://checkout.infinitepay.io/wellysonm/YRkxwPxC5g';
 
 export const revalidate = 3600;

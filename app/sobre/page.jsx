@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-const SITE_URL = 'https://moto.pistaviva.com.br';
+const SITE_URL = 'https://www.pistavivamototurismo.com.br';
 const PORTRAIT = 'https://cnvsooegnraedwmemzgl.supabase.co/storage/v1/object/public/post-images/site/wellyson.jpg';
 
 export const revalidate = 600;

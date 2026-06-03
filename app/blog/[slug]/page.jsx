@@ -75,15 +75,15 @@ export default async function BlogPost({ params }) {
     datePublished: post.published_at || undefined,
     author: post.author ? { '@type': 'Person', name: post.author } : { '@type': 'Organization', name: 'Pistaviva' },
     publisher: { '@type': 'Organization', name: 'Pistaviva' },
-    mainEntityOfPage: `https://moto.pistaviva.com.br/blog/${slug}`,
+    mainEntityOfPage: `https://www.pistavivamototurismo.com.br/blog/${slug}`,
   };
 
   const breadcrumbLd = {
     '@context': 'https://schema.org', '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://moto.pistaviva.com.br/' },
-      { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://moto.pistaviva.com.br/blog' },
-      { '@type': 'ListItem', position: 3, name: post.title, item: `https://moto.pistaviva.com.br/blog/${slug}` },
+      { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://www.pistavivamototurismo.com.br/' },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://www.pistavivamototurismo.com.br/blog' },
+      { '@type': 'ListItem', position: 3, name: post.title, item: `https://www.pistavivamototurismo.com.br/blog/${slug}` },
     ],
   };
 
@@ -93,7 +93,7 @@ export default async function BlogPost({ params }) {
   const initials = author.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
   const dateFmt = post.published_at ? new Date(post.published_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }) : null;
   const related = (await getPublishedPosts(4)).filter(p => p.slug !== slug).slice(0, 3);
-  const url = `https://moto.pistaviva.com.br/blog/${slug}`;
+  const url = `https://www.pistavivamototurismo.com.br/blog/${slug}`;
   const share = {
     wa: `https://wa.me/?text=${encodeURIComponent(post.title + ' ' + url)}`,
     x: `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(url)}`,

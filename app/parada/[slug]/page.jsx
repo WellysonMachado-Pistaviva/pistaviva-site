@@ -43,9 +43,9 @@ export default async function ParadaPage({ params }) {
   const breadcrumbLd = {
     '@context': 'https://schema.org', '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://moto.pistaviva.com.br/' },
-      { '@type': 'ListItem', position: 2, name: 'Paradas', item: 'https://moto.pistaviva.com.br/paradas' },
-      { '@type': 'ListItem', position: 3, name: s.nome, item: `https://moto.pistaviva.com.br/parada/${slug}` },
+      { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://www.pistavivamototurismo.com.br/' },
+      { '@type': 'ListItem', position: 2, name: 'Paradas', item: 'https://www.pistavivamototurismo.com.br/paradas' },
+      { '@type': 'ListItem', position: 3, name: s.nome, item: `https://www.pistavivamototurismo.com.br/parada/${slug}` },
     ],
   };
 
