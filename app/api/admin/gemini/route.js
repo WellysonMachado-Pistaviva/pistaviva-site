@@ -27,6 +27,23 @@ async function gemini(prompt, schema) {
   return { text };
 }
 
+// Busca o texto de uma página externa (fonte de pesquisa). Falha silenciosa.
+async function fetchRefText(url) {
+  try {
+    if (!/^https?:\/\//i.test(url)) return '';
+    const ctrl = new AbortController();
+    const to = setTimeout(() => ctrl.abort(), 12000);
+    const res = await fetch(url, { signal: ctrl.signal, headers: { 'User-Agent': 'Mozilla/5.0 (compatible; PistavivaBot/1.0)' } });
+    clearTimeout(to);
+    if (!res.ok) return '';
+    let html = await res.text();
+    html = html.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ');
+    const main = html.match(/<(article|main)[\s\S]*?<\/\1>/i)?.[0] || html;
+    const text = main.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ').replace(/\s+/g, ' ').trim();
+    return text.slice(0, 9000);
+  } catch { return ''; }
+}
+
 const BLOG_SCHEMA = {
   type: 'object',
   properties: {
@@ -39,8 +56,20 @@ const BLOG_SCHEMA = {
   required: ['title', 'excerpt', 'tags', 'body'],
 };
 
-function blogPrompt({ tema, keyword }) {
-  return `Você é um motociclista viajante brasileiro experiente, escrevendo para o Pistaviva — comunidade aberta de mototurismo. Escreva uma matéria de blog completa sobre: "${tema}".${keyword ? ` Palavra-chave principal de SEO: "${keyword}".` : ''}
+function blogPrompt({ tema, keyword, refText }) {
+  const refBlock = refText ? `
+
+MATERIAL DE REFERÊNCIA (use APENAS como fonte de fatos/contexto — extraído de uma página externa):
+"""
+${refText.slice(0, 7000)}
+"""
+REGRAS DE ORIGINALIDADE (obrigatório):
+- Escreva uma matéria 100% ORIGINAL, com suas próprias palavras, estrutura e ângulo.
+- NÃO copie frases, NÃO traduza trechos, NÃO parafraseie sentença por sentença do material acima.
+- Use só os FATOS/ideias como pesquisa; reescreva tudo na voz do Pistaviva.
+- Se algum dado parecer incerto, não invente — escreva de forma geral.
+` : '';
+  return `Você é um motociclista viajante brasileiro experiente, escrevendo para o Pistaviva — comunidade aberta de mototurismo. Escreva uma matéria de blog completa sobre: "${tema}".${keyword ? ` Palavra-chave principal de SEO: "${keyword}".` : ''}${refBlock}
 
 REGRAS:
 - Português do Brasil, tom de quem pega estrada de verdade (use "a gente", "rolê", "pista", "curva"). Natural, sem clichê de IA, sem frases genéricas tipo "no mundo de hoje".
@@ -81,8 +110,14 @@ export async function POST(req) {
   const { task, ...args } = await req.json().catch(() => ({}));
 
   if (task === 'blog') {
-    if (!args.tema?.trim()) return NextResponse.json({ error: 'Informe o tema.' }, { status: 400 });
-    const { text, error } = await gemini(blogPrompt(args), BLOG_SCHEMA);
+    if (!args.tema?.trim() && !args.ref?.trim()) return NextResponse.json({ error: 'Informe o tema ou um link de referência.' }, { status: 400 });
+    let refText = '';
+    if (args.ref?.trim()) {
+      refText = await fetchRefText(args.ref.trim());
+      if (!refText) return NextResponse.json({ error: 'Não consegui ler esse link (pode estar bloqueado). Tente outro ou escreva só o tema.' }, { status: 422 });
+    }
+    const tema = args.tema?.trim() || 'gere o tema a partir do material de referência';
+    const { text, error } = await gemini(blogPrompt({ ...args, tema, refText }), BLOG_SCHEMA);
     if (error) return NextResponse.json({ error }, { status: 502 });
     try { return NextResponse.json({ result: JSON.parse(text) }); }
     catch { return NextResponse.json({ error: 'Resposta inválida da IA.' }, { status: 502 }); }

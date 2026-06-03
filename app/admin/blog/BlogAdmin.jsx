@@ -20,17 +20,18 @@ export default function BlogAdmin() {
   const [uploading, setUploading] = useState(false);
   const [aiTema, setAiTema] = useState('');
   const [aiKw, setAiKw] = useState('');
+  const [aiRef, setAiRef] = useState('');
   const [aiBusy, setAiBusy] = useState(false);
 
   const gerarIA = async () => {
-    if (!aiTema.trim()) { showToast('Escreva o tema da matéria', 'error'); return; }
+    if (!aiTema.trim() && !aiRef.trim()) { showToast('Escreva o tema ou cole um link de referência', 'error'); return; }
     setAiBusy(true);
     try {
       const { data: sess } = await supabase.auth.getSession();
       const res = await fetch('/api/admin/gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${sess?.session?.access_token || ''}` },
-        body: JSON.stringify({ task: 'blog', tema: aiTema, keyword: aiKw }),
+        body: JSON.stringify({ task: 'blog', tema: aiTema, keyword: aiKw, ref: aiRef }),
       });
       const json = await res.json();
       if (!res.ok) { showToast(json.error || 'Erro na IA', 'error'); setAiBusy(false); return; }
@@ -152,11 +153,12 @@ export default function BlogAdmin() {
         <div style={{ background: 'var(--bg3, rgba(255,255,255,.03))', border: '1px dashed var(--clay)', borderRadius: 10, padding: '12px 14px', marginBottom: 16 }}>
           <div style={{ fontWeight: 800, fontSize: 13, marginBottom: 8, color: 'var(--clay)' }}>✨ Gerar rascunho com IA</div>
           <input style={{ ...inp, marginBottom: 8 }} placeholder="Tema da matéria (ex: Serra da Graciosa de moto)" value={aiTema} onChange={e => setAiTema(e.target.value)} />
+          <input style={{ ...inp, marginBottom: 8 }} placeholder="Link de referência (opcional) — cole a URL de uma matéria/fonte" value={aiRef} onChange={e => setAiRef(e.target.value)} />
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <input style={{ ...inp, marginBottom: 0, flex: 1, minWidth: 200 }} placeholder="Palavra-chave SEO (opcional)" value={aiKw} onChange={e => setAiKw(e.target.value)} />
             <button type="button" className="btn btn--primary" onClick={gerarIA} disabled={aiBusy}>{aiBusy ? 'Gerando…' : '✨ Gerar'}</button>
           </div>
-          <p style={{ fontSize: 11, color: 'var(--paper-mut)', marginTop: 8, marginBottom: 0 }}>Preenche título, resumo, tags e corpo (com FAQ e links). Sempre revise antes de publicar.</p>
+          <p style={{ fontSize: 11, color: 'var(--paper-mut)', marginTop: 8, marginBottom: 0 }}>Com link: a IA lê a fonte e escreve uma matéria <b>original</b> no nosso padrão (SEO, FAQ, links internos). Use como pesquisa — sempre revise antes de publicar.</p>
         </div>
 
         <input style={inp} placeholder="Título" value={form.title}
