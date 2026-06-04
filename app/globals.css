@@ -1051,6 +1051,50 @@ body.pg-locked{ overflow:hidden; }
   .igm-menucell span span, .igm-menucell > span > span { color: #7a7a80; font-size: 11px; margin-top: 1px; display: block; }
 }
 
+/* ===== Telas internas (SPA views) no estilo IGNIS-mobile (≤768px) ===== */
+@media (max-width: 768px) {
+  /* cabeçalho de página estilo IGNIS (título condensado grande) */
+  .page-header { padding: 16px 16px 4px !important; }
+  .page-title {
+    font-family: var(--display) !important; text-transform: uppercase; font-weight: 800;
+    font-size: clamp(32px, 10vw, 44px) !important; line-height: .9; letter-spacing: -.01em; margin: 0;
+  }
+  .page-subtitle { color: rgba(255,255,255,.56); font-size: 14px; line-height: 1.45; margin-top: 8px; }
+
+  /* chips de filtro: rolagem horizontal, pill IGNIS */
+  .filter-bar {
+    display: flex; gap: 8px; overflow-x: auto; padding: 4px 16px 12px;
+    margin: 0; scrollbar-width: none; flex-wrap: nowrap !important;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-chip {
+    flex-shrink: 0; border-radius: 100px !important; padding: 9px 15px !important;
+    font-family: var(--mono); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; font-size: 12px;
+    border: 1.5px solid rgba(255,255,255,.15) !important; color: rgba(255,255,255,.56);
+  }
+  .filter-chip.active { background: #ff5a00 !important; border-color: #ff5a00 !important; color: #fff !important; }
+
+  /* cards e superfícies: cantos arredondados de app */
+  .calc-card, .glass, .dest-card, .card { border-radius: 14px !important; }
+
+  /* botões estilo IGNIS-mobile */
+  .btn-primary, .btn-ghost, .btn-outline {
+    border-radius: 11px !important; font-family: var(--mono); font-weight: 700;
+    text-transform: uppercase; letter-spacing: .06em;
+  }
+  .btn-primary { background: #ff5a00 !important; }
+
+  /* campos de formulário (planejador, fipe, etc.) */
+  .calc-field label, .field label {
+    font-family: var(--mono); font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+    font-size: 11px; color: rgba(255,255,255,.56);
+  }
+  .calc-field input, .calc-field select, .input, .select {
+    border-radius: 11px !important; background: #1d1d22 !important;
+    border: 1px solid rgba(255,255,255,.15) !important; font-size: 16px !important;
+  }
+}
+
 /* ===== Home no estilo IGNIS-mobile (≤768px) — rail horizontal + espaçamento app ===== */
 @media (max-width: 768px) {
   /* seções mais compactas, cara de app */
