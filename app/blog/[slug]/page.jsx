@@ -7,18 +7,32 @@ import ReadingProgress from '../../components/ReadingProgress';
 
 export const revalidate = 300;
 
-// Renderiza markdown inline: [texto](/link) vira <a>/<Link>, **negrito** vira <strong>.
+// Renderiza markdown inline: [texto](/link) vira <a>/<Link>, **negrito**, *italico*, e raw URLs.
 function renderInline(text) {
-  const out = []; const re = /\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*/g;
+  const out = []; 
+  // Regex para: [texto](url), **negrito**, *italico*, e raw URLs (https://...)
+  const re = /\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*|(https?:\/\/[^\s]+)/g;
   let i = 0, m, k = 0;
   while ((m = re.exec(text))) {
     if (m.index > i) out.push(text.slice(i, m.index));
+    
     if (m[1] !== undefined) {
+      // Link markdown
       const href = m[2];
       out.push(href.startsWith('/')
         ? <Link key={k++} className="inl" href={href}>{m[1]}</Link>
         : <a key={k++} className="inl" href={href} target="_blank" rel="noopener noreferrer">{m[1]}</a>);
-    } else { out.push(<strong key={k++}>{m[3]}</strong>); }
+    } else if (m[3] !== undefined) {
+      // Bold
+      out.push(<strong key={k++}>{m[3]}</strong>);
+    } else if (m[4] !== undefined) {
+      // Italic
+      out.push(<em key={k++}>{m[4]}</em>);
+    } else if (m[5] !== undefined) {
+      // Raw URL
+      const href = m[5];
+      out.push(<a key={k++} className="inl" href={href} target="_blank" rel="noopener noreferrer">{href}</a>);
+    }
     i = re.lastIndex;
   }
   if (i < text.length) out.push(text.slice(i));

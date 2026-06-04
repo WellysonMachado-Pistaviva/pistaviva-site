@@ -6,6 +6,7 @@ import L from 'leaflet';
 import { getPings, addPing, getCurrentRoute } from '../services/storage';
 import { joinSOSChannel, leaveSOSChannel, joinComboioChannel, updateComboioLocation, leaveComboioChannel } from '../services/realtime';
 import { supabase } from '../lib/supabaseClient';
+import { fetchPoisInBounds } from '../services/overpass';
 
 const photIg = (ig) => !ig ? null : (ig.startsWith('http') ? ig : `https://instagram.com/${ig.replace(/^@/, '')}`);
 const photographerIcon = L.divIcon({
@@ -40,6 +41,16 @@ const createBikerIcon = () => L.divIcon({
 const createSosIcon = () => L.divIcon({
   html: `<div style="width:40px;height:40px;border-radius:50%;background:rgba(239,68,68,0.2);display:flex;align-items:center;justify-content:center;animation:pulse-sos 2s infinite;"><div style="width:24px;height:24px;border-radius:50%;background:#ef4444;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:12px;border:2px solid #fff;box-shadow:0 0 10px #ef4444;">!</div></div>`,
   className: '', iconSize: [40, 40], iconAnchor: [20, 20], popupAnchor: [0, -20],
+});
+
+const fuelIcon = L.divIcon({
+  html: `<div style="width:28px;height:28px;border-radius:50%;background:#eab308;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.5);border:2px solid #fff;">⛽</div>`,
+  className: '', iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -14],
+});
+
+const restaurantIcon = L.divIcon({
+  html: `<div style="width:28px;height:28px;border-radius:50%;background:#e11d48;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.5);border:2px solid #fff;">🍽️</div>`,
+  className: '', iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -14],
 });
 
 const createComboioMemberIcon = () => L.divIcon({
@@ -130,6 +141,54 @@ const FitMonuments = ({ active }) => {
   return null;
 };
 
+const PoiRadarComponent = ({ active, onPoisFetched, onFetchingChange }) => {
+  const map = useMap();
+  const [lastBounds, setLastBounds] = useState(null);
+
+  useEffect(() => {
+    if (!active) return;
+    
+    let timeoutId;
+    
+    const fetchPois = async () => {
+      const zoom = map.getZoom();
+      if (zoom < 10) {
+        // Too zoomed out, don't fetch to avoid huge payloads
+        onPoisFetched([]);
+        onFetchingChange(false);
+        return;
+      }
+      
+      const bounds = map.getBounds();
+      // Basic check to avoid re-fetching if bounds haven't changed much
+      if (lastBounds && lastBounds.equals(bounds)) return;
+      
+      onFetchingChange(true);
+      setLastBounds(bounds);
+      const pois = await fetchPoisInBounds(bounds);
+      onPoisFetched(pois);
+      onFetchingChange(false);
+    };
+
+    const handleMoveEnd = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(fetchPois, 800); // 800ms debounce
+    };
+
+    // Initial fetch
+    fetchPois();
+
+    map.on('moveend', handleMoveEnd);
+    return () => {
+      clearTimeout(timeoutId);
+      map.off('moveend', handleMoveEnd);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active, map, onPoisFetched]); // purposefully excluding lastBounds to avoid loop
+
+  return null;
+};
+
 
 const createSelfIcon = () => L.divIcon({
   html: `<div style="position:relative;width:44px;height:44px;display:flex;align-items:center;justify-content:center;"><div style="position:absolute;width:44px;height:44px;border-radius:50%;background:rgba(249,115,22,0.3);animation:pulse-sos 2s infinite;"></div><div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#f97316,#ea580c);display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 2px 10px rgba(249,115,22,.8);border:2px solid #fff;z-index:1;">🏍️</div></div>`,
@@ -174,6 +233,11 @@ const MapPage = ({ user }) => {
   const [photographers, setPhotographers] = useState([]);
   const [spots, setSpots] = useState([]);
   const [sosAlerts, setSosAlerts] = useState([]);
+
+  // POI Radar State
+  const [showPoiRadar, setShowPoiRadar] = useState(false);
+  const [poiData, setPoiData] = useState([]);
+  const [isFetchingPois, setIsFetchingPois] = useState(false);
 
   useEffect(() => {
     supabase.from('pv_photographers').select('id, slug, nome, local, instagram, site_url, lat, lng')
@@ -426,17 +490,37 @@ const MapPage = ({ user }) => {
           >
             {showMonuments ? '✓ VISÍVEIS' : 'MOSTRAR'}
           </button>
-          {showMonuments && (
-            <button
-              onClick={() => setShowMonuments(false)}
-              style={{
-                padding: '6px 10px', borderRadius: 'var(--radius-xs)', fontSize: '11px', fontWeight: '700',
-                background: 'var(--bg3)', color: 'var(--muted)', border: '1px solid var(--border)', cursor: 'pointer',
-              }}
-            >
-              OCULTAR
-            </button>
-          )}
+        </div>
+      </div>
+
+      {/* Radar de Apoio (POIs Overpass) */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px',
+        padding: '10px 16px', borderRadius: 'var(--radius-sm)',
+        background: showPoiRadar ? 'rgba(234,179,8,.08)' : 'var(--bg2)',
+        border: `1px solid ${showPoiRadar ? 'rgba(234,179,8,.35)' : 'var(--border)'}`,
+        transition: 'var(--transition)',
+      }}>
+        <span style={{ fontSize: '20px' }}>{isFetchingPois ? <span className="loading-spinner" style={{borderColor: '#eab308', borderTopColor: 'transparent', width: 20, height: 20, borderWidth: 2}} /> : '📡'}</span>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontWeight: '800', fontSize: '13px' }}>Radar de Apoio</div>
+          <div style={{ fontSize: '11px', color: 'var(--muted)' }}>Postos e Restaurantes (Zoom min: 10)</div>
+        </div>
+        <div style={{ display: 'flex', gap: '6px' }}>
+          <button
+            onClick={() => {
+              if (showPoiRadar) setPoiData([]); // clear when disabling
+              setShowPoiRadar(!showPoiRadar);
+            }}
+            style={{
+              padding: '6px 12px', borderRadius: 'var(--radius-xs)', fontSize: '11px', fontWeight: '800',
+              background: showPoiRadar ? '#eab308' : 'var(--bg3)',
+              color: showPoiRadar ? '#000' : 'var(--muted)',
+              border: '1px solid var(--border)', cursor: 'pointer',
+            }}
+          >
+            {showPoiRadar ? '✓ LIGADO' : 'LIGAR'}
+          </button>
         </div>
       </div>
 
@@ -681,6 +765,26 @@ const MapPage = ({ user }) => {
               </Marker>
             );
           })}
+
+          {/* Overpass POIs (Radar) */}
+          {showPoiRadar && <PoiRadarComponent active={showPoiRadar} onPoisFetched={setPoiData} onFetchingChange={setIsFetchingPois} />}
+          {showPoiRadar && poiData.map(poi => (
+            <Marker key={poi.id} position={[poi.lat, poi.lng]} icon={poi.type === 'fuel' ? fuelIcon : restaurantIcon}>
+              <Popup>
+                <div style={{ minWidth: '160px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                    <span style={{ fontSize: '16px' }}>{poi.type === 'fuel' ? '⛽' : '🍽️'}</span>
+                    <strong style={{ fontSize: '13px', color: poi.type === 'fuel' ? '#eab308' : '#e11d48' }}>
+                      {poi.type === 'fuel' ? 'Posto de Combustível' : 'Restaurante'}
+                    </strong>
+                  </div>
+                  <strong style={{ display: 'block', fontSize: '14px', marginBottom: '8px' }}>{poi.name}</strong>
+                  {poi.operator && <div style={{ fontSize: '11px', color: '#666', marginBottom: '4px' }}>Rede: {poi.operator}</div>}
+                  {poi.opening_hours && <div style={{ fontSize: '11px', color: '#666' }}>Horário: {poi.opening_hours}</div>}
+                </div>
+              </Popup>
+            </Marker>
+          ))}
 
           {routeLine && <Polyline positions={routeLine} color="#f97316" weight={5} opacity={0.85} />}
           {newPing && <Marker position={[newPing.lat, newPing.lng]} icon={icons[pingType]} />}
