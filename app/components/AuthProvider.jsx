@@ -112,7 +112,14 @@ export default function AuthProvider({ children }) {
     setAdminBusy(true); setAdminErr('');
     const { error } = await supabase.auth.signInWithPassword({ email: adminForm.email.trim(), password: adminForm.senha });
     setAdminBusy(false);
-    if (error) { setAdminErr('E-mail ou senha incorretos.'); return; }
+    if (error) {
+      const m = (error.message || '').toLowerCase();
+      if (m.includes('captcha')) setAdminErr('Captcha ativo no Supabase — desligue em Authentication › Settings.');
+      else if (m.includes('confirm')) setAdminErr('E-mail não confirmado. Confirme o usuário no Supabase (Auth › Users).');
+      else if (m.includes('invalid')) setAdminErr('E-mail ou senha incorretos.');
+      else setAdminErr(error.message);
+      return;
+    }
     showToast('Bem-vindo, admin.', 'success');
   };
   const doForgot = async () => {
