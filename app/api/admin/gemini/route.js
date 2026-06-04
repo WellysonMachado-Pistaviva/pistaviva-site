@@ -4,7 +4,7 @@ import { requireAdmin } from '../../../lib/supabaseAdmin';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-const MODEL = 'gemini-2.0-flash';
+const MODEL = 'gemini-3.5-flash';
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
 async function gemini(prompt, schema) {
