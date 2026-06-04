@@ -995,10 +995,10 @@ body.pg-locked{ overflow:hidden; }
 .igm-appbar, .igm-bottomnav, .igm-sheet, .igm-scrim { display: none; }
 
 @media (max-width: 768px) {
-  /* esconde o header/footer desktop no mobile */
-  .site-head, .site-foot { display: none !important; }
-  /* espaço pro bottom-nav não cobrir conteúdo */
-  #app { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+  /* esconde só o header desktop (app bar IGNIS o substitui); footer continua no mobile */
+  .site-head { display: none !important; }
+  /* espaço no fim da página pro bottom-nav fixo não cobrir o footer */
+  .ed-stack { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
 
   .igm-appbar {
     display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 40;
@@ -1006,8 +1006,8 @@ body.pg-locked{ overflow:hidden; }
     -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255,255,255,.09);
   }
-  .igm-brand { font-family: var(--display); font-weight: 800; font-size: 22px; letter-spacing: .04em; color: #fff; display: flex; align-items: center; gap: 7px; text-transform: uppercase; }
-  .igm-brand .igm-spark { width: 11px; height: 19px; background: #ff5a00; clip-path: polygon(58% 0,0 58%,42% 58%,42% 100%,100% 42%,58% 42%); display: inline-block; }
+  .igm-brand { display: flex; align-items: center; }
+  .igm-brand img { height: 22px; width: auto; display: block; }
   .igm-sp { flex: 1; }
   .igm-iconbtn { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; color: #fff; background: rgba(255,255,255,.05); }
   .igm-iconbtn:active { background: rgba(255,255,255,.14); }
