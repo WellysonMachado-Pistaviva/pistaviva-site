@@ -1075,7 +1075,7 @@ body.pg-locked{ overflow:hidden; }
   .filter-chip.active { background: #ff5a00 !important; border-color: #ff5a00 !important; color: #fff !important; }
 
   /* cards e superfícies: cantos arredondados de app */
-  .calc-card, .glass, .dest-card, .card { border-radius: 14px !important; }
+  .calc-card, .glass, .dest-card, .card, .ig-evcard { border-radius: 14px !important; }
 
   /* botões estilo IGNIS-mobile */
   .btn-primary, .btn-ghost, .btn-outline {

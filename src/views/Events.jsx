@@ -156,7 +156,7 @@ const Events = ({ user, openAuthModal }) => {
               {event.imageUrl && <img src={event.imageUrl} alt={event.title} style={{ width: '100%', height: 160, objectFit: 'cover' }} />}
               <div style={{ padding: '22px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                  <span style={{ padding: '5px 11px', borderRadius: 2, fontSize: '10px', fontWeight: '700', letterSpacing: '.1em', textTransform: 'uppercase', fontFamily: 'var(--mono)', background: status.color, color: '#fff' }}>{status.label}</span>
+                  <span style={{ padding: '5px 11px', borderRadius: 6, fontSize: '10px', fontWeight: '700', letterSpacing: '.1em', textTransform: 'uppercase', fontFamily: 'var(--mono)', background: status.color, color: '#fff' }}>{status.label}</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '.1em', fontSize: '11px', color: 'var(--accent-2)', fontWeight: 600 }}>
                     {event.category}<ChevronRight size={14} />
                   </div>
