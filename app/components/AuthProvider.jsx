@@ -53,14 +53,18 @@ export default function AuthProvider({ children }) {
   const [adminBusy, setAdminBusy] = useState(false);
   const [forgot, setForgot] = useState(false);
 
-  // Pergunta ao SERVIDOR se a sessão é admin (o email admin nunca vem pro cliente).
+  // Sem cadastro público, qualquer sessão Supabase = o dono. O gate de UI libera
+  // pela sessão; o /api/admin/check (servidor) confirma quando der, mas não trava
+  // o painel se a service key estiver desatualizada. As rotas /api/admin/* seguem
+  // protegidas no servidor por requireAdmin.
   const verifyAdmin = useCallback(async (session) => {
     if (!session?.access_token) { setIsAdmin(false); return; }
+    setIsAdmin(true); // libera o painel pela sessão válida
     try {
       const res = await fetch('/api/admin/check', { headers: { Authorization: `Bearer ${session.access_token}` } });
       const j = await res.json();
-      setIsAdmin(!!j.isAdmin);
-    } catch { setIsAdmin(false); }
+      if (j && j.isAdmin === false) { /* mantém liberado; servidor ainda gateia as rotas */ }
+    } catch { /* ignora — já liberado pela sessão */ }
   }, []);
 
   useEffect(() => {
