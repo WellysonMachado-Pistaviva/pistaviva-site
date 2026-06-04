@@ -51,7 +51,7 @@ export default async function Paradas({ searchParams }) {
 
       <div className="wrap">
         {/* Filtros */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, margin: '4px 0 18px' }}>
+        <div className="ph-filterbar" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, margin: '4px 0 18px' }}>
           <Link href="/paradas" style={chip(!sp?.selo && !sp?.categoria)}>Todos</Link>
           {SELOS.map(s => (
             <Link key={s.id} href={`/paradas?selo=${s.id}`} style={chip(sp?.selo === s.id)}>{s.nome}</Link>
