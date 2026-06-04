@@ -155,7 +155,7 @@ export default function AuthProvider({ children }) {
 
       {/* Modal de identificação da comunidade — sem login, só nome + cidade/UF */}
       {identOpen && (
-        <div className="modal-overlay" onClick={cancelIdentity}>
+        <div className="modal-overlay modal-overlay--center" onClick={cancelIdentity}>
           <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 380, padding: '26px 22px' }}>
             <button className="modal-close" onClick={cancelIdentity}>×</button>
             <div className="auth-logo" style={{ marginBottom: 6 }}>PISTA<span style={{ color: 'var(--accent)' }}>VIVA</span></div>
