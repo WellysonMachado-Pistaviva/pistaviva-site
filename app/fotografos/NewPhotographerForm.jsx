@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '../../src/lib/supabaseClient';
 import { uploadPostImage } from '../../src/services/storage';
 import { useAuth, showToast } from '../components/AuthProvider';
+import Stepper, { Step } from '../components/Stepper';
 import { slugify } from '../lib/spotMeta';
 
 const EMPTY = { nome: '', cidade: '', uf: '', local: '', instagram: '', site_url: '', whatsapp: '', descricao: '', lat: null, lng: null, cover_url: '', horario_dias: [], horario_inicio: '', horario_fim: '' };
@@ -64,50 +65,72 @@ export default function NewPhotographerForm() {
     setF(EMPTY); setGeo(''); setOpen(false); router.refresh();
   };
 
+  const validateStep = (i) => {
+    if (i === 0 && !f.nome.trim()) { showToast('Informe seu nome', 'error'); return false; }
+    if (i === 2 && f.lat == null) { showToast('Marque a localização (GPS) do ponto', 'error'); return false; }
+    return true;
+  };
+
   return (
     <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '1.4rem' }}>
-      <h3 style={{ fontFamily: 'var(--display)', marginBottom: 14 }}>Cadastrar fotógrafo</h3>
-      <input style={inp} placeholder="Seu nome / estúdio" value={f.nome} onChange={e => setF(s => ({ ...s, nome: e.target.value }))} />
-      <input style={inp} placeholder="Trecho/ponto (ex: Serra do Rio do Rastro)" value={f.local} onChange={e => setF(s => ({ ...s, local: e.target.value }))} />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 80px', gap: 8 }}>
-        <input style={inp} placeholder="Cidade" value={f.cidade} onChange={e => setF(s => ({ ...s, cidade: e.target.value }))} />
-        <input style={inp} placeholder="UF" maxLength={2} value={f.uf} onChange={e => setF(s => ({ ...s, uf: e.target.value.toUpperCase() }))} />
-      </div>
-      <input style={inp} placeholder="Instagram (@ ou link)" value={f.instagram} onChange={e => setF(s => ({ ...s, instagram: e.target.value }))} />
-      <input style={inp} placeholder="Link do site/galeria de fotos" value={f.site_url} onChange={e => setF(s => ({ ...s, site_url: e.target.value }))} />
-      <input style={inp} placeholder="WhatsApp (opcional)" value={f.whatsapp} onChange={e => setF(s => ({ ...s, whatsapp: e.target.value }))} />
-      <textarea style={{ ...inp, minHeight: 70, resize: 'vertical' }} placeholder="Descrição (opcional)" value={f.descricao} onChange={e => setF(s => ({ ...s, descricao: e.target.value }))} />
-
-      {/* Horário no ponto — mostra "No ponto agora" / "Ausente" automático */}
-      <div style={{ marginBottom: 10 }}>
-        <div style={{ fontSize: 12, color: 'var(--paper-mut)', fontWeight: 700, marginBottom: 7 }}>Horário que você fica no ponto</div>
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
-          {DIAS.map(([lbl, n]) => {
-            const on = f.horario_dias.includes(n);
-            return (
-              <button key={n} type="button" onClick={() => setF(s => ({ ...s, horario_dias: on ? s.horario_dias.filter(d => d !== n) : [...s.horario_dias, n] }))}
-                style={{ padding: '7px 11px', borderRadius: 100, fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700, cursor: 'pointer', border: `1.5px solid ${on ? 'var(--accent)' : 'var(--border)'}`, background: on ? 'var(--accent)' : 'transparent', color: on ? '#fff' : 'var(--paper-dim)' }}>{lbl}</button>
-            );
-          })}
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-          <div><label style={{ fontSize: 11, color: 'var(--paper-mut)' }}>Início</label><input type="time" style={inp} value={f.horario_inicio} onChange={e => setF(s => ({ ...s, horario_inicio: e.target.value }))} /></div>
-          <div><label style={{ fontSize: 11, color: 'var(--paper-mut)' }}>Fim</label><input type="time" style={inp} value={f.horario_fim} onChange={e => setF(s => ({ ...s, horario_fim: e.target.value }))} /></div>
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+        <h3 style={{ fontFamily: 'var(--display)' }}>Cadastrar fotógrafo</h3>
+        <button className="btn btn--ghost" style={{ padding: '.4rem .8rem' }} type="button" onClick={() => setOpen(false)}>Cancelar</button>
       </div>
 
-      <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
-        <button className="btn btn--ghost" type="button" onClick={pegarGeo}>📍 Marcar localização</button>
-        <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-dim)' }}>{geo}</span>
-      </div>
-      <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
-        <label className="btn btn--ghost" style={{ cursor: 'pointer', margin: 0 }}>{uploading ? 'Enviando…' : '📷 Foto de capa'}<input type="file" accept="image/*" hidden onChange={onImage} /></label>
-        {f.cover_url && <img src={f.cover_url} alt="" style={{ height: 50, borderRadius: 6 }} />}
-      </div>
-      <div style={{ display: 'flex', gap: 10 }}>
-        <button className="btn btn--primary" onClick={salvar} disabled={saving}>{saving ? 'Salvando…' : 'Publicar'}</button>
-        <button className="btn btn--ghost" type="button" onClick={() => setOpen(false)}>Cancelar</button>
-      </div>
+      <Stepper validate={validateStep} onComplete={salvar} busy={saving} completeText={saving ? 'Salvando…' : 'Publicar'}>
+        {/* 1 — Você */}
+        <Step>
+          <div style={{ fontWeight: 800, marginBottom: 10 }}>1. Você e o ponto</div>
+          <input style={inp} placeholder="Seu nome / estúdio" value={f.nome} onChange={e => setF(s => ({ ...s, nome: e.target.value }))} />
+          <input style={inp} placeholder="Trecho/ponto (ex: Serra do Rio do Rastro)" value={f.local} onChange={e => setF(s => ({ ...s, local: e.target.value }))} />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 80px', gap: 8 }}>
+            <input style={inp} placeholder="Cidade" value={f.cidade} onChange={e => setF(s => ({ ...s, cidade: e.target.value }))} />
+            <input style={inp} placeholder="UF" maxLength={2} value={f.uf} onChange={e => setF(s => ({ ...s, uf: e.target.value.toUpperCase() }))} />
+          </div>
+        </Step>
+
+        {/* 2 — Contato */}
+        <Step>
+          <div style={{ fontWeight: 800, marginBottom: 10 }}>2. Contato e galeria</div>
+          <input style={inp} placeholder="Instagram (@ ou link)" value={f.instagram} onChange={e => setF(s => ({ ...s, instagram: e.target.value }))} />
+          <input style={inp} placeholder="Link do site/galeria de fotos" value={f.site_url} onChange={e => setF(s => ({ ...s, site_url: e.target.value }))} />
+          <input style={inp} placeholder="WhatsApp (opcional)" value={f.whatsapp} onChange={e => setF(s => ({ ...s, whatsapp: e.target.value }))} />
+          <textarea style={{ ...inp, minHeight: 70, resize: 'vertical' }} placeholder="Descrição (opcional)" value={f.descricao} onChange={e => setF(s => ({ ...s, descricao: e.target.value }))} />
+        </Step>
+
+        {/* 3 — Local + foto */}
+        <Step>
+          <div style={{ fontWeight: 800, marginBottom: 10 }}>3. Localização e foto</div>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
+            <button className="btn btn--ghost" type="button" onClick={pegarGeo}>📍 Marcar localização</button>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-dim)' }}>{geo}</span>
+          </div>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+            <label className="btn btn--ghost" style={{ cursor: 'pointer', margin: 0 }}>{uploading ? 'Enviando…' : '📷 Foto de capa'}<input type="file" accept="image/*" hidden onChange={onImage} /></label>
+            {f.cover_url && <img src={f.cover_url} alt="" style={{ height: 50, borderRadius: 6 }} />}
+          </div>
+        </Step>
+
+        {/* 4 — Horário */}
+        <Step>
+          <div style={{ fontWeight: 800, marginBottom: 10 }}>4. Horário no ponto</div>
+          <p style={{ fontSize: 13, color: 'var(--paper-mut)', marginBottom: 10 }}>Dentro do horário, seu perfil mostra <b>"No ponto agora"</b> automático.</p>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
+            {DIAS.map(([lbl, n]) => {
+              const on = f.horario_dias.includes(n);
+              return (
+                <button key={n} type="button" onClick={() => setF(s => ({ ...s, horario_dias: on ? s.horario_dias.filter(d => d !== n) : [...s.horario_dias, n] }))}
+                  style={{ padding: '7px 11px', borderRadius: 100, fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700, cursor: 'pointer', border: `1.5px solid ${on ? 'var(--accent)' : 'var(--border)'}`, background: on ? 'var(--accent)' : 'transparent', color: on ? '#fff' : 'var(--paper-dim)' }}>{lbl}</button>
+              );
+            })}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+            <div><label style={{ fontSize: 11, color: 'var(--paper-mut)' }}>Início</label><input type="time" style={inp} value={f.horario_inicio} onChange={e => setF(s => ({ ...s, horario_inicio: e.target.value }))} /></div>
+            <div><label style={{ fontSize: 11, color: 'var(--paper-mut)' }}>Fim</label><input type="time" style={inp} value={f.horario_fim} onChange={e => setF(s => ({ ...s, horario_fim: e.target.value }))} /></div>
+          </div>
+        </Step>
+      </Stepper>
     </div>
   );
 }

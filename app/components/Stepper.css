@@ -1,0 +1,21 @@
+.pv-stepper { display: flex; flex-direction: column; gap: 16px; }
+
+/* indicador de progresso */
+.pv-step-dots { display: flex; align-items: center; gap: 8px; }
+.pv-dot {
+  flex: 1; height: 4px; border-radius: 2px; background: var(--border);
+  transition: background .3s ease;
+}
+.pv-dot.on { background: var(--clay, #ff5a00); }
+.pv-dot.done { background: var(--moss, #ff5a00); opacity: .7; }
+
+/* conteúdo da etapa — anima ao trocar (remonta via key) */
+.pv-step-track { animation: pv-step-in .28s cubic-bezier(.2,.7,.2,1); }
+@keyframes pv-step-in { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .pv-step-track { animation: none; } }
+
+.pv-step { display: flex; flex-direction: column; }
+
+/* rodapé navegação */
+.pv-step-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pv-step-count { font-family: var(--mono); font-size: 12px; color: var(--paper-mut); letter-spacing: .08em; }
