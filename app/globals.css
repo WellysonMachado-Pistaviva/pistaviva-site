@@ -1051,6 +1051,10 @@ body.pg-locked{ overflow:hidden; }
   .igm-menucell span span, .igm-menucell > span > span { color: #7a7a80; font-size: 11px; margin-top: 1px; display: block; }
 }
 
+/* modal centralizado no meio da tela (usado no "Identifique-se") */
+.modal-overlay--center { align-items: center !important; padding: 20px !important; }
+.modal-overlay--center .modal-content { border-radius: 16px !important; border-bottom: 1px solid var(--border) !important; margin: auto; }
+
 /* acessível só pra leitores de tela / SEO (não aparece visualmente) */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 /* faixa de specs quando standalone (sem o hero atrás) */

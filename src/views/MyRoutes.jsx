@@ -218,7 +218,7 @@ const RouteCard = ({ route, user, userLocation }) => {
             <div style={{ display: 'flex', gap: '8px' }}>
               <input
                 type="text"
-                placeholder={user ? 'Conte como foi sua experiência...' : 'Faça login para comentar'}
+                placeholder={user ? 'Conte como foi sua experiência...' : 'Identifique-se para comentar'}
                 value={text}
                 onChange={e => setText(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSend()}
