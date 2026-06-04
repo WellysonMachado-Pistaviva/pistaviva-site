@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Cover from '../../components/Cover';
+import LiveBadge from '../../components/LiveBadge';
 import { notFound } from 'next/navigation';
 import { getPhotographerBySlug, getAllPhotographerSlugs, igUrl } from '../../lib/photographers';
 
@@ -62,6 +63,7 @@ export default async function FotografoPage({ params }) {
         <div className="wrap">
           <span className="eyebrow">📸 Fotógrafo{f.local ? ' · ' + f.local : ''}</span>
           <h1>{f.nome}</h1>
+          <div style={{ marginTop: 10 }}><LiveBadge dias={f.horario_dias} inicio={f.horario_inicio} fim={f.horario_fim} /></div>
 
           <div className="ph-layout">
             {/* coluna principal */}
