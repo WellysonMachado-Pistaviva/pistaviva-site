@@ -3,6 +3,7 @@ import Cover from './components/Cover';
 import Counter from './components/Counter';
 import MotosFilter from './components/MotosFilter';
 import HomeBanner from './components/HomeBanner';
+import FlowingMenu from './components/FlowingMenu';
 import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
 import { getBanners } from './lib/site';
 
@@ -83,6 +84,27 @@ export default async function Home() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ===== DESTINOS (FlowingMenu animado) ===== */}
+      <section className="ig-cats" id="destinos" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <div className="ig-sechead">
+            <div className="lead">
+              <span className="ig-eyebrow">Pra onde rodar</span>
+              <h2 className="ig-title">Destinos</h2>
+              <p>Os trechos que valem a viagem. Passe o mouse e cai no guia completo.</p>
+            </div>
+          </div>
+        </div>
+        <div style={{ height: 'clamp(360px, 56vh, 520px)' }}>
+          <FlowingMenu items={[
+            { text: 'Serra do Rio do Rastro', link: '/blog/serra-do-rio-do-rastro-de-moto-guia', image: 'https://picsum.photos/seed/pv-rastro/600/400' },
+            { text: 'Serra da Mantiqueira', link: '/blog/serra-da-mantiqueira-de-moto-rotas', image: 'https://picsum.photos/seed/pv-mantiqueira/600/400' },
+            { text: 'Estrada Real', link: '/blog/estrada-real-de-moto-roteiro-minas', image: 'https://picsum.photos/seed/pv-estradareal/600/400' },
+            { text: 'Nordeste', link: '/blog/viagem-de-moto-pelo-nordeste-rota-do-sol', image: 'https://picsum.photos/seed/pv-nordeste/600/400' },
+          ]} />
         </div>
       </section>
 
