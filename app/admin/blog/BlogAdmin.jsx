@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../../src/lib/supabaseClient';
 import { uploadPostImage } from '../../../src/services/storage';
@@ -22,6 +22,21 @@ export default function BlogAdmin() {
   const [aiKw, setAiKw] = useState('');
   const [aiRef, setAiRef] = useState('');
   const [aiBusy, setAiBusy] = useState(false);
+  const bodyRef = useRef(null);
+  const posRef = useRef(0);
+  const trackPos = () => { if (bodyRef.current) posRef.current = bodyRef.current.selectionStart; };
+  // Insere um trecho no lugar onde o cursor está (meio do texto), não no fim.
+  const insertAtCursor = (snippet) => {
+    setForm(f => {
+      const cur = f.body || '';
+      const pos = Math.min(posRef.current ?? cur.length, cur.length);
+      const next = cur.slice(0, pos) + snippet + cur.slice(pos);
+      const np = pos + snippet.length;
+      posRef.current = np;
+      requestAnimationFrame(() => { const ta = bodyRef.current; if (ta) { ta.focus(); ta.setSelectionRange(np, np); } });
+      return { ...f, body: next };
+    });
+  };
 
   const gerarIA = async () => {
     if (!aiTema.trim() && !aiRef.trim()) { showToast('Escreva o tema ou cole um link de referência', 'error'); return; }
@@ -99,9 +114,10 @@ export default function BlogAdmin() {
     const reader = new FileReader();
     reader.onload = async () => {
       const url = await uploadPostImage(reader.result, auth.user?.id || 'admin');
-      if (url) { setForm(f => ({ ...f, body: `${f.body}\n\n[img:${url}]\n\n` })); showToast('Imagem inserida no corpo ✓', 'success'); }
+      if (url) { insertAtCursor(`\n\n[img:${url}]\n\n`); showToast('Imagem inserida onde o cursor estava ✓', 'success'); }
       else showToast('Falha no upload', 'error');
       setUploading(false);
+      e.target.value = '';
     };
     reader.readAsDataURL(file);
   };
@@ -174,19 +190,31 @@ export default function BlogAdmin() {
           </label>
         </div>
         {form.cover_url && <img src={form.cover_url} alt="" style={{ maxHeight: 140, borderRadius: 8, marginBottom: 10 }} />}
-        <div style={{ marginBottom: 8, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <label className="btn btn--ghost" style={{ cursor: 'pointer', margin: 0, display: 'inline-flex' }}>
-            🖼️ Inserir imagem no corpo
-            <input type="file" accept="image/*" hidden onChange={onBodyImage} />
-          </label>
-          <button type="button" className="btn btn--ghost" onClick={() => setForm(f => ({
-            ...f,
-            excerpt: f.excerpt || 'Resumo da matéria em 1 ou 2 frases — aparece nos cards e no Google.',
-            body: f.body && f.body.trim() ? f.body : `Abertura: um parágrafo forte que resume a matéria e prende o leitor logo de cara.\n\n## Primeiro tópico\nDesenvolva o ponto principal. Use parágrafos curtos e diretos.\n\n## Segundo tópico\nContinue a matéria. Você pode inserir uma imagem no corpo com o botão acima.\n\n## Dicas práticas\nListe o que o leitor precisa saber, item por item.\n\n## Conclusão\nFeche com um resumo e um convite pra comunidade Pistaviva.\n\n## Perguntas frequentes\n### Primeira pergunta que o leitor faria?\nResposta direta e completa (vira rich result no Google).\n### Segunda pergunta?\nOutra resposta clara.`,
-          }))}>📋 Usar modelo</button>
+        {/* Barra de blocos — clica e insere ONDE o cursor está no texto (sem digitar código) */}
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
+          {(() => { const tb = { padding: '6px 11px', fontSize: 12, fontWeight: 700, borderRadius: 7, border: '1px solid var(--border)', background: 'var(--bg3, rgba(255,255,255,.04))', color: 'var(--text)', cursor: 'pointer' }; return (<>
+            <button type="button" style={tb} onClick={() => insertAtCursor('\n\n## Título da seção\n')}>+ Título</button>
+            <button type="button" style={tb} onClick={() => insertAtCursor('\n\n### Subtítulo\n')}>+ Subtítulo</button>
+            <button type="button" style={tb} onClick={() => insertAtCursor('**texto em negrito**')}>+ Negrito</button>
+            <button type="button" style={tb} onClick={() => insertAtCursor('[escreva o texto](/pagina)')}>+ Link</button>
+            <label style={{ ...tb, display: 'inline-flex', alignItems: 'center', margin: 0 }}>
+              {uploading ? '🖼️ Enviando…' : '🖼️ Imagem aqui'}
+              <input type="file" accept="image/*" hidden onChange={onBodyImage} onClick={trackPos} />
+            </label>
+            <button type="button" style={tb} onClick={() => insertAtCursor('\n### Pergunta do leitor?\nResposta clara e direta.\n')}>+ Pergunta FAQ</button>
+            <button type="button" style={{ ...tb, borderColor: 'var(--clay)', color: 'var(--clay)' }} onClick={() => insertAtCursor('\n\n## Perguntas frequentes\n### Primeira pergunta?\nResposta direta e completa.\n### Segunda pergunta?\nOutra resposta clara.\n### Terceira pergunta?\nMais uma resposta.\n')}>+ Bloco FAQ</button>
+            <button type="button" style={{ ...tb, marginLeft: 'auto', borderColor: 'var(--moss)', color: 'var(--moss)' }} onClick={() => setForm(f => ({
+              ...f,
+              excerpt: f.excerpt || 'Resumo da matéria em 1 ou 2 frases — aparece nos cards e no Google.',
+              body: f.body && f.body.trim() ? f.body : `Abertura: um parágrafo forte que resume a matéria e prende o leitor logo de cara.\n\n## Primeiro tópico\nDesenvolva o ponto principal. Use parágrafos curtos e diretos.\n\n## Segundo tópico\nContinue a matéria. Clique "Imagem aqui" pra inserir uma foto no meio.\n\n## Dicas práticas\nListe o que o leitor precisa saber, item por item.\n\n## Conclusão\nFeche com um resumo e um convite pra comunidade Pistaviva.\n\n## Perguntas frequentes\n### Primeira pergunta que o leitor faria?\nResposta direta e completa (vira rich result no Google).\n### Segunda pergunta?\nOutra resposta clara.`,
+            }))}>📋 Usar modelo</button>
+          </>); })()}
         </div>
-        <p style={{ fontSize: 11, color: 'var(--paper-mut)', marginBottom: 8, fontFamily: 'var(--mono)' }}>Formatação: linha em branco = novo parágrafo · <b>## </b>título de seção · <b>### </b>subtítulo · imagem vira <b>[img:URL]</b>.</p>
-        <textarea style={{ ...inp, minHeight: 220, resize: 'vertical' }} placeholder="Corpo do post (parágrafos separados por linha em branco). Imagens viram [img:URL]." value={form.body} onChange={e => setForm(f => ({ ...f, body: e.target.value }))} />
+        <p style={{ fontSize: 11, color: 'var(--paper-mut)', marginBottom: 8, fontFamily: 'var(--mono)' }}>Clique no texto onde quer inserir, depois no botão. Linha em branco = novo parágrafo.</p>
+        <textarea ref={bodyRef} onSelect={trackPos} onClick={trackPos} onKeyUp={trackPos}
+          style={{ ...inp, minHeight: 260, resize: 'vertical', lineHeight: 1.6 }}
+          placeholder="Corpo do post. Use os botões acima pra inserir título, imagem e FAQ no lugar do cursor."
+          value={form.body} onChange={e => setForm(f => ({ ...f, body: e.target.value }))} />
         <label style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 14 }}>
           <input type="checkbox" checked={form.published} onChange={e => setForm(f => ({ ...f, published: e.target.checked }))} /> Publicado
         </label>
