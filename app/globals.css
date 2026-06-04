@@ -1055,6 +1055,18 @@ body.pg-locked{ overflow:hidden; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 /* faixa de specs quando standalone (sem o hero atrás) */
 .ig-spec-strip--solo { background: var(--ink); }
+/* mobile: tudo em UMA linha (5 colunas compactas), em vez de empilhar */
+@media (max-width: 768px) {
+  .ig-spec-strip--solo .wrap { display: flex; gap: 0; align-items: stretch; }
+  .ig-spec-strip--solo .ig-spec {
+    flex: 1 1 0 !important; min-width: 0 !important; padding: 12px 6px !important;
+    border-left: 1px solid rgba(255,255,255,.1); text-align: center; align-items: center;
+  }
+  .ig-spec-strip--solo .ig-spec:first-child { border-left: none; }
+  .ig-spec-strip--solo .ig-spec .v,
+  .ig-spec-strip--solo .ig-spec .model-name { font-size: 15px !important; line-height: 1; }
+  .ig-spec-strip--solo .ig-spec .k { font-size: 7.5px !important; letter-spacing: .03em; margin-top: 4px; white-space: nowrap; }
+}
 
 /* ===== Filtros de listagem (paradas) com rolagem horizontal no mobile ===== */
 @media (max-width: 768px) {
