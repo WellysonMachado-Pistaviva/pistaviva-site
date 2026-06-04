@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '../../src/lib/supabaseClient';
 import { uploadPostImage } from '../../src/services/storage';
 import { useAuth, showToast } from '../components/AuthProvider';
+import Stepper, { Step } from '../components/Stepper';
 import { SELOS, CATEGORIAS, slugify } from '../lib/spotMeta';
 
 const EMPTY = { nome: '', categoria: 'pousada', cidade: '', uf: '', descricao: '', lat: null, lng: null, cover_url: '' };
@@ -87,47 +88,76 @@ export default function NewSpotForm() {
     router.refresh();
   };
 
+  const validateStep = (i) => {
+    if (i === 0) {
+      if (!form.nome.trim() || !form.cidade.trim() || form.uf.length !== 2) {
+        showToast('Preencha nome, cidade e UF (2 letras)', 'error');
+        return false;
+      }
+    }
+    return true;
+  };
+
   return (
     <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '1.4rem' }}>
-      <h3 style={{ fontFamily: 'var(--display)', marginBottom: 14 }}>Cadastrar parada</h3>
-      <input style={inp} placeholder="Nome do ponto (ex: Queijaria do Zé)" value={form.nome} onChange={e => setForm(f => ({ ...f, nome: e.target.value }))} maxLength={60} />
-      <select style={inp} value={form.categoria} onChange={e => setForm(f => ({ ...f, categoria: e.target.value }))}>
-        {CATEGORIAS.map(c => <option key={c.id} value={c.id}>{c.nome}</option>)}
-      </select>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 80px', gap: 8 }}>
-        <input style={inp} placeholder="Cidade" value={form.cidade} onChange={e => setForm(f => ({ ...f, cidade: e.target.value }))} />
-        <input style={inp} placeholder="UF" maxLength={2} value={form.uf} onChange={e => setForm(f => ({ ...f, uf: e.target.value.toUpperCase() }))} />
-      </div>
-      <textarea style={{ ...inp, minHeight: 70, resize: 'vertical' }} placeholder="Descrição (opcional)" maxLength={240} value={form.descricao} onChange={e => setForm(f => ({ ...f, descricao: e.target.value }))} />
-
-      <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
-        <button className="btn btn--ghost" onClick={pegarGeo} type="button">📍 Usar minha localização</button>
-        <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-dim)' }}>{geo}</span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+        <h3 style={{ fontFamily: 'var(--display)' }}>Cadastrar parada</h3>
+        <button className="btn btn--ghost" style={{ padding: '.4rem .8rem' }} onClick={() => setOpen(false)} type="button">Cancelar</button>
       </div>
 
-      <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
-        <label className="btn btn--ghost" style={{ cursor: 'pointer', margin: 0 }}>
-          {uploading ? 'Enviando…' : '📷 Enviar foto'}
-          <input type="file" accept="image/*" hidden onChange={onImage} />
-        </label>
-        {form.cover_url && <img src={form.cover_url} alt="" style={{ height: 56, borderRadius: 6 }} />}
-      </div>
+      <Stepper validate={validateStep} onComplete={salvar} busy={saving} completeText={saving ? 'Salvando…' : 'Publicar parada'}>
+        {/* 1 — Básico */}
+        <Step>
+          <div style={{ fontWeight: 800, marginBottom: 10 }}>1. Sobre o ponto</div>
+          <input style={inp} placeholder="Nome do ponto (ex: Queijaria do Zé)" value={form.nome} onChange={e => setForm(f => ({ ...f, nome: e.target.value }))} maxLength={60} />
+          <select style={inp} value={form.categoria} onChange={e => setForm(f => ({ ...f, categoria: e.target.value }))}>
+            {CATEGORIAS.map(c => <option key={c.id} value={c.id}>{c.nome}</option>)}
+          </select>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 80px', gap: 8 }}>
+            <input style={inp} placeholder="Cidade" value={form.cidade} onChange={e => setForm(f => ({ ...f, cidade: e.target.value }))} />
+            <input style={inp} placeholder="UF" maxLength={2} value={form.uf} onChange={e => setForm(f => ({ ...f, uf: e.target.value.toUpperCase() }))} />
+          </div>
+        </Step>
 
-      <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--paper-mut)', marginBottom: 8 }}>Comodidades (toque pra marcar)</div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 16 }}>
-        {SELOS.map(s => (
-          <button key={s.id} type="button" onClick={() => toggle(s.id)}
-            style={{ textAlign: 'left', padding: '10px 12px', borderRadius: 8, cursor: 'pointer', border: '1px solid var(--border)', background: selos[s.id] ? 'var(--clay)' : 'transparent', color: selos[s.id] ? 'var(--ink)' : 'var(--text)' }}>
-            <div style={{ fontWeight: 800, fontFamily: 'var(--display)' }}>{s.nome}</div>
-            <div style={{ fontSize: 11, opacity: .8 }}>{s.desc}</div>
-          </button>
-        ))}
-      </div>
+        {/* 2 — Localização */}
+        <Step>
+          <div style={{ fontWeight: 800, marginBottom: 10 }}>2. Localização</div>
+          <p style={{ fontSize: 13, color: 'var(--paper-mut)', marginBottom: 12 }}>Marque o ponto exato pra aparecer no mapa e nas rotas que passam por perto.</p>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+            <button className="btn btn--ghost" onClick={pegarGeo} type="button">📍 Usar minha localização</button>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-dim)' }}>{geo}</span>
+          </div>
+        </Step>
 
-      <div style={{ display: 'flex', gap: 10 }}>
-        <button className="btn btn--primary" onClick={salvar} disabled={saving}>{saving ? 'Salvando…' : 'Publicar parada'}</button>
-        <button className="btn btn--ghost" onClick={() => setOpen(false)} type="button">Cancelar</button>
-      </div>
+        {/* 3 — Foto */}
+        <Step>
+          <div style={{ fontWeight: 800, marginBottom: 10 }}>3. Foto de capa</div>
+          <p style={{ fontSize: 13, color: 'var(--paper-mut)', marginBottom: 12 }}>Uma boa foto ajuda quem procura onde parar (opcional).</p>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+            <label className="btn btn--ghost" style={{ cursor: 'pointer', margin: 0 }}>
+              {uploading ? 'Enviando…' : '📷 Enviar foto'}
+              <input type="file" accept="image/*" hidden onChange={onImage} />
+            </label>
+            {form.cover_url && <img src={form.cover_url} alt="" style={{ height: 56, borderRadius: 6 }} />}
+          </div>
+        </Step>
+
+        {/* 4 — Detalhes */}
+        <Step>
+          <div style={{ fontWeight: 800, marginBottom: 10 }}>4. Detalhes</div>
+          <textarea style={{ ...inp, minHeight: 70, resize: 'vertical' }} placeholder="Descrição (opcional)" maxLength={240} value={form.descricao} onChange={e => setForm(f => ({ ...f, descricao: e.target.value }))} />
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--paper-mut)', margin: '6px 0 8px' }}>Comodidades (toque pra marcar)</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+            {SELOS.map(s => (
+              <button key={s.id} type="button" onClick={() => toggle(s.id)}
+                style={{ textAlign: 'left', padding: '10px 12px', borderRadius: 8, cursor: 'pointer', border: '1px solid var(--border)', background: selos[s.id] ? 'var(--clay)' : 'transparent', color: selos[s.id] ? 'var(--ink)' : 'var(--text)' }}>
+                <div style={{ fontWeight: 800, fontFamily: 'var(--display)' }}>{s.nome}</div>
+                <div style={{ fontSize: 11, opacity: .8 }}>{s.desc}</div>
+              </button>
+            ))}
+          </div>
+        </Step>
+      </Stepper>
     </div>
   );
 }
