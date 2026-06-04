@@ -1,11 +1,10 @@
 import Link from 'next/link';
 import Cover from './components/Cover';
 import Counter from './components/Counter';
-import CoolMode from './components/CoolMode';
 import MotosFilter from './components/MotosFilter';
 import HomeBanner from './components/HomeBanner';
 import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
-import { getHeroImage, getBanners } from './lib/site';
+import { getBanners } from './lib/site';
 
 export const revalidate = 300;
 
@@ -42,7 +41,6 @@ const fmtDate = (iso) => { if (!iso) return ''; const d = new Date(iso); return 
 export default async function Home() {
   const posts = await getPublishedPosts(3);
   const featured = await getFeaturedPosts(1);
-  const heroImg = await getHeroImage();
   const banners = await getBanners();
   const news = [...(featured || []), ...posts.filter(p => !featured?.some(f => f.id === p.id))].slice(0, 3);
 
@@ -51,28 +49,17 @@ export default async function Home() {
       {/* ===== BANNERS ROTATIVOS (admin) ===== */}
       <HomeBanner banners={banners} />
 
-      {/* ===== HERO ===== */}
-      <section className="ig-hero">
-        <div className="ig-hero-media" aria-hidden="true" style={heroImg ? { backgroundImage: `radial-gradient(58% 90% at 82% 28%, rgba(255,90,0,.14), transparent 60%), url(${heroImg})`, backgroundSize: 'auto, cover', backgroundPosition: 'center, center', backgroundRepeat: 'no-repeat, no-repeat' } : undefined} />
-        <div className="ig-hero-scrim" />
-        <div className="wrap ig-hero-inner">
-          <span className="ig-eyebrow on-dark">Comunidade aberta · Mototurismo no Brasil</span>
-          <h1>A estrada<br />é só o <span className="it">começo</span></h1>
-          <p className="ig-lede">Rotas que a gente já rodou, piloto trocando ideia de verdade e a cultura de quem vive em cima da moto. Conteúdo de quem pega estrada — não de quem só pesquisou.</p>
-          <div className="ig-actions">
-            <Link href="/rotas" className="ig-btn ig-btn--primary">Explorar rotas <span className="arr">→</span></Link>
-            <Link href="/comunidade" className="ig-btn ig-btn--ghost on-dark">Entrar na comunidade</Link>
-            <CoolMode><span className="cool-moto" title="clica! 🏍️">🏍️</span></CoolMode>
-          </div>
-        </div>
-        <div className="ig-spec-strip">
-          <div className="wrap">
-            <div className="ig-spec"><span className="model-name">Pistaviva</span><span className="k">Comunidade</span></div>
-            <div className="ig-spec"><span className="v"><Counter to={27} prefix="+" /></span><span className="k">Estados</span></div>
-            <div className="ig-spec"><span className="v">GPS</span><span className="k">Comboio ao vivo</span></div>
-            <div className="ig-spec"><span className="v">FIPE</span><span className="k">Consulta grátis</span></div>
-            <div className="ig-spec"><span className="v">Livre</span><span className="k">Aberta a todos</span></div>
-          </div>
+      {/* H1 da home — visual é o carrossel acima; este título serve ao SEO */}
+      <h1 className="sr-only">Pistaviva — Mototurismo, rotas e comunidade aberta sobre duas rodas no Brasil</h1>
+
+      {/* faixa de specs (stats da comunidade) */}
+      <section className="ig-spec-strip ig-spec-strip--solo">
+        <div className="wrap">
+          <div className="ig-spec"><span className="model-name">Pistaviva</span><span className="k">Comunidade</span></div>
+          <div className="ig-spec"><span className="v"><Counter to={27} prefix="+" /></span><span className="k">Estados</span></div>
+          <div className="ig-spec"><span className="v">GPS</span><span className="k">Comboio ao vivo</span></div>
+          <div className="ig-spec"><span className="v">FIPE</span><span className="k">Consulta grátis</span></div>
+          <div className="ig-spec"><span className="v">Livre</span><span className="k">Aberta a todos</span></div>
         </div>
       </section>
 
