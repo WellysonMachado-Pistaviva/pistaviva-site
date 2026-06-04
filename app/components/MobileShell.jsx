@@ -42,7 +42,7 @@ export default function MobileShell() {
       {/* App bar */}
       <header className="igm-appbar">
         <Link href="/" className="igm-brand" aria-label="Pistaviva — início">
-          <span className="igm-spark" />PISTAVIVA
+          <img src="/logo.svg" alt="Pistaviva" />
         </Link>
         <span className="igm-sp" />
         <Link href="/busca" className="igm-iconbtn" aria-label="Buscar">
