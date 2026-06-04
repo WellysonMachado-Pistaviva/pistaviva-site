@@ -991,6 +991,66 @@ body.pg-locked{ overflow:hidden; }
 .comment-box input{ border-radius:3px; }
 .autocomplete-list{ border-radius:4px; }
 
+/* ===== Shell mobile IGNIS (app bar + bottom-nav + sheet) — só ≤768px ===== */
+.igm-appbar, .igm-bottomnav, .igm-sheet, .igm-scrim { display: none; }
+
+@media (max-width: 768px) {
+  /* esconde o header/footer desktop no mobile */
+  .site-head, .site-foot { display: none !important; }
+  /* espaço pro bottom-nav não cobrir conteúdo */
+  #app { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+
+  .igm-appbar {
+    display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 40;
+    height: 56px; padding: 0 16px; background: rgba(12,12,13,.9);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,.09);
+  }
+  .igm-brand { font-family: var(--display); font-weight: 800; font-size: 22px; letter-spacing: .04em; color: #fff; display: flex; align-items: center; gap: 7px; text-transform: uppercase; }
+  .igm-brand .igm-spark { width: 11px; height: 19px; background: #ff5a00; clip-path: polygon(58% 0,0 58%,42% 58%,42% 100%,100% 42%,58% 42%); display: inline-block; }
+  .igm-sp { flex: 1; }
+  .igm-iconbtn { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; color: #fff; background: rgba(255,255,255,.05); }
+  .igm-iconbtn:active { background: rgba(255,255,255,.14); }
+
+  .igm-bottomnav {
+    display: grid; grid-template-columns: repeat(5,1fr); position: fixed; left: 50%; bottom: 0;
+    transform: translateX(-50%); width: 100%; max-width: 600px; z-index: 45;
+    height: calc(64px + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom);
+    background: rgba(12,12,13,.94); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    border-top: 1px solid rgba(255,255,255,.09);
+  }
+  .igm-navbtn {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    color: rgba(255,255,255,.56); font-family: var(--mono); font-weight: 600; font-size: 10px;
+    text-transform: uppercase; letter-spacing: .04em; background: none; border: none; transition: .15s;
+  }
+  .igm-navbtn svg { width: 23px; height: 23px; }
+  .igm-navbtn.active { color: #ff5a00; }
+  .igm-navbtn:active { transform: scale(.92); }
+
+  .igm-scrim {
+    display: block; position: fixed; inset: 0; z-index: 60; background: rgba(4,4,5,.6);
+    -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .24s;
+  }
+  .igm-scrim.show { opacity: 1; pointer-events: auto; }
+  .igm-sheet {
+    display: block; position: fixed; left: 50%; bottom: 0; transform: translateX(-50%) translateY(100%);
+    width: 100%; max-width: 600px; z-index: 61; background: #141418; border-radius: 22px 22px 0 0;
+    border-top: 1px solid rgba(255,255,255,.15); padding: 10px 16px calc(22px + env(safe-area-inset-bottom));
+    transition: transform .3s cubic-bezier(.3,.8,.3,1); max-height: 84dvh; overflow-y: auto;
+  }
+  .igm-sheet.show { transform: translateX(-50%) translateY(0); }
+  .igm-grab { width: 38px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.15); margin: 6px auto 14px; }
+  .igm-sheet h3 { font-family: var(--display); text-transform: uppercase; font-weight: 800; font-size: 20px; margin-bottom: 14px; color: #fff; }
+  .igm-menugrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .igm-menucell { display: flex; align-items: center; gap: 11px; background: #1d1d22; border: 1px solid rgba(255,255,255,.09); border-radius: 13px; padding: 14px 13px; transition: .15s; }
+  .igm-menucell:active { background: #27272e; }
+  .igm-mi { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,90,0,.12); color: #ff5a00; display: grid; place-items: center; flex-shrink: 0; }
+  .igm-mi svg { width: 20px; height: 20px; }
+  .igm-menucell b { font-family: var(--mono); font-weight: 700; font-size: 14px; color: #fff; display: block; }
+  .igm-menucell span span, .igm-menucell > span > span { color: #7a7a80; font-size: 11px; margin-top: 1px; display: block; }
+}
+
 /* ===== HomeBanner — carrossel de banners (estilo Yamaha/IGNIS) ===== */
 .pvb{ position:relative; background:var(--ink); color:#fff; }
 .pvb-viewport{ overflow:hidden; }
