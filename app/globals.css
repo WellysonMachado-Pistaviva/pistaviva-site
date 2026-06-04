@@ -1079,6 +1079,28 @@ body.pg-locked{ overflow:hidden; }
   .ph-filterbar > a { flex-shrink: 0; white-space: nowrap; }
 }
 
+/* ===== Rail de Destinos (cards horizontais: foto + nome) ===== */
+.dr-rail {
+  display: flex; gap: 14px; overflow-x: auto; padding: 4px var(--gut, 16px) 14px;
+  scroll-snap-type: x mandatory; scrollbar-width: none;
+}
+.dr-rail::-webkit-scrollbar { display: none; }
+.dr-card {
+  flex: 0 0 auto; width: clamp(220px, 72vw, 300px); scroll-snap-align: start;
+  display: block; border-radius: 16px; overflow: hidden; position: relative;
+  background: #16161a; border: 1px solid var(--border); color: #fff;
+  transition: transform .3s cubic-bezier(.2,.7,.2,1);
+}
+.dr-card:hover { transform: translateY(-4px); }
+.dr-pic { position: relative; aspect-ratio: 4/5; overflow: hidden; }
+.dr-pic img { width: 100%; height: 100%; object-fit: cover; }
+.dr-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(8,8,9,.92), rgba(8,8,9,.05) 55%); pointer-events: none; }
+.dr-name {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 16px;
+  font-family: var(--display); font-weight: 800; text-transform: uppercase;
+  font-size: clamp(18px, 4.5vw, 24px); line-height: 1; letter-spacing: -.01em;
+}
+
 /* ===== Selo "No ponto agora / Ausente" do fotógrafo ===== */
 .ph-card .pic .ph-live { position: absolute; top: 12px; right: 12px; z-index: 3; }
 .pv-live {

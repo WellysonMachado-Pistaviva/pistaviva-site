@@ -458,8 +458,129 @@ function BannersEditor() {
   );
 }
 
+// ════════════════════════════════════════════════════════════
+// DESTINOS DA HOME (tabela pv_destinos) — cards foto + nome
+// ════════════════════════════════════════════════════════════
+function DestinosEditor() {
+  const [rows, setRows] = useState(null);
+  const [editing, setEditing] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  const load = useCallback(async () => {
+    const { data } = await supabase.from('pv_destinos').select('*').order('sort_order', { ascending: true }).order('created_at', { ascending: true });
+    setRows(data || []);
+  }, []);
+  useEffect(() => { load(); }, [load]);
+
+  const save = async () => {
+    const b = editing;
+    if (!b.nome?.trim()) return showToast('Dê um nome ao destino.', 'error');
+    if (!b.image_url?.trim()) return showToast('Envie a foto do destino.', 'error');
+    setBusy(true);
+    const payload = { nome: b.nome.trim(), image_url: b.image_url, link: b.link?.trim() || null, active: b.active, sort_order: b.sort_order ?? 0, updated_at: new Date().toISOString() };
+    const res = b.id
+      ? await supabase.from('pv_destinos').update(payload).eq('id', b.id)
+      : await supabase.from('pv_destinos').insert({ ...payload, sort_order: rows?.length || 0 });
+    setBusy(false);
+    if (res.error) return showToast('Erro: ' + res.error.message, 'error');
+    showToast('Destino salvo ✓', 'success'); setEditing(null); load();
+  };
+  const remove = async (row) => {
+    if (!confirm(`Excluir destino "${row.nome}"?`)) return;
+    const { error } = await supabase.from('pv_destinos').delete().eq('id', row.id);
+    if (error) return showToast('Erro: ' + error.message, 'error');
+    showToast('Excluído', 'success'); load();
+  };
+  const toggleActive = async (row) => {
+    const { error } = await supabase.from('pv_destinos').update({ active: !row.active }).eq('id', row.id);
+    if (error) return showToast('Erro: ' + error.message, 'error'); load();
+  };
+  const move = async (idx, dir) => {
+    const j = idx + dir; if (j < 0 || j >= rows.length) return;
+    const a = rows[idx], b = rows[j];
+    await Promise.all([
+      supabase.from('pv_destinos').update({ sort_order: b.sort_order }).eq('id', a.id),
+      supabase.from('pv_destinos').update({ sort_order: a.sort_order }).eq('id', b.id),
+    ]);
+    load();
+  };
+  const onFile = async (e) => {
+    const file = e.target.files?.[0]; if (!file) return;
+    if (file.size > 6 * 1024 * 1024) return showToast('Imagem muito pesada (máx 6MB)', 'error');
+    setBusy(true);
+    try {
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+      const path = `destinos/dest-${Date.now()}.${ext}`;
+      const { error } = await supabase.storage.from('post-images').upload(path, file, { upsert: true, contentType: file.type });
+      if (error) throw error;
+      const { data } = supabase.storage.from('post-images').getPublicUrl(path);
+      setEditing(ed => ({ ...ed, image_url: data.publicUrl }));
+      showToast('Foto enviada ✓', 'success');
+    } catch (err) { showToast('Erro no upload: ' + err.message, 'error'); }
+    setBusy(false);
+  };
+  const inp = { width: '100%', padding: '9px 11px', marginBottom: 9, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)', fontFamily: 'inherit', fontSize: 14 };
+  const set = (k, v) => setEditing(ed => ({ ...ed, [k]: v }));
+
+  if (rows === null) return <div className="spinner-wrap"><span className="loading-spinner" /></div>;
+
+  return (
+    <div>
+      <div className="section-head" style={{ marginBottom: 14 }}>
+        <div><h3 style={{ fontFamily: 'var(--display)' }}>🏔️ Destinos da home</h3><p style={{ fontSize: 13, color: 'var(--paper-mut)' }}>Cards de foto + nome, lado a lado. Arraste a ordem com ▲▼. Aparece na home em ~5 min.</p></div>
+        <button className="btn btn--primary" onClick={() => setEditing({ nome: '', image_url: '', link: '', active: true, sort_order: 0 })}>+ Novo destino</button>
+      </div>
+      {rows.length === 0 && <p style={{ color: 'var(--paper-dim)' }}>Nenhum destino ainda. Crie o primeiro.</p>}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {rows.map((row, idx) => (
+          <div key={row.id} style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 12px', opacity: row.active ? 1 : 0.5 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <button className="btn btn--ghost" style={{ padding: '2px 7px', fontSize: 11 }} disabled={idx === 0} onClick={() => move(idx, -1)}>▲</button>
+              <button className="btn btn--ghost" style={{ padding: '2px 7px', fontSize: 11 }} disabled={idx === rows.length - 1} onClick={() => move(idx, 1)}>▼</button>
+            </div>
+            <div style={{ width: 46, height: 58, borderRadius: 6, overflow: 'hidden', flex: '0 0 auto', background: 'var(--bg3,#222)' }}>
+              {row.image_url && <img src={row.image_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.nome}</div>
+              <div style={{ fontSize: 12, color: 'var(--paper-mut)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.link || 'sem link'}</div>
+            </div>
+            <button className="btn btn--ghost" style={{ padding: '.45rem .8rem', color: row.active ? 'var(--moss)' : 'var(--paper-mut)', borderColor: row.active ? 'var(--moss)' : 'var(--border)' }} onClick={() => toggleActive(row)}>{row.active ? 'Ativo' : 'Oculto'}</button>
+            <button className="btn btn--ghost" style={{ padding: '.45rem .8rem' }} onClick={() => setEditing(row)}>Editar</button>
+            <button className="btn btn--ghost" style={{ padding: '.45rem .8rem', borderColor: 'var(--danger)', color: 'var(--danger)' }} onClick={() => remove(row)}>Excluir</button>
+          </div>
+        ))}
+      </div>
+      {editing && (
+        <div className="modal-overlay" onClick={() => setEditing(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 460, maxHeight: '90vh', overflowY: 'auto', padding: 24 }}>
+            <button className="modal-close" onClick={() => setEditing(null)}>×</button>
+            <h3 style={{ fontFamily: 'var(--display)', marginBottom: 14 }}>{editing.id ? 'Editar destino' : 'Novo destino'}</h3>
+            <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Nome do destino *</label>
+            <input style={inp} value={editing.nome} onChange={e => set('nome', e.target.value)} placeholder="Ex: Serra da Mantiqueira" />
+            <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Foto * (vertical, ideal 600×750 / 4:5)</label>
+            {editing.image_url && <img src={editing.image_url} alt="" style={{ width: 120, aspectRatio: '4/5', objectFit: 'cover', borderRadius: 8, marginBottom: 8, border: '1px solid var(--border)' }} />}
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 9 }}>
+              <label className="btn btn--ghost" style={{ cursor: 'pointer', margin: 0, padding: '.5rem .9rem' }}>{busy ? 'Enviando…' : '📷 Enviar foto'}<input type="file" accept="image/*" hidden onChange={onFile} disabled={busy} /></label>
+              <span style={{ fontSize: 12, color: 'var(--paper-mut)' }}>ou cole URL:</span>
+            </div>
+            <input style={inp} value={editing.image_url} onChange={e => set('image_url', e.target.value)} placeholder="https://..." />
+            <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Link (pra onde vai ao clicar)</label>
+            <input style={inp} value={editing.link || ''} onChange={e => set('link', e.target.value)} placeholder="/blog/... ou /rotas ou https://..." />
+            <label style={{ display: 'flex', gap: 8, alignItems: 'center', margin: '8px 0 16px' }}>
+              <input type="checkbox" checked={editing.active} onChange={e => set('active', e.target.checked)} /> Ativo (aparece na home)
+            </label>
+            <button className="btn btn--primary" onClick={save} disabled={busy}>{busy ? 'Salvando…' : 'Salvar destino'}</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const EXTRA_TABS = [
   { id: 'banners', label: 'Banners' },
+  { id: 'destinos', label: 'Destinos' },
   { id: 'denuncias', label: 'Denúncias' },
   { id: 'comentarios', label: 'Coment. Trechos' },
   { id: 'aviso', label: 'Aviso/Banner' },
@@ -483,6 +604,7 @@ export default function Moderacao() {
       </div>
       {cfg ? <Section key={cfg.id} cfg={cfg} />
         : tab === 'banners' ? <BannersEditor />
+        : tab === 'destinos' ? <DestinosEditor />
         : tab === 'denuncias' ? <ReportsQueue />
         : tab === 'comentarios' ? <CommentsMod />
         : tab === 'aviso' ? <BannerEditor />

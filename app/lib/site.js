@@ -29,6 +29,23 @@ export async function getBanners() {
   }
 }
 
+// Destinos da home (tabela pv_destinos) — cards horizontais com foto + nome.
+export async function getDestinos() {
+  try {
+    const sb = supabaseServer();
+    const { data, error } = await sb
+      .from('pv_destinos')
+      .select('id, nome, image_url, link, sort_order')
+      .eq('active', true)
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true });
+    if (error) return [];
+    return data || [];
+  } catch {
+    return [];
+  }
+}
+
 // Lista de permalinks do Instagram (posts/reels) exibidos na home, na ordem definida no admin.
 export async function getInstagramPosts() {
   try {
