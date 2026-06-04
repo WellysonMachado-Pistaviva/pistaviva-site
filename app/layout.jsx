@@ -13,6 +13,7 @@ import AuthProvider from './components/AuthProvider';
 import SiteHeader from './components/SiteHeader';
 import SiteFooter from './components/SiteFooter';
 import AnnouncementBar from './components/AnnouncementBar';
+import MobileShell from './components/MobileShell';
 
 // IGNIS spec: Saira (corpo), Saira Condensed (títulos), Saira Semi Condensed (labels/botões)
 const display = Saira_Condensed({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-display', display: 'swap' });
@@ -98,6 +99,7 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <div className="ed-stack">
             <AnnouncementBar />
+            <MobileShell />
             <SiteHeader />
             <main id="app" style={{ flex: 1 }}>{children}</main>
             <SiteFooter />
