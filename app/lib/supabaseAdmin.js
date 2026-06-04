@@ -5,11 +5,16 @@ import { createClient } from '@supabase/supabase-js';
 export function supabaseAdmin() {
   const url =
     process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL_SUPABASE_URL ||
     process.env.SUPABASE_DATABASE_URL ||
     '';
+  // Prefere a service_role criada pela integração do Supabase (projeto atual).
+  // A SUPABASE_SECRET_KEY antiga fica por último (estava desatualizada).
   const key =
-    process.env.SUPABASE_SECRET_KEY ||
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL_SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL_SUPABASE_SECRET_KEY ||
+    process.env.SUPABASE_SECRET_KEY ||
     '';
   return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 }
