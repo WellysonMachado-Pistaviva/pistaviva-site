@@ -1051,6 +1051,13 @@ body.pg-locked{ overflow:hidden; }
   .igm-menucell span span, .igm-menucell > span > span { color: #7a7a80; font-size: 11px; margin-top: 1px; display: block; }
 }
 
+/* ===== Filtros de listagem (paradas) com rolagem horizontal no mobile ===== */
+@media (max-width: 768px) {
+  .ph-filterbar { flex-wrap: nowrap !important; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .ph-filterbar::-webkit-scrollbar { display: none; }
+  .ph-filterbar > a { flex-shrink: 0; white-space: nowrap; }
+}
+
 /* ===== Selo "No ponto agora / Ausente" do fotógrafo ===== */
 .ph-card .pic .ph-live { position: absolute; top: 12px; right: 12px; z-index: 3; }
 .pv-live {
