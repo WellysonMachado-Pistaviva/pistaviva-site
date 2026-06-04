@@ -547,19 +547,7 @@ const MapPage = ({ user }) => {
           }}
           onClick={() => { setIsAdding(!isAdding); setIsPhotographerMode(false); setPingType('user'); }}
         >
-          <Plus size={14} /> MANUAL
-        </button>
-        <button
-          style={{
-            flex: 1, padding: '9px', fontSize: '12px', borderRadius: 'var(--radius-sm)',
-            border: `1px solid ${isPhotographerMode ? '#8b5cf6' : 'var(--border)'}`,
-            background: isPhotographerMode ? 'rgba(139,92,246,.15)' : 'transparent',
-            color: isPhotographerMode ? '#8b5cf6' : 'var(--muted)', cursor: 'pointer', fontWeight: 700,
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px',
-          }}
-          onClick={() => { setIsPhotographerMode(!isPhotographerMode); setIsAdding(true); setPingType('photographer'); }}
-        >
-          <Camera size={14} /> FOTÓGRAFO
+          <Plus size={14} /> ADICIONAR PONTO
         </button>
       </div>
 

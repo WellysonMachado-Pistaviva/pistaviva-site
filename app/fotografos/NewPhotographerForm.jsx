@@ -20,16 +20,15 @@ export default function NewPhotographerForm() {
   const [uploading, setUploading] = useState(false);
   const inp = { width: '100%', padding: '10px 12px', marginBottom: 10, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)', fontFamily: 'inherit' };
 
-  if (!auth?.user) {
+  if (!open) {
     return (
       <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '1.4rem', textAlign: 'center' }}>
         <h3 style={{ fontFamily: 'var(--display)', marginBottom: 8 }}>É fotógrafo de estrada?</h3>
-        <p style={{ color: 'var(--paper-dim)', marginBottom: 14 }}>Identifique-se para cadastrar seu ponto e ser visto por quem passa por lá.</p>
-        <button className="btn btn--primary" onClick={() => auth?.openAuthModal('login')}>Identificar-se para cadastrar</button>
+        <p style={{ color: 'var(--paper-dim)', marginBottom: 14 }}>Cadastre seu ponto e horário — e apareça pra quem passa por lá. Sem login.</p>
+        <button className="btn btn--primary" onClick={() => setOpen(true)}>+ Cadastrar fotógrafo</button>
       </div>
     );
   }
-  if (!open) return <button className="btn btn--primary" onClick={() => setOpen(true)}>+ Cadastrar fotógrafo</button>;
 
   const pegarGeo = () => {
     if (!navigator.geolocation) { setGeo('GPS indisponível'); return; }
