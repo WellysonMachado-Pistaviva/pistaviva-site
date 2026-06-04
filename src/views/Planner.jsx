@@ -55,6 +55,8 @@ const Planner = ({ user }) => {
   const [routeName, setRouteName] = useState('');
   const [motoName, setMotoName]   = useState('');
   const [saved, setSaved]         = useState(false);
+  const [showStory, setShowStory] = useState(false);
+  const [sharing, setSharing]     = useState(false);
 
   const [photographers, setPhotographers] = useState([]);
 
@@ -398,6 +400,9 @@ const Planner = ({ user }) => {
                 <Share2 size={18} />
               </button>
             </div>
+            <button className="btn-ghost" style={{ width:'100%', marginTop:8, color:'var(--accent)', borderColor:'var(--accent)' }} onClick={()=>setShowStory(true)}>
+              <Camera size={16} /> Criar card pra Stories
+            </button>
           </div>
         </div>
       )}
@@ -406,6 +411,88 @@ const Planner = ({ user }) => {
           </div>{/* .pg-grid */}
         </div>{/* .wrap */}
       </main>
+
+      {/* ── CARD PRA STORIES (9:16, estilo Strava) ── */}
+      {showStory && result && (() => {
+        const km = parseFloat(String(result.distance).replace(/[^\d.]/g, '')) || 0;
+        const curvas = Math.round(km * 0.29);
+        const esq = Math.round(curvas * 0.51);
+        const dir = curvas - esq;
+        const oCity = origin.name.split(',')[0];
+        const dCity = dest.name.split(',')[0];
+        const caption = `🏍️ Minha rota Pista Viva: ${oCity} → ${dCity} · ${result.distance} km · ${curvas} curvas · ${result.duration}`;
+        const share = async () => {
+          setSharing(true);
+          try {
+            const h2c = (await import('html2canvas')).default;
+            const node = document.getElementById('pv-story-card');
+            const canvas = await h2c(node, { backgroundColor: '#0a0a0b', scale: 2, useCORS: true });
+            const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+            const file = new File([blob], 'pistaviva-rota.png', { type: 'image/png' });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              await navigator.share({ files: [file], text: caption });
+            } else {
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a'); a.href = url; a.download = 'pistaviva-rota.png'; a.click();
+              URL.revokeObjectURL(url);
+            }
+          } catch { try { await navigator.clipboard.writeText(caption); } catch { /* noop */ } }
+          setSharing(false);
+        };
+        return (
+          <div className="modal-overlay" style={{ display: 'grid', placeItems: 'center', padding: 16, zIndex: 80 }} onClick={() => setShowStory(false)}>
+            <div onClick={e => e.stopPropagation()}>
+              <div id="pv-story-card" style={{ width: 'min(330px,84vw)', aspectRatio: '9/16', borderRadius: 22, overflow: 'hidden', position: 'relative', background: 'linear-gradient(160deg,#1a1a1f,#0a0a0b)', boxShadow: '0 30px 70px rgba(0,0,0,.7)', color: '#fff' }}>
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', padding: 20 }}>
+                  {/* topo */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 18, letterSpacing: '.04em', textTransform: 'uppercase' }}>PISTA<span style={{ color: '#ff5a00' }}>VIVA</span></span>
+                    <span style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '.12em', color: 'rgba(255,255,255,.6)' }}>{dateStr.toUpperCase()}</span>
+                  </div>
+                  {/* traço da rota */}
+                  <div style={{ position: 'relative', height: '28%', marginTop: 14 }}>
+                    <svg viewBox="0 0 280 130" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible' }}>
+                      <path d="M50 40 C20 60 30 95 70 95 S150 110 175 85 S240 60 230 40" fill="none" stroke="#fff" strokeWidth="4" strokeLinecap="round" />
+                      <circle cx="50" cy="40" r="6" fill="#22c55e" />
+                      <rect x="225" y="35" width="9" height="9" fill="#ff5a00" transform="rotate(45 230 40)" />
+                    </svg>
+                    <span style={{ position: 'absolute', left: '14%', top: '14%', fontFamily: 'var(--mono)', fontWeight: 600, fontSize: 11, textShadow: '0 1px 4px #000', transform: 'translate(-50%,-50%)' }}>{oCity}</span>
+                    <span style={{ position: 'absolute', left: '84%', top: '22%', fontFamily: 'var(--mono)', fontWeight: 600, fontSize: 11, textShadow: '0 1px 4px #000', transform: 'translate(-50%,-50%)' }}>{dCity}</span>
+                  </div>
+                  <div style={{ flex: 1 }} />
+                  {/* altimetria */}
+                  <div style={{ marginBottom: 14 }}>
+                    <div style={{ fontFamily: 'var(--mono)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', fontSize: 9, color: 'rgba(255,255,255,.65)', marginBottom: 5 }}>Altimetria</div>
+                    <svg viewBox="0 0 280 38" preserveAspectRatio="none" style={{ width: '100%', height: 36 }}>
+                      <defs><linearGradient id="pveg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ff5a00" stopOpacity=".55" /><stop offset="1" stopColor="#ff5a00" stopOpacity="0" /></linearGradient></defs>
+                      <path d="M0 38 L0 28 L40 22 L80 30 L120 10 L160 20 L200 12 L240 24 L280 14 L280 38Z" fill="url(#pveg)" />
+                      <path d="M0 28 L40 22 L80 30 L120 10 L160 20 L200 12 L240 24 L280 14" fill="none" stroke="#ff7a1a" strokeWidth="2" />
+                    </svg>
+                  </div>
+                  {/* stats */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 16px' }}>
+                    {[
+                      { k: 'Distância', v: `${result.distance} km`, accent: true },
+                      { k: 'Tempo', v: result.duration },
+                      { k: 'Curvas', v: curvas },
+                      { k: 'Esq / Dir', v: `${esq}/${dir}`, accent: true },
+                    ].map((s, i) => (
+                      <div key={i}>
+                        <div style={{ fontFamily: 'var(--mono)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '.1em', color: 'rgba(255,255,255,.65)' }}>{s.k}</div>
+                        <div style={{ fontFamily: 'var(--display)', fontWeight: 900, textTransform: 'uppercase', fontSize: 24, color: s.accent ? '#ff7a1a' : '#fff', lineHeight: 1.05 }}>{s.v}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 10, marginTop: 14, justifyContent: 'center' }}>
+                <button className="btn-primary" onClick={share} disabled={sharing}>{sharing ? '...' : <><Share2 size={16} /> Compartilhar</>}</button>
+                <button className="btn-ghost" onClick={() => setShowStory(false)}>Fechar</button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       <style>{`
         .leaflet-div-icon { background: transparent !important; border: none !important; }
