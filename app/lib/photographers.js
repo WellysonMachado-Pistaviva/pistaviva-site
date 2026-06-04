@@ -4,7 +4,7 @@ export async function getPhotographers({ limit = 200 } = {}) {
   try {
     const sb = supabaseServer();
     const { data, error } = await sb.from('pv_photographers')
-      .select('id, slug, nome, cidade, uf, local, lat, lng, instagram, site_url, cover_url, descricao')
+      .select('id, slug, nome, cidade, uf, local, lat, lng, instagram, site_url, cover_url, descricao, horario_dias, horario_inicio, horario_fim')
       .eq('published', true)
       .order('created_at', { ascending: false })
       .limit(limit);

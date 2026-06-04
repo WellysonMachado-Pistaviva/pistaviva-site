@@ -6,7 +6,8 @@ import { uploadPostImage } from '../../src/services/storage';
 import { useAuth, showToast } from '../components/AuthProvider';
 import { slugify } from '../lib/spotMeta';
 
-const EMPTY = { nome: '', cidade: '', uf: '', local: '', instagram: '', site_url: '', whatsapp: '', descricao: '', lat: null, lng: null, cover_url: '' };
+const EMPTY = { nome: '', cidade: '', uf: '', local: '', instagram: '', site_url: '', whatsapp: '', descricao: '', lat: null, lng: null, cover_url: '', horario_dias: [], horario_inicio: '', horario_fim: '' };
+const DIAS = [['Dom', 0], ['Seg', 1], ['Ter', 2], ['Qua', 3], ['Qui', 4], ['Sex', 5], ['Sáb', 6]];
 
 export default function NewPhotographerForm() {
   const auth = useAuth();
@@ -53,6 +54,8 @@ export default function NewPhotographerForm() {
       local: f.local.trim() || null, lat: f.lat, lng: f.lng,
       instagram: f.instagram.trim() || null, site_url: f.site_url.trim() || null, whatsapp: f.whatsapp.trim() || null,
       descricao: f.descricao.trim() || null, cover_url: f.cover_url || null,
+      horario_dias: f.horario_dias.length ? f.horario_dias : null,
+      horario_inicio: f.horario_inicio || null, horario_fim: f.horario_fim || null,
       author_id: String(auth.user?.id || ''), published: true,
     });
     setSaving(false);
@@ -74,6 +77,25 @@ export default function NewPhotographerForm() {
       <input style={inp} placeholder="Link do site/galeria de fotos" value={f.site_url} onChange={e => setF(s => ({ ...s, site_url: e.target.value }))} />
       <input style={inp} placeholder="WhatsApp (opcional)" value={f.whatsapp} onChange={e => setF(s => ({ ...s, whatsapp: e.target.value }))} />
       <textarea style={{ ...inp, minHeight: 70, resize: 'vertical' }} placeholder="Descrição (opcional)" value={f.descricao} onChange={e => setF(s => ({ ...s, descricao: e.target.value }))} />
+
+      {/* Horário no ponto — mostra "No ponto agora" / "Ausente" automático */}
+      <div style={{ marginBottom: 10 }}>
+        <div style={{ fontSize: 12, color: 'var(--paper-mut)', fontWeight: 700, marginBottom: 7 }}>Horário que você fica no ponto</div>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
+          {DIAS.map(([lbl, n]) => {
+            const on = f.horario_dias.includes(n);
+            return (
+              <button key={n} type="button" onClick={() => setF(s => ({ ...s, horario_dias: on ? s.horario_dias.filter(d => d !== n) : [...s.horario_dias, n] }))}
+                style={{ padding: '7px 11px', borderRadius: 100, fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700, cursor: 'pointer', border: `1.5px solid ${on ? 'var(--accent)' : 'var(--border)'}`, background: on ? 'var(--accent)' : 'transparent', color: on ? '#fff' : 'var(--paper-dim)' }}>{lbl}</button>
+            );
+          })}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+          <div><label style={{ fontSize: 11, color: 'var(--paper-mut)' }}>Início</label><input type="time" style={inp} value={f.horario_inicio} onChange={e => setF(s => ({ ...s, horario_inicio: e.target.value }))} /></div>
+          <div><label style={{ fontSize: 11, color: 'var(--paper-mut)' }}>Fim</label><input type="time" style={inp} value={f.horario_fim} onChange={e => setF(s => ({ ...s, horario_fim: e.target.value }))} /></div>
+        </div>
+      </div>
+
       <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
         <button className="btn btn--ghost" type="button" onClick={pegarGeo}>📍 Marcar localização</button>
         <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-dim)' }}>{geo}</span>
