@@ -1051,6 +1051,34 @@ body.pg-locked{ overflow:hidden; }
   .igm-menucell span span, .igm-menucell > span > span { color: #7a7a80; font-size: 11px; margin-top: 1px; display: block; }
 }
 
+/* ===== Home no estilo IGNIS-mobile (≤768px) — rail horizontal + espaçamento app ===== */
+@media (max-width: 768px) {
+  /* seções mais compactas, cara de app */
+  .ig-cats, .ig-models, .ig-news { padding: 26px 0 8px; }
+  .ig-band { padding: 30px 0; margin: 8px 0; }
+  .ig-sechead { margin-bottom: 16px; align-items: flex-start; }
+  .ig-sechead .lead { max-width: 100%; }
+  .ig-sechead p { font-size: 13px; margin-top: 8px; }
+  .ig-sechead .ig-eyebrow { margin-bottom: 8px; }
+  /* o botão "ver tudo" some no mobile (a sheet/nav cobre) */
+  .ig-sechead > .ig-btn { display: none; }
+
+  /* categorias: rail horizontal com scroll (qrail IGNIS) */
+  .ig-cat-rail {
+    display: flex; gap: 10px; overflow-x: auto; grid-template-columns: none;
+    padding: 2px 16px 6px; margin: 0 calc(-1 * var(--gut, 16px));
+    scrollbar-width: none;
+  }
+  .ig-cat-rail::-webkit-scrollbar { display: none; }
+  .ig-cat-card { min-width: 132px; flex-shrink: 0; aspect-ratio: 3/3.7; border-radius: 14px; }
+  .ig-cat-card .lbl { padding: 12px; }
+  .ig-cat-card .lbl .n { font-size: 19px; }
+  .ig-cat-card .ig-cat-ico { font-size: 44px; }
+
+  /* títulos de seção menores no app */
+  .ig-title { font-size: clamp(26px, 8vw, 34px); }
+}
+
 /* ===== HomeBanner — carrossel de banners (estilo Yamaha/IGNIS) ===== */
 .pvb{ position:relative; background:var(--ink); color:#fff; }
 .pvb-viewport{ overflow:hidden; }
