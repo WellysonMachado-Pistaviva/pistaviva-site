@@ -1051,6 +1051,20 @@ body.pg-locked{ overflow:hidden; }
   .igm-menucell span span, .igm-menucell > span > span { color: #7a7a80; font-size: 11px; margin-top: 1px; display: block; }
 }
 
+/* ===== Selo "No ponto agora / Ausente" do fotógrafo ===== */
+.ph-card .pic .ph-live { position: absolute; top: 12px; right: 12px; z-index: 3; }
+.pv-live {
+  display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono);
+  font-weight: 700; text-transform: uppercase; letter-spacing: .06em; font-size: 10px;
+  padding: 5px 10px; border-radius: 7px; background: rgba(8,8,9,.72); color: rgba(255,255,255,.7);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+}
+.pv-live .dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.4); flex-shrink: 0; }
+.pv-live.on { background: #22c55e; color: #04210f; }
+.pv-live.on .dot { background: #04210f; box-shadow: 0 0 0 0 rgba(4,33,15,.5); animation: pv-pulse 1.6s infinite; }
+.pv-live .sched { opacity: .8; font-weight: 600; }
+@keyframes pv-pulse { 70% { box-shadow: 0 0 0 6px rgba(4,33,15,0); } 100% { box-shadow: 0 0 0 0 rgba(4,33,15,0); } }
+
 /* ===== Telas internas (SPA views) no estilo IGNIS-mobile (≤768px) ===== */
 @media (max-width: 768px) {
   /* cabeçalho de página estilo IGNIS (título condensado grande) */

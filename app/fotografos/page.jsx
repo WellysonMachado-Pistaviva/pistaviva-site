@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Cover from '../components/Cover';
+import LiveBadge from '../components/LiveBadge';
 import { getPhotographers, igUrl } from '../lib/photographers';
 import NewPhotographerForm from './NewPhotographerForm';
 
@@ -38,6 +39,7 @@ export default async function Fotografos() {
               <Link className="ph-card" key={f.id} href={`/fotografo/${f.slug}`}>
                 <div className="pic">
                   <span className="spot">📸 {f.local || f.cidade || 'Fotógrafo'}</span>
+                  <span className="ph-live"><LiveBadge dias={f.horario_dias} inicio={f.horario_inicio} fim={f.horario_fim} showSchedule={false} /></span>
                   {f.cover_url ? <Cover src={f.cover_url} alt={f.nome} sizes="(max-width:600px) 100vw, 380px" /> : <span className="pic-ph">📷</span>}
                 </div>
                 <div className="body">
