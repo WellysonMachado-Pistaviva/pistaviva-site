@@ -1115,7 +1115,7 @@ body.pg-locked{ overflow:hidden; }
 }
 .dr-card:hover { transform: translateY(-4px); }
 .dr-pic { position: relative; aspect-ratio: 4/5; overflow: hidden; }
-.dr-pic img { width: 100%; height: 100%; object-fit: cover; }
+.dr-pic img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .dr-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(8,8,9,.92), rgba(8,8,9,.05) 55%); pointer-events: none; }
 .dr-name {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 16px;
@@ -1215,7 +1215,7 @@ body.pg-locked{ overflow:hidden; }
 .pvb-track{ display:flex; transition:transform .6s cubic-bezier(.6,.02,.1,1); }
 .pvb-slide{ min-width:100%; display:flex; flex-direction:column; }
 .pvb-media{ position:relative; aspect-ratio:16/6.4; background:#16161a; overflow:hidden; }
-.pvb-media img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.pvb-media img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
 .pvb-media::after{ content:""; position:absolute; inset:0; background:linear-gradient(0deg,rgba(8,8,9,.5),transparent 36%); }
 
 /* tag por tipo */
