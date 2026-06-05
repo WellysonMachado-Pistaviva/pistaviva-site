@@ -2,6 +2,13 @@
   "name": "pistaviva",
   "private": true,
   "version": "1.0.0",
+  "browserslist": [
+    "chrome >= 100",
+    "safari >= 15",
+    "firefox >= 100",
+    "edge >= 100",
+    "not dead"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -27,7 +34,6 @@
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17.5.0",
-    "playwright-core": "^1.60.0"
+    "globals": "^17.5.0"
   }
 }

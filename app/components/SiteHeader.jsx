@@ -22,7 +22,7 @@ export default function SiteHeader() {
     <header className="site-head">
       <div className="wrap bar">
         <Link className="brand" href="/" aria-label="Pistaviva — início" onClick={close}>
-          <img className="brand-logo" src="/logo.svg" alt="Pistaviva" />
+          <img className="brand-logo" src="/logo.svg" alt="Pistaviva" width="1222" height="88" />
         </Link>
 
         <nav className={`nav${open ? ' open' : ''}`} aria-label="Navegação principal">
