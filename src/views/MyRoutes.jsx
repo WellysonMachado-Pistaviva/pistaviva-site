@@ -52,7 +52,7 @@ const DestWeather = ({ lat, lng }) => {
 };
 
 // ── Card de roteiro preset ────────────────────────────────────
-const RouteCard = ({ route, user, userLocation }) => {
+const RouteCard = ({ route, user, userLocation, promptIdentity, identity, deviceId }) => {
   const [expanded, setExpanded]   = useState(false);
   const [comments, setComments]   = useState([]);
   const [loadingCmt, setLoadingCmt] = useState(false);
@@ -86,9 +86,11 @@ const RouteCard = ({ route, user, userLocation }) => {
   })() : null;
 
   const handleSend = async () => {
-    if (!text.trim() || !user) return;
+    if (!text.trim()) return;
+    let nome = identity?.nome;
+    if (!nome) { const id = await promptIdentity?.(); if (!id) return; nome = id.nome; }
     setSending(true);
-    const saved = await addRouteComment(route.id, user.id, user.nome || user.name, text);
+    const saved = await addRouteComment(route.id, deviceId || 'anon', nome, text);
     if (saved) { setComments(prev => [...prev, saved]); setText(''); }
     setSending(false);
   };
@@ -218,14 +220,13 @@ const RouteCard = ({ route, user, userLocation }) => {
             <div style={{ display: 'flex', gap: '8px' }}>
               <input
                 type="text"
-                placeholder={user ? 'Conte como foi sua experiência...' : 'Identifique-se para comentar'}
+                placeholder="Conte como foi sua experiência..."
                 value={text}
                 onChange={e => setText(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSend()}
-                disabled={!user}
                 style={{ flex: 1, fontSize: '13px' }}
               />
-              <button className="btn-primary" style={{ width: '44px', flexShrink: 0, padding: 0 }} onClick={handleSend} disabled={!user || !text.trim() || sending}>
+              <button className="btn-primary" style={{ width: '44px', flexShrink: 0, padding: 0 }} onClick={handleSend} disabled={!text.trim() || sending}>
                 {sending ? <span className="loading-spinner" /> : <Send size={15} />}
               </button>
             </div>
@@ -247,7 +248,7 @@ const regionMap = {
 };
 
 // ── Página principal ──────────────────────────────────────────
-const MyRoutes = ({ user }) => {
+const MyRoutes = ({ user, promptIdentity, identity, deviceId }) => {
   const [diffFilter, setDiffFilter]     = useState('Todos');
   const [regionFilter, setRegionFilter] = useState('Todas');
   const [search, setSearch]             = useState('');
@@ -315,7 +316,7 @@ const MyRoutes = ({ user }) => {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {filtered.length > 0
-              ? filtered.map(r => <RouteCard key={r.id} route={r} user={user} userLocation={userLocation} />)
+              ? filtered.map(r => <RouteCard key={r.id} route={r} user={user} userLocation={userLocation} promptIdentity={promptIdentity} identity={identity} deviceId={deviceId} />)
               : <div style={{ textAlign: 'center', padding: '40px', color: 'var(--muted)' }}>Nenhum roteiro encontrado.</div>
             }
           </div>
