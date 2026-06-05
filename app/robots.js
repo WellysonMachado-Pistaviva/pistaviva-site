@@ -1,16 +1,12 @@
 export default function robots() {
   const BASE = 'https://www.pistavivamototurismo.com.br';
   return {
+    // Sem bloquear /_next/ — Google precisa de CSS/JS pra renderizar (exigência do guia).
     rules: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin', '/perfil', '/api/', '/_next/'],
-      },
-      {
-        userAgent: 'Googlebot',
-        allow: '/',
-        disallow: ['/admin', '/perfil', '/api/'],
+        disallow: ['/admin', '/api/'],
       },
     ],
     sitemap: `${BASE}/sitemap.xml`,
