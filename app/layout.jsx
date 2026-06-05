@@ -119,7 +119,7 @@ export default function RootLayout({ children }) {
           </>
         )}
         <Script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
-          strategy="afterInteractive" crossOrigin="anonymous" />
+          strategy="lazyOnload" crossOrigin="anonymous" />
       </body>
     </html>
   );

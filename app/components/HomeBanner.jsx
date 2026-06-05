@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 // Carrossel de banners da home (porta do layout IGNIS, 100% funcional):
 // autoplay 6s, dots com barra de progresso, setas, swipe e pause no hover.
@@ -83,7 +84,15 @@ export default function HomeBanner({ banners = [] }) {
             return (
               <article className="pvb-slide" key={b.id || k}>
                 <div className="pvb-media">
-                  <img src={b.image_url} alt={b.title || ''} loading={k === 0 ? 'eager' : 'lazy'} />
+                  <Image
+                    src={b.image_url}
+                    alt={b.title || ''}
+                    fill
+                    sizes="100vw"
+                    quality={70}
+                    priority={k === 0}
+                    style={{ objectFit: 'cover', objectPosition: 'center' }}
+                  />
                   <span className={tag.cls}><span className="dot" />{b.tag_label || tag.label}</span>
                 </div>
                 <div className="pvb-cap">
