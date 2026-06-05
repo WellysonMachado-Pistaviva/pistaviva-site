@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Plus, KeyRound, Map as MapIcon, ShieldCheck, Share2, Send, Pin, MessageSquare, X, Flag, Gauge, AlertTriangle } from 'lucide-react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 import { TILES } from '../lib/mapTiles';
+import ComboioRoute from './ComboioRoute';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { joinComboioChannel, updateComboioLocation, leaveComboioChannel, sendComboioChat, updatePinnedMessage } from '../services/realtime';
@@ -33,6 +34,10 @@ const createOfflineComboioIcon = () => L.divIcon({
 const comboioIcon    = createComboioMemberIcon();
 const selfComboioIcon = createSelfComboioIcon();
 const offlineComboioIcon = createOfflineComboioIcon();
+const routeStopIcon = (n) => L.divIcon({
+  html: `<div style="width:24px;height:24px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#f97316;border:2px solid #fff;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.5)"><span style="transform:rotate(45deg);font-size:11px;font-weight:800;color:#fff">${n}</span></div>`,
+  className: '', iconSize: [24, 24], iconAnchor: [12, 24],
+});
 
 const AutoCenterMap = ({ pins }) => {
   const map = useMap();
@@ -56,6 +61,7 @@ const Comboio = ({ user, openAuthModal }) => {
   const [speed, setSpeed] = useState(0);            // km/h do GPS (painel de bordo)
   const [leaderId, setLeaderId] = useState(null);   // userId do líder (quem criou)
   const [sosHold, setSosHold] = useState(0);        // progresso do SOS (0-100)
+  const [routeStops, setRouteStops] = useState([]); // paradas da rota do comboio (mapa)
 
   // Chat & Presence State
   const [members, setMembers] = useState([]);
@@ -284,6 +290,16 @@ const Comboio = ({ user, openAuthModal }) => {
 
     return () => { supabase.removeChannel(dbChannel); };
   }, [activeComboio, user]);
+
+  // Rota do comboio (paradas) — carrega + escuta broadcast de atualização do líder
+  useEffect(() => {
+    if (!activeComboio) { setRouteStops([]); return; }
+    const loadRoute = () => supabase.from('pv_comboio_routes').select('stops').eq('comboio_code', activeComboio).maybeSingle()
+      .then(({ data }) => setRouteStops(Array.isArray(data?.stops) ? data.stops : []));
+    loadRoute();
+    const ch = supabase.channel(`comboio-db-${activeComboio}`).on('broadcast', { event: 'route' }, loadRoute).subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, [activeComboio]);
 
   // Mensagens com +2h são filtradas no SELECT do banco — sem cleanup local necessário
 
@@ -525,6 +541,12 @@ const Comboio = ({ user, openAuthModal }) => {
             >
               <MapIcon size={16} /> MAPA ({members.length})
             </button>
+            <button
+              style={{ flex: 1, padding: '10px', borderRadius: '8px', border: 'none', background: activeTab === 'rota' ? 'var(--bg3)' : 'transparent', color: activeTab === 'rota' ? '#fff' : 'var(--muted)', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+              onClick={() => setActiveTab('rota')}
+            >
+              <Pin size={16} /> ROTA{routeStops.length ? ` (${routeStops.length})` : ''}
+            </button>
           </div>
 
           {/* CHAT TAB */}
@@ -679,6 +701,16 @@ const Comboio = ({ user, openAuthModal }) => {
                     <TileLayer attribution={TILES.topo.attribution} url={TILES.topo.url} />
                     <AutoCenterMap pins={pins} />
 
+                    {/* Rota do comboio (paradas do líder) */}
+                    {routeStops.length > 1 && (
+                      <Polyline positions={routeStops.map(s => [s.lat, s.lng])} color="#f97316" weight={3} opacity={0.7} dashArray="6 8" />
+                    )}
+                    {routeStops.map((s, i) => (
+                      <Marker key={`stop-${i}`} position={[s.lat, s.lng]} icon={routeStopIcon(i + 1)}>
+                        <Popup><div style={{ textAlign: 'center', padding: '2px' }}><strong>{i + 1}. {s.nome}</strong></div></Popup>
+                      </Marker>
+                    ))}
+
                     {pins.map(p => {
                       const isMe = p.userId === user.id;
                       const icon = isMe ? selfComboioIcon : (p.online ? comboioIcon : offlineComboioIcon);
@@ -711,6 +743,11 @@ const Comboio = ({ user, openAuthModal }) => {
               </div>
             );
           })()}
+
+          {/* ROTA TAB */}
+          {activeTab === 'rota' && (
+            <ComboioRoute comboioCode={activeComboio} isLeader={leaderId === user.id} />
+          )}
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>

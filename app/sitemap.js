@@ -1,6 +1,7 @@
 import { getAllSlugs } from './lib/blog';
 import { getAllSpotSlugs } from './lib/spots';
-import { getAllPhotographerSlugs } from './lib/photographers';
+import { getAllPhotographerSlugs, getPhotographers } from './lib/photographers';
+import { UF_NAMES, citySlug } from './lib/ufs';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 
@@ -60,6 +61,7 @@ export default async function sitemap() {
       lastModified: s.published_at ? new Date(s.published_at).toISOString() : LAST_BUILD,
       changeFrequency: 'monthly',
       priority: 0.7,
+      ...(s.cover_url ? { images: [s.cover_url] } : {}),
     }));
   } catch { /* DB indisponível no build */ }
 
@@ -72,6 +74,7 @@ export default async function sitemap() {
       lastModified: s.created_at ? new Date(s.created_at).toISOString() : LAST_BUILD,
       changeFrequency: 'weekly',
       priority: 0.7,
+      ...(s.cover_url ? { images: [s.cover_url] } : {}),
     }));
   } catch { /* DB indisponível no build */ }
 
@@ -87,5 +90,30 @@ export default async function sitemap() {
     }));
   } catch { /* DB indisponível no build */ }
 
-  return [...staticEntries, ...posts, ...paradas, ...fotos];
+  // ── Hubs por estado (/mototurismo + /mototurismo/[uf]) ──
+  // Só inclui estados com conteúdo (≥3 itens) — espelha o noindex de thin content.
+  let hubs = [{ url: `${BASE}/mototurismo`, lastModified: LAST_BUILD, changeFrequency: 'weekly', priority: 0.9 }];
+  try {
+    const [spotSlugs, fotoList] = await Promise.all([getAllSpotSlugs(), getPhotographers({ limit: 500 })]);
+    const cnt = {};
+    const cityCnt = {}; // `${uf}/${citySlug}` -> contagem de paradas
+    for (const s of spotSlugs || []) {
+      const u = String(s.uf || '').toLowerCase();
+      if (u) cnt[u] = (cnt[u] || 0) + 1;
+      const cs = citySlug(s.cidade);
+      if (u && cs) { const k = `${u}/${cs}`; cityCnt[k] = (cityCnt[k] || 0) + 1; }
+    }
+    for (const p of fotoList || []) { const u = String(p.uf || '').toLowerCase(); if (u) cnt[u] = (cnt[u] || 0) + 1; }
+    for (const uf of Object.keys(UF_NAMES)) {
+      if ((cnt[uf] || 0) >= 3) {
+        hubs.push({ url: `${BASE}/mototurismo/${uf}`, lastModified: LAST_BUILD, changeFrequency: 'weekly', priority: 0.85 });
+      }
+    }
+    // Hubs de cidade — espelha o noindex (≥2 paradas)
+    for (const [k, n] of Object.entries(cityCnt)) {
+      if (n >= 2) hubs.push({ url: `${BASE}/mototurismo/${k}`, lastModified: LAST_BUILD, changeFrequency: 'weekly', priority: 0.8 });
+    }
+  } catch { /* DB indisponível no build */ }
+
+  return [...staticEntries, ...hubs, ...posts, ...paradas, ...fotos];
 }
