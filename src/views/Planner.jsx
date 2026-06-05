@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Polyline, Marker, useMap } from 'react-leaflet
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useWeather } from '../hooks/useWeather';
+import { TILES } from '../lib/mapTiles';
 import { addRoute, saveCurrentRoute } from '../services/storage';
 import { supabase } from '../lib/supabaseClient';
 
@@ -347,7 +348,7 @@ const Planner = ({ user }) => {
           {result.line && result.line.length > 0 && (
             <div style={{ height:'180px', position:'relative' }}>
               <MapContainer center={[-14,-51]} zoom={4} style={{ height:'100%', width:'100%' }} attributionControl={false} zoomControl={false}>
-                <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+                <TileLayer attribution={TILES.topo.attribution} url={TILES.topo.url} />
                 <Polyline positions={result.line} color="var(--accent)" weight={4} opacity={0.9} />
                 <Marker position={result.line[0]} icon={originIcon} />
                 <Marker position={result.line[result.line.length-1]} icon={destIcon} />
