@@ -57,6 +57,7 @@ const Planner = ({ user }) => {
   const [saved, setSaved]         = useState(false);
   const [showStory, setShowStory] = useState(false);
   const [sharing, setSharing]     = useState(false);
+  const [routeMode, setRouteMode] = useState('rapida'); // 'rapida' (OSRM) | 'curva' (BRouter)
 
   const [photographers, setPhotographers] = useState([]);
 
@@ -110,13 +111,34 @@ const Planner = ({ user }) => {
     setResult(null);
     try {
       const allPoints = [origin, ...waypoints.filter(w => w.lat), dest];
-      const coords = allPoints.map(p => `${p.lng},${p.lat}`).join(';');
-      const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`);
-      const data = await res.json();
-      if (data?.code === 'Ok' && data.routes?.length > 0) {
-        const route = data.routes[0];
-        let distKm = route.distance / 1000;
-        let durSec = route.duration;
+      let line = null, distKm = 0, durSec = 0;
+
+      if (routeMode === 'curva') {
+        // BRouter (open-source) via proxy /api/route — rota por estradas
+        const res = await fetch('/api/route', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ points: allPoints.map(p => [p.lat, p.lng]) }),
+        });
+        const data = await res.json();
+        if (res.ok && data.line?.length) {
+          line = data.line;
+          distKm = data.distanceKm || (line.reduce((s, p, i) => i ? s + distKmLL(line[i - 1][0], line[i - 1][1], p[0], p[1]) : 0, 0));
+          durSec = data.durationSec || (distKm / 60) * 3600; // ~60 km/h em serra
+        }
+      } else {
+        // OSRM — rota mais rápida
+        const coords = allPoints.map(p => `${p.lng},${p.lat}`).join(';');
+        const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`);
+        const data = await res.json();
+        if (data?.code === 'Ok' && data.routes?.length > 0) {
+          const route = data.routes[0];
+          distKm = route.distance / 1000;
+          durSec = route.duration;
+          line = route.geometry.coordinates.map(c => [c[1], c[0]]);
+        }
+      }
+
+      if (line && line.length) {
         if (isRoundtrip) { distKm *= 2; durSec *= 2; }
         const avg   = parseFloat(avgKmL) || 20;
         const price = parseFloat(fuelPrice) || 5.89;
@@ -124,7 +146,6 @@ const Planner = ({ user }) => {
         const cost   = liters * price;
         const h = Math.floor(durSec / 3600);
         const m = Math.floor((durSec % 3600) / 60);
-        const line = route.geometry.coordinates.map(c => [c[1], c[0]]);
         saveCurrentRoute(line);
         setResult({
           distance:    distKm.toFixed(1),
@@ -274,6 +295,15 @@ const Planner = ({ user }) => {
           <span className="box">{isRoundtrip && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.2"><path d="m5 12 5 5 9-10" /></svg>}</span>
           <span className="tt"><b>Bate e Volta</b><span>Dobra a distância e o custo automaticamente</span></span>
         </label>
+
+        {/* Modo da rota */}
+        <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+          {[['rapida', '⚡ Mais rápida'], ['curva', '🏍️ Mais curva']].map(([k, l]) => (
+            <button key={k} type="button" onClick={() => setRouteMode(k)}
+              style={{ flex: 1, padding: '10px', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.04em', cursor: 'pointer', border: `1.5px solid ${routeMode === k ? 'var(--accent)' : 'var(--border)'}`, background: routeMode === k ? 'var(--accent)' : 'transparent', color: routeMode === k ? '#fff' : 'var(--muted)' }}>{l}</button>
+          ))}
+        </div>
+        {routeMode === 'curva' && <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10, marginTop: -4 }}>Rota que evita reta chata e prioriza estrada de curva (motor BRouter, grátis).</p>}
 
         <button className="btn-primary pg-gen" onClick={handleCalculate} disabled={loading || !origin.lat || !dest.lat}>
           {loading ? <><span className="loading-spinner" /> CALCULANDO...</> : <><Calculator size={18} /> GERAR ROTEIRO</>}
