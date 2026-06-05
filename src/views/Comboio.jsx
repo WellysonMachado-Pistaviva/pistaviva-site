@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Plus, KeyRound, Map as MapIcon, ShieldCheck, Share2, Send, Pin, MessageSquare, X } from 'lucide-react';
+import { Plus, KeyRound, Map as MapIcon, ShieldCheck, Share2, Send, Pin, MessageSquare, X, Flag, Gauge, AlertTriangle } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { TILES } from '../lib/mapTiles';
 import L from 'leaflet';
@@ -9,6 +9,14 @@ import { getComboioMessages, saveComboioMessage } from '../services/storage';
 import { notifyComboioMessage, notifyNewMember } from '../services/notify';
 import { supabase } from '../lib/supabaseClient';
 import { useWakeLock } from '../hooks/useWakeLock';
+
+const cbToast = (msg) => { const el = document.getElementById('app-toast'); if (el) { el.textContent = msg; el.className = 'toast error'; el.style.display = 'block'; setTimeout(() => { el.style.display = 'none'; }, 3500); } };
+const distKmCB = (aLat, aLng, bLat, bLng) => {
+  const R = 6371, toR = Math.PI / 180;
+  const dLat = (bLat - aLat) * toR, dLng = (bLng - aLng) * toR;
+  const s = Math.sin(dLat / 2) ** 2 + Math.cos(aLat * toR) * Math.cos(bLat * toR) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s));
+};
 
 const createComboioMemberIcon = () => L.divIcon({
   html: `<div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#2563eb);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(59,130,246,.6);border:2px solid #fff;">👤</div>`,
@@ -45,6 +53,9 @@ const Comboio = ({ user, openAuthModal }) => {
   const [activeComboio, setActiveComboio] = useState(null);
   const [joinCode, setJoinCode] = useState('');
   const [activeTab, setActiveTab] = useState('chat'); // 'chat' or 'map'
+  const [speed, setSpeed] = useState(0);            // km/h do GPS (painel de bordo)
+  const [leaderId, setLeaderId] = useState(null);   // userId do líder (quem criou)
+  const [sosHold, setSosHold] = useState(0);        // progresso do SOS (0-100)
 
   // Chat & Presence State
   const [members, setMembers] = useState([]);
@@ -71,12 +82,23 @@ const Comboio = ({ user, openAuthModal }) => {
     const saved = sessionStorage.getItem('activeComboio');
     if (saved) {
       setActiveComboio(saved);
+      setLeaderId(sessionStorage.getItem('comboioLeader') || null);
       // Carrega mensagens do banco (últimas 2h) imediatamente
       getComboioMessages(saved).then(msgs => {
         if (msgs.length > 0) setMessages(msgs);
       });
     }
   }, []);
+
+  // Velocidade do GPS (painel de bordo) — só quando num comboio ativo
+  useEffect(() => {
+    if (!activeComboio || !navigator.geolocation) return;
+    const id = navigator.geolocation.watchPosition(
+      p => setSpeed(p.coords.speed != null && p.coords.speed >= 0 ? p.coords.speed * 3.6 : 0),
+      () => {}, { enableHighAccuracy: true, maximumAge: 2000, timeout: 12000 }
+    );
+    return () => navigator.geolocation.clearWatch(id);
+  }, [activeComboio]);
 
   // Realtime Connection
   useEffect(() => {
@@ -290,6 +312,8 @@ const Comboio = ({ user, openAuthModal }) => {
   const createComboio = () => {
     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
     sessionStorage.setItem('activeComboio', code);
+    sessionStorage.setItem('comboioLeader', user.id);
+    setLeaderId(user.id);
     setActiveComboio(code);
     setMessages([]); // novo comboio começa sem histórico
   };
@@ -307,6 +331,8 @@ const Comboio = ({ user, openAuthModal }) => {
 
   const leaveComboio = () => {
     sessionStorage.removeItem('activeComboio');
+    sessionStorage.removeItem('comboioLeader');
+    setLeaderId(null);
     leaveComboioChannel();
     setActiveComboio(null);
     setMembers([]);
@@ -315,6 +341,33 @@ const Comboio = ({ user, openAuthModal }) => {
     lastKnownRef.current = {};
     setLastKnownSnapshot({});
   };
+
+  // SOS — segura 3s → dispara alerta com a coordenada exata (chat + fixado)
+  const sosTimer = useRef(null);
+  const sosStart = () => {
+    if (sosTimer.current) return;
+    const t0 = Date.now();
+    sosTimer.current = setInterval(() => {
+      const pct = Math.min(100, ((Date.now() - t0) / 3000) * 100);
+      setSosHold(pct);
+      if (pct >= 100) {
+        clearInterval(sosTimer.current); sosTimer.current = null; setSosHold(0);
+        navigator.geolocation?.getCurrentPosition(
+          p => {
+            const link = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+            const txt = `🆘 SOS / QUEBRA — ${user.nome || user.name} parou aqui: ${link}`;
+            saveComboioMessage(activeComboio, user.id, user.nome || user.name, txt);
+            sendComboioChat(activeComboio, { userId: user.id, name: user.nome || user.name, text: txt, time: new Date().toISOString() });
+            updatePinnedMessage(activeComboio, { text: txt, author: user.nome || user.name, time: new Date().toISOString() });
+            cbToast('SOS enviado ao grupo 🆘');
+          },
+          () => cbToast('Não foi possível pegar a localização do SOS'),
+          { enableHighAccuracy: true, timeout: 8000 }
+        );
+      }
+    }, 60);
+  };
+  const sosCancel = () => { if (sosTimer.current) { clearInterval(sosTimer.current); sosTimer.current = null; } setSosHold(0); };
 
   // Broadcast de "digitando" — sem salvar no banco (efêmero)
   const handleTyping = (value) => {
@@ -419,6 +472,44 @@ const Comboio = ({ user, openAuthModal }) => {
               <button className="btn-outline" onClick={leaveComboio} style={{ padding: '8px', borderColor: 'var(--danger)', color: 'var(--danger)' }} aria-label="Sair"><X size={16} /></button>
             </div>
           </div>
+
+          {/* PAINEL DE BORDO */}
+          {(() => {
+            const snap = lastKnownSnapshot;
+            const myPos = snap[user.id];
+            const leaderPos = leaderId ? snap[leaderId] : null;
+            const isLeader = leaderId === user.id;
+            const distLeader = (myPos?.lat != null && leaderPos?.lat != null) ? distKmCB(myPos.lat, myPos.lng, leaderPos.lat, leaderPos.lng) : null;
+            const behind = distLeader != null && distLeader > 0.6;
+            const tile = { flex: 1, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px', textAlign: 'center' };
+            const big = { fontFamily: 'var(--display)', fontWeight: 900, fontSize: 26, lineHeight: 1, color: '#fff' };
+            const lab = { fontFamily: 'var(--mono)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '.1em', color: 'var(--paper-mut)', marginTop: 5 };
+            return (
+              <>
+                <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+                  <div style={tile}><div style={{ ...big, color: 'var(--accent-2,#ff7a1a)' }}>{Math.round(speed)}</div><div style={lab}><Gauge size={10} style={{ verticalAlign: -1 }} /> km/h</div></div>
+                  <div style={tile}><div style={big}>{Object.values(snap).filter(p => p.online).length}</div><div style={lab}>Pilotos online</div></div>
+                  <div style={tile}><div style={{ ...big, fontSize: isLeader ? 20 : 26 }}>{isLeader ? '🏁' : (distLeader != null ? distLeader.toFixed(distLeader < 10 ? 1 : 0) : '—')}</div><div style={lab}>{isLeader ? 'Você é o líder' : 'km do líder'}</div></div>
+                </div>
+                {behind && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', borderRadius: 10, marginBottom: 10, background: 'rgba(180,83,9,.18)', border: '1px solid rgba(255,122,26,.4)', color: '#ff7a1a', fontWeight: 700, fontSize: 13 }}>
+                    <AlertTriangle size={16} /> Você ficou pra trás · {distLeader.toFixed(1)} km do líder
+                  </div>
+                )}
+                {isLeader && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', borderRadius: 10, marginBottom: 10, background: 'rgba(34,197,94,.1)', border: '1px solid rgba(34,197,94,.3)', color: '#22c55e', fontWeight: 700, fontSize: 13 }}>
+                    <Flag size={16} /> Você dita o ritmo do comboio.
+                  </div>
+                )}
+                {/* SOS — discreto, segura 3s */}
+                <button onPointerDown={sosStart} onPointerUp={sosCancel} onPointerLeave={sosCancel}
+                  style={{ position: 'relative', overflow: 'hidden', width: '100%', marginBottom: 12, padding: '11px', borderRadius: 10, border: '1px solid var(--danger)', background: 'rgba(239,68,68,.08)', color: 'var(--danger)', fontFamily: 'var(--mono)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '.06em', fontSize: 12, cursor: 'pointer' }}>
+                  <span style={{ position: 'absolute', inset: 0, width: `${sosHold}%`, background: 'rgba(239,68,68,.35)', transition: 'width .06s linear' }} />
+                  <span style={{ position: 'relative' }}>🆘 SOS / Quebra — segure 3s</span>
+                </button>
+              </>
+            );
+          })()}
 
           {/* TABS */}
           <div style={{ display: 'flex', background: 'var(--bg2)', padding: '4px', borderRadius: 'var(--radius)', marginBottom: '12px' }}>
