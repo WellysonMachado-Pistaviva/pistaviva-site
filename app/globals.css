@@ -1079,6 +1079,23 @@ body.pg-locked{ overflow:hidden; }
   .ph-filterbar > a { flex-shrink: 0; white-space: nowrap; }
 }
 
+/* ===== Toast de atividade da comunidade (prova social real) ===== */
+.pv-livetoast {
+  position: fixed; left: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 70;
+  display: flex; align-items: center; gap: 11px; max-width: min(340px, calc(100vw - 28px));
+  padding: 11px 15px 11px 11px; border-radius: 14px;
+  background: rgba(12,12,13,.92); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.12); box-shadow: 0 12px 34px rgba(0,0,0,.5);
+  transform: translateY(140%); opacity: 0; transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .3s;
+  pointer-events: none;
+}
+.pv-livetoast.show { transform: none; opacity: 1; }
+.pv-lt-ico { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; font-size: 20px; background: linear-gradient(135deg, #ff7a1a, #ff5a00); }
+.pv-lt-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.pv-lt-txt b { color: #fff; font-size: 13.5px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pv-lt-txt span { color: #34d27b; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 768px) { .pv-livetoast { bottom: calc(76px + env(safe-area-inset-bottom)); } }
+
 /* ===== Galeria de fotos da parada (até 3) ===== */
 .ph-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
 .ph-thumb { aspect-ratio: 16/10; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); background: var(--ink-2, #16161a); }
