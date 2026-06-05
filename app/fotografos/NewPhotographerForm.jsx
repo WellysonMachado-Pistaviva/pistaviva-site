@@ -9,6 +9,7 @@ import { slugify } from '../lib/spotMeta';
 
 const EMPTY = { nome: '', cidade: '', uf: '', local: '', instagram: '', site_url: '', whatsapp: '', descricao: '', lat: null, lng: null, cover_url: '', horario_dias: [], horario_inicio: '', horario_fim: '' };
 const DIAS = [['Dom', 0], ['Seg', 1], ['Ter', 2], ['Qua', 3], ['Qui', 4], ['Sex', 5], ['Sáb', 6]];
+const UF_MAP = { 'Acre': 'AC', 'Alagoas': 'AL', 'Amapá': 'AP', 'Amazonas': 'AM', 'Bahia': 'BA', 'Ceará': 'CE', 'Distrito Federal': 'DF', 'Espírito Santo': 'ES', 'Goiás': 'GO', 'Maranhão': 'MA', 'Mato Grosso': 'MT', 'Mato Grosso do Sul': 'MS', 'Minas Gerais': 'MG', 'Pará': 'PA', 'Paraíba': 'PB', 'Paraná': 'PR', 'Pernambuco': 'PE', 'Piauí': 'PI', 'Rio de Janeiro': 'RJ', 'Rio Grande do Norte': 'RN', 'Rio Grande do Sul': 'RS', 'Rondônia': 'RO', 'Roraima': 'RR', 'Santa Catarina': 'SC', 'São Paulo': 'SP', 'Sergipe': 'SE', 'Tocantins': 'TO' };
 
 export default function NewPhotographerForm() {
   const auth = useAuth();
@@ -18,7 +19,15 @@ export default function NewPhotographerForm() {
   const [saving, setSaving] = useState(false);
   const [geo, setGeo] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [citySug, setCitySug] = useState([]);
+  const [showSug, setShowSug] = useState(false);
   const inp = { width: '100%', padding: '10px 12px', marginBottom: 10, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)', fontFamily: 'inherit' };
+
+  const buscarCidade = async (q) => {
+    if (q.length < 3) { setCitySug([]); return; }
+    try { const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&language=pt&count=8`); const d = await res.json(); setCitySug((d.results || []).filter(r => r.country_code === 'BR')); setShowSug(true); } catch { /* */ }
+  };
+  const pickCidade = (r) => { setF(s => ({ ...s, cidade: r.name, uf: UF_MAP[r.admin1] || s.uf, lat: s.lat ?? r.latitude, lng: s.lng ?? r.longitude })); setShowSug(false); setCitySug([]); };
 
   if (!open) {
     return (
@@ -83,10 +92,16 @@ export default function NewPhotographerForm() {
           <div style={{ fontWeight: 800, marginBottom: 10 }}>1. Você e o ponto</div>
           <input style={inp} placeholder="Seu nome / estúdio" value={f.nome} onChange={e => setF(s => ({ ...s, nome: e.target.value }))} />
           <input style={inp} placeholder="Trecho/ponto (ex: Serra do Rio do Rastro)" value={f.local} onChange={e => setF(s => ({ ...s, local: e.target.value }))} />
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 80px', gap: 8 }}>
-            <input style={inp} placeholder="Cidade" value={f.cidade} onChange={e => setF(s => ({ ...s, cidade: e.target.value }))} />
-            <input style={inp} placeholder="UF" maxLength={2} value={f.uf} onChange={e => setF(s => ({ ...s, uf: e.target.value.toUpperCase() }))} />
+          <div style={{ position: 'relative' }}>
+            <input style={inp} placeholder="Cidade — escolha na lista" value={f.cidade}
+              onChange={e => { setF(s => ({ ...s, cidade: e.target.value })); buscarCidade(e.target.value); }} />
+            {showSug && citySug.length > 0 && (
+              <ul className="autocomplete-list" style={{ position: 'absolute', width: '100%', zIndex: 50, marginTop: -8 }}>
+                {citySug.map((r, i) => <li key={i} onClick={() => pickCidade(r)}>{r.name} <small>{r.admin1}{UF_MAP[r.admin1] ? ` · ${UF_MAP[r.admin1]}` : ''}</small></li>)}
+              </ul>
+            )}
           </div>
+          {f.cidade && f.uf && <p style={{ fontSize: 12, color: 'var(--moss)', marginTop: -4 }}>✓ {f.cidade} / {f.uf}</p>}
         </Step>
 
         {/* 2 — Contato */}
