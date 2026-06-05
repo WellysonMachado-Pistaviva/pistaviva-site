@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap, Polyline } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap, Polyline, LayersControl } from 'react-leaflet';
+import { TILES } from '../lib/mapTiles';
 import { Camera, Plus, X, Search } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -590,10 +591,17 @@ const MapPage = ({ user }) => {
       {/* Map */}
       <div style={{ flex: 1, borderRadius: 'var(--radius)', overflow: 'hidden', border: '1px solid var(--border)', minHeight: '420px' }}>
         <MapContainer center={[-22.5, -48.5]} zoom={5} style={{ height: '100%', width: '100%', minHeight: '420px' }}>
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+          <LayersControl position="topright">
+            <LayersControl.BaseLayer checked name={TILES.topo.label}>
+              <TileLayer attribution={TILES.topo.attribution} url={TILES.topo.url} />
+            </LayersControl.BaseLayer>
+            <LayersControl.BaseLayer name={TILES.satelite.label}>
+              <TileLayer attribution={TILES.satelite.attribution} url={TILES.satelite.url} />
+            </LayersControl.BaseLayer>
+            <LayersControl.BaseLayer name={TILES.escuro.label}>
+              <TileLayer attribution={TILES.escuro.attribution} url={TILES.escuro.url} subdomains="abcd" />
+            </LayersControl.BaseLayer>
+          </LayersControl>
           <MapClickHandler isAdding={isAdding} onMapClick={handleMapClick} />
           <MapResizer />
           <FitMonuments active={fitMonuments} />
