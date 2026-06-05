@@ -8,6 +8,16 @@ const BASE = 'https://www.pistavivamototurismo.com.br';
 // Data do último deploy / atualização geral do site
 const LAST_BUILD = new Date().toISOString();
 
+// Next 15 não escapa & em <image:loc> → quebra o parse do Google. Escapa XML na mão.
+const xmlEscape = (u) =>
+  String(u || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+const safeImages = (url) => (url ? { images: [xmlEscape(url)] } : {});
+
 export default async function sitemap() {
   // ── Páginas estáticas com prioridades e frequências específicas ──
   const staticPages = [
@@ -61,7 +71,7 @@ export default async function sitemap() {
       lastModified: s.published_at ? new Date(s.published_at).toISOString() : LAST_BUILD,
       changeFrequency: 'monthly',
       priority: 0.7,
-      ...(s.cover_url ? { images: [s.cover_url] } : {}),
+      ...safeImages(s.cover_url),
     }));
   } catch { /* DB indisponível no build */ }
 
@@ -74,7 +84,7 @@ export default async function sitemap() {
       lastModified: s.created_at ? new Date(s.created_at).toISOString() : LAST_BUILD,
       changeFrequency: 'weekly',
       priority: 0.7,
-      ...(s.cover_url ? { images: [s.cover_url] } : {}),
+      ...safeImages(s.cover_url),
     }));
   } catch { /* DB indisponível no build */ }
 
