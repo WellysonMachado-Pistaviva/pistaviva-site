@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Plus, KeyRound, Map as MapIcon, ShieldCheck, Share2, Send, Pin, MessageSquare, X } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { TILES } from '../lib/mapTiles';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { joinComboioChannel, updateComboioLocation, leaveComboioChannel, sendComboioChat, updatePinnedMessage } from '../services/realtime';
@@ -381,7 +382,7 @@ const Comboio = ({ user, openAuthModal }) => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100dvh - 120px - env(safe-area-inset-bottom))', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', ...(activeComboio ? { height: 'calc(100dvh - 120px - env(safe-area-inset-bottom))', overflow: 'hidden' } : { minHeight: 'auto', paddingBottom: 'calc(84px + env(safe-area-inset-bottom))' }) }}>
       {!activeComboio && (
         <div className="page-header" style={{ marginBottom: '20px' }}>
           <h1 className="page-title">MEUS COMBOIOS</h1>
@@ -584,7 +585,7 @@ const Comboio = ({ user, openAuthModal }) => {
 
                 <div style={{ flex: 1, borderRadius: 'var(--radius)', overflow: 'hidden', border: '1px solid var(--border)' }}>
                   <MapContainer center={[-15, -50]} zoom={4} style={{ height: '100%', width: '100%' }}>
-                    <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+                    <TileLayer attribution={TILES.topo.attribution} url={TILES.topo.url} />
                     <AutoCenterMap pins={pins} />
 
                     {pins.map(p => {
