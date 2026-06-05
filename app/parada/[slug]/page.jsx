@@ -51,6 +51,7 @@ export default async function ParadaPage({ params }) {
 
   const mapsUrl = s.lat && s.lng ? `https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}` : null;
   const ativos = SELOS.filter(sl => (s.selos || []).includes(sl.id));
+  const fotos = ((s.fotos && s.fotos.length ? s.fotos : (s.cover_url ? [s.cover_url] : [])) || []).filter(Boolean).slice(0, 3);
 
   return (
     <div className="ignis ph-page">
@@ -74,8 +75,15 @@ export default async function ParadaPage({ params }) {
           <div className="ph-layout">
             <div>
               <div className="ph-heroph">
-                {s.cover_url ? <Cover src={s.cover_url} alt={s.nome} sizes="(max-width:900px) 100vw, 680px" priority /> : <span className="pic-ph">📍</span>}
+                {fotos[0] ? <Cover src={fotos[0]} alt={s.nome} sizes="(max-width:900px) 100vw, 680px" priority /> : <span className="pic-ph">📍</span>}
               </div>
+              {fotos.length > 1 && (
+                <div className="ph-gallery">
+                  {fotos.slice(1).map((src, i) => (
+                    <div className="ph-thumb" key={i}><img src={src} alt={`${s.nome} ${i + 2}`} loading="lazy" /></div>
+                  ))}
+                </div>
+              )}
               <div className="ph-bio">
                 {s.descricao && <p>{s.descricao}</p>}
                 <div className="place"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></svg> {[s.cidade, s.uf].filter(Boolean).join(' · ')}</div>

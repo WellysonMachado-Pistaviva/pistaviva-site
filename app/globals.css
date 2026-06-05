@@ -1079,6 +1079,11 @@ body.pg-locked{ overflow:hidden; }
   .ph-filterbar > a { flex-shrink: 0; white-space: nowrap; }
 }
 
+/* ===== Galeria de fotos da parada (até 3) ===== */
+.ph-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.ph-thumb { aspect-ratio: 16/10; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); background: var(--ink-2, #16161a); }
+.ph-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
 /* ===== Rail de Destinos (cards horizontais: foto + nome) ===== */
 .dr-rail {
   display: flex; gap: 14px; overflow-x: auto; padding: 4px var(--gut, 16px) 14px;
