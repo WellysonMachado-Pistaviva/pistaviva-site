@@ -14,7 +14,7 @@ const SECTIONS = [
     extra: () => ({ href: '/admin/blog', label: 'Editor completo' }),
   },
   {
-    id: 'paradas', table: 'pv_spots', label: 'Paradas', mode: 'published', featured: true,
+    id: 'paradas', table: 'pv_spots', label: 'Paradas', mode: 'published', featured: true, photos: true,
     title: r => r.nome, sub: r => `${r.categoria} · ${[r.cidade, r.uf].filter(Boolean).join('/')}${r.featured ? ' · ⭐destaque' : ''}`,
     edit: [{ k: 'nome', l: 'Nome' }, { k: 'categoria', l: 'Categoria' }, { k: 'cidade', l: 'Cidade' }, { k: 'uf', l: 'UF' }, { k: 'descricao', l: 'Descrição' }, { k: 'selos', l: 'Selos (vírgula: asfalto,descanso,gear,sabor)', arr: true }],
   },
@@ -81,6 +81,37 @@ function Section({ cfg }) {
     showToast('Salvo ✓', 'success'); setEditing(null); load();
   };
 
+  // ── Gerenciador de fotos (até 3) — só pra seções com cfg.photos ──
+  const [photoRow, setPhotoRow] = useState(null);
+  const [pfotos, setPfotos] = useState([]);
+  const [pbusy, setPbusy] = useState(false);
+  const openPhotos = (row) => {
+    const arr = (row.fotos && row.fotos.length ? row.fotos : (row.cover_url ? [row.cover_url] : [])).filter(Boolean).slice(0, 3);
+    setPfotos(arr); setPhotoRow(row);
+  };
+  const addPhoto = async (e) => {
+    const file = e.target.files?.[0]; if (!file) return;
+    if (pfotos.length >= 3) { showToast('Máximo de 3 fotos', 'error'); return; }
+    if (file.size > 6 * 1024 * 1024) { showToast('Imagem muito pesada (máx 6MB)', 'error'); return; }
+    setPbusy(true);
+    try {
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+      const path = `spots/spot-${Date.now()}.${ext}`;
+      const { error } = await supabase.storage.from('post-images').upload(path, file, { upsert: true, contentType: file.type });
+      if (error) throw error;
+      const { data } = supabase.storage.from('post-images').getPublicUrl(path);
+      setPfotos(p => [...p, data.publicUrl].slice(0, 3));
+    } catch (err) { showToast('Erro no upload: ' + err.message, 'error'); }
+    setPbusy(false); e.target.value = '';
+  };
+  const savePhotos = async () => {
+    setPbusy(true);
+    const { error } = await supabase.from(cfg.table).update({ fotos: pfotos, cover_url: pfotos[0] || null }).eq('id', photoRow.id);
+    setPbusy(false);
+    if (error) return showToast('Erro: ' + error.message, 'error');
+    showToast('Fotos salvas ✓', 'success'); setPhotoRow(null); load();
+  };
+
   const inp = { width: '100%', padding: '9px 11px', marginBottom: 9, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)', fontFamily: 'inherit', fontSize: 14 };
 
   return (
@@ -102,6 +133,7 @@ function Section({ cfg }) {
                 </div>
                 <button className="btn btn--ghost" style={{ padding: '.45rem .8rem' }} onClick={() => toggle(row)}>{vis ? 'Ocultar' : 'Mostrar'}</button>
                 {cfg.featured && <button className="btn btn--ghost" style={{ padding: '.45rem .8rem', borderColor: row.featured ? 'var(--clay)' : 'var(--border)', color: row.featured ? 'var(--clay)' : 'var(--text)' }} onClick={() => toggleFeatured(row)}>{row.featured ? '★' : '☆'}</button>}
+                {cfg.photos && <button className="btn btn--ghost" style={{ padding: '.45rem .8rem' }} onClick={() => openPhotos(row)}>📷 Fotos</button>}
                 {cfg.edit.length > 0 && <button className="btn btn--ghost" style={{ padding: '.45rem .8rem' }} onClick={() => openEdit(row)}>Editar</button>}
                 <button className="btn btn--ghost" style={{ padding: '.45rem .8rem', borderColor: 'var(--danger)', color: 'var(--danger)' }} onClick={() => remove(row)}>Excluir</button>
               </div>
@@ -122,6 +154,32 @@ function Section({ cfg }) {
               </div>
             ))}
             <button className="btn btn--primary" onClick={saveEdit}>Salvar</button>
+          </div>
+        </div>
+      )}
+
+      {photoRow && (
+        <div className="modal-overlay" onClick={() => setPhotoRow(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 460, padding: 24 }}>
+            <button className="modal-close" onClick={() => setPhotoRow(null)}>×</button>
+            <h3 style={{ fontFamily: 'var(--display)', marginBottom: 4 }}>Fotos — {cfg.title(photoRow)}</h3>
+            <p style={{ fontSize: 12, color: 'var(--paper-mut)', marginBottom: 14 }}>Até 3 fotos. A 1ª é a capa.</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 14 }}>
+              {pfotos.map((src, i) => (
+                <div key={i} style={{ position: 'relative', aspectRatio: '1', borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)' }}>
+                  <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  {i === 0 && <span style={{ position: 'absolute', top: 4, left: 4, fontSize: 9, fontWeight: 800, background: 'var(--clay)', color: 'var(--ink)', padding: '2px 6px', borderRadius: 4 }}>CAPA</span>}
+                  <button type="button" onClick={() => setPfotos(p => p.filter((_, k) => k !== i))} style={{ position: 'absolute', top: 4, right: 4, width: 22, height: 22, borderRadius: '50%', background: 'rgba(0,0,0,.7)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 800 }}>×</button>
+                </div>
+              ))}
+              {pfotos.length < 3 && (
+                <label style={{ aspectRatio: '1', borderRadius: 8, border: '1.5px dashed var(--border)', display: 'grid', placeItems: 'center', cursor: 'pointer', color: 'var(--paper-mut)', fontSize: 13, textAlign: 'center' }}>
+                  {pbusy ? '…' : <span>📷<br />Adicionar</span>}
+                  <input type="file" accept="image/*" hidden onChange={addPhoto} disabled={pbusy} />
+                </label>
+              )}
+            </div>
+            <button className="btn btn--primary" onClick={savePhotos} disabled={pbusy}>{pbusy ? 'Salvando…' : 'Salvar fotos'}</button>
           </div>
         </div>
       )}

@@ -4,7 +4,7 @@ export async function getSpots({ uf, categoria, selo, limit = 100 } = {}) {
   try {
     const sb = supabaseServer();
     let q = sb.from('pv_spots')
-      .select('id, slug, nome, categoria, descricao, cidade, uf, selos, cover_url, author, reviews')
+      .select('id, slug, nome, categoria, descricao, cidade, uf, selos, cover_url, fotos, author, reviews')
       .eq('published', true)
       .order('created_at', { ascending: false })
       .limit(limit);
