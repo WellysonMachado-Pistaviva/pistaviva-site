@@ -19,6 +19,11 @@ const SECTIONS = [
     edit: [{ k: 'nome', l: 'Nome' }, { k: 'categoria', l: 'Categoria' }, { k: 'cidade', l: 'Cidade' }, { k: 'uf', l: 'UF' }, { k: 'descricao', l: 'Descrição' }, { k: 'selos', l: 'Selos (vírgula: asfalto,descanso,gear,sabor)', arr: true }],
   },
   {
+    id: 'rotas', table: 'pv_user_routes', label: 'Rotas', mode: 'published', photos: true, cover: false,
+    title: r => r.nome, sub: r => `${[r.origem, r.destino].filter(Boolean).join(' → ')}${r.dificuldade ? ' · ' + r.dificuldade : ''}`,
+    edit: [{ k: 'nome', l: 'Nome' }, { k: 'origem', l: 'Origem' }, { k: 'destino', l: 'Destino' }, { k: 'dificuldade', l: 'Dificuldade (Fácil/Intermediário/Avançado)' }, { k: 'descricao', l: 'Descrição' }],
+  },
+  {
     id: 'fotografos', table: 'pv_photographers', label: 'Fotógrafos', mode: 'published',
     title: r => r.nome, sub: r => [r.local, r.cidade, r.uf].filter(Boolean).join(' · '),
     edit: [{ k: 'nome', l: 'Nome' }, { k: 'local', l: 'Local/trecho' }, { k: 'cidade', l: 'Cidade' }, { k: 'uf', l: 'UF' }, { k: 'instagram', l: 'Instagram' }, { k: 'site_url', l: 'Site/galeria' }, { k: 'descricao', l: 'Descrição' }],
@@ -106,7 +111,9 @@ function Section({ cfg }) {
   };
   const savePhotos = async () => {
     setPbusy(true);
-    const { error } = await supabase.from(cfg.table).update({ fotos: pfotos, cover_url: pfotos[0] || null }).eq('id', photoRow.id);
+    const patch = { fotos: pfotos };
+    if (cfg.cover !== false) patch.cover_url = pfotos[0] || null;
+    const { error } = await supabase.from(cfg.table).update(patch).eq('id', photoRow.id);
     setPbusy(false);
     if (error) return showToast('Erro: ' + error.message, 'error');
     showToast('Fotos salvas ✓', 'success'); setPhotoRow(null); load();

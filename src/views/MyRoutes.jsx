@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Polyline, Marker, useMap } from 'react-leaflet
 import L from 'leaflet';
 import { useWeather } from '../hooks/useWeather';
 import { getRoutes, getPresetRoutes, getRouteComments, addRouteComment } from '../services/storage';
+import UserRoutesSection from './UserRoutesSection';
 
 const distMeters = (aLat, aLng, bLat, bLng) => {
   const R = 6371000, toR = Math.PI / 180;
@@ -314,6 +315,11 @@ const MyRoutes = ({ user, promptIdentity, identity, deviceId }) => {
             O ponto de partida é a <strong style={{ color: 'var(--text)', margin: '0 3px' }}>sua localização atual</strong>. Clique em "Navegar" para abrir o Google Maps com a rota calculada.
           </div>
 
+          <div style={{ marginBottom: 20 }}>
+            <UserRoutesSection promptIdentity={promptIdentity} identity={identity} deviceId={deviceId} />
+          </div>
+
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 12 }}>Roteiros curados</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {filtered.length > 0
               ? filtered.map(r => <RouteCard key={r.id} route={r} user={user} userLocation={userLocation} promptIdentity={promptIdentity} identity={identity} deviceId={deviceId} />)
