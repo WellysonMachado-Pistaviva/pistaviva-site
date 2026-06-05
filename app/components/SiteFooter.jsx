@@ -12,6 +12,8 @@ export default function SiteFooter() {
           <div className="foot-col">
             <h5>Conteúdo</h5>
             <Link href="/comunidade">Comunidade</Link>
+            <Link href="/mototurismo">Mototurismo por estado</Link>
+            <Link href="/estradas">Estradas icônicas</Link>
             <Link href="/paradas">Paradas</Link>
             <Link href="/blog">Blog</Link>
             <Link href="/diretorio-duas-rodas">Diretório Duas Rodas</Link>
