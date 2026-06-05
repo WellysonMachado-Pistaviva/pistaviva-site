@@ -5,6 +5,8 @@ import { supabase } from '../../src/lib/supabaseClient';
 const AuthCtx = createContext(null);
 export const useAuth = () => useContext(AuthCtx);
 
+const UF_MAP = { 'Acre': 'AC', 'Alagoas': 'AL', 'Amapá': 'AP', 'Amazonas': 'AM', 'Bahia': 'BA', 'Ceará': 'CE', 'Distrito Federal': 'DF', 'Espírito Santo': 'ES', 'Goiás': 'GO', 'Maranhão': 'MA', 'Mato Grosso': 'MT', 'Mato Grosso do Sul': 'MS', 'Minas Gerais': 'MG', 'Pará': 'PA', 'Paraíba': 'PB', 'Paraná': 'PR', 'Pernambuco': 'PE', 'Piauí': 'PI', 'Rio de Janeiro': 'RJ', 'Rio Grande do Norte': 'RN', 'Rio Grande do Sul': 'RS', 'Rondônia': 'RO', 'Roraima': 'RR', 'Santa Catarina': 'SC', 'São Paulo': 'SP', 'Sergipe': 'SE', 'Tocantins': 'TO' };
+
 let toastTimeout;
 export const showToast = (msg, type = '') => {
   if (typeof document === 'undefined') return;
@@ -42,7 +44,14 @@ export default function AuthProvider({ children }) {
   // ── Modal de identificação pública (nome + cidade/UF) ──
   const [identOpen, setIdentOpen] = useState(false);
   const [identForm, setIdentForm] = useState({ nome: '', cidade: '', uf: '' });
+  const [citySug, setCitySug] = useState([]);
+  const [showSug, setShowSug] = useState(false);
   const identResolver = useRef(null);
+  const buscarCidade = async (q) => {
+    if (q.length < 3) { setCitySug([]); return; }
+    try { const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&language=pt&count=8`); const d = await res.json(); setCitySug((d.results || []).filter(r => r.country_code === 'BR')); setShowSug(true); } catch { /* */ }
+  };
+  const pickCidade = (r) => { setIdentForm(f => ({ ...f, cidade: r.name, uf: UF_MAP[r.admin1] || f.uf })); setShowSug(false); setCitySug([]); };
 
   // ── Admin (Supabase email/senha — só no /admin) ──
   const [adminEmail, setAdminEmail] = useState(null);
@@ -163,12 +172,17 @@ export default function AuthProvider({ children }) {
             <input style={inp} type="text" placeholder="Seu nome" value={identForm.nome} autoFocus autoComplete="name"
               onChange={e => setIdentForm(f => ({ ...f, nome: e.target.value }))}
               onKeyDown={e => e.key === 'Enter' && submitIdentity()} />
-            <div style={{ display: 'flex', gap: 10 }}>
-              <input style={{ ...inp, flex: 1 }} type="text" placeholder="Cidade" value={identForm.cidade}
-                onChange={e => setIdentForm(f => ({ ...f, cidade: e.target.value }))} />
+            <div style={{ display: 'flex', gap: 10, position: 'relative' }}>
+              <input style={{ ...inp, flex: 1 }} type="text" placeholder="Cidade — escolha na lista" value={identForm.cidade}
+                onChange={e => { setIdentForm(f => ({ ...f, cidade: e.target.value })); buscarCidade(e.target.value); }} />
               <input style={{ ...inp, width: 80 }} type="text" placeholder="UF" maxLength={2} value={identForm.uf}
                 onChange={e => setIdentForm(f => ({ ...f, uf: e.target.value }))}
                 onKeyDown={e => e.key === 'Enter' && submitIdentity()} />
+              {showSug && citySug.length > 0 && (
+                <ul className="autocomplete-list" style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 50 }}>
+                  {citySug.map((r, i) => <li key={i} onClick={() => pickCidade(r)}>{r.name} <small>{r.admin1}{UF_MAP[r.admin1] ? ` · ${UF_MAP[r.admin1]}` : ''}</small></li>)}
+                </ul>
+              )}
             </div>
             <button className="btn-primary" onClick={submitIdentity}>Continuar</button>
             <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--paper-mut)', marginTop: 10, marginBottom: 0 }}>Sem cadastro, sem senha. Comunidade aberta.</p>
