@@ -5,6 +5,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useWeather } from '../hooks/useWeather';
 import { TILES } from '../lib/mapTiles';
+import RideNav from './RideNav';
 import { addRoute, saveCurrentRoute } from '../services/storage';
 import { supabase } from '../lib/supabaseClient';
 
@@ -59,6 +60,7 @@ const Planner = ({ user }) => {
   const [showStory, setShowStory] = useState(false);
   const [sharing, setSharing]     = useState(false);
   const [routeMode, setRouteMode] = useState('rapida'); // 'rapida' (OSRM) | 'curva' (BRouter)
+  const [riding, setRiding]       = useState(false);
 
   const [photographers, setPhotographers] = useState([]);
 
@@ -431,6 +433,9 @@ const Planner = ({ user }) => {
                 <Share2 size={18} />
               </button>
             </div>
+            <button className="btn-primary" style={{ width:'100%', marginTop:10 }} onClick={()=>setRiding(true)}>
+              <Navigation size={16} /> INICIAR VIAGEM (GPS)
+            </button>
             <button className="btn-ghost" style={{ width:'100%', marginTop:8, color:'var(--accent)', borderColor:'var(--accent)' }} onClick={()=>setShowStory(true)}>
               <Camera size={16} /> Criar card pra Stories
             </button>
@@ -442,6 +447,11 @@ const Planner = ({ user }) => {
           </div>{/* .pg-grid */}
         </div>{/* .wrap */}
       </main>
+
+      {/* ── NAVEGAÇÃO GPS (tela cheia) ── */}
+      {riding && result && (
+        <RideNav line={result.line} dest={{ lat: dest.lat, lng: dest.lng }} originName={origin.name} destName={dest.name} onClose={() => setRiding(false)} />
+      )}
 
       {/* ── CARD PRA STORIES (9:16, estilo Strava) ── */}
       {showStory && result && (() => {
