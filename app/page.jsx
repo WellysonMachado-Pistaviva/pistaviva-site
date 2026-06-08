@@ -55,6 +55,18 @@ export default async function Home() {
       {/* H1 da home — visual é o carrossel acima; este título serve ao SEO */}
       <h1 className="sr-only">Pistaviva — Mototurismo, rotas e comunidade aberta sobre duas rodas no Brasil</h1>
 
+      {/* Faixa "Bora Rodar?" — entrada diária pro painel de condições */}
+      <div className="wrap" style={{ paddingTop: 14 }}>
+        <Link href="/bora-rodar" className="bora-band" aria-label="Ver se está bom pra rodar de moto hoje">
+          <span className="bora-band-ic" aria-hidden="true">🏍️</span>
+          <span className="bora-band-txt">
+            <strong>Bora rodar hoje?</strong>
+            <span>Veja o clima e o índice de pilotagem da sua cidade</span>
+          </span>
+          <span className="bora-band-arr" aria-hidden="true">→</span>
+        </Link>
+      </div>
+
       {/* faixa de specs (stats da comunidade) */}
       <section className="ig-spec-strip ig-spec-strip--solo">
         <div className="wrap">
