@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MessageSquare, Heart, Camera, Send, X, Image as ImageIcon } from 'lucide-react';
 import { getPosts, addPost, likePost, addComment, uploadPostImage, reportContent } from '../services/storage';
+import PhotoCarousel from '../../app/components/PhotoCarousel';
 
 const showErr = (msg) => {
   const el = document.getElementById('app-toast');
@@ -28,7 +29,7 @@ const Feed = ({ deviceId = 'anon', identity, promptIdentity }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isPosting, setIsPosting] = useState(false);
-  const [newPost, setNewPost] = useState({ name: identity?.nome || '', originCity: identity?.cidade || '', originUf: identity?.uf || '', city: '', uf: '', category: 'viagem', comment: '', image: '' });
+  const [newPost, setNewPost] = useState({ name: identity?.nome || '', originCity: identity?.cidade || '', originUf: identity?.uf || '', city: '', uf: '', category: 'viagem', comment: '', images: [] });
   const [commentInputs, setCommentInputs] = useState({});
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -66,17 +67,19 @@ const Feed = ({ deviceId = 'anon', identity, promptIdentity }) => {
   };
 
   const handlePost = async () => {
-    if (!newPost.name || !newPost.city || !newPost.comment || !newPost.image) return;
+    if (!newPost.name || !newPost.city || !newPost.comment || !newPost.images?.length) return;
     setIsPosting(false); // Hide immediately for better UX
-    let imageUrl = newPost.image;
-    if (imageUrl.startsWith('data:')) {
-      imageUrl = (await uploadPostImage(imageUrl, deviceId)) || imageUrl;
+    const urls = [];
+    for (const im of newPost.images) {
+      let u = im;
+      if (u.startsWith('data:')) u = (await uploadPostImage(u, deviceId)) || u;
+      urls.push(u);
     }
     const origin = [newPost.originCity?.trim(), newPost.originUf?.trim()].filter(Boolean).join('/');
     const signature = origin ? `${newPost.name.trim()} · ${origin}` : newPost.name.trim();
-    const result = await addPost({ ...newPost, image: imageUrl, user: signature }, deviceId);
+    const result = await addPost({ ...newPost, images: urls, image: urls[0], user: signature }, deviceId);
     if (result?.ok) {
-      setNewPost({ name: newPost.name, originCity: newPost.originCity, originUf: newPost.originUf, city: '', uf: '', category: 'viagem', comment: '', image: '' });
+      setNewPost({ name: newPost.name, originCity: newPost.originCity, originUf: newPost.originUf, city: '', uf: '', category: 'viagem', comment: '', images: [] });
       loadPosts(); // Refresh feed
     } else {
       showErr('Erro ao publicar. Verifique sua conexão e tente novamente.');
@@ -170,38 +173,36 @@ const Feed = ({ deviceId = 'anon', identity, promptIdentity }) => {
               <button className="btn-ghost" onClick={() => setIsPosting(false)}><X size={20} /></button>
             </div>
 
-            {/* Image upload — always square */}
+            {/* Image upload — múltiplas fotos (até 5, viram carrossel) */}
             <div className="calc-field">
-              <label>Foto da Galeria</label>
-              <div
-                style={{
-                  aspectRatio: '1/1', border: '2px dashed var(--border)', borderRadius: 'var(--radius-sm)',
-                  cursor: 'pointer', overflow: 'hidden', display: 'flex', alignItems: 'center',
-                  justifyContent: 'center', background: 'rgba(255,255,255,.02)', position: 'relative',
-                  transition: 'var(--transition)',
-                }}
-                onClick={() => document.getElementById('file-upload').click()}
-                onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent)'}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
-              >
-                {newPost.image ? (
-                  <img src={newPost.image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : (
-                  <div style={{ textAlign: 'center' }}>
-                    <ImageIcon size={36} color="var(--accent)" style={{ marginBottom: '8px' }} />
-                    <p style={{ fontSize: '13px', color: 'var(--muted)' }}>Toque para selecionar</p>
+              <label>Fotos da galeria (até 5)</label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                {newPost.images.map((src, i) => (
+                  <div key={i} style={{ position: 'relative', aspectRatio: '1/1', borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border)' }}>
+                    <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <button type="button" onClick={() => setNewPost(p => ({ ...p, images: p.images.filter((_, k) => k !== i) }))}
+                      style={{ position: 'absolute', top: 4, right: 4, width: 22, height: 22, borderRadius: '50%', border: 'none', background: 'rgba(0,0,0,.7)', color: '#fff', cursor: 'pointer', display: 'grid', placeItems: 'center' }} aria-label="Remover foto"><X size={13} /></button>
+                    {i === 0 && <span style={{ position: 'absolute', bottom: 4, left: 4, fontSize: 9, fontWeight: 800, background: 'var(--accent)', color: '#fff', padding: '2px 6px', borderRadius: 4 }}>CAPA</span>}
+                  </div>
+                ))}
+                {newPost.images.length < 5 && (
+                  <div onClick={() => document.getElementById('file-upload').click()}
+                    style={{ aspectRatio: '1/1', border: '2px dashed var(--border)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'rgba(255,255,255,.02)' }}>
+                    <ImageIcon size={28} color="var(--accent)" />
+                    <p style={{ fontSize: '11px', color: 'var(--muted)' }}>Adicionar</p>
                   </div>
                 )}
-                <input id="file-upload" type="file" accept="image/*" style={{ display: 'none' }}
-                  onChange={e => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onload = ev => setNewPost({ ...newPost, image: ev.target.result });
-                      reader.readAsDataURL(file);
-                    }
-                  }} />
               </div>
+              <input id="file-upload" type="file" accept="image/*" multiple style={{ display: 'none' }}
+                onChange={e => {
+                  const files = Array.from(e.target.files || []);
+                  files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = ev => setNewPost(p => (p.images.length >= 5 ? p : { ...p, images: [...p.images, ev.target.result].slice(0, 5) }));
+                    reader.readAsDataURL(file);
+                  });
+                  e.target.value = '';
+                }} />
             </div>
 
             {/* Identificação — nome + de onde é (sem login) */}
@@ -286,9 +287,11 @@ const Feed = ({ deviceId = 'anon', identity, promptIdentity }) => {
           </div>
         ) : visiblePosts.map(post => (
           <div key={post.id} className="dest-card featured glass" style={{ overflow: 'hidden' }}>
-            {/* Square image */}
-            <div style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden', flexShrink: 0 }}>
-              <img src={post.image} alt={post.city} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            {/* Foto(s) — carrossel quando tem mais de uma */}
+            <div style={{ width: '100%', flexShrink: 0 }}>
+              {(post.images && post.images.length > 1)
+                ? <PhotoCarousel images={post.images} height={400} alt={post.city} radius={0} />
+                : <div style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden' }}><img src={post.image} alt={post.city} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>}
             </div>
             <div style={{ padding: '16px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>

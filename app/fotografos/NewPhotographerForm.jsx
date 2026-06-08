@@ -7,7 +7,7 @@ import { useAuth, showToast } from '../components/AuthProvider';
 import Stepper, { Step } from '../components/Stepper';
 import { slugify } from '../lib/spotMeta';
 
-const EMPTY = { nome: '', cidade: '', uf: '', local: '', instagram: '', site_url: '', whatsapp: '', descricao: '', lat: null, lng: null, cover_url: '', horario_dias: [], horario_inicio: '', horario_fim: '' };
+const EMPTY = { nome: '', cidade: '', uf: '', local: '', instagram: '', site_url: '', whatsapp: '', descricao: '', lat: null, lng: null, cover_url: '', images: [], horario_dias: [], horario_inicio: '', horario_fim: '' };
 const DIAS = [['Dom', 0], ['Seg', 1], ['Ter', 2], ['Qua', 3], ['Qui', 4], ['Sex', 5], ['Sáb', 6]];
 const UF_MAP = { 'Acre': 'AC', 'Alagoas': 'AL', 'Amapá': 'AP', 'Amazonas': 'AM', 'Bahia': 'BA', 'Ceará': 'CE', 'Distrito Federal': 'DF', 'Espírito Santo': 'ES', 'Goiás': 'GO', 'Maranhão': 'MA', 'Mato Grosso': 'MT', 'Mato Grosso do Sul': 'MS', 'Minas Gerais': 'MG', 'Pará': 'PA', 'Paraíba': 'PB', 'Paraná': 'PR', 'Pernambuco': 'PE', 'Piauí': 'PI', 'Rio de Janeiro': 'RJ', 'Rio Grande do Norte': 'RN', 'Rio Grande do Sul': 'RS', 'Rondônia': 'RO', 'Roraima': 'RR', 'Santa Catarina': 'SC', 'São Paulo': 'SP', 'Sergipe': 'SE', 'Tocantins': 'TO' };
 
@@ -47,26 +47,36 @@ export default function NewPhotographerForm() {
       () => setGeo('não foi possível obter o GPS'), { enableHighAccuracy: true, timeout: 8000 });
   };
   const onImage = async (e) => {
-    const file = e.target.files?.[0]; if (!file) return;
+    const files = Array.from(e.target.files || []); if (!files.length) return;
     setUploading(true);
-    const r = new FileReader();
-    r.onload = async () => { const url = await uploadPostImage(r.result, auth.user?.id || 'foto'); if (url) setF(s => ({ ...s, cover_url: url })); setUploading(false); };
-    r.readAsDataURL(file);
+    for (const file of files) {
+      if ((f.images?.length || 0) >= 6) break;
+      const dataUrl = await new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(file); });
+      const url = await uploadPostImage(dataUrl, auth.user?.id || 'foto');
+      if (url) setF(s => ({ ...s, images: [...(s.images || []), url].slice(0, 6), cover_url: s.cover_url || url }));
+    }
+    setUploading(false);
+    e.target.value = '';
   };
   const salvar = async () => {
     if (!f.nome.trim()) { showToast('Informe o nome', 'error'); return; }
     if (f.lat == null) { showToast('Marque a localização (GPS) do ponto', 'error'); return; }
     setSaving(true);
-    const { error } = await supabase.from('pv_photographers').insert({
+    const base = {
       slug: slugify(f.nome) + '-' + Math.random().toString(36).slice(2, 6),
       nome: f.nome.trim(), cidade: f.cidade.trim() || null, uf: f.uf ? f.uf.toUpperCase() : null,
       local: f.local.trim() || null, lat: f.lat, lng: f.lng,
       instagram: f.instagram.trim() || null, site_url: f.site_url.trim() || null, whatsapp: f.whatsapp.trim() || null,
-      descricao: f.descricao.trim() || null, cover_url: f.cover_url || null,
+      descricao: f.descricao.trim() || null,
+      cover_url: (f.images && f.images[0]) || f.cover_url || null,
       horario_dias: f.horario_dias.length ? f.horario_dias : null,
       horario_inicio: f.horario_inicio || null, horario_fim: f.horario_fim || null,
       author_id: String(auth.user?.id || ''), published: true,
-    });
+    };
+    let { error } = await supabase.from('pv_photographers').insert({ ...base, images: f.images || [] });
+    if (error && /images/i.test(error.message || '')) {
+      ({ error } = await supabase.from('pv_photographers').insert(base)); // banco sem coluna images
+    }
     setSaving(false);
     if (error) { showToast('Erro: ' + error.message, 'error'); return; }
     showToast('Fotógrafo cadastrado ✓', 'success');
@@ -121,9 +131,18 @@ export default function NewPhotographerForm() {
             <button className="btn btn--ghost" type="button" onClick={pegarGeo}>📍 Marcar GPS exato (opcional)</button>
             <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-dim)' }}>{geo || (f.lat ? `✓ ${f.lat.toFixed(3)}, ${f.lng.toFixed(3)}` : '')}</span>
           </div>
-          <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-            <label className="btn btn--ghost" style={{ cursor: 'pointer', margin: 0 }}>{uploading ? 'Enviando…' : '📷 Foto de capa'}<input type="file" accept="image/*" hidden onChange={onImage} /></label>
-            {f.cover_url && <img src={f.cover_url} alt="" style={{ height: 50, borderRadius: 6 }} />}
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+            {(f.images || []).map((src, i) => (
+              <div key={i} style={{ position: 'relative' }}>
+                <img src={src} alt="" style={{ height: 56, width: 56, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border)' }} />
+                <button type="button" onClick={() => setF(s => ({ ...s, images: s.images.filter((_, k) => k !== i), cover_url: '' }))}
+                  style={{ position: 'absolute', top: -6, right: -6, width: 20, height: 20, borderRadius: '50%', border: 'none', background: 'rgba(0,0,0,.75)', color: '#fff', cursor: 'pointer' }} aria-label="Remover">×</button>
+                {i === 0 && <span style={{ position: 'absolute', bottom: 2, left: 2, fontSize: 8, fontWeight: 800, background: 'var(--accent,#ff5a00)', color: '#fff', padding: '1px 5px', borderRadius: 3 }}>CAPA</span>}
+              </div>
+            ))}
+            {(f.images?.length || 0) < 6 && (
+              <label className="btn btn--ghost" style={{ cursor: 'pointer', margin: 0 }}>{uploading ? 'Enviando…' : '📷 Fotos (até 6)'}<input type="file" accept="image/*" multiple hidden onChange={onImage} /></label>
+            )}
           </div>
         </Step>
 
