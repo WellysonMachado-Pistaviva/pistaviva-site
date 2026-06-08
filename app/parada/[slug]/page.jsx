@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Cover from '../../components/Cover';
+import PhotoCarousel from '../../components/PhotoCarousel';
 import { notFound } from 'next/navigation';
 import { getSpotBySlug, getAllSpotSlugs } from '../../lib/spots';
 import { SELOS, catNome } from '../../lib/spotMeta';
@@ -83,14 +84,13 @@ export default async function ParadaPage({ params }) {
 
           <div className="ph-layout">
             <div>
-              <div className="ph-heroph">
-                {fotos[0] ? <Cover src={fotos[0]} alt={s.nome} sizes="(max-width:900px) 100vw, 680px" priority /> : <span className="pic-ph">📍</span>}
-              </div>
-              {fotos.length > 1 && (
-                <div className="ph-gallery">
-                  {fotos.slice(1).map((src, i) => (
-                    <div className="ph-thumb" key={i}><img src={src} alt={`${s.nome} ${i + 2}`} loading="lazy" /></div>
-                  ))}
+              {fotos.length > 1 ? (
+                <div className="ph-heroph" style={{ height: 'auto' }}>
+                  <PhotoCarousel images={fotos} height={420} alt={s.nome} radius={14} />
+                </div>
+              ) : (
+                <div className="ph-heroph">
+                  {fotos[0] ? <Cover src={fotos[0]} alt={s.nome} sizes="(max-width:900px) 100vw, 680px" priority /> : <span className="pic-ph">📍</span>}
                 </div>
               )}
               <div className="ph-bio">

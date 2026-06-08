@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { MapPin, Navigation, Send, Camera, X, Plus } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { uploadPostImage, getRouteComments, addRouteComment } from '../services/storage';
+import PhotoCarousel from '../../app/components/PhotoCarousel';
 
 const DIFFS = ['Fácil', 'Intermediário', 'Avançado'];
 const DIFF_COLOR = { 'Fácil': '#22c55e', 'Intermediário': '#eab308', 'Avançado': '#ef4444' };
@@ -61,9 +62,7 @@ function UserRouteCard({ route, promptIdentity, identity, deviceId }) {
   return (
     <div style={{ background: 'var(--bg2)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', overflow: 'hidden' }}>
       {fotos.length > 0 && (
-        <div style={{ display: 'flex', gap: 8, overflowX: 'auto', padding: 8, scrollSnapType: 'x mandatory' }} className="ur-carousel">
-          {fotos.map((src, i) => <img key={i} src={src} alt="" loading="lazy" style={{ height: 170, minWidth: '78%', objectFit: 'cover', borderRadius: 10, scrollSnapAlign: 'start', flex: '0 0 auto' }} />)}
-        </div>
+        <PhotoCarousel images={fotos} height={200} alt={route.nome} radius={0} />
       )}
       <div style={{ padding: '16px 18px', cursor: 'pointer' }} onClick={() => setOpen(o => !o)}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
