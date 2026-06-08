@@ -193,13 +193,22 @@ export default function NewSpotForm() {
           <input style={inp} type="text" placeholder="Instagram (opcional) — @perfil ou link" value={form.instagram} onChange={e => setForm(f => ({ ...f, instagram: e.target.value }))} />
           <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--paper-mut)', margin: '6px 0 8px' }}>Comodidades (toque pra marcar)</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-            {SELOS.map(s => (
-              <button key={s.id} type="button" onClick={() => toggle(s.id)}
-                style={{ textAlign: 'left', padding: '10px 12px', borderRadius: 8, cursor: 'pointer', border: '1px solid var(--border)', background: selos[s.id] ? 'var(--clay)' : 'transparent', color: selos[s.id] ? 'var(--ink)' : 'var(--text)' }}>
-                <div style={{ fontWeight: 800, fontFamily: 'var(--display)' }}>{s.nome}</div>
-                <div style={{ fontSize: 11, opacity: .8 }}>{s.desc}</div>
-              </button>
-            ))}
+            {SELOS.map(s => {
+              const on = !!selos[s.id];
+              return (
+                <button key={s.id} type="button" onClick={() => toggle(s.id)} aria-pressed={on}
+                  style={{ display: 'flex', alignItems: 'center', gap: 10, textAlign: 'left', padding: '10px 12px', borderRadius: 10, cursor: 'pointer',
+                    border: `1.5px solid ${on ? 'var(--accent, #ff5a00)' : 'var(--border)'}`, background: on ? 'rgba(255,90,0,.1)' : 'transparent', transition: '.15s' }}>
+                  <span style={{ fontSize: 22, lineHeight: 1, flexShrink: 0 }} aria-hidden="true">{s.sigla}</span>
+                  <span style={{ flex: 1, minWidth: 0 }}>
+                    <span style={{ display: 'block', fontWeight: 800, fontFamily: 'var(--display)', fontSize: 13 }}>{s.nome}</span>
+                    <span style={{ display: 'block', fontSize: 11, opacity: .7 }}>{s.desc}</span>
+                  </span>
+                  <span aria-hidden="true" style={{ flexShrink: 0, width: 20, height: 20, borderRadius: 6, display: 'grid', placeItems: 'center',
+                    border: `2px solid ${on ? 'var(--accent, #ff5a00)' : 'var(--border)'}`, background: on ? 'var(--accent, #ff5a00)' : 'transparent', color: '#fff', fontSize: 12, fontWeight: 900 }}>{on ? '✓' : ''}</span>
+                </button>
+              );
+            })}
           </div>
         </Step>
       </Stepper>
