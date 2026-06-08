@@ -157,8 +157,8 @@ const Events = ({ user, openAuthModal }) => {
               onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
               onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.borderColor = 'var(--border)'; }}>
               {event.images && event.images.length > 1
-                ? <PhotoCarousel images={event.images} height={160} alt={event.title} radius={0} />
-                : event.imageUrl && <img src={event.imageUrl} alt={event.title} style={{ width: '100%', height: 160, objectFit: 'cover' }} />}
+                ? <PhotoCarousel images={event.images} height={180} alt={event.title} radius={0} fit="contain" />
+                : event.imageUrl && <img src={event.imageUrl} alt={event.title} style={{ width: '100%', height: 180, objectFit: 'contain', objectPosition: 'center', background: '#0d0d0f' }} />}
               <div style={{ padding: '22px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                   <span style={{ padding: '5px 11px', borderRadius: 6, fontSize: '10px', fontWeight: '700', letterSpacing: '.1em', textTransform: 'uppercase', fontFamily: 'var(--mono)', background: status.color, color: '#fff' }}>{status.label}</span>
@@ -239,8 +239,8 @@ const Events = ({ user, openAuthModal }) => {
           <div className="modal-overlay" onClick={() => setSelectedEvent(null)} style={{ alignItems: 'flex-end', padding: '0' }}>
             <div onClick={e => e.stopPropagation()} style={{ background: 'var(--bg2)', borderRadius: 'var(--radius) var(--radius) 0 0', border: '1px solid var(--border)', borderBottom: 'none', width: '100%', maxWidth: '640px', margin: '0 auto', maxHeight: '90vh', overflowY: 'auto', animation: 'slideUp .32s cubic-bezier(.34,1.36,.64,1)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
               {ev.images && ev.images.length > 1
-                ? <PhotoCarousel images={ev.images} height={200} alt={ev.title} radius={0} />
-                : ev.imageUrl && <img src={ev.imageUrl} alt={ev.title} style={{ width: '100%', height: 200, objectFit: 'cover' }} />}
+                ? <PhotoCarousel images={ev.images} height={220} alt={ev.title} radius={0} fit="contain" />
+                : ev.imageUrl && <img src={ev.imageUrl} alt={ev.title} style={{ width: '100%', height: 220, objectFit: 'contain', objectPosition: 'center', background: '#0d0d0f' }} />}
               <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '12px 20px 4px' }}>
                 <button onClick={() => setSelectedEvent(null)} style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--muted)' }}><X size={16} /></button>
               </div>

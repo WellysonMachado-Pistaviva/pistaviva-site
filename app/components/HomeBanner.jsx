@@ -89,9 +89,9 @@ export default function HomeBanner({ banners = [] }) {
                     alt={b.title || ''}
                     fill
                     sizes="100vw"
-                    quality={70}
+                    quality={75}
                     priority={k === 0}
-                    style={{ objectFit: 'cover', objectPosition: 'center' }}
+                    style={{ objectFit: 'contain', objectPosition: 'center' }}
                   />
                   <span className={tag.cls}><span className="dot" />{b.tag_label || tag.label}</span>
                 </div>
