@@ -1458,6 +1458,6 @@ body.pg-locked{ overflow:hidden; }
 .bora-band:hover{ border-color:#ff5a00; background:linear-gradient(100deg, rgba(255,90,0,.2), rgba(255,90,0,.06)); }
 .bora-band-ic{ font-size:30px; line-height:1; }
 .bora-band-txt{ display:flex; flex-direction:column; flex:1; min-width:0; }
-.bora-band-txt strong{ font-family:var(--display); font-weight:800; font-size:17px; color:var(--ink,#fff); text-transform:uppercase; letter-spacing:-.01em; }
+.bora-band-txt strong{ font-family:var(--display); font-weight:800; font-size:17px; color:#ff5a00; text-transform:uppercase; letter-spacing:-.01em; }
 .bora-band-txt span{ font-size:13px; color:var(--ink-soft,#9a9a9a); }
 .bora-band-arr{ font-size:22px; color:#ff5a00; font-weight:800; flex-shrink:0; }
