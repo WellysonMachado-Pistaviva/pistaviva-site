@@ -4,8 +4,15 @@ import { useAuth } from './AuthProvider';
 
 const Spinner = () => (
   <div className="wrap section" style={{ paddingTop: 'clamp(24px,4vw,48px)' }}>
-    <div className="skel-grid">
-      {Array.from({ length: 6 }).map((_, i) => <div key={i} className="skeleton skel-card" />)}
+    <div className="lead-skel">
+      <div className="skeleton lead-skel__primary" />
+      <div className="lead-skel__col">
+        <div className="skeleton lead-skel__wide" />
+        <div className="lead-skel__row">
+          <div className="skeleton lead-skel__half" />
+          <div className="skeleton lead-skel__half" />
+        </div>
+      </div>
     </div>
   </div>
 );
