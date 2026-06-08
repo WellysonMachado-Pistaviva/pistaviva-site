@@ -284,22 +284,7 @@ const MyRoutes = ({ user, promptIdentity, identity, deviceId }) => {
         <p className="page-subtitle">Destinos épicos curados pela comunidade</p>
       </div>
 
-      {/* Tabs */}
-      <div style={{ display: 'flex', background: 'var(--bg2)', padding: '4px', borderRadius: 'var(--radius)', marginBottom: '20px' }}>
-        {[
-          { id: 'comunidade', label: 'DA COMUNIDADE' },
-          { id: 'salvos',     label: `MEUS SALVOS (${savedRoutes.length})` },
-        ].map(t => (
-          <button key={t.id}
-            style={{ flex: 1, padding: '10px', borderRadius: '8px', border: 'none', background: activeTab === t.id ? 'var(--bg3)' : 'transparent', color: activeTab === t.id ? '#fff' : 'var(--muted)', fontWeight: 700, transition: '0.2s', fontFamily: 'var(--font)' }}
-            onClick={() => setActiveTab(t.id)}
-          >{t.label}</button>
-        ))}
-      </div>
-
-      {activeTab === 'comunidade' ? (
-        <>
-          <div style={{ position: 'relative', marginBottom: '12px' }}>
+      <div style={{ position: 'relative', marginBottom: '12px' }}>
             <MapPin size={14} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
             <input type="text" placeholder="Buscar roteiro, destino ou tag..." value={search} onChange={e => setSearch(e.target.value)} style={{ paddingLeft: '38px' }} />
           </div>
@@ -326,39 +311,6 @@ const MyRoutes = ({ user, promptIdentity, identity, deviceId }) => {
               : <div style={{ textAlign: 'center', padding: '40px', color: 'var(--muted)' }}>Nenhum roteiro encontrado.</div>
             }
           </div>
-        </>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          {savedRoutes.length > 0 ? savedRoutes.map(r => (
-            <div key={r.id} style={{ background: 'var(--bg2)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', padding: '18px 20px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
-                <div>
-                  <h3 style={{ fontSize: '15px', fontWeight: 800 }}>{r.name}</h3>
-                  <div style={{ fontSize: '12px', color: 'var(--muted)' }}>Salvo por {r.user} · {r.date}</div>
-                </div>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', fontSize: '13px', color: 'var(--text)' }}>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}><MapPin size={13} color="var(--accent)" /> {r.origin} <strong style={{ color: 'var(--muted)' }}>→</strong> {r.dest}</div>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}><Navigation size={13} color="var(--accent)" /> {r.distance} km {r.isRoundtrip ? '(Bate e Volta)' : ''}</div>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}><Clock size={13} color="var(--accent)" /> {r.duration}</div>
-              </div>
-              <button
-                className="btn-outline"
-                style={{ marginTop: '14px', fontSize: '12px', padding: '8px 16px' }}
-                onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(r.dest)}&travelmode=driving`, '_blank')}
-              >
-                <Navigation size={13} /> NAVEGAR ATÉ O DESTINO
-              </button>
-            </div>
-          )) : (
-            <div style={{ textAlign: 'center', padding: '48px 20px', color: 'var(--muted)' }}>
-              <BookOpen size={40} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
-              <p style={{ fontWeight: 700, marginBottom: '4px' }}>Nenhum roteiro salvo ainda.</p>
-              <p style={{ fontSize: '13px' }}>Use o Planejador para criar e salvar suas rotas.</p>
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 };

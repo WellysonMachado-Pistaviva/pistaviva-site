@@ -15,7 +15,7 @@ const Spinner = () => (
 // num só lugar (antes eram 4 rotas separadas). Reaproveita as views existentes.
 const TABS = [
   { id: 'planejar',   label: 'Planejar',     comp: dynamic(() => import('../../src/views/Planner'), { ssr: false, loading: Spinner }) },
-  { id: 'rotas',      label: 'Minhas rotas', comp: dynamic(() => import('../../src/views/MyRoutes'), { ssr: false, loading: Spinner }) },
+  { id: 'rotas',      label: 'Rotas cadastradas', comp: dynamic(() => import('../../src/views/MyRoutes'), { ssr: false, loading: Spinner }) },
   { id: 'trechos',    label: 'Trechos',      comp: dynamic(() => import('../../src/views/Segments'), { ssr: false, loading: Spinner }) },
   { id: 'expedicoes', label: 'Expedições',   comp: dynamic(() => import('../../src/views/Expeditions'), { ssr: false, loading: Spinner }) },
 ];
