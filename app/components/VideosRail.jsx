@@ -25,7 +25,7 @@ export default function VideosRail() {
       <div className="wrap vrail-head">
         <div className="lead">
           <span className="ig-eyebrow">Da estrada</span>
-          <h2 className="ig-title">Pistaviva nas redes</h2>
+          <h2 className="ig-title">Veja na rede</h2>
         </div>
         <a className="ig-btn ig-btn--ghost" href="https://www.instagram.com/pistavivaoficial" target="_blank" rel="noopener noreferrer">Seguir no Instagram <span className="arr">→</span></a>
       </div>
