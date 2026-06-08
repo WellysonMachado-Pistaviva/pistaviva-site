@@ -13,7 +13,7 @@ const nextConfig = {
   async redirects() {
     return [
       { source: '/calculadora', destination: '/rotas', permanent: true },
-      { source: '/trechos', destination: '/rotas?tab=trechos', permanent: true },
+      { source: '/trechos', destination: '/rotas', permanent: true },
       { source: '/expedicoes', destination: '/rotas?tab=expedicoes', permanent: true },
       { source: '/pista-ao-vivo', destination: '/comboio', permanent: true },
       { source: '/busca', destination: '/', permanent: true },
