@@ -5,6 +5,7 @@ import Link from 'next/link';
 const LINKS = [
   { href: '/rotas', label: 'Planejador' },
   { href: '/estradas', label: 'Estradas' },
+  { href: '/guias', label: 'Guias' },
   { href: '/mapa', label: 'Mapa' },
   { href: '/paradas', label: 'Paradas' },
   { href: '/fipe', label: 'FIPE' },

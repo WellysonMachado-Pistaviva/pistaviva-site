@@ -17,6 +17,7 @@ const PRIMARY = [
 const MENU = [
   { href: '/rotas', t: 'Planejador', s: 'Rota, custo & trechos', i: <><circle cx="6" cy="19" r="2.5" /><circle cx="18" cy="5" r="2.5" /><path d="M8.5 19H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h6.5" /></> },
   { href: '/estradas', t: 'Estradas', s: 'Serras icônicas', i: <><path d="M5 3v18M19 3v18" /><path d="M12 5v2M12 11v2M12 17v2" /></> },
+  { href: '/guias', t: 'Guias', s: 'Dicas pra viajar', i: <><path d="M4 5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" /><path d="M8 8h6M8 12h8M8 16h5" /></> },
   { href: '/fipe', t: 'FIPE', s: 'Consulta grátis', i: <><path d="M12 14 16 9" /><circle cx="12" cy="14" r="1.6" fill="currentColor" /><path d="M4 18a8 8 0 1 1 16 0" /></> },
   { href: '/paradas', t: 'Paradas', s: 'Amigas do biker', i: <><rect x="4" y="3" width="9" height="18" rx="1.5" /><path d="M4 11h9M16 7l3 3v7a2 2 0 0 1-4 0V5" /></> },
   { href: '/eventos', t: 'Eventos', s: 'Calendário', i: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 9h18M8 3v4M16 3v4" /></> },
