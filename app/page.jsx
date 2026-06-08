@@ -4,6 +4,7 @@ import Counter from './components/Counter';
 import MotosFilter from './components/MotosFilter';
 import HomeBanner from './components/HomeBanner';
 import DestinosRail from './components/DestinosRail';
+import VideosRail from './components/VideosRail';
 import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
 import { getBanners, getDestinos } from './lib/site';
 
@@ -128,6 +129,9 @@ export default async function Home() {
           <Link href="/comunidade" className="ig-btn ig-btn--ghost on-accent">Entrar agora <span className="arr">→</span></Link>
         </div>
       </section>
+
+      {/* ===== VÍDEOS / REDES ===== */}
+      <VideosRail />
 
       {/* ===== NOTÍCIAS / BLOG ===== */}
       {news.length > 0 && (
