@@ -179,7 +179,7 @@ const Planner = ({ user }) => {
       o: `${origin.lat},${origin.lng}`, d: `${dest.lat},${dest.lng}`,
       on: origin.name || 'Origem', dn: dest.name || 'Destino', m: routeMode,
     });
-    return `${base}/calculadora?${p.toString()}`;
+    return `${base}/rotas?${p.toString()}`;
   };
   const shareWhats = () => {
     if (!result) return;

@@ -74,6 +74,7 @@ const Comboio = ({ user, openAuthModal }) => {
   const [typingUsers, setTypingUsers]       = useState([]); // [{userId, name}]
   const typingTimers                        = useRef({});   // limpa após 3s
   const messagesEndRef                      = useRef(null);
+  const sosTimer                            = useRef(null);  // intervalo do hold do SOS
 
   // Última localização conhecida — persiste mesmo quando o membro cai offline
   // { [userId]: { userId, name, lat, lng, online, lastSeen } }
@@ -359,7 +360,6 @@ const Comboio = ({ user, openAuthModal }) => {
   };
 
   // SOS — segura 3s → dispara alerta com a coordenada exata (chat + fixado)
-  const sosTimer = useRef(null);
   const sosStart = () => {
     if (sosTimer.current) return;
     const t0 = Date.now();
@@ -372,9 +372,10 @@ const Comboio = ({ user, openAuthModal }) => {
           p => {
             const link = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
             const txt = `🆘 SOS / QUEBRA — ${user.nome || user.name} parou aqui: ${link}`;
-            saveComboioMessage(activeComboio, user.id, user.nome || user.name, txt);
-            sendComboioChat(activeComboio, { userId: user.id, name: user.nome || user.name, text: txt, time: new Date().toISOString() });
-            updatePinnedMessage(activeComboio, { text: txt, author: user.nome || user.name, time: new Date().toISOString() });
+            saveComboioMessage(activeComboio, user.id, user.nome || user.name, txt).then(id => {
+              sendComboioChat(user, txt, id || undefined);
+            });
+            updatePinnedMessage({ text: txt, author: user.nome || user.name, time: new Date().toISOString() });
             cbToast('SOS enviado ao grupo 🆘');
           },
           () => cbToast('Não foi possível pegar a localização do SOS'),

@@ -3,6 +3,7 @@ import Cover from '../../components/Cover';
 import { notFound } from 'next/navigation';
 import { getSpotBySlug, getAllSpotSlugs } from '../../lib/spots';
 import { SELOS, catNome } from '../../lib/spotMeta';
+import { ufName } from '../../lib/ufs';
 import ViewPing from '../../components/ViewPing';
 
 export const revalidate = 120;
@@ -40,16 +41,23 @@ export default async function ParadaPage({ params }) {
     ...(s.cover_url ? { image: [s.cover_url] } : {}),
   };
 
-  const breadcrumbLd = {
-    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://www.pistavivamototurismo.com.br/' },
-      { '@type': 'ListItem', position: 2, name: 'Paradas', item: 'https://www.pistavivamototurismo.com.br/paradas' },
-      { '@type': 'ListItem', position: 3, name: s.nome, item: `https://www.pistavivamototurismo.com.br/parada/${slug}` },
-    ],
-  };
+  const ufLow = String(s.uf || '').toLowerCase();
+  const estado = ufName(s.uf);
+  const B = 'https://www.pistavivamototurismo.com.br';
+  const crumbItems = [
+    { '@type': 'ListItem', position: 1, name: 'Início', item: `${B}/` },
+    { '@type': 'ListItem', position: 2, name: 'Paradas', item: `${B}/paradas` },
+  ];
+  if (estado) crumbItems.push({ '@type': 'ListItem', position: 3, name: `Mototurismo em ${estado}`, item: `${B}/mototurismo/${ufLow}` });
+  crumbItems.push({ '@type': 'ListItem', position: crumbItems.length + 1, name: s.nome, item: `${B}/parada/${slug}` });
+  const breadcrumbLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: crumbItems };
 
-  const mapsUrl = s.lat && s.lng ? `https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}` : null;
+  const mapsUrl = (s.maps_url && s.maps_url.trim())
+    ? s.maps_url.trim()
+    : (s.lat && s.lng ? `https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}` : null);
+  const igRaw = (s.instagram || '').trim();
+  const igUrl = igRaw ? (igRaw.startsWith('http') ? igRaw : `https://instagram.com/${igRaw.replace(/^@/, '')}`) : null;
+  const igHandle = igRaw ? '@' + igRaw.replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/^@/, '').replace(/\/.*$/, '') : null;
   const ativos = SELOS.filter(sl => (s.selos || []).includes(sl.id));
   const fotos = ((s.fotos && s.fotos.length ? s.fotos : (s.cover_url ? [s.cover_url] : [])) || []).filter(Boolean).slice(0, 3);
 
@@ -63,6 +71,7 @@ export default async function ParadaPage({ params }) {
         <div className="wrap">
           <Link href="/">Início</Link><span className="sep">/</span>
           <Link href="/paradas">Paradas</Link><span className="sep">/</span>
+          {estado && <><Link href={`/mototurismo/${ufLow}`}>{estado}</Link><span className="sep">/</span></>}
           <span className="here">{s.nome}</span>
         </div>
       </nav>
@@ -89,6 +98,8 @@ export default async function ParadaPage({ params }) {
                 <div className="place"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></svg> {[s.cidade, s.uf].filter(Boolean).join(' · ')}</div>
                 <div className="ph-actions">
                   {mapsUrl && <a className="ig-btn ig-btn--primary" href={mapsUrl} target="_blank" rel="noopener noreferrer">Abrir no Google Maps</a>}
+                  {igUrl && <a className="ig-btn ig-btn--ghost" href={igUrl} target="_blank" rel="noopener noreferrer">📷 {igHandle}</a>}
+                  {estado && <Link className="ig-btn ig-btn--ghost" href={`/mototurismo/${ufLow}`}>Mais paradas em {estado}</Link>}
                   <Link className="ig-btn ig-btn--ghost" href="/paradas">Todas as paradas</Link>
                 </div>
                 {s.author && <p style={{ marginTop: 18, fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--ink-soft)', textTransform: 'uppercase', letterSpacing: '.06em' }}>Cadastrado por {s.author}</p>}

@@ -3,7 +3,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 const LINKS = [
-  { href: '/calculadora', label: 'Planejador' },
+  { href: '/rotas', label: 'Planejador' },
+  { href: '/estradas', label: 'Estradas' },
   { href: '/mapa', label: 'Mapa' },
   { href: '/paradas', label: 'Paradas' },
   { href: '/fipe', label: 'FIPE' },

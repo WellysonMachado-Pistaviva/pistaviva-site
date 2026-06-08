@@ -12,16 +12,11 @@ const Spinner = () => (
 
 const PAGES = {
   feed:        dynamic(() => import('../../src/views/Feed'), { ssr: false, loading: Spinner }),
-  calculadora: dynamic(() => import('../../src/views/Planner'), { ssr: false, loading: Spinner }),
   mapa:        dynamic(() => import('../../src/views/MapPage'), { ssr: false, loading: Spinner }),
-  pistaAoVivo: dynamic(() => import('../../src/views/PistaAoVivo'), { ssr: false, loading: Spinner }),
-  rotas:       dynamic(() => import('../../src/views/MyRoutes'), { ssr: false, loading: Spinner }),
   eventos:     dynamic(() => import('../../src/views/Events'), { ssr: false, loading: Spinner }),
   parceiros:   dynamic(() => import('../../src/views/Partners'), { ssr: false, loading: Spinner }),
   comboio:     dynamic(() => import('../../src/views/Comboio'), { ssr: false, loading: Spinner }),
   loja:        dynamic(() => import('../../src/views/Store'), { ssr: false, loading: Spinner }),
-  trechos:     dynamic(() => import('../../src/views/Segments'), { ssr: false, loading: Spinner }),
-  expedicoes:  dynamic(() => import('../../src/views/Expeditions'), { ssr: false, loading: Spinner }),
   admin:       dynamic(() => import('../../src/views/AdminDashboard'), { ssr: false, loading: Spinner }),
 };
 

@@ -1372,3 +1372,11 @@ body.pg-locked{ overflow:hidden; }
   /* isola o carrossel na própria camada de composição (evita rasgo residual) */
   .pvb-track, .pvb-media, .pvb-media img { transform: translateZ(0); backface-visibility: hidden; }
 }
+
+/* ── Abas do hub /rotas (Planejar · Minhas rotas · Trechos · Expedições) ── */
+.rotas-tabs{ display:flex; gap:6px; flex-wrap:wrap; max-width:1100px; margin:0 auto; padding:0 clamp(16px,4vw,24px) 4px; }
+.rotas-tab{ font-family:var(--mono); font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.05em;
+  padding:9px 16px; border-radius:100px; border:1.5px solid var(--snow-line,rgba(255,255,255,.14)); background:transparent;
+  color:var(--ink-soft,#9a9a9a); cursor:pointer; transition:.16s; }
+.rotas-tab:hover{ color:var(--ink,#fff); }
+.rotas-tab.active{ background:#ff5a00; border-color:#ff5a00; color:#fff; }
