@@ -3,6 +3,7 @@ import { getAllSpotSlugs } from './lib/spots';
 import { getAllPhotographerSlugs, getPhotographers } from './lib/photographers';
 import { UF_NAMES, citySlug } from './lib/ufs';
 import { ESTRADAS } from './lib/estradas';
+import { GUIAS } from './lib/guias';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 
@@ -32,6 +33,7 @@ export default async function sitemap() {
     { path: '/rotas', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/comunidade', priority: 0.9, changeFrequency: 'daily' },
     { path: '/estradas', priority: 0.9, changeFrequency: 'weekly' },
+    { path: '/guias', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/fotografos', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/mapa', priority: 0.9, changeFrequency: 'weekly' },
 
@@ -130,5 +132,13 @@ export default async function sitemap() {
     priority: 0.85,
   }));
 
-  return [...staticEntries, ...hubs, ...estradas, ...posts, ...paradas, ...fotos];
+  // ── Guias práticos (conteúdo editorial fixo) ──
+  const guias = GUIAS.map((g) => ({
+    url: `${BASE}/guias/${g.slug}`,
+    lastModified: LAST_BUILD,
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  }));
+
+  return [...staticEntries, ...hubs, ...estradas, ...guias, ...posts, ...paradas, ...fotos];
 }
