@@ -1353,3 +1353,22 @@ body.pg-locked{ overflow:hidden; }
 .spa-intro{ padding:clamp(28px,5vw,52px) 0 clamp(14px,2.5vw,22px); }
 .spa-intro h1{ font-family:var(--display); font-size:clamp(1.7rem,4.5vw,2.6rem); font-weight:800; line-height:1.02; letter-spacing:-.01em; text-transform:uppercase; margin:.5rem 0 0; }
 .spa-intro__lead{ color:var(--paper-dim); font-size:clamp(.95rem,2vw,1.05rem); line-height:1.55; max-width:62ch; margin-top:.7rem; }
+
+/* ── Fix tearing/glitch no Android: backdrop-filter blur sobre conteúdo animado
+   (carrossel, mapa do comboio) rasga na GPU de vários aparelhos. No mobile mata o
+   blur e compensa com fundo quase sólido — desktop mantém o efeito frosted. ── */
+@media (max-width: 768px) {
+  .site-head, .igm-appbar, .igm-bottomnav, .igm-scrim, .pg-story-ov,
+  .ig-spec-strip, .route .tag, .pvb-nav {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .site-head      { background: rgba(14,19,17,.96) !important; }
+  .igm-appbar     { background: rgba(12,12,13,.97) !important; }
+  .igm-bottomnav  { background: rgba(12,12,13,.98) !important; }
+  .igm-scrim      { background: rgba(4,4,5,.74) !important; }
+  .pg-story-ov    { background: rgba(6,6,7,.94) !important; }
+  .ig-spec-strip  { background: rgba(8,8,9,.92) !important; }
+  /* isola o carrossel na própria camada de composição (evita rasgo residual) */
+  .pvb-track, .pvb-media, .pvb-media img { transform: translateZ(0); backface-visibility: hidden; }
+}
