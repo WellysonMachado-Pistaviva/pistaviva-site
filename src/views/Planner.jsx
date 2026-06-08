@@ -6,7 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import { useWeather } from '../hooks/useWeather';
 import { TILES } from '../lib/mapTiles';
 import RideNav from './RideNav';
-import { addRoute, saveCurrentRoute } from '../services/storage';
+import { addRoute } from '../services/storage';
 import { supabase } from '../lib/supabaseClient';
 
 // distância haversine (km)
@@ -143,7 +143,6 @@ const Planner = ({ user }) => {
         const cost   = liters * price;
         const h = Math.floor(durSec / 3600);
         const m = Math.floor((durSec % 3600) / 60);
-        saveCurrentRoute(line);
         setResult({
           distance:    distKm.toFixed(1),
           duration:    `${h}h ${m}min`,

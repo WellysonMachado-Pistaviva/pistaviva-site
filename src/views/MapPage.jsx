@@ -4,7 +4,7 @@ import { TILES } from '../lib/mapTiles';
 import { Camera, Plus, X, Search } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { getPings, addPing, getCurrentRoute } from '../services/storage';
+import { getPings, addPing } from '../services/storage';
 import { joinSOSChannel, leaveSOSChannel, joinComboioChannel, updateComboioLocation, leaveComboioChannel } from '../services/realtime';
 import { supabase } from '../lib/supabaseClient';
 import { fetchPoisInBounds } from '../services/overpass';
@@ -272,9 +272,6 @@ const MapPage = ({ user }) => {
         { enableHighAccuracy: true, timeout: 8000 }
       );
     }
-
-    const line = getCurrentRoute();
-    if (line && Array.isArray(line) && line.length > 0) setRouteLine(line);
 
     // Join SOS Channel
     joinSOSChannel((alert) => {
