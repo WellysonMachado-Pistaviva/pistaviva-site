@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Cover from '../../components/Cover';
+import PhotoCarousel from '../../components/PhotoCarousel';
 import LiveBadge from '../../components/LiveBadge';
 import { notFound } from 'next/navigation';
 import { getPhotographerBySlug, getAllPhotographerSlugs, igUrl } from '../../lib/photographers';
@@ -68,9 +69,15 @@ export default async function FotografoPage({ params }) {
           <div className="ph-layout">
             {/* coluna principal */}
             <div>
-              <div className="ph-heroph">
-                {f.cover_url ? <Cover src={f.cover_url} alt={f.nome} sizes="(max-width:900px) 100vw, 680px" priority /> : <span className="pic-ph">📷</span>}
-              </div>
+              {f.images && f.images.length > 1 ? (
+                <div className="ph-heroph" style={{ height: 'auto' }}>
+                  <PhotoCarousel images={f.images} height={420} alt={f.nome} radius={14} />
+                </div>
+              ) : (
+                <div className="ph-heroph">
+                  {f.cover_url ? <Cover src={f.cover_url} alt={f.nome} sizes="(max-width:900px) 100vw, 680px" priority /> : <span className="pic-ph">📷</span>}
+                </div>
+              )}
               <div className="ph-bio">
                 {f.descricao && <p>{f.descricao}</p>}
                 {local && <div className="place"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></svg> {local}</div>}

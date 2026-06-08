@@ -3,6 +3,7 @@ import { Calendar, MapPin, Clock, Users, X, CheckCircle, ChevronRight, Bike, Tim
 import { getEvents, getEventRsvps, setEventRsvp, addEvent } from '../services/storage';
 import { uploadPostImage } from '../services/storage';
 import CoolMode from '../../app/components/CoolMode';
+import PhotoCarousel from '../../app/components/PhotoCarousel';
 
 const MONTH_ABBR = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 const MONTH_MAP = { jan: 0, fev: 1, mar: 2, abr: 3, mai: 4, jun: 5, jul: 6, ago: 7, set: 8, out: 9, nov: 10, dez: 11 };
@@ -52,7 +53,7 @@ const parseTags = (tags) => {
 
 const CATEGORIES = ['Todos', 'Encontro', 'Expedição', 'Workshop', 'Rolê', 'Competição'];
 const FORM_CATS = ['Encontro', 'Expedição', 'Workshop', 'Rolê', 'Competição'];
-const EMPTY = { title: '', category: 'Encontro', dateIso: '', time: '', local: '', organizer: '', description: '', tags: '', imageUrl: '', maxParticipants: 100 };
+const EMPTY = { title: '', category: 'Encontro', dateIso: '', time: '', local: '', organizer: '', description: '', tags: '', imageUrl: '', images: [], maxParticipants: 100 };
 
 const Events = ({ user, openAuthModal }) => {
   const [events, setEvents] = useState([]);
@@ -97,16 +98,17 @@ const Events = ({ user, openAuthModal }) => {
   };
 
   const onImage = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
     setUploading(true);
-    const reader = new FileReader();
-    reader.onload = async () => {
-      const url = await uploadPostImage(reader.result, user?.id || 'event');
-      if (url) setForm(f => ({ ...f, imageUrl: url }));
-      setUploading(false);
-    };
-    reader.readAsDataURL(file);
+    for (const file of files) {
+      if ((form.images?.length || 0) >= 5) break;
+      const dataUrl = await new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(file); });
+      const url = await uploadPostImage(dataUrl, user?.id || 'event');
+      if (url) setForm(f => ({ ...f, images: [...(f.images || []), url].slice(0, 5), imageUrl: f.imageUrl || url }));
+    }
+    setUploading(false);
+    e.target.value = '';
   };
 
   const saveEvent = async () => {
@@ -115,7 +117,8 @@ const Events = ({ user, openAuthModal }) => {
     const ev = await addEvent({
       title: form.title.trim(), category: form.category, date: fmtDateBR(form.dateIso),
       time: form.time.trim(), local: form.local.trim(), organizer: form.organizer.trim() || (user?.nome || user?.name || 'Comunidade'),
-      description: form.description.trim(), tags: form.tags.trim(), imageUrl: form.imageUrl || null,
+      description: form.description.trim(), tags: form.tags.trim(),
+      imageUrl: (form.images && form.images[0]) || form.imageUrl || null, images: form.images || [],
       maxParticipants: parseInt(form.maxParticipants) || 100, type: 'open',
     });
     setSaving(false);
@@ -153,7 +156,9 @@ const Events = ({ user, openAuthModal }) => {
               style={{ background: 'var(--ink-2)', borderRadius: 4, border: '1px solid var(--border)', cursor: 'pointer', transition: 'transform .25s ease, border-color .25s ease', overflow: 'hidden' }}
               onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
               onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.borderColor = 'var(--border)'; }}>
-              {event.imageUrl && <img src={event.imageUrl} alt={event.title} style={{ width: '100%', height: 160, objectFit: 'cover' }} />}
+              {event.images && event.images.length > 1
+                ? <PhotoCarousel images={event.images} height={160} alt={event.title} radius={0} />
+                : event.imageUrl && <img src={event.imageUrl} alt={event.title} style={{ width: '100%', height: 160, objectFit: 'cover' }} />}
               <div style={{ padding: '22px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                   <span style={{ padding: '5px 11px', borderRadius: 6, fontSize: '10px', fontWeight: '700', letterSpacing: '.1em', textTransform: 'uppercase', fontFamily: 'var(--mono)', background: status.color, color: '#fff' }}>{status.label}</span>
@@ -203,12 +208,20 @@ const Events = ({ user, openAuthModal }) => {
             <input style={inp} placeholder="Organizador (opcional)" value={form.organizer} onChange={e => setForm(f => ({ ...f, organizer: e.target.value }))} />
             <textarea style={{ ...inp, minHeight: 90, resize: 'vertical' }} placeholder="O que vai ter no evento? (atrações, percurso, custo...)" value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
             <input style={inp} placeholder="Tags separadas por vírgula" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} />
-            <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
-              <label className="btn-outline" style={{ cursor: 'pointer', margin: 0, maxWidth: 180 }}>
-                <ImageIcon size={15} /> {uploading ? 'Enviando…' : 'Imagem do evento'}
-                <input type="file" accept="image/*" hidden onChange={onImage} />
-              </label>
-              {form.imageUrl && <img src={form.imageUrl} alt="" style={{ height: 50, borderRadius: 6 }} />}
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
+              {(form.images || []).map((src, i) => (
+                <div key={i} style={{ position: 'relative' }}>
+                  <img src={src} alt="" style={{ height: 56, width: 56, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border)' }} />
+                  <button type="button" onClick={() => setForm(f => ({ ...f, images: f.images.filter((_, k) => k !== i) }))}
+                    style={{ position: 'absolute', top: -6, right: -6, width: 20, height: 20, borderRadius: '50%', border: 'none', background: 'rgba(0,0,0,.75)', color: '#fff', cursor: 'pointer', display: 'grid', placeItems: 'center' }} aria-label="Remover"><X size={12} /></button>
+                </div>
+              ))}
+              {(form.images?.length || 0) < 5 && (
+                <label className="btn-outline" style={{ cursor: 'pointer', margin: 0, maxWidth: 180 }}>
+                  <ImageIcon size={15} /> {uploading ? 'Enviando…' : 'Fotos do evento'}
+                  <input type="file" accept="image/*" multiple hidden onChange={onImage} />
+                </label>
+              )}
             </div>
             <button className="btn-primary" onClick={saveEvent} disabled={saving}>{saving ? <span className="loading-spinner" /> : 'Publicar evento'}</button>
           </div>
@@ -225,7 +238,9 @@ const Events = ({ user, openAuthModal }) => {
         return (
           <div className="modal-overlay" onClick={() => setSelectedEvent(null)} style={{ alignItems: 'flex-end', padding: '0' }}>
             <div onClick={e => e.stopPropagation()} style={{ background: 'var(--bg2)', borderRadius: 'var(--radius) var(--radius) 0 0', border: '1px solid var(--border)', borderBottom: 'none', width: '100%', maxWidth: '640px', margin: '0 auto', maxHeight: '90vh', overflowY: 'auto', animation: 'slideUp .32s cubic-bezier(.34,1.36,.64,1)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
-              {ev.imageUrl && <img src={ev.imageUrl} alt={ev.title} style={{ width: '100%', height: 200, objectFit: 'cover' }} />}
+              {ev.images && ev.images.length > 1
+                ? <PhotoCarousel images={ev.images} height={200} alt={ev.title} radius={0} />
+                : ev.imageUrl && <img src={ev.imageUrl} alt={ev.title} style={{ width: '100%', height: 200, objectFit: 'cover' }} />}
               <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '12px 20px 4px' }}>
                 <button onClick={() => setSelectedEvent(null)} style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--muted)' }}><X size={16} /></button>
               </div>

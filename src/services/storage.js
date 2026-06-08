@@ -138,6 +138,7 @@ export const getPosts = async (currentUserId = null) => {
       category: contentObj.category,
       comment: contentObj.comment,
       image: p.image_url,
+      images: (p.images && p.images.length ? p.images : (p.image_url ? [p.image_url] : [])),
       date: new Date(p.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }),
       likes: p.pv_post_likes ? p.pv_post_likes.length : 0,
       likedByCurrentUser: currentUserId ? (p.pv_post_likes || []).some(l => l.user_id === currentUserId) : false,
@@ -152,13 +153,20 @@ export const addPost = async (post, userId) => {
   const contentStr = JSON.stringify({
     city: post.city, uf: post.uf, category: post.category, comment: post.comment
   });
+  const imgs = (post.images && post.images.length ? post.images : (post.image ? [post.image] : [])).filter(Boolean);
   const payload = {
     user_id: String(userId || 'anon'),
     author_name: post.user || 'Piloto Anônimo',
     content: contentStr,
-    image_url: post.image || null
+    image_url: imgs[0] || null,
+    images: imgs,
   };
-  const { data, error } = await supabase.from('pv_posts').insert(payload).select();
+  let { data, error } = await supabase.from('pv_posts').insert(payload).select();
+  if (error && /images/i.test(error.message || '')) {
+    // Banco ainda sem a coluna images — grava só a capa
+    const { images, ...noImg } = payload;
+    ({ data, error } = await supabase.from('pv_posts').insert(noImg).select());
+  }
   if (error) {
     console.error('❌ Erro ao publicar post:', error);
     return { ok: false, error };
@@ -1011,6 +1019,7 @@ const toEvent = (e) => ({
   time: e.time, local: e.local, organizer: e.organizer,
   maxParticipants: e.max_participants, description: e.description,
   tags: e.tags, type: e.type, imageUrl: e.image_url,
+  images: (e.images && e.images.length ? e.images : (e.image_url ? [e.image_url] : [])),
 });
 
 export const getEvents = async () => {
@@ -1020,13 +1029,24 @@ export const getEvents = async () => {
 };
 
 export const addEvent = async (event) => {
-  const { data, error } = await supabase.from('pv_events').insert({
+  const evImgs = (event.images && event.images.length ? event.images : (event.imageUrl ? [event.imageUrl] : [])).filter(Boolean);
+  let { data, error } = await supabase.from('pv_events').insert({
     title: event.title, category: event.category, date: event.date,
     time: event.time, local: event.local, organizer: event.organizer,
     max_participants: event.maxParticipants || 100,
     description: event.description, tags: event.tags, type: event.type || 'open',
-    image_url: event.imageUrl || null,
+    image_url: evImgs[0] || null, images: evImgs,
   }).select().single();
+  if (error && /images/i.test(error.message || '')) {
+    const r = await supabase.from('pv_events').insert({
+      title: event.title, category: event.category, date: event.date,
+      time: event.time, local: event.local, organizer: event.organizer,
+      max_participants: event.maxParticipants || 100,
+      description: event.description, tags: event.tags, type: event.type || 'open',
+      image_url: evImgs[0] || null,
+    }).select().single();
+    data = r.data; error = r.error;
+  }
   if (error) { console.error(error); return null; }
   return toEvent(data);
 };
