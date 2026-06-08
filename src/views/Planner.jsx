@@ -262,7 +262,7 @@ const Planner = ({ user }) => {
           </div>
           <div style={{ position: 'relative' }}>
             <input type="text" placeholder="Cidade de partida..." value={origin.name}
-              onChange={e => { setOrigin({ ...origin, name: e.target.value }); fetchSuggestions(e.target.value, 'origin'); }} />
+              onChange={e => { setOrigin({ name: e.target.value, lat: null, lng: null }); setResult(null); fetchSuggestions(e.target.value, 'origin'); }} />
             {activeSearch === 'origin' && suggestions.length > 0 && (
               <ul className="autocomplete-list" style={{ position: 'absolute', width: '100%', zIndex: 50 }}>
                 {suggestions.map((s, i) => <li key={i} onClick={() => selectSuggestion(s, 'origin')}>{s.name} <small>{s.admin1 || s.country}</small></li>)}
@@ -279,8 +279,8 @@ const Planner = ({ user }) => {
               <div style={{ flex: 1, position: 'relative' }}>
                 <input type="text" placeholder="Cidade de parada..." value={wp.name || ''}
                   onChange={e => {
-                    const wps = [...waypoints]; wps[idx] = { ...wps[idx], name: e.target.value };
-                    setWaypoints(wps); fetchSuggestions(e.target.value, idx);
+                    const wps = [...waypoints]; wps[idx] = { name: e.target.value, lat: null, lng: null };
+                    setWaypoints(wps); setResult(null); fetchSuggestions(e.target.value, idx);
                   }} />
                 {activeSearch === idx && suggestions.length > 0 && (
                   <ul className="autocomplete-list" style={{ position: 'absolute', width: '100%', zIndex: 50 }}>
@@ -299,7 +299,7 @@ const Planner = ({ user }) => {
           <label>Destino</label>
           <div style={{ position: 'relative' }}>
             <input type="text" placeholder="Aonde você quer ir?" value={dest.name}
-              onChange={e => { setDest({ ...dest, name: e.target.value }); fetchSuggestions(e.target.value, 'dest'); }} />
+              onChange={e => { setDest({ name: e.target.value, lat: null, lng: null }); setResult(null); fetchSuggestions(e.target.value, 'dest'); }} />
             {activeSearch === 'dest' && suggestions.length > 0 && (
               <ul className="autocomplete-list" style={{ position: 'absolute', width: '100%', zIndex: 50 }}>
                 {suggestions.map((s, i) => <li key={i} onClick={() => selectSuggestion(s, 'dest')}>{s.name} <small>{s.admin1 || s.country}</small></li>)}
