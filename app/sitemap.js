@@ -37,13 +37,8 @@ export default async function sitemap() {
 
     // Funcionalidades interativas — prioridade alta
     { path: '/fipe', priority: 0.8, changeFrequency: 'weekly' },
-    { path: '/busca', priority: 0.8, changeFrequency: 'weekly' },
     { path: '/comboio', priority: 0.8, changeFrequency: 'weekly' },
-    { path: '/calculadora', priority: 0.8, changeFrequency: 'monthly' },
     { path: '/eventos', priority: 0.8, changeFrequency: 'weekly' },
-    { path: '/expedicoes', priority: 0.8, changeFrequency: 'weekly' },
-    { path: '/trechos', priority: 0.8, changeFrequency: 'weekly' },
-    { path: '/pista-ao-vivo', priority: 0.8, changeFrequency: 'daily' },
 
     // Páginas institucionais — prioridade média
     { path: '/sobre', priority: 0.7, changeFrequency: 'monthly' },

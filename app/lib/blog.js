@@ -56,7 +56,7 @@ export async function getAllSlugs() {
     const sb = supabaseServer();
     const { data, error } = await sb
       .from('pv_blog_posts')
-      .select('slug, published_at')
+      .select('slug, published_at, cover_url')
       .eq('published', true);
     if (error) return [];
     return data || [];

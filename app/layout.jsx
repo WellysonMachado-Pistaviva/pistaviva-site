@@ -83,11 +83,6 @@ export default function RootLayout({ children }) {
         name: 'Pistaviva',
         inLanguage: 'pt-BR',
         publisher: { '@id': `${SITE_URL}/#org` },
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: { '@type': 'EntryPoint', urlTemplate: `${SITE_URL}/busca?q={search_term_string}` },
-          'query-input': 'required name=search_term_string',
-        },
       },
     ],
   };

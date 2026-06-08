@@ -17,7 +17,7 @@ const UF_MAP = {
   'São Paulo': 'SP', 'Sergipe': 'SE', 'Tocantins': 'TO',
 };
 
-const EMPTY = { nome: '', categoria: 'pousada', cidade: '', uf: '', descricao: '', lat: null, lng: null, fotos: [] };
+const EMPTY = { nome: '', categoria: 'pousada', cidade: '', uf: '', descricao: '', lat: null, lng: null, fotos: [], maps_url: '', instagram: '' };
 
 export default function NewSpotForm() {
   const auth = useAuth();
@@ -102,6 +102,8 @@ export default function NewSpotForm() {
       lat: form.lat, lng: form.lng,
       fotos: form.fotos,
       cover_url: form.fotos[0] || null,
+      maps_url: form.maps_url.trim() || null,
+      instagram: form.instagram.trim() || null,
       selos: Object.keys(selos).filter(k => selos[k]),
       author: auth.user?.nome || auth.user?.name || 'Piloto',
       author_id: String(auth.user?.id || ''),
@@ -187,6 +189,8 @@ export default function NewSpotForm() {
         <Step>
           <div style={{ fontWeight: 800, marginBottom: 10 }}>4. Detalhes</div>
           <textarea style={{ ...inp, minHeight: 70, resize: 'vertical' }} placeholder="Descrição (opcional)" maxLength={240} value={form.descricao} onChange={e => setForm(f => ({ ...f, descricao: e.target.value }))} />
+          <input style={inp} type="url" inputMode="url" placeholder="Link do Google Maps do local" value={form.maps_url} onChange={e => setForm(f => ({ ...f, maps_url: e.target.value }))} />
+          <input style={inp} type="text" placeholder="Instagram (opcional) — @perfil ou link" value={form.instagram} onChange={e => setForm(f => ({ ...f, instagram: e.target.value }))} />
           <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--paper-mut)', margin: '6px 0 8px' }}>Comodidades (toque pra marcar)</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
             {SELOS.map(s => (

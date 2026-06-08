@@ -17,12 +17,11 @@ export default function SiteFooter() {
             <Link href="/paradas">Paradas</Link>
             <Link href="/blog">Blog</Link>
             <Link href="/diretorio-duas-rodas">Diretório Duas Rodas</Link>
-            <Link href="/rotas">Rotas &amp; Expedições</Link>
+            <Link href="/rotas">Planejar rota</Link>
             <Link href="/eventos">Eventos</Link>
           </div>
           <div className="foot-col">
             <h5>Ferramentas</h5>
-            <Link href="/calculadora">Planejador</Link>
             <Link href="/mapa">Mapa</Link>
             <Link href="/comboio">Comboio</Link>
             <Link href="/fotografos">Fotógrafos</Link>

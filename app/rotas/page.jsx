@@ -1,19 +1,22 @@
-import SpaPage from '../components/SpaPage';
 import SpaIntro from '../components/SpaIntro';
+import RotasHub from '../components/RotasHub';
 
 export const metadata = {
-  title: 'Minhas Rotas e Roteiros',
-  description: 'Roteiros de moto com paradas, distância e dificuldade. Salve e compartilhe rotas.',
+  title: 'Planejar Rota de Moto — Roteiros, Combustível e Trechos',
+  description: 'Planeje sua viagem de moto: trace a rota, calcule distância, combustível e custo, salve roteiros, veja trechos lendários e expedições da comunidade Pistaviva.',
   alternates: { canonical: '/rotas' },
 };
 
-export default function Page() {
+export default async function Page({ searchParams }) {
+  const sp = await searchParams;
+  const tab = typeof sp?.tab === 'string' ? sp.tab : 'planejar';
+
   return (
     <>
-      <SpaIntro eyebrow="Roteiros" title="Rotas e Roteiros de Moto">
-        Monte, salve e compartilhe roteiros de mototurismo com paradas, distância e nível de dificuldade. Planeje sua próxima viagem de moto pelo Brasil.
+      <SpaIntro eyebrow="Planejar & rodar" title="Planejar Rota de Moto">
+        Trace a rota com modo curvas, calcule distância, combustível e custo, salve seus roteiros e veja trechos lendários e expedições da comunidade. Tudo num lugar só, antes de cair na estrada.
       </SpaIntro>
-      <SpaPage name="rotas" />
+      <RotasHub initial={tab} />
     </>
   );
 }

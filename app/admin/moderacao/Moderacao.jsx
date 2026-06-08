@@ -16,7 +16,7 @@ const SECTIONS = [
   {
     id: 'paradas', table: 'pv_spots', label: 'Paradas', mode: 'published', featured: true, photos: true,
     title: r => r.nome, sub: r => `${r.categoria} · ${[r.cidade, r.uf].filter(Boolean).join('/')}${r.featured ? ' · ⭐destaque' : ''}`,
-    edit: [{ k: 'nome', l: 'Nome' }, { k: 'categoria', l: 'Categoria' }, { k: 'cidade', l: 'Cidade' }, { k: 'uf', l: 'UF' }, { k: 'descricao', l: 'Descrição' }, { k: 'selos', l: 'Selos (vírgula: asfalto,descanso,gear,sabor)', arr: true }],
+    edit: [{ k: 'nome', l: 'Nome' }, { k: 'categoria', l: 'Categoria' }, { k: 'cidade', l: 'Cidade' }, { k: 'uf', l: 'UF' }, { k: 'descricao', l: 'Descrição' }, { k: 'maps_url', l: 'Link Google Maps' }, { k: 'instagram', l: 'Instagram (@perfil ou link)' }, { k: 'selos', l: 'Selos (vírgula: asfalto,descanso,gear,sabor)', arr: true }],
   },
   {
     id: 'rotas', table: 'pv_user_routes', label: 'Rotas', mode: 'published', photos: true, cover: false,
@@ -310,7 +310,7 @@ const LINK_TYPES = [
   { v: 'parada', l: 'Parada', table: 'pv_spots', name: 'nome', href: r => `/parada/${r.slug}` },
   { v: 'fotografo', l: 'Fotógrafo', table: 'pv_photographers', name: 'nome', href: r => `/fotografo/${r.slug}` },
   { v: 'evento', l: 'Eventos (página)', fixed: '/eventos' },
-  { v: 'pagina', l: 'Página do site', pages: ['/rotas', '/paradas', '/comboio', '/mapa', '/fotografos', '/fipe', '/comunidade', '/loja', '/expedicoes', '/trechos', '/calculadora', '/parceiros'] },
+  { v: 'pagina', l: 'Página do site', pages: ['/rotas', '/estradas', '/paradas', '/comboio', '/mapa', '/fotografos', '/fipe', '/comunidade', '/mototurismo', '/loja', '/parceiros'] },
   { v: 'url', l: 'URL livre' },
 ];
 
