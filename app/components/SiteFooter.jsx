@@ -14,6 +14,7 @@ export default function SiteFooter() {
             <Link href="/comunidade">Comunidade</Link>
             <Link href="/mototurismo">Mototurismo por estado</Link>
             <Link href="/estradas">Estradas icônicas</Link>
+            <Link href="/destinos">Destinos dos sonhos</Link>
             <Link href="/guias">Guias de mototurismo</Link>
             <Link href="/paradas">Paradas</Link>
             <Link href="/blog">Blog</Link>
@@ -23,6 +24,7 @@ export default function SiteFooter() {
           </div>
           <div className="foot-col">
             <h5>Ferramentas</h5>
+            <Link href="/bora-rodar">Bora Rodar? (clima)</Link>
             <Link href="/mapa">Mapa</Link>
             <Link href="/comboio">Comboio</Link>
             <Link href="/fotografos">Fotógrafos</Link>

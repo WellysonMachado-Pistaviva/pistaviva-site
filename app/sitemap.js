@@ -4,6 +4,7 @@ import { getAllPhotographerSlugs, getPhotographers } from './lib/photographers';
 import { UF_NAMES, citySlug } from './lib/ufs';
 import { ESTRADAS } from './lib/estradas';
 import { GUIAS } from './lib/guias';
+import { DESTINOS } from './lib/destinos';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 
@@ -34,6 +35,8 @@ export default async function sitemap() {
     { path: '/comunidade', priority: 0.9, changeFrequency: 'daily' },
     { path: '/estradas', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/guias', priority: 0.9, changeFrequency: 'weekly' },
+    { path: '/destinos', priority: 0.85, changeFrequency: 'weekly' },
+    { path: '/bora-rodar', priority: 0.85, changeFrequency: 'daily' },
     { path: '/fotografos', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/mapa', priority: 0.9, changeFrequency: 'weekly' },
 
@@ -140,5 +143,13 @@ export default async function sitemap() {
     priority: 0.8,
   }));
 
-  return [...staticEntries, ...hubs, ...estradas, ...guias, ...posts, ...paradas, ...fotos];
+  // ── Destinos-sonho (matéria editorial) ──
+  const destinos = DESTINOS.map((d) => ({
+    url: `${BASE}/destinos/${d.slug}`,
+    lastModified: LAST_BUILD,
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  }));
+
+  return [...staticEntries, ...hubs, ...estradas, ...guias, ...destinos, ...posts, ...paradas, ...fotos];
 }
