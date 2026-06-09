@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { ESTRADAS, ESTRADA_GEO, getEstrada, allEstradaSlugs } from '../../lib/estradas';
 import { ufName } from '../../lib/ufs';
 import { getNearbySpots } from '../../lib/spots';
+import { getNearbyPOIs } from '../../lib/pois';
 import NearbyStops from '../../components/NearbyStops';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
@@ -34,9 +35,15 @@ export default async function EstradaPage({ params }) {
   if (!e) notFound();
   const ufs = e.uf.map((u) => ufName(u));
 
-  // Paradas no caminho (proximidade via Turf) — dinâmico, novas aparecem sozinhas
+  // Paradas no caminho (Turf): curadas do banco + postos/hospedagem on-demand (OSM/Overpass)
   const geo = ESTRADA_GEO[e.slug];
-  const nearby = geo ? await getNearbySpots({ lat: geo.lat, lng: geo.lng, radiusKm: geo.raio, limit: 60 }) : [];
+  const [curadas, pois] = geo
+    ? await Promise.all([
+        getNearbySpots({ lat: geo.lat, lng: geo.lng, radiusKm: geo.raio, limit: 60 }),
+        getNearbyPOIs({ lat: geo.lat, lng: geo.lng, radiusKm: geo.raio, limit: 24, kinds: ['fuel', 'hotel'] }),
+      ])
+    : [[], []];
+  const nearby = [...curadas, ...pois]; // curadas (com foto/parceiro) primeiro
 
   const touristLd = {
     '@context': 'https://schema.org', '@type': 'TouristAttraction',

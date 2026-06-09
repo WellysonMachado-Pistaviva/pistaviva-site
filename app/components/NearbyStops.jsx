@@ -49,22 +49,28 @@ export default function NearbyStops({ stops = [], titulo = 'Paradas no caminho' 
       </div>
 
       <div className="ph-grid">
-        {lista.map((s) => (
-          <Link className="ph-card" key={s.id} href={`/parada/${s.slug}`}>
-            <div className="pic">
-              <span className="spot">{CAT[s.categoria]?.ico} {CAT[s.categoria]?.label || s.categoria}</span>
-              {s.cover_url ? <Cover src={s.cover_url} alt={`${s.nome} — ${s.cidade}/${s.uf}`} sizes="(max-width:600px) 100vw, 380px" /> : <span className="pic-ph">📍</span>}
-            </div>
-            <div className="body">
-              <h3>{s.nome}</h3>
-              <p className="desc">{s.descricao || `${CAT[s.categoria]?.label || ''} em ${s.cidade}/${s.uf}`}</p>
-              <div className="foot">
-                <span className="loc">{[s.cidade, s.uf].filter(Boolean).join(' · ')}</span>
-                {s.distKm != null && <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--clay)' }}>~{s.distKm} km</span>}
+        {lista.map((s) => {
+          const ico = CAT[s.categoria]?.ico, lbl = CAT[s.categoria]?.label || s.categoria;
+          const inner = (
+            <>
+              <div className="pic">
+                <span className="spot">{ico} {lbl}</span>
+                {s.cover_url ? <Cover src={s.cover_url} alt={`${s.nome} — ${s.cidade}/${s.uf}`} sizes="(max-width:600px) 100vw, 380px" /> : <span className="pic-ph">{ico || '📍'}</span>}
               </div>
-            </div>
-          </Link>
-        ))}
+              <div className="body">
+                <h3>{s.nome}</h3>
+                <p className="desc">{s.descricao || `${lbl}${s.cidade ? ` em ${[s.cidade, s.uf].filter(Boolean).join('/')}` : ''}`}</p>
+                <div className="foot">
+                  <span className="loc">{s.osm ? 'via mapa (OpenStreetMap)' : [s.cidade, s.uf].filter(Boolean).join(' · ')}</span>
+                  {s.distKm != null && <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--clay)' }}>~{s.distKm} km</span>}
+                </div>
+              </div>
+            </>
+          );
+          return s.osm
+            ? <a className="ph-card" key={s.id} href={s.mapsUrl} target="_blank" rel="noopener noreferrer">{inner}</a>
+            : <Link className="ph-card" key={s.id} href={`/parada/${s.slug}`}>{inner}</Link>;
+        })}
       </div>
     </div>
   );
