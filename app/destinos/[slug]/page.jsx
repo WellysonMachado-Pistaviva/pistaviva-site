@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { DESTINOS, getDestino, allDestinoSlugs } from '../../lib/destinos';
+import { DESTINOS, DESTINO_GEO, getDestino, allDestinoSlugs } from '../../lib/destinos';
+import { getNearbyPOIs } from '../../lib/pois';
+import NearbyStops from '../../components/NearbyStops';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 export const revalidate = 3600;
@@ -28,6 +30,10 @@ export default async function DestinoPage({ params }) {
   const { slug } = await params;
   const d = getDestino(slug);
   if (!d) notFound();
+
+  // Onde abastecer/dormir no destino (POIs OSM on-demand)
+  const dgeo = DESTINO_GEO[d.slug];
+  const nearby = dgeo ? await getNearbyPOIs({ lat: dgeo.lat, lng: dgeo.lng, radiusKm: dgeo.raio, limit: 24, kinds: ['fuel', 'hotel'] }) : [];
 
   const articleLd = {
     '@context': 'https://schema.org', '@type': 'Article',
@@ -122,6 +128,9 @@ export default async function DestinoPage({ params }) {
               </div>
             </div>
           )}
+
+          {/* Onde abastecer/dormir (POIs OSM) */}
+          <NearbyStops stops={nearby} titulo={`Onde abastecer e dormir — ${d.nome}`} />
 
           <section className="ph-cta" style={{ marginTop: 30 }}>
             <div className="inner">

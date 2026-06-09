@@ -212,5 +212,15 @@ export const DESTINOS = [
   },
 ];
 
+// Centro + raio por destino — pro bloco "onde abastecer/dormir" (POIs OSM).
+export const DESTINO_GEO = {
+  'patagonia-de-moto': { lat: -54.80, lng: -68.30, raio: 90 },        // Ushuaia
+  'carretera-austral-chile': { lat: -45.57, lng: -72.07, raio: 140 }, // Coyhaique
+  'ruta-40-argentina': { lat: -41.13, lng: -71.31, raio: 120 },       // Bariloche
+  'deserto-do-atacama-de-moto': { lat: -22.91, lng: -68.20, raio: 110 }, // San Pedro
+  'alpes-e-dolomitas-de-moto': { lat: 46.50, lng: 11.35, raio: 90 },  // Dolomitas
+  'rota-66-estados-unidos': { lat: 35.20, lng: -111.65, raio: 90 },   // Flagstaff
+};
+
 export const getDestino = (slug) => DESTINOS.find((d) => d.slug === slug) || null;
 export const allDestinoSlugs = () => DESTINOS.map((d) => d.slug);
