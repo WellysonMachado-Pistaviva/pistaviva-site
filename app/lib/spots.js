@@ -30,6 +30,32 @@ export async function getSpotBySlug(slug) {
   }
 }
 
+// Paradas próximas de um ponto (Turf) — pro bloco "no caminho" das estradas/destinos.
+// Dinâmico: toda parada nova com lat/lng dentro do raio aparece sozinha.
+export async function getNearbySpots({ lat, lng, radiusKm = 60, limit = 60 } = {}) {
+  if (lat == null || lng == null) return [];
+  try {
+    const { distance, point } = await import('@turf/turf');
+    const sb = supabaseServer();
+    const { data, error } = await sb.from('pv_spots')
+      .select('id, slug, nome, categoria, descricao, cidade, uf, cover_url, fotos, lat, lng')
+      .eq('published', true)
+      .not('lat', 'is', null);
+    if (error) return [];
+    const here = point([lng, lat]);
+    return (data || [])
+      .map((s) => {
+        const d = distance(here, point([s.lng, s.lat]), { units: 'kilometers' });
+        return { ...s, distKm: Math.round(d) };
+      })
+      .filter((s) => s.distKm <= radiusKm)
+      .sort((a, b) => a.distKm - b.distKm)
+      .slice(0, limit);
+  } catch {
+    return [];
+  }
+}
+
 export async function getAllSpotSlugs() {
   try {
     const sb = supabaseServer();

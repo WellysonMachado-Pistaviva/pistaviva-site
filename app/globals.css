@@ -194,7 +194,7 @@ a{ color:inherit; text-decoration:none; }
 .post-cover img{ width:100%; height:100%; object-fit:cover; }
 .article{ max-width:70ch; }
 .article > *{ margin-bottom:1.3rem; }
-.article p{ font-size:1.12rem; color:#d6d8de; }
+.article p{ font-size:1.12rem; color:#d6d8de; overflow-wrap: break-word; word-break: break-word; }
 .article h2{ font-family:var(--display); font-weight:800; font-size:clamp(1.5rem,3.4vw,2.1rem); text-transform:uppercase; margin-top:2.4rem; padding-top:1.4rem; border-top:1px solid var(--line); }
 .article h3{ font-family:var(--display); font-size:1.3rem; margin-top:1.8rem; color:var(--clay-soft); }
 .article ul, .article ol{ padding-left:1.3rem; color:#d6d8de; }
@@ -1493,3 +1493,10 @@ body.pg-locked{ overflow:hidden; }
 .lead-skel__row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
 .lead-skel__half{ height:143px; border-radius:12px; }
 @media(max-width:640px){ .lead-skel{ grid-template-columns:1fr; } .lead-skel__primary{ height:180px; } }
+
+/* Chips de categoria do "Paradas no caminho" (NearbyStops) */
+.ns-chip{ font-family:var(--mono); font-weight:700; font-size:12px; padding:8px 14px; border-radius:100px;
+  border:1.5px solid var(--snow-line,rgba(255,255,255,.16)); background:transparent; color:var(--ink-soft,#9a9a9a);
+  cursor:pointer; transition:.15s; }
+.ns-chip:hover{ color:var(--ink,#fff); border-color:var(--ink-soft,#9a9a9a); }
+.ns-chip.on{ background:#ff5a00; border-color:#ff5a00; color:#fff; }

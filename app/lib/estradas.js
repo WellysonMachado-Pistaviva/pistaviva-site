@@ -263,5 +263,19 @@ export const ESTRADAS = [
   },
 ];
 
+// Centro geográfico aproximado + raio (km) de cada estrada — pro bloco
+// "Paradas no caminho" (proximidade via Turf). Slugs sem geo não mostram o bloco.
+export const ESTRADA_GEO = {
+  'serra-do-rio-do-rastro': { lat: -28.34, lng: -49.63, raio: 75 },
+  'estrada-da-graciosa': { lat: -25.48, lng: -48.83, raio: 55 },
+  'serra-do-corvo-branco': { lat: -28.01, lng: -49.59, raio: 60 },
+  'estrada-real': { lat: -21.10, lng: -44.17, raio: 130 },
+  'serra-da-mantiqueira': { lat: -22.74, lng: -45.59, raio: 90 },
+  'caminho-dos-canyons': { lat: -29.05, lng: -50.15, raio: 65 },
+  'rota-do-sol-rs': { lat: -29.20, lng: -50.30, raio: 80 },
+  'rota-romantica': { lat: -29.37, lng: -50.88, raio: 45 },
+  'serra-do-cipo': { lat: -19.30, lng: -43.60, raio: 60 },
+};
+
 export const getEstrada = (slug) => ESTRADAS.find((e) => e.slug === slug) || null;
 export const allEstradaSlugs = () => ESTRADAS.map((e) => e.slug);
