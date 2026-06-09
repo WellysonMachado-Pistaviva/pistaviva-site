@@ -1500,3 +1500,9 @@ body.pg-locked{ overflow:hidden; }
   cursor:pointer; transition:.15s; }
 .ns-chip:hover{ color:var(--ink,#fff); border-color:var(--ink-soft,#9a9a9a); }
 .ns-chip.on{ background:#ff5a00; border-color:#ff5a00; color:#fff; }
+
+/* Facade do Instagram no carrossel (carrega embed só no clique — perf) */
+.vrail-ig-facade{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+  background:linear-gradient(135deg,#833ab4,#c13584 40%,#e1306c 70%,#fd1d1d); color:#fff; }
+.vrail-ig-glyph{ color:#fff; opacity:.95; }
+.vrail-ig-txt{ font-family:var(--mono); font-weight:700; font-size:13px; letter-spacing:.03em; }

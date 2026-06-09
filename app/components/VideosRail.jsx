@@ -42,15 +42,25 @@ export default function VideosRail() {
     </div>
   ) : (
     <div className="vrail-card vrail-card--ig" key={i}>
-      <iframe
-        src={`https://www.instagram.com/${v.path}/embed`}
-        title="Reel do Instagram"
-        loading="lazy"
-        scrolling="no"
-        allowtransparency="true"
-        allow="encrypted-media"
-      />
-      <span className="vrail-badge ig" aria-hidden="true">Instagram</span>
+      {playing === i ? (
+        <iframe
+          src={`https://www.instagram.com/${v.path}/embed`}
+          title="Reel do Instagram"
+          loading="lazy"
+          scrolling="no"
+          allowtransparency="true"
+          allow="encrypted-media"
+        />
+      ) : (
+        <button className="vrail-play vrail-ig-facade" onClick={() => setPlaying(i)} aria-label="Abrir reel do Instagram">
+          <span className="vrail-ig-glyph" aria-hidden="true">
+            <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none" /></svg>
+          </span>
+          <span className="vrail-ig-txt">Reel no Instagram</span>
+          <span className="vrail-badge ig" aria-hidden="true">Instagram</span>
+          <span className="vrail-pbtn" aria-hidden="true">▶</span>
+        </button>
+      )}
     </div>
   ));
 
