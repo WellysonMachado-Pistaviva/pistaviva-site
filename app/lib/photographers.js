@@ -37,3 +37,19 @@ export function igUrl(ig) {
   if (ig.startsWith('http')) return ig;
   return `https://instagram.com/${ig.replace(/^@/, '')}`;
 }
+
+// Normaliza link de site/galeria: aceita "cunhat9films.com.br" e devolve URL absoluta.
+export function siteUrl(s) {
+  if (!s) return null;
+  const t = String(s).trim();
+  if (!t) return null;
+  return /^https?:\/\//i.test(t) ? t : `https://${t}`;
+}
+
+// Texto do horário do ponto (ex: "Dom, Sáb · 07:00–13:00"). null se incompleto.
+const DIAS_PT = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+export function horarioTxt(dias, inicio, fim) {
+  if (!Array.isArray(dias) || dias.length === 0 || !inicio || !fim) return null;
+  const d = dias.slice().sort((a, b) => a - b).map(n => DIAS_PT[n]).filter(Boolean).join(', ');
+  return `${d} · ${inicio}–${fim}`;
+}
