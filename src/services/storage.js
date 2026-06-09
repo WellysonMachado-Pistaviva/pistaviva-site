@@ -88,6 +88,48 @@ const cropSquare1080 = (dataUrl, size = 1080) => new Promise((resolve) => {
   } catch { resolve(dataUrl); }
 });
 
+// Center-crop p/ banner wide 1200x630 (1.91:1) — usado em CAPA de matéria/blog,
+// mesma proporção do hero (.art-lead). Garante WYSIWYG: o que sobe = o que aparece.
+const cropWide1200 = (dataUrl, tw = 1200, th = 630) => new Promise((resolve) => {
+  try {
+    if (typeof document === 'undefined') return resolve(dataUrl);
+    const img = new Image();
+    img.onload = () => {
+      const target = tw / th, ratio = img.width / img.height;
+      let sw, sh, sx, sy;
+      if (ratio > target) { sh = img.height; sw = sh * target; sx = (img.width - sw) / 2; sy = 0; }
+      else { sw = img.width; sh = sw / target; sx = 0; sy = (img.height - sh) / 2; }
+      const c = document.createElement('canvas');
+      c.width = tw; c.height = th;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#0e1311'; ctx.fillRect(0, 0, tw, th);
+      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, tw, th);
+      resolve(c.toDataURL('image/jpeg', 0.9));
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  } catch { resolve(dataUrl); }
+});
+
+// Upload de CAPA (banner 1200x630). Mesma proporção do hero da matéria.
+export const uploadCoverImage = async (base64DataUrl, userId) => {
+  if (!base64DataUrl || !base64DataUrl.startsWith('data:')) return null;
+  try {
+    const wide = await cropWide1200(base64DataUrl);
+    const res = await fetch(wide);
+    const blob = await res.blob();
+    const path = `covers/${userId || 'anon'}/${Date.now()}.jpg`;
+    const tryUpload = async () => supabase.storage.from('post-images').upload(path, blob, { contentType: blob.type, upsert: false });
+    let { data, error } = await tryUpload();
+    if (error?.message?.toLowerCase().includes('bucket')) {
+      await supabase.storage.createBucket('post-images', { public: true });
+      ({ data, error } = await tryUpload());
+    }
+    if (error || !data) return null;
+    return supabase.storage.from('post-images').getPublicUrl(data.path).data.publicUrl;
+  } catch { return null; }
+};
+
 // ── Supabase Storage — upload de imagem de post (sempre 1080x1080) ────────
 export const uploadPostImage = async (base64DataUrl, userId) => {
   if (!base64DataUrl || !base64DataUrl.startsWith('data:')) return null;
