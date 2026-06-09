@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Cover from '../../components/Cover';
 import PhotoCarousel from '../../components/PhotoCarousel';
+import NearbyLive from '../../components/NearbyLive';
 import { notFound } from 'next/navigation';
 import { getSpotBySlug, getAllSpotSlugs } from '../../lib/spots';
 import { SELOS, catNome } from '../../lib/spotMeta';
@@ -129,6 +130,11 @@ export default async function ParadaPage({ params }) {
               </div>
             </aside>
           </div>
+
+          {/* O que tem perto daqui — paradas curadas + postos/hospedagem (OSM), lazy */}
+          {s.lat && s.lng && (
+            <NearbyLive lat={s.lat} lng={s.lng} excludeId={s.id} radiusKm={35} titulo="O que tem perto daqui" />
+          )}
         </div>
       </main>
     </div>
