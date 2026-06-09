@@ -19,9 +19,9 @@ import LiveToast from './components/LiveToast';
 
 // IGNIS spec: Saira (corpo), Saira Condensed (títulos), Saira Semi Condensed (labels/botões)
 const display = Saira_Condensed({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-display', display: 'swap' });
-const semi = Saira_Semi_Condensed({ subsets: ['latin'], weight: ['600', '700'], variable: '--font-mono', display: 'swap' });
+const semi = Saira_Semi_Condensed({ subsets: ['latin'], weight: ['600', '700'], variable: '--font-mono', display: 'swap', preload: false });
 const poppins = Saira({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-sans', display: 'swap' });
-const serif = Saira({ subsets: ['latin'], weight: ['500'], style: ['italic'], variable: '--font-serif', display: 'swap' });
+const serif = Saira({ subsets: ['latin'], weight: ['500'], style: ['italic'], variable: '--font-serif', display: 'swap', preload: false });
 
 const SITE_URL = 'https://www.pistavivamototurismo.com.br';
 
