@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import EmblaCarousel from './EmblaCarousel';
 
@@ -21,8 +21,21 @@ const VIDEOS = [
 
 export default function VideosRail() {
   const [playing, setPlaying] = useState(null); // índice do YouTube tocando
+  const [show, setShow] = useState(false);       // só monta o carrossel perto da viewport (perf)
+  const ref = useRef(null);
 
-  const slides = VIDEOS.map((v, i) => v.type === 'youtube' ? (
+  useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined') { setShow(true); return; }
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver((es) => {
+      if (es.some((e) => e.isIntersecting)) { setShow(true); io.disconnect(); }
+    }, { rootMargin: '400px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const slides = !show ? [] : VIDEOS.map((v, i) => v.type === 'youtube' ? (
     <div className="vrail-card" key={i}>
       {playing === i ? (
         <iframe
@@ -65,7 +78,7 @@ export default function VideosRail() {
   ));
 
   return (
-    <section className="vrail-sec">
+    <section className="vrail-sec" ref={ref}>
       <div className="wrap vrail-head">
         <div className="lead">
           <span className="ig-eyebrow">Da estrada</span>
@@ -75,7 +88,9 @@ export default function VideosRail() {
       </div>
 
       <div className="wrap">
-        <EmblaCarousel slides={slides} basis="clamp(260px,76vw,300px)" gap={14} />
+        {show
+          ? <EmblaCarousel slides={slides} basis="clamp(260px,76vw,300px)" gap={14} />
+          : <div style={{ height: 'calc(clamp(260px,76vw,300px) * 16 / 9)', maxHeight: 534 }} aria-hidden="true" />}
       </div>
     </section>
   );
