@@ -10,6 +10,7 @@ import '../src/App.css';
 import 'leaflet/dist/leaflet.css';
 import './globals.css';
 import AuthProvider from './components/AuthProvider';
+import AdSenseLoader from './components/AdSenseLoader';
 import SiteHeader from './components/SiteHeader';
 import SiteFooter from './components/SiteFooter';
 import AnnouncementBar from './components/AnnouncementBar';
@@ -113,8 +114,7 @@ export default function RootLayout({ children }) {
             </Script>
           </>
         )}
-        <Script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
-          strategy="lazyOnload" crossOrigin="anonymous" />
+        <AdSenseLoader client={ADSENSE_ID} />
       </body>
     </html>
   );
