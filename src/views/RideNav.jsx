@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { MapContainer, TileLayer, Polyline, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { X, Crosshair, Navigation, Volume2, VolumeX, CornerUpLeft, CornerUpRight, AlertTriangle } from 'lucide-react';
+import { X, Crosshair, Navigation, Volume2, VolumeX, CornerUpLeft, CornerUpRight, AlertTriangle, Compass } from 'lucide-react';
 import { useWakeLock } from '../hooks/useWakeLock';
 import { TILES } from '../lib/mapTiles';
 
@@ -41,6 +41,9 @@ export default function RideNav({ line = [], dest, originName, destName, onClose
   const [pos, setPos] = useState(null);
   const [speed, setSpeed] = useState(0);
   const [follow, setFollow] = useState(true);
+  const [headingUp, setHeadingUp] = useState(true); // mapa gira pra direção (GPS de guidão)
+  const [heading, setHeading] = useState(0);
+  const lastPosRef = useRef(null);
   const [voice, setVoice] = useState(true);
   const [err, setErr] = useState('');
   const [idx, setIdx] = useState(0);          // índice do segmento mais próximo (progresso)
@@ -82,6 +85,11 @@ export default function RideNav({ line = [], dest, originName, destName, onClose
         setPos(cur);
         setSpeed(p.coords.speed != null && p.coords.speed >= 0 ? p.coords.speed * 3.6 : 0);
         setErr('');
+        // direção (heading) — GPS quando em movimento, senão calcula pelo deslocamento
+        let hd = (p.coords.heading != null && !isNaN(p.coords.heading) && (p.coords.speed == null || p.coords.speed > 1.2)) ? p.coords.heading : null;
+        if (hd == null && lastPosRef.current && meters(lastPosRef.current, cur) > 4) hd = bearing(lastPosRef.current, cur);
+        if (hd != null && !isNaN(hd)) setHeading(hd);
+        lastPosRef.current = cur;
         // segmento mais próximo + distância à rota
         let best = Infinity, bi = 0;
         for (let i = 0; i < line.length - 1; i++) {
@@ -122,14 +130,34 @@ export default function RideNav({ line = [], dest, originName, destName, onClose
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 4000, background: '#0a0a0b' }}>
-      <MapContainer center={center} zoom={15} style={{ height: '100%', width: '100%' }} zoomControl={false} attributionControl={false}>
-        <TileLayer attribution={TILES.topo.attribution} url={TILES.topo.url} />
-        {traveled.length > 1 && <Polyline positions={traveled} color="#6b7280" weight={5} opacity={0.7} />}
-        {remaining.length > 1 && <Polyline positions={remaining} color="#f97316" weight={6} opacity={0.95} />}
-        {dLat != null && <Marker position={[dLat, dLng]} icon={destIcon} />}
-        {pos && <Marker position={pos} icon={riderIcon} />}
-        <Follow pos={pos} follow={follow} />
-      </MapContainer>
+      {/* Viewport recorta; o "stage" é maior que a tela e gira pra direção (heading-up) */}
+      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+        <div style={{
+          position: 'absolute', top: '-35%', left: '-35%', width: '170%', height: '170%',
+          transform: headingUp ? `rotate(${-heading}deg)` : 'none',
+          transformOrigin: '50% 50%', transition: 'transform .4s ease-out',
+        }}>
+          <MapContainer center={center} zoom={15} style={{ height: '100%', width: '100%' }} zoomControl={false} attributionControl={false} dragging={!headingUp} doubleClickZoom={false}>
+            <TileLayer attribution={TILES.topo.attribution} url={TILES.topo.url} />
+            {traveled.length > 1 && <Polyline positions={traveled} color="#6b7280" weight={5} opacity={0.7} />}
+            {remaining.length > 1 && <Polyline positions={remaining} color="#f97316" weight={6} opacity={0.95} />}
+            {dLat != null && <Marker position={[dLat, dLng]} icon={destIcon} />}
+            <Follow pos={pos} follow={follow} />
+          </MapContainer>
+        </div>
+      </div>
+
+      {/* Piloto sempre no centro, olhando pra frente (seta sobe = direção do movimento) */}
+      {pos && (
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', zIndex: 4001, pointerEvents: 'none' }}>
+          <div style={{ transform: headingUp ? 'none' : `rotate(${heading}deg)`, transition: 'transform .4s ease-out' }}>
+            <svg width="40" height="40" viewBox="0 0 40 40" style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,.6))' }}>
+              <circle cx="20" cy="20" r="8" fill="rgba(249,115,22,.25)" />
+              <path d="M20 5 L30 30 L20 24 L10 30 Z" fill="#f97316" stroke="#fff" strokeWidth="2" strokeLinejoin="round" />
+            </svg>
+          </div>
+        </div>
+      )}
 
       {/* banner de curva / saiu da rota */}
       {(offRoute || cue) && (
@@ -158,6 +186,7 @@ export default function RideNav({ line = [], dest, originName, destName, onClose
       {/* botões base */}
       <div style={{ position: 'absolute', bottom: 'calc(16px + env(safe-area-inset-bottom))', left: 12, right: 12, zIndex: 4001, display: 'flex', gap: 8 }}>
         <button onClick={() => setFollow(f => !f)} style={{ flex: '0 0 auto', padding: '13px 15px', borderRadius: 12, background: follow ? '#f97316' : 'rgba(8,8,9,.82)', color: '#fff', border: '1px solid rgba(255,255,255,.15)', cursor: 'pointer', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 7 }}><Crosshair size={16} /> {follow ? 'Seguindo' : 'Centralizar'}</button>
+        <button onClick={() => setHeadingUp(h => !h)} aria-label="Direção/Norte" title={headingUp ? 'Mapa na direção' : 'Mapa ao norte'} style={{ flex: '0 0 auto', padding: '13px 15px', borderRadius: 12, background: headingUp ? '#f97316' : 'rgba(8,8,9,.82)', color: '#fff', border: '1px solid rgba(255,255,255,.15)', cursor: 'pointer', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 7 }}><Compass size={16} /> {headingUp ? 'Direção' : 'Norte'}</button>
         {gmaps && <a href={gmaps} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '13px 15px', borderRadius: 12, background: 'rgba(8,8,9,.82)', color: '#fff', border: '1px solid rgba(255,255,255,.15)', textAlign: 'center', fontWeight: 700, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}><Navigation size={16} /> Maps (voz)</a>}
         {waze && <a href={waze} target="_blank" rel="noopener noreferrer" style={{ flex: '0 0 auto', padding: '13px 15px', borderRadius: 12, background: 'rgba(8,8,9,.82)', color: '#fff', border: '1px solid rgba(255,255,255,.15)', textAlign: 'center', fontWeight: 700, textDecoration: 'none' }}>Waze</a>}
       </div>
