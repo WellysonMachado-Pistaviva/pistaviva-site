@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../../src/lib/supabaseClient';
-import { uploadPostImage } from '../../../src/services/storage';
+import { uploadPostImage, uploadCoverImage } from '../../../src/services/storage';
 import { useAuth, showToast } from '../../components/AuthProvider';
 
 const slugify = (s) =>
@@ -66,7 +66,7 @@ export default function BlogAdmin() {
     if (!file) return;
     setUploading(true);
     const r = new FileReader();
-    r.onload = async () => { const url = await uploadPostImage(r.result, auth.user?.id || 'admin'); if (url) set('cover_url', url); else showToast('Falha no upload', 'error'); setUploading(false); };
+    r.onload = async () => { const url = await uploadCoverImage(r.result, auth.user?.id || 'admin'); if (url) set('cover_url', url); else showToast('Falha no upload', 'error'); setUploading(false); };
     r.readAsDataURL(file);
   };
   const onBodyImage = async (e) => {
