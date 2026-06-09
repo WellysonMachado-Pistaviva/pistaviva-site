@@ -17,6 +17,9 @@ const distKmLL = (aLat, aLng, bLat, bLng) => {
   return R * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s));
 };
 const igLink = (ig) => !ig ? null : (ig.startsWith('http') ? ig : `https://instagram.com/${ig.replace(/^@/, '')}`);
+const siteLink = (s) => { if (!s) return null; const t = String(s).trim(); return t ? (/^https?:\/\//i.test(t) ? t : `https://${t}`) : null; };
+const CAT = { pousada: ['🛏️', 'Pousada'], restaurante: ['🍽️', 'Restaurante'], mirante: ['🏞️', 'Mirante'], oficina: ['🔧', 'Oficina'], posto: ['⛽', 'Posto'], atrativo: ['🌄', 'Atrativo'], outro: ['📍', 'Parada'] };
+const catInfo = (c) => CAT[c] || CAT.outro;
 
 const showErr = (msg) => {
   const el = document.getElementById('app-toast');
@@ -58,6 +61,7 @@ const Planner = ({ user }) => {
   const [riding, setRiding]       = useState(false);
 
   const [photographers, setPhotographers] = useState([]);
+  const [spots, setSpots] = useState([]);
 
   const { weather: originWeather } = useWeather(result ? origin.lat : null, result ? origin.lng : null);
   const { weather: destWeather }   = useWeather(result ? dest.lat : null, result ? dest.lng : null);
@@ -66,6 +70,9 @@ const Planner = ({ user }) => {
     supabase.from('pv_photographers').select('id, slug, nome, local, instagram, site_url, lat, lng')
       .eq('published', true).not('lat', 'is', null)
       .then(({ data }) => setPhotographers(data || []));
+    supabase.from('pv_spots').select('id, slug, nome, categoria, cidade, uf, lat, lng')
+      .eq('published', true).not('lat', 'is', null)
+      .then(({ data }) => setSpots(data || []));
   }, []);
 
   // Fotógrafos a até 12 km de qualquer ponto da rota traçada.
@@ -76,6 +83,15 @@ const Planner = ({ user }) => {
       line.some(([lat, lng]) => distKmLL(lat, lng, f.lat, f.lng) <= 12)
     );
   }, [result, photographers]);
+
+  // Paradas a até 12 km de qualquer ponto da rota traçada.
+  const routeSpots = useMemo(() => {
+    if (!result?.line?.length || !spots.length) return [];
+    const line = result.line.filter((_, i) => i % 8 === 0);
+    return spots.filter(s =>
+      line.some(([lat, lng]) => distKmLL(lat, lng, s.lat, s.lng) <= 12)
+    );
+  }, [result, spots]);
 
   const fetchSuggestions = async (query, type) => {
     if (query.length < 3) { setSuggestions([]); return; }
@@ -367,13 +383,37 @@ const Planner = ({ user }) => {
                 {routePhotographers.map(f => (
                   <div key={f.id} style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap', background:'var(--bg)', border:'1px solid var(--border)', borderRadius:8, padding:'8px 12px' }}>
                     <div style={{ flex:1, minWidth:140 }}>
-                      <div style={{ fontWeight:700, fontSize:14 }}>{f.nome}</div>
+                      <a href={`/fotografo/${f.slug}`} style={{ fontWeight:700, fontSize:14, color:'inherit', textDecoration:'none' }}>{f.nome}</a>
                       {f.local && <div style={{ fontSize:12, color:'var(--muted)' }}>📍 {f.local}</div>}
                     </div>
                     {igLink(f.instagram) && <a href={igLink(f.instagram)} target="_blank" rel="noopener noreferrer" style={{ display:'inline-flex', alignItems:'center', gap:4, fontSize:12, color:'var(--accent)', fontWeight:700 }}>📷 Instagram</a>}
-                    {f.site_url && <a href={f.site_url} target="_blank" rel="noopener noreferrer" style={{ fontSize:12, color:'var(--accent)', fontWeight:700 }}>Fotos →</a>}
+                    {siteLink(f.site_url) && <a href={siteLink(f.site_url)} target="_blank" rel="noopener noreferrer" style={{ fontSize:12, color:'var(--accent)', fontWeight:700 }}>Fotos →</a>}
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* PARADAS NA ROTA */}
+          {routeSpots.length > 0 && (
+            <div style={{ background:'rgba(255,98,0,.05)', borderBottom:'1px solid var(--border)', padding:'14px 16px' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:10, color:'var(--accent)', fontWeight:800, fontSize:13, letterSpacing:'.5px' }}>
+                <MapPin size={16} /> {routeSpots.length} parada{routeSpots.length>1?'s':''} no caminho
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                {routeSpots.map(s => {
+                  const [emo, lbl] = catInfo(s.categoria);
+                  return (
+                    <a key={s.id} href={`/parada/${s.slug}`} style={{ display:'flex', alignItems:'center', gap:10, background:'var(--bg)', border:'1px solid var(--border)', borderRadius:8, padding:'8px 12px', textDecoration:'none', color:'inherit' }}>
+                      <span style={{ fontSize:18 }}>{emo}</span>
+                      <div style={{ flex:1, minWidth:0 }}>
+                        <div style={{ fontWeight:700, fontSize:14 }}>{s.nome}</div>
+                        <div style={{ fontSize:12, color:'var(--muted)' }}>{lbl}{s.cidade ? ` · ${s.cidade}${s.uf?'/'+s.uf:''}` : ''}</div>
+                      </div>
+                      <span style={{ fontSize:12, color:'var(--accent)', fontWeight:700, flexShrink:0 }}>Ver →</span>
+                    </a>
+                  );
+                })}
               </div>
             </div>
           )}

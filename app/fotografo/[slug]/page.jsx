@@ -3,7 +3,7 @@ import Cover from '../../components/Cover';
 import PhotoCarousel from '../../components/PhotoCarousel';
 import LiveBadge from '../../components/LiveBadge';
 import { notFound } from 'next/navigation';
-import { getPhotographerBySlug, getAllPhotographerSlugs, igUrl } from '../../lib/photographers';
+import { getPhotographerBySlug, getAllPhotographerSlugs, igUrl, siteUrl, horarioTxt } from '../../lib/photographers';
 
 export const revalidate = 120;
 
@@ -30,6 +30,9 @@ export default async function FotografoPage({ params }) {
   const f = await getPhotographerBySlug(slug);
   if (!f) notFound();
   const ig = igUrl(f.instagram);
+  const galeria = siteUrl(f.site_url);
+  const horario = horarioTxt(f.horario_dias, f.horario_inicio, f.horario_fim);
+  const gallery = (Array.isArray(f.images) ? f.images.filter(Boolean) : []);
   const jsonLd = {
     '@context': 'https://schema.org', '@type': 'Person', name: f.nome,
     jobTitle: 'Fotógrafo', ...(ig ? { sameAs: [ig] } : {}), ...(f.site_url ? { url: f.site_url } : {}),
@@ -69,13 +72,11 @@ export default async function FotografoPage({ params }) {
           <div className="ph-layout">
             {/* coluna principal */}
             <div>
-              {f.images && f.images.length > 1 ? (
-                <div className="ph-heroph" style={{ height: 'auto' }}>
-                  <PhotoCarousel images={f.images} height={420} alt={f.nome} radius={14} />
-                </div>
+              {gallery.length > 1 ? (
+                <PhotoCarousel images={gallery} height={420} alt={f.nome} radius={14} />
               ) : (
                 <div className="ph-heroph">
-                  {f.cover_url ? <Cover src={f.cover_url} alt={f.nome} sizes="(max-width:900px) 100vw, 680px" priority /> : <span className="pic-ph">📷</span>}
+                  {(gallery[0] || f.cover_url) ? <Cover src={gallery[0] || f.cover_url} alt={f.nome} sizes="(max-width:900px) 100vw, 680px" priority /> : <span className="pic-ph">📷</span>}
                 </div>
               )}
               <div className="ph-bio">
@@ -83,7 +84,7 @@ export default async function FotografoPage({ params }) {
                 {local && <div className="place"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></svg> {local}</div>}
                 <div className="ph-actions">
                   {ig && <a className="ig-btn ig-btn--primary" href={ig} target="_blank" rel="noopener noreferrer">Instagram</a>}
-                  {f.site_url && <a className="ig-btn ig-btn--ghost" href={f.site_url} target="_blank" rel="noopener noreferrer">Ver galeria</a>}
+                  {galeria && <a className="ig-btn ig-btn--ghost" href={galeria} target="_blank" rel="noopener noreferrer">Ver galeria</a>}
                   {f.whatsapp && <a className="ig-btn ig-btn--ghost" href={`https://wa.me/${f.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">WhatsApp</a>}
                 </div>
                 <div style={{ marginTop: 26 }}><Link className="ph-linkarrow" href="/fotografos"><span className="arr" style={{ transform: 'scaleX(-1)' }}>→</span> Todos os fotógrafos</Link></div>
@@ -97,6 +98,7 @@ export default async function FotografoPage({ params }) {
                 <div className="pb">
                   <div className="rate"><span className="k">Trecho</span><span className="v">{f.local || '—'}</span></div>
                   <div className="rate"><span className="k">Cidade</span><span className="v">{[f.cidade, f.uf].filter(Boolean).join('/') || '—'}</span></div>
+                  {horario && <div className="rate"><span className="k">Horário</span><span className="v">{horario}</span></div>}
                 </div>
                 {mapsUrl && <a className="ph-openmap" href={mapsUrl} target="_blank" rel="noopener noreferrer">Abrir ponto no mapa →</a>}
               </div>
