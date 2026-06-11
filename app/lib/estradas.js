@@ -261,6 +261,53 @@ export const ESTRADAS = [
       { q: 'Dá pra subir o Pico da Bandeira de moto?', a: 'Não até o cume — a parte final é trilha a pé. De moto chega-se aos portões e estacionamentos do parque por estradas de terra e pedra; trail e big trail se dão melhor.' },
     ],
   },
+  {
+    slug: 'rio-santos-costa-verde',
+    nome: 'Rio–Santos (Costa Verde)',
+    uf: ['rj', 'sp'],
+    regiao: 'Litoral · Rio de Janeiro e São Paulo',
+    rodovia: 'BR-101 / SP-055',
+    pontas: 'Rio de Janeiro ↔ Santos (Angra dos Reis, Paraty, Ubatuba)',
+    piso: 'Asfalto',
+    dificuldade: 'Moderada — tráfego, curvas cegas e chuva de litoral',
+    melhorEpoca: 'Fora da alta temporada e de feriadões; outono e inverno têm menos chuva',
+    resumo: 'A estrada de litoral mais famosa do Brasil: centenas de quilômetros espremidos entre a Serra do Mar e o mar, costurando praias, Angra, Paraty e Ubatuba em curvas com vista pro oceano.',
+    descricao: [
+      'A Rio–Santos é o clássico absoluto do litoral: a pista corre espremida entre o paredão verde da Serra do Mar e o mar aberto, revelando uma praia diferente a cada curva. É o tipo de estrada em que o destino importa menos que o caminho — Angra dos Reis, Paraty, Ubatuba e dezenas de vilas de pescador vão aparecendo no ritmo da viagem.',
+      'O traçado mistura retas curtas e curvas de serra à beira-mar, com mirantes naturais pra parar e fotografar. Em compensação, é estrada viva: tráfego pesado perto dos centros, curva cega com saída de praia e chuva frequente de litoral pedem atenção — feriadão e alta temporada transformam trechos inteiros em fila.',
+      'O roteiro clássico é fazer com calma, dormindo em Paraty ou Ubatuba e esticando os trechos cênicos de manhã cedo, quando a estrada está vazia e a luz é a melhor do dia. Combina bem com a subida pra Cunha ou pra Serra da Bocaina pra fechar o roteiro com serra.',
+    ],
+    destaques: ['Curvas com vista pro mar', 'Paraty histórica', 'Praias de Ubatuba e Angra', 'Serra do Mar encostada na pista'],
+    faqs: [
+      { q: 'Onde fica a Rio–Santos?', a: 'É o trecho litorâneo da BR-101 (e SP-055) entre o Rio de Janeiro e Santos, passando por Angra dos Reis, Paraty e Ubatuba — a chamada Costa Verde.' },
+      { q: 'Qual a melhor época pra rodar a Rio–Santos de moto?', a: 'Fora da alta temporada e dos feriadões, quando o tráfego despenca. Outono e inverno costumam ter menos chuva no litoral; de manhã cedo a estrada rende mais e a luz é melhor.' },
+      { q: 'A Rio–Santos é perigosa de moto?', a: 'O risco vem do movimento, não do traçado: tráfego intenso, curva cega com saída de praia e pista molhada de chuva de litoral. Rodando com margem e fora dos horários de pico, é viagem tranquila e cênica.' },
+    ],
+  },
+  {
+    slug: 'transpantaneira',
+    nome: 'Transpantaneira',
+    uf: ['mt'],
+    regiao: 'Pantanal · Mato Grosso',
+    rodovia: 'MT-060 (estrada-parque)',
+    pontas: 'Poconé ↔ Porto Jofre',
+    piso: 'Terra, com dezenas de pontes de madeira',
+    dificuldade: 'Alta — terra, pontes estreitas e lama na época de cheia',
+    melhorEpoca: 'Seca — de maio a setembro (na cheia, trechos ficam intransitáveis)',
+    resumo: 'A estrada-parque que corta o Pantanal: mais de cem quilômetros de terra e pontes de madeira entre Poconé e Porto Jofre, com jacarés, tuiuiús e capivaras na beira da pista.',
+    descricao: [
+      'A Transpantaneira é a aventura de natureza mais impressionante que dá pra fazer de moto no Brasil. A estrada-parque atravessa o Pantanal de Poconé a Porto Jofre em mais de cem quilômetros de terra batida e uma sequência enorme de pontes de madeira — e a fauna aparece de verdade: jacarés tomando sol na beira da pista, capivaras, tuiuiús e, com sorte, ariranhas e até onça na região de Porto Jofre.',
+      'É rota de trail e big trail, e o segredo é a época: na seca (de maio a setembro) a estrada fica firme e rodável; na cheia, lama e alagamento tornam trechos intransitáveis. As pontes de madeira pedem respeito — tábua solta, madeira molhada e pranchas no sentido da roda exigem passagem em pé, devagar e sem freio.',
+      'A logística é parte do plano: combustível e estrutura se concentram em Poconé e nas pousadas do caminho, então vale sair com tanque cheio e reserva de água. O pôr do sol pantaneiro, com a estrada de terra rasgando o horizonte alagado, paga a viagem inteira.',
+    ],
+    destaques: ['Pontes de madeira históricas', 'Jacarés e fauna na beira da pista', 'Pôr do sol pantaneiro', 'Porto Jofre — território da onça'],
+    faqs: [
+      { q: 'Onde fica a Transpantaneira?', a: 'No Mato Grosso: é a MT-060, estrada-parque que liga Poconé a Porto Jofre, dentro do Pantanal — mais de cem quilômetros de terra e dezenas de pontes de madeira.' },
+      { q: 'Qual a melhor época pra fazer a Transpantaneira de moto?', a: 'Na seca, de maio a setembro, quando a terra fica firme e rodável. Na época de cheia, lama e alagamentos tornam trechos intransitáveis — não vale arriscar.' },
+      { q: 'Precisa de moto trail pra rodar a Transpantaneira?', a: 'É o ideal. Trail e big trail lidam melhor com terra batida, buracos e pontes de madeira. Na seca, piloto experiente passa com outras motos, mas é caminho de aventura — não de moto baixa carregada.' },
+      { q: 'Tem posto de combustível na Transpantaneira?', a: 'A estrutura se concentra em Poconé, na entrada. Saia com tanque cheio, leve água e planeje as paradas nas pousadas do caminho — autonomia é parte do roteiro.' },
+    ],
+  },
 ];
 
 // Centro geográfico aproximado + raio (km) de cada estrada — pro bloco
@@ -275,6 +322,8 @@ export const ESTRADA_GEO = {
   'rota-do-sol-rs': { lat: -29.20, lng: -50.30, raio: 80 },
   'rota-romantica': { lat: -29.37, lng: -50.88, raio: 45 },
   'serra-do-cipo': { lat: -19.30, lng: -43.60, raio: 60 },
+  'rio-santos-costa-verde': { lat: -23.22, lng: -44.71, raio: 95 },
+  'transpantaneira': { lat: -16.80, lng: -56.70, raio: 85 },
 };
 
 export const getEstrada = (slug) => ESTRADAS.find((e) => e.slug === slug) || null;

@@ -314,6 +314,124 @@ export const GUIAS = [
       { href: '/guias/seguranca-em-viagem-de-moto', label: 'Segurança na estrada' },
     ],
   },
+  {
+    slug: 'quanto-custa-viajar-de-moto',
+    titulo: 'Quanto custa viajar de moto: como montar o orçamento',
+    h1: 'Quanto custa viajar de moto',
+    categoria: 'Planejamento',
+    resumo: 'Como calcular o custo real de uma viagem de moto: combustível, hospedagem, comida, pedágio, manutenção e a margem de imprevisto que salva o rolê.',
+    secoes: [
+      {
+        h: 'Combustível: a conta mais fácil (e mais errada)',
+        p: [
+          'A base é simples: quilometragem total ÷ consumo da moto × preço do litro. O erro clássico é usar o consumo de cidade — moto carregada, com garupa ou em serra bebe mais. Faça a conta com o consumo real de estrada carregada e arredonde pra cima.',
+          'Some também o trajeto extra que toda viagem tem: ida até a rota, voltinhas no destino e desvios. Uma folga de 10–15% na quilometragem deixa a conta honesta.',
+        ],
+      },
+      {
+        h: 'Hospedagem e comida: onde o orçamento se decide',
+        p: [
+          'Dormida e comida costumam pesar mais que a gasolina. O custo varia brutalmente com o estilo: camping e marmita de posto numa ponta, pousada com café e restaurante na outra. Defina o estilo antes e multiplique pelo número de noites — esse número é o coração do orçamento.',
+          'Dica de estrada: cidade pequena fora de feriado tem diária boa e comida farta a preço justo. Alta temporada e evento na cidade dobram tudo — vale checar o calendário do destino antes de fechar a data.',
+        ],
+      },
+      {
+        h: 'Pedágio, manutenção e a margem que salva',
+        p: [
+          'Pedágio em rota litorânea ou de rodovia concedida soma rápido — vale conferir o trajeto. E toda viagem consome a moto: pneu, óleo, corrente e revisão são custo da viagem, mesmo que a conta chegue depois.',
+          'Por fim, a regra de ouro: leve uma margem de 20–30% pra imprevisto. Pneu furado, peça, uma diária extra por causa de chuva — quem viaja sem margem transforma perrengue pequeno em problema grande.',
+        ],
+      },
+    ],
+    faqs: [
+      { q: 'Como calcular o combustível de uma viagem de moto?', a: 'Quilometragem total ÷ consumo real da moto carregada × preço do litro, com folga de 10–15% na quilometragem. Use o consumo de estrada com carga, não o de cidade — moto carregada e serra bebem mais.' },
+      { q: 'Qual a maior despesa numa viagem de moto?', a: 'Na maioria das viagens, hospedagem e comida superam o combustível. É onde o estilo da viagem (camping × pousada) muda o orçamento de verdade. E reserve 20–30% de margem pra imprevisto.' },
+    ],
+    relacionados: [
+      { href: '/guias/como-planejar-uma-rota-de-moto', label: 'Planejar a rota' },
+      { href: '/guias/o-que-levar-na-viagem-de-moto', label: 'O que levar na viagem' },
+      { href: '/rotas', label: 'Calcular distância no planejador' },
+    ],
+  },
+  {
+    slug: 'viajar-de-moto-com-garupa',
+    titulo: 'Viajar de moto com garupa: guia pra dois na estrada',
+    h1: 'Viajar de moto com garupa',
+    categoria: 'Preparação',
+    resumo: 'O que muda quando a viagem é a dois: ajuste da moto, equipamento da garupa, comunicação, paradas e como dividir o peso sem perder o prazer da estrada.',
+    secoes: [
+      {
+        h: 'A moto muda — ajuste antes de sair',
+        p: [
+          'Com garupa e bagagem, a moto fica mais pesada atrás: calibre os pneus na pressão "com carga" do manual e, se a suspensão tiver regulagem de pré-carga, endureça. Freio pede mais distância e a moto inclina diferente — vale rodar um trecho curto carregado antes da viagem pra recalibrar a mão.',
+          'Distribua o peso: o mais pesado nas laterais, embaixo e perto do centro. Baú alto e lotado atrás da garupa deixa a moto "bamba" em velocidade.',
+        ],
+      },
+      {
+        h: 'Equipamento da garupa não é opcional',
+        p: [
+          'A garupa precisa do mesmo nível de proteção do piloto: capacete que veda bem, jaqueta com proteção, luva, calça e bota que cubra o tornozelo. Frio e vento castigam mais quem vai atrás — sem o guidão pra segurar e sem o quebra-vento, a garupa esfria primeiro.',
+          'Conforto define a viagem a dois: assento razoável, pedaleira em boa posição e paradas mais frequentes. Garupa com cãibra e frio não quer saber de paisagem.',
+        ],
+      },
+      {
+        h: 'Combinem comunicação e ritmo',
+        p: [
+          'Antes de sair, combinem sinais simples: toque no ombro pra parar, na perna pra reduzir — ou usem intercomunicador, que transforma a viagem a dois. A garupa acompanha o corpo do piloto nas curvas, sem se jogar nem lutar contra a inclinação.',
+          'O ritmo é o da dupla, não o do piloto: paradas a cada 1h–1h30, trechos mais curtos por dia e tempo pra descer, esticar e fotografar. Viagem a dois boa é a que os dois querem repetir.',
+        ],
+      },
+    ],
+    faqs: [
+      { q: 'O que muda na moto pra viajar com garupa?', a: 'Pressão dos pneus na condição "com carga", pré-carga da suspensão mais firme (se houver regulagem), mais distância de frenagem e peso bem distribuído. Rode um trecho curto carregado antes pra se acostumar.' },
+      { q: 'Quantos quilômetros por dia viajando de moto com garupa?', a: 'Menos que sozinho: o conforto da garupa dita o ritmo. Algo entre 150 e 300 km por dia com paradas a cada 1h–1h30 costuma manter a viagem boa pros dois.' },
+    ],
+    relacionados: [
+      { href: '/guias/como-preparar-a-moto-para-viagem', label: 'Preparar a moto' },
+      { href: '/guias/equipamento-e-epi-para-mototurismo', label: 'Equipamento e EPI' },
+      { href: '/guias/quanto-custa-viajar-de-moto', label: 'Orçamento da viagem' },
+    ],
+  },
+  {
+    slug: 'documentos-para-viajar-de-moto-pela-america-do-sul',
+    titulo: 'Documentos pra viajar de moto pela América do Sul',
+    h1: 'Documentos pra rodar a América do Sul de moto',
+    categoria: 'Planejamento',
+    resumo: 'O que o brasileiro precisa pra cruzar fronteira de moto no Mercosul e vizinhos: documentos pessoais, da moto, seguro de fronteira e o que conferir antes de sair.',
+    secoes: [
+      {
+        h: 'Documentos pessoais: mais simples do que parece',
+        p: [
+          'Nos países do Mercosul e associados (Argentina, Uruguai, Paraguai, Chile, Bolívia…), brasileiro costuma entrar com RG em bom estado ou passaporte — e a CNH brasileira vale pra conduzir nesses países. Leve os originais físicos: versão digital nem sempre é aceita na fronteira.',
+          'Regra de viagem internacional: confirme as exigências atuais de cada país pouco antes de sair, nos canais oficiais (consulados/migração). Regras mudam, e a fila da fronteira não é lugar de descobrir isso.',
+        ],
+      },
+      {
+        h: 'Documentos da moto e a questão do nome',
+        p: [
+          'O CRLV da moto (original e dentro da validade) é obrigatório. O ponto que mais pega: o ideal é a moto estar no nome de quem viaja. Moto em nome de terceiro, financiada ou alugada costuma exigir autorização específica (em geral com tradução pro espanhol e reconhecimento) — resolva isso com semanas de antecedência.',
+          'Na fronteira a moto entra como "admissão temporária": guarde todos os papéis que receber na entrada, porque eles serão exigidos na saída.',
+        ],
+      },
+      {
+        h: 'Seguro de fronteira: a tal Carta Verde',
+        p: [
+          'Pra rodar nos países do Mercosul é exigido o seguro de responsabilidade civil internacional — a conhecida Carta Verde. É contratado no Brasil antes de sair, por período (dias/meses da viagem), e fiscalizado nas fronteiras e em blitz. Sem ele, a viagem pode parar na primeira aduana.',
+          'Países fora do acordo (como o Peru, por exemplo) podem exigir seguro próprio comprado na entrada. De novo: confirme o exigido em cada país do roteiro antes de sair.',
+        ],
+      },
+    ],
+    faqs: [
+      { q: 'Precisa de passaporte pra viajar de moto pela América do Sul?', a: 'Nos países do Mercosul e associados, brasileiro costuma entrar com RG em bom estado — passaporte é alternativa. Leve documento físico original e confirme as regras atuais de cada país antes de sair.' },
+      { q: 'O que é a Carta Verde e ela é obrigatória?', a: 'É o seguro de responsabilidade civil internacional exigido pra circular com veículo brasileiro nos países do Mercosul. Contrata-se no Brasil, pelo período da viagem, e é cobrada em fronteira e blitz.' },
+      { q: 'Posso cruzar a fronteira com moto que não está no meu nome?', a: 'Em geral só com autorização específica do proprietário (muitas vezes com tradução e reconhecimento) — e moto financiada/alugada tem exigências próprias. Resolva a papelada com semanas de antecedência.' },
+    ],
+    relacionados: [
+      { href: '/destinos', label: 'Destinos dos sonhos (Patagônia, Atacama…)' },
+      { href: '/guias/quanto-custa-viajar-de-moto', label: 'Orçamento da viagem' },
+      { href: '/guias/o-que-levar-na-viagem-de-moto', label: 'O que levar na viagem' },
+    ],
+  },
 ];
 
 export const getGuia = (slug) => GUIAS.find((g) => g.slug === slug) || null;

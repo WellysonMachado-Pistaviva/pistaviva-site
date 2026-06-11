@@ -5,6 +5,7 @@ import { UF_NAMES, citySlug } from './lib/ufs';
 import { ESTRADAS } from './lib/estradas';
 import { GUIAS } from './lib/guias';
 import { DESTINOS } from './lib/destinos';
+import { DESAFIOS } from './lib/desafios';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 
@@ -34,6 +35,7 @@ export default async function sitemap() {
     { path: '/rotas', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/comunidade', priority: 0.9, changeFrequency: 'daily' },
     { path: '/estradas', priority: 0.9, changeFrequency: 'weekly' },
+    { path: '/desafios', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/guias', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/destinos', priority: 0.85, changeFrequency: 'weekly' },
     { path: '/bora-rodar', priority: 0.85, changeFrequency: 'daily' },
@@ -151,5 +153,13 @@ export default async function sitemap() {
     priority: 0.8,
   }));
 
-  return [...staticEntries, ...hubs, ...estradas, ...guias, ...destinos, ...posts, ...paradas, ...fotos];
+  // ── Desafios (roteiros com certificado) ──
+  const desafios = DESAFIOS.map((d) => ({
+    url: `${BASE}/desafios/${d.slug}`,
+    lastModified: LAST_BUILD,
+    changeFrequency: 'monthly',
+    priority: 0.85,
+  }));
+
+  return [...staticEntries, ...hubs, ...estradas, ...guias, ...destinos, ...desafios, ...posts, ...paradas, ...fotos];
 }

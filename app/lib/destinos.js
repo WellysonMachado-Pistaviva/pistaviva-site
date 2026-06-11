@@ -210,6 +210,44 @@ export const DESTINOS = [
       { q: 'Qual a melhor época pra fazer a Rota 66?', a: 'Primavera (abril a junho) e outono (setembro a outubro), evitando o calor extremo do verão no deserto e o frio do inverno. É o destino Fly & Ride clássico, com moto alugada nos EUA.' },
     ],
   },
+  {
+    slug: 'marrocos-de-moto',
+    nome: 'Marrocos de moto',
+    regiao: 'Norte da África · Atlas e Saara',
+    bandeira: '🇲🇦',
+    melhorEpoca: 'Primavera (março a maio) e outono (setembro a novembro)',
+    dificuldade: 'Média a alta — montanha, calor do deserto e logística diferente',
+    resumo: 'O destino de aventura mais acessível fora das Américas: passos de montanha no Atlas, gargantas de pedra, kasbahs e a chegada às dunas do Saara — tudo em poucos dias de roteiro.',
+    secoes: [
+      {
+        h: 'Por que o Marrocos virou febre no mototurismo',
+        p: [
+          'O Marrocos comprime, num país só, o que motociclista de aventura procura: passos asfaltados de montanha no Alto Atlas, gargantas espetaculares como Todra e Dades, vilarejos de adobe, kasbahs de cinema e, no fim do caminho, as dunas do Saara em Merzouga. Em uma ou duas semanas roda-se deserto e montanha sem repetir paisagem.',
+          'Pra quem vem da Europa é logística fácil — balsa da Espanha e estrada. Pro brasileiro, é o destino "exótico" mais viável de realizar: voo a Marrakech e moto alugada ou expedição guiada.',
+        ],
+      },
+      {
+        h: 'Estradas, piso e o que esperar',
+        p: [
+          'A malha principal surpreende: asfalto bom costurando os passos do Atlas, com curvas de altitude que rivalizam com estrada alpina. Quem quer terra encontra pistas e trilhas no deserto e nas montanhas — é playground de big trail, com nível pra todo gosto.',
+          'O ritmo do país é diferente: trânsito de cidade caótico, animais na pista em área rural e fiscalização frequente de velocidade. Roda-se de dia, com margem de horário e tanque abastecido nas cidades maiores.',
+        ],
+      },
+      {
+        h: 'Quando ir e como ir',
+        p: [
+          'Primavera e outono são as janelas: no verão o deserto passa fácil dos 40 °C, e no inverno os passos do Atlas têm frio de verdade e até neve. Entre março e maio o país está verde e o clima rende.',
+          'O modelo mais comum é o Fly & Ride com moto alugada em Marrakech ou expedição guiada — resolve seguro, rota e apoio. Viajantes experientes também fazem por conta, dormindo em riads e kasbahs pelo caminho.',
+        ],
+      },
+    ],
+    destaques: ['Passos do Alto Atlas', 'Gargantas de Todra e Dades', 'Dunas do Saara em Merzouga', 'Kasbahs e cultura berbere'],
+    faqs: [
+      { q: 'Qual a melhor época pra rodar o Marrocos de moto?', a: 'Primavera (março a maio) e outono (setembro a novembro). No verão o deserto ultrapassa 40 °C; no inverno os passos do Atlas têm frio intenso e pode haver neve na altitude.' },
+      { q: 'Precisa de moto trail pra viajar no Marrocos?', a: 'Pro roteiro clássico de asfalto (Atlas, gargantas e chegada a Merzouga), não — o asfalto é bom. Trail e big trail abrem as pistas de terra do deserto e das montanhas, que são o ponto alto pra quem busca aventura.' },
+      { q: 'Como o brasileiro costuma fazer o Marrocos de moto?', a: 'No modelo Fly & Ride: voo a Marrakech e moto alugada, ou expedição guiada com apoio. É o destino "exótico" mais viável fora das Américas em custo e logística.' },
+    ],
+  },
 ];
 
 // Centro + raio por destino — pro bloco "onde abastecer/dormir" (POIs OSM).
@@ -220,6 +258,7 @@ export const DESTINO_GEO = {
   'deserto-do-atacama-de-moto': { lat: -22.91, lng: -68.20, raio: 110 }, // San Pedro
   'alpes-e-dolomitas-de-moto': { lat: 46.50, lng: 11.35, raio: 90 },  // Dolomitas
   'rota-66-estados-unidos': { lat: 35.20, lng: -111.65, raio: 90 },   // Flagstaff
+  'marrocos-de-moto': { lat: 31.05, lng: -7.13, raio: 120 },          // Alto Atlas (Tizi n'Tichka)
 };
 
 export const getDestino = (slug) => DESTINOS.find((d) => d.slug === slug) || null;
