@@ -4,7 +4,7 @@ import { DESAFIOS, REGRAS_GERAIS, COMO_VALIDAR, getDesafio, allDesafioSlugs, des
 import { getEstrada } from '../../lib/estradas';
 import { getNearbySpots } from '../../lib/spots';
 import DesafioMapa from '../../components/DesafioMapa';
-import CertificadoDesafio from '../../components/CertificadoDesafio';
+import DesafioCheckin from '../../components/DesafioCheckin';
 import NearbyStops from '../../components/NearbyStops';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
@@ -162,7 +162,7 @@ export default async function DesafioPage({ params }) {
             </ul>
           </div>
 
-          {/* Como validar */}
+          {/* Como funciona a validação */}
           <div style={{ marginTop: 26, maxWidth: 760 }}>
             <h2 style={{ fontFamily: 'var(--display)', marginBottom: 12 }}>Como validar e pegar o certificado</h2>
             <ol style={{ margin: 0, paddingLeft: 0, listStyle: 'none', display: 'grid', gap: 8 }}>
@@ -175,13 +175,18 @@ export default async function DesafioPage({ params }) {
             </ol>
           </div>
 
-          {/* Certificado */}
-          <div id="certificado" style={{ marginTop: 30, border: '1px solid var(--snow-line)', borderRadius: 16, padding: 'clamp(16px, 4vw, 26px)', background: 'linear-gradient(180deg, rgba(255,90,0,.05), transparent)' }}>
-            <h2 style={{ fontFamily: 'var(--display)', marginBottom: 6 }}>🏆 Concluiu? Gere seu certificado</h2>
-            <p style={{ color: 'var(--ink-soft)', fontSize: 14.5, marginBottom: 16, maxWidth: 600, lineHeight: 1.5 }}>
-              Gratuito, gerado na hora, pronto pra postar. Vale pelas suas fotos nos checkpoints — quem roda sabe o que fez.
-            </p>
-            <CertificadoDesafio desafio={{ slug: d.slug, nome: d.nome, distancia: d.distancia, regiao: d.regiao }} />
+          {/* Gamificação: check-ins com foto → progresso → certificado liberado */}
+          <div style={{ marginTop: 30 }}>
+            <DesafioCheckin
+              desafio={{ slug: d.slug, nome: d.nome, distancia: d.distancia, regiao: d.regiao }}
+              checkpoints={d.rotaLivre
+                ? [
+                    { nome: 'Partida', detalhe: 'Foto do odômetro + painel, com horário' },
+                    { nome: 'Metade do caminho', detalhe: 'Foto em um abastecimento no meio da rota' },
+                    { nome: 'Chegada', detalhe: 'Foto do odômetro na chegada, dentro das 24 h' },
+                  ]
+                : d.checkpoints.map((c) => ({ nome: c.nome, detalhe: c.detalhe }))}
+            />
           </div>
 
           {/* Estradas do desafio */}
