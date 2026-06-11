@@ -121,10 +121,10 @@ export const DESAFIOS = [
     rotaLivre: true,
     estradas: [],
     validacaoExtra: [
-      'Foto do odômetro + painel no ponto de partida (com horário)',
-      'Comprovantes de abastecimento ao longo do caminho (guardam local + hora)',
-      'Foto do odômetro na chegada, dentro da janela de 24 h',
-      'Dica: rode com o rastreamento do Comboio Pistaviva ligado — seu trajeto fica registrado',
+      'Check-in de partida aqui na página: foto do odômetro + painel, com horário.',
+      'Check-in no meio da rota: foto em um abastecimento (o cupom registra local e hora — guarde).',
+      'Check-in de chegada: foto do odômetro, dentro da janela de 24 h. Aí o certificado libera.',
+      'Dica: rode com o rastreamento do Comboio Pistaviva ligado — seu trajeto fica registrado.',
     ],
     faqs: [
       { q: 'Preciso correr pra fazer 1.000 km em 24 horas?', a: 'Não — e não deve. A média necessária é de ~42 km/h, folgada em rodovia respeitando os limites. O desafio é de planejamento e resistência: gerenciar paradas, combustível e cansaço, nunca velocidade.' },
@@ -146,12 +146,12 @@ export const REGRAS_GERAIS = [
   'Você é o único responsável pela sua pilotagem e segurança. O desafio é um roteiro sugerido, não um evento organizado.',
 ];
 
-// Passos de validação padrão (v1 — sistema de honra + fotos).
+// Passos de validação (check-in com foto aqui na página → certificado libera).
 export const COMO_VALIDAR = [
-  'Complete o roteiro passando por todos os checkpoints (em qualquer ordem e sentido, salvo indicação).',
-  'Registre as fotos em cada checkpoint (odômetro + você no local, com data/hora).',
-  'Guarde suas fotos — elas são a sua comprovação e a sua memória.',
-  'Gere seu certificado digital gratuito aqui na página e compartilhe com a hashtag #DesafioPistaviva marcando @pistavivaoficial.',
+  'Faça o roteiro passando por todos os checkpoints (em qualquer ordem e sentido, salvo indicação).',
+  'Em cada checkpoint, faça o check-in aqui na página: bate a foto (você + moto no local) e, se quiser, conta como foi o trecho.',
+  'A barra de progresso enche a cada ponto carimbado — sua foto entra na galeria do desafio.',
+  'Carimbou todos? O certificado digital libera na hora, grátis. Poste com #DesafioPistaviva marcando @pistavivaoficial.',
 ];
 
 export const getDesafio = (slug) => DESAFIOS.find((d) => d.slug === slug) || null;

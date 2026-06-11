@@ -11,9 +11,9 @@ const hoje = () => {
   return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
 };
 
-export default function CertificadoDesafio({ desafio }) {
+export default function CertificadoDesafio({ desafio, nomeInicial = '' }) {
   const certRef = useRef(null);
-  const [nome, setNome] = useState('');
+  const [nome, setNome] = useState(nomeInicial);
   const [moto, setMoto] = useState('');
   const [data, setData] = useState(hoje());
   const [busy, setBusy] = useState(false);
