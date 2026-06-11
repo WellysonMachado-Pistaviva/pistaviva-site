@@ -7,11 +7,13 @@ import DestinosRail from './components/DestinosRail';
 import VideosRail from './components/VideosRail';
 import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
 import { getBanners, getDestinos } from './lib/site';
+import { DESAFIOS } from './lib/desafios';
 
 export const revalidate = 300;
 
-// Categorias (rail 5 cards) — adaptadas ao Pistaviva
+// Categorias (rail de cards) — adaptadas ao Pistaviva
 const CATS = [
+  { n: 'Desafios', sub: 'Complete & carimbe', href: '/desafios', ico: '🏁' },
   { n: 'Rotas', sub: 'Roteiros & expedições', href: '/rotas', ico: '🗺️' },
   { n: 'Paradas', sub: 'Amigas do motociclista', href: '/paradas', ico: '📍' },
   { n: 'Comboio', sub: 'Ao vivo no mapa', href: '/comboio', ico: '🛰️' },
@@ -67,14 +69,14 @@ export default async function Home() {
         </Link>
       </div>
 
-      {/* faixa de specs (stats da comunidade) */}
+      {/* faixa de specs (stats da comunidade) — números que provam autoridade */}
       <section className="ig-spec-strip ig-spec-strip--solo">
         <div className="wrap">
-          <div className="ig-spec"><span className="model-name">Pistaviva</span><span className="k">Comunidade</span></div>
+          <div className="ig-spec"><span className="model-name">Pistaviva</span><span className="k">O hub do mototurismo</span></div>
+          <div className="ig-spec"><span className="v"><Counter to={190} prefix="+" /></span><span className="k">Paradas mapeadas</span></div>
           <div className="ig-spec"><span className="v"><Counter to={27} prefix="+" /></span><span className="k">Estados</span></div>
+          <div className="ig-spec"><span className="v"><Counter to={14} /></span><span className="k">Estradas icônicas</span></div>
           <div className="ig-spec"><span className="v">GPS</span><span className="k">Comboio ao vivo</span></div>
-          <div className="ig-spec"><span className="v">FIPE</span><span className="k">Consulta grátis</span></div>
-          <div className="ig-spec"><span className="v">Livre</span><span className="k">Aberta a todos</span></div>
         </div>
       </section>
 
@@ -87,7 +89,6 @@ export default async function Home() {
               <h2 className="ig-title">Categorias</h2>
               <p>Da serra ao asfalto. Escolha por onde começar e cai na estrada com a comunidade.</p>
             </div>
-            <Link href="/rotas" className="ig-btn ig-btn--ghost">Ver tudo</Link>
           </div>
           <div className="ig-cat-rail">
             {CATS.map((c, i) => (
@@ -116,6 +117,32 @@ export default async function Home() {
           <DestinosRail items={destinos} />
         </section>
       )}
+
+      {/* ===== DESAFIOS (o produto-assinatura do hub) ===== */}
+      <section className="ig-cats" id="desafios" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <div className="ig-sechead">
+            <div className="lead">
+              <span className="ig-eyebrow">Complete & carimbe</span>
+              <h2 className="ig-title">Desafios Pistaviva</h2>
+              <p>Roteiros com checkpoints, mapa do traçado e certificado grátis no final. Conclusão, não velocidade — o desafio é contra o sofá.</p>
+            </div>
+            <Link href="/desafios" className="ig-btn ig-btn--ghost">Todos os desafios</Link>
+          </div>
+          <div className="ph-grid">
+            {DESAFIOS.map((d) => (
+              <Link className="ph-card" key={d.slug} href={`/desafios/${d.slug}`}>
+                <div className="body" style={{ padding: '14px 16px' }}>
+                  <span className="eyebrow" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--clay)', textTransform: 'uppercase', letterSpacing: '.06em' }}>🏁 {d.nivel} · {d.distancia}</span>
+                  <h3 style={{ margin: '4px 0 6px' }}>{d.nome}</h3>
+                  <p className="desc">{d.resumo}</p>
+                  <div className="foot"><span className="loc">{d.regiao}</span></div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ===== MAIS VENDIDAS (grade filtrável) ===== */}
       <section className="ig-models" id="mais-vendidas">

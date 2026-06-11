@@ -7,7 +7,7 @@ export default function SiteFooter() {
         <div className="foot-grid">
           <div className="foot-col">
             <Link className="brand" href="/"><img src="/logo.svg" alt="Pistaviva" width="1222" height="88" style={{ height: 24, width: 'auto', maxWidth: '70%' }} /></Link>
-            <p>Comunidade aberta e conteúdo para o mototurismo brasileiro. Da Serra da Mantiqueira para a estrada.</p>
+            <p>O hub do mototurismo brasileiro: estradas, desafios, paradas e comunidade aberta — feito por quem roda, pra quem roda. Da Serra da Mantiqueira pro Brasil inteiro.</p>
           </div>
           <div className="foot-col">
             <h5>Conteúdo</h5>

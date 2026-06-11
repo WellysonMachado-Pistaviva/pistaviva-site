@@ -8,10 +8,10 @@ const BASE = 'https://www.pistavivamototurismo.com.br';
 export const revalidate = 300;
 
 export const metadata = {
-  title: 'Comunidade do Mototurismo',
-  description: 'O feed aberto da comunidade Pistaviva: relatos, fotos e rolês de pilotos de todo o Brasil, mais o blog de mototurismo.',
+  title: 'Comunidade do Mototurismo — Relatos e Rolês de Todo o Brasil',
+  description: 'A comunidade aberta de mototurismo do Brasil: relatos de estrada, fotos e rolês de pilotos de todos os estados. Sem cadastro pra ler, sem algoritmo — de quem roda pra quem roda.',
   alternates: { canonical: '/comunidade' },
-  openGraph: { title: 'Comunidade Pistaviva', description: 'Feed aberto de mototurismo + blog.' },
+  openGraph: { title: 'Comunidade Pistaviva — de quem roda pra quem roda', description: 'Relatos de estrada e rolês de pilotos de todo o Brasil, num feed aberto.' },
 };
 
 export default async function Comunidade() {
@@ -46,8 +46,20 @@ export default async function Comunidade() {
         <div>
           <p className="eyebrow eyebrow--moss">Aberta · de piloto pra piloto</p>
           <h1>Comunidade do Mototurismo</h1>
+          <p className="lede" style={{ maxWidth: 720, marginTop: 8 }}>
+            O ponto de encontro de quem roda o Brasil: relatos de estrada, paradas indicadas e rolês ao vivo.
+            Sem cadastro pra ler, sem algoritmo escondendo post — quem manda aqui é quem tá na estrada.
+          </p>
         </div>
         <Link className="link" href="/blog">Ver o blog →</Link>
+      </div>
+
+      {/* O que dá pra fazer aqui — ações diretas, mobile-first */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, margin: '4px 0 2.2rem' }}>
+        <a className="ig-btn ig-btn--primary" href="#feed">✍️ Postar um relato</a>
+        <Link className="ig-btn ig-btn--ghost" href="/paradas">📍 Indicar uma parada</Link>
+        <Link className="ig-btn ig-btn--ghost" href="/comboio">🛰️ Criar um comboio</Link>
+        <Link className="ig-btn ig-btn--ghost" href="/desafios">🏁 Encarar um desafio</Link>
       </div>
 
       {posts.length > 0 && (
@@ -72,9 +84,9 @@ export default async function Comunidade() {
       {/* Relatos server-rendered pro Google indexar (feed interativo carrega abaixo) */}
       {relatos.length > 0 && (
         <section style={{ margin: '0 0 2.4rem' }}>
-          <h2 className="sr-only">Últimos relatos da comunidade</h2>
+          <h2 style={{ fontFamily: 'var(--display)', marginBottom: 12 }}>Direto da estrada</h2>
           <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 10 }}>
-            {relatos.map((r) => (
+            {relatos.slice(0, 8).map((r) => (
               <li key={r.id} style={{ border: '1px solid var(--snow-line)', borderRadius: 12, padding: '12px 16px' }}>
                 <p style={{ margin: 0, lineHeight: 1.5 }}>{r.comment}</p>
                 <p style={{ margin: '6px 0 0', fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--ink-soft)', textTransform: 'uppercase', letterSpacing: '.04em' }}>
@@ -86,7 +98,9 @@ export default async function Comunidade() {
         </section>
       )}
 
-      <SpaPage name="feed" />
+      <div id="feed">
+        <SpaPage name="feed" />
+      </div>
     </div>
   );
 }
