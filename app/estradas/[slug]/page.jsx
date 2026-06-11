@@ -154,6 +154,17 @@ export default async function EstradaPage({ params }) {
             </div>
           )}
 
+          {/* Guias de preparação — linkagem interna pro cluster /guias */}
+          <div style={{ marginTop: 28 }}>
+            <h2 style={{ fontFamily: 'var(--display)', marginBottom: 12 }}>Prepare-se pra rodar a {e.nome}</h2>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+              <Link className="ig-btn ig-btn--ghost" href="/guias/como-preparar-a-moto-para-viagem">Preparar a moto</Link>
+              <Link className="ig-btn ig-btn--ghost" href="/guias/o-que-levar-na-viagem-de-moto">O que levar</Link>
+              <Link className="ig-btn ig-btn--ghost" href="/guias/quanto-custa-viajar-de-moto">Orçamento da viagem</Link>
+              <Link className="ig-btn ig-btn--ghost" href="/guias">Todos os guias</Link>
+            </div>
+          </div>
+
           {/* CTA */}
           <section className="ph-cta" style={{ marginTop: 30 }}>
             <div className="inner">

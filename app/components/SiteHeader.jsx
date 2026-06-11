@@ -6,6 +6,7 @@ const LINKS = [
   { href: '/bora-rodar', label: 'Bora rodar?' },
   { href: '/rotas', label: 'Planejador' },
   { href: '/estradas', label: 'Estradas' },
+  { href: '/desafios', label: 'Desafios' },
   { href: '/destinos', label: 'Destinos' },
   { href: '/guias', label: 'Guias' },
   { href: '/mapa', label: 'Mapa' },

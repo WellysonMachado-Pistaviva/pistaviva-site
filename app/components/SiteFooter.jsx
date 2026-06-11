@@ -14,6 +14,7 @@ export default function SiteFooter() {
             <Link href="/comunidade">Comunidade</Link>
             <Link href="/mototurismo">Mototurismo por estado</Link>
             <Link href="/estradas">Estradas icônicas</Link>
+            <Link href="/desafios">Desafios</Link>
             <Link href="/destinos">Destinos dos sonhos</Link>
             <Link href="/guias">Guias de mototurismo</Link>
             <Link href="/paradas">Paradas</Link>

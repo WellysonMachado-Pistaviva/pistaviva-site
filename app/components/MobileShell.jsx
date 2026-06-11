@@ -18,6 +18,7 @@ const MENU = [
   { href: '/bora-rodar', t: 'Bora Rodar?', s: 'Tá pra rodar hoje?', i: <><path d="M12 3v2M12 19v2M5 12H3M21 12h-2M6 6 4.5 4.5M18 18l1.5 1.5M6 18l-1.5 1.5M18 6l1.5-1.5" /><circle cx="12" cy="12" r="4" /></> },
   { href: '/rotas', t: 'Planejador', s: 'Rota, custo & trechos', i: <><circle cx="6" cy="19" r="2.5" /><circle cx="18" cy="5" r="2.5" /><path d="M8.5 19H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h6.5" /></> },
   { href: '/estradas', t: 'Estradas', s: 'Serras icônicas', i: <><path d="M5 3v18M19 3v18" /><path d="M12 5v2M12 11v2M12 17v2" /></> },
+  { href: '/desafios', t: 'Desafios', s: 'Complete & carimbe', i: <><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0Z" /><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4" /></> },
   { href: '/destinos', t: 'Destinos', s: 'Viagens dos sonhos', i: <><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></> },
   { href: '/guias', t: 'Guias', s: 'Dicas pra viajar', i: <><path d="M4 5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" /><path d="M8 8h6M8 12h8M8 16h5" /></> },
   { href: '/fipe', t: 'FIPE', s: 'Consulta grátis', i: <><path d="M12 14 16 9" /><circle cx="12" cy="14" r="1.6" fill="currentColor" /><path d="M4 18a8 8 0 1 1 16 0" /></> },
