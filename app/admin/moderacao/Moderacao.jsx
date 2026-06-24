@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../../src/lib/supabaseClient';
-import { getReportsQueue, resolveReport, deleteReport, getAllRouteComments, deleteRouteComment, getAnnouncement, saveAnnouncement } from '../../../src/services/storage';
+import { getReportsQueue, resolveReport, getAllRouteComments, deleteRouteComment, getAnnouncement, saveAnnouncement } from '../../../src/services/storage';
 import { useAuth, showToast } from '../../components/AuthProvider';
 
 // Configuração de cada tipo de conteúdo moderável.
@@ -53,7 +53,7 @@ function Section({ cfg }) {
     const { data } = await supabase.from(cfg.table).select('*').order('created_at', { ascending: false }).limit(300);
     setRows(data || []); setLoading(false);
   }, [cfg.table]);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
 
   const toggle = async (row) => {
     const vis = isVisible(row, cfg.mode);
@@ -198,7 +198,7 @@ function ReportsQueue() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const load = useCallback(async () => { setLoading(true); setRows(await getReportsQueue('open')); setLoading(false); }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
   const TARGET = { post: 'Post', comment: 'Comentário', spot: 'Parada', photographer: 'Fotógrafo', blog: 'Matéria', event: 'Evento' };
   const TABLE = { post: 'pv_posts', spot: 'pv_spots', photographer: 'pv_photographers', blog: 'pv_blog_posts', event: 'pv_events', comment: 'pv_post_comments' };
   const delTarget = async (r) => {
@@ -233,7 +233,7 @@ function CommentsMod() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const load = useCallback(async () => { setLoading(true); setRows(await getAllRouteComments()); setLoading(false); }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
   const del = async (id) => { if (!confirm('Excluir comentário?')) return; await deleteRouteComment(id); showToast('Excluído', 'success'); load(); };
   return (
     <div>
@@ -321,9 +321,11 @@ function LinkPicker({ onPick }) {
 
   useEffect(() => {
     const t = LINK_TYPES.find(x => x.v === type);
-    if (!t?.table) { setOpts([]); return; }
-    supabase.from(t.table).select(`slug, ${t.name}`).order(t.name, { ascending: true }).limit(300)
-      .then(({ data }) => setOpts(data || []));
+    (async () => {
+      if (!t?.table) { setOpts([]); return; }
+      const { data } = await supabase.from(t.table).select(`slug, ${t.name}`).order(t.name, { ascending: true }).limit(300);
+      setOpts(data || []);
+    })();
   }, [type]);
 
   const t = LINK_TYPES.find(x => x.v === type);
@@ -364,7 +366,7 @@ function BannersEditor() {
     const { data } = await supabase.from('pv_banners').select('*').order('sort_order', { ascending: true }).order('created_at', { ascending: true });
     setRows(data || []);
   }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
 
   const save = async () => {
     const b = editing;
@@ -535,7 +537,7 @@ function DestinosEditor() {
     const { data } = await supabase.from('pv_destinos').select('*').order('sort_order', { ascending: true }).order('created_at', { ascending: true });
     setRows(data || []);
   }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
 
   const save = async () => {
     const b = editing;

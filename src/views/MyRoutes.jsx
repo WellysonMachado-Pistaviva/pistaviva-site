@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Clock, Navigation, Star, ChevronDown, ChevronUp, MessageSquare, Send, BookOpen } from 'lucide-react';
+import { MapPin, Clock, Navigation, ChevronDown, ChevronUp, MessageSquare, Send } from 'lucide-react';
 import { MapContainer, TileLayer, Polyline, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useWeather } from '../hooks/useWeather';
@@ -53,7 +53,7 @@ const DestWeather = ({ lat, lng }) => {
 };
 
 // ── Card de roteiro preset ────────────────────────────────────
-const RouteCard = ({ route, user, userLocation, promptIdentity, identity, deviceId }) => {
+const RouteCard = ({ route, userLocation, promptIdentity, identity, deviceId }) => {
   const [expanded, setExpanded]   = useState(false);
   const [comments, setComments]   = useState([]);
   const [loadingCmt, setLoadingCmt] = useState(false);
@@ -63,8 +63,13 @@ const RouteCard = ({ route, user, userLocation, promptIdentity, identity, device
 
   useEffect(() => {
     if (!expanded || comments.length > 0) return;
-    setLoadingCmt(true);
-    getRouteComments(route.id).then(data => { setComments(data); setLoadingCmt(false); });
+    (async () => {
+      setLoadingCmt(true);
+      const data = await getRouteComments(route.id);
+      setComments(data); setLoadingCmt(false);
+    })();
+    // só busca ao expandir; ignora mudanças de comments/route
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expanded]);
 
   // Desenha a rota (linha pelas estradas) via OSRM pelos waypoints — igual ao traçado do guia.
@@ -75,6 +80,8 @@ const RouteCard = ({ route, user, userLocation, promptIdentity, identity, device
       .then(r => r.json())
       .then(d => { if (d?.routes?.[0]) setRouteLine(d.routes[0].geometry.coordinates.map(c => [c[1], c[0]])); })
       .catch(() => {});
+    // desenha uma vez ao expandir
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expanded]);
 
   // Início da rota e distância/tempo a partir do GPS do usuário.
@@ -253,13 +260,12 @@ const MyRoutes = ({ user, promptIdentity, identity, deviceId }) => {
   const [diffFilter, setDiffFilter]     = useState('Todos');
   const [regionFilter, setRegionFilter] = useState('Todas');
   const [search, setSearch]             = useState('');
-  const [savedRoutes, setSavedRoutes]   = useState([]);
+  const [, setSavedRoutes]              = useState([]);
   const [presetRoutes, setPresetRoutes] = useState([]);
-  const [activeTab, setActiveTab]       = useState('comunidade');
   const [userLocation, setUserLocation] = useState(null);
 
   useEffect(() => {
-    setPresetRoutes(getPresetRoutes());
+    queueMicrotask(() => setPresetRoutes(getPresetRoutes()));
     getRoutes().then(setSavedRoutes);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(

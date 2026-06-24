@@ -77,7 +77,7 @@ export default function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    setDeviceId(getDeviceId());
+    queueMicrotask(() => setDeviceId(getDeviceId()));
     supabase.auth.getSession().then(({ data }) => {
       setAdminEmail(data.session?.user?.email || null);
       verifyAdmin(data.session);

@@ -26,8 +26,7 @@ export default function EmblaCarousel({ slides = [], basis = '100%', gap = 12, d
 
   useEffect(() => {
     if (!embla) return;
-    setSnaps(embla.scrollSnapList());
-    onSelect(embla);
+    queueMicrotask(() => { setSnaps(embla.scrollSnapList()); onSelect(embla); });
     embla.on('select', onSelect);
     embla.on('reInit', () => { setSnaps(embla.scrollSnapList()); onSelect(embla); });
   }, [embla, onSelect]);

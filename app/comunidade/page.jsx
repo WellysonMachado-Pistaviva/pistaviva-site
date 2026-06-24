@@ -1,11 +1,38 @@
 import Link from 'next/link';
 import Cover from '../components/Cover';
 import SpaPage from '../components/SpaPage';
+import SeoContent from '../components/SeoContent';
 import { getPublishedPosts } from '../lib/blog';
 import { getCommunityPosts } from '../lib/community';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 export const revalidate = 300;
+
+const SECOES = [
+  {
+    h: 'A comunidade aberta do mototurismo',
+    p: [
+      'A comunidade Pistaviva é o ponto de encontro de quem roda o Brasil de moto. Aqui piloto compartilha relato de viagem, foto de estrada, dica de parada e convite pra rolê — num feed aberto, sem cadastro pra ler e sem algoritmo escondendo post. O que vale é o que está acontecendo na estrada, de quem roda pra quem roda.',
+      'Diferente de rede social genérica, tudo aqui gira em torno de duas rodas: relatos de travessia, perrengue superado, curva memorável, restaurante que recebeu bem e aquela estrada que vale a viagem. É conhecimento real de quem já passou pelo caminho.',
+    ],
+  },
+  {
+    h: 'O que dá pra fazer na comunidade',
+    lista: [
+      'Postar um relato de estrada com foto e contar como foi o rolê.',
+      'Indicar uma parada boa pra ajudar quem vai passar pela região.',
+      'Criar um comboio e chamar a galera pra rodar em grupo com rastreamento ao vivo.',
+      'Encarar um desafio de roteiro e conquistar o certificado.',
+      'Ler relatos de pilotos de todos os estados antes de planejar sua viagem.',
+    ],
+  },
+];
+
+const FAQS = [
+  { q: 'Preciso de cadastro pra ler a comunidade?', a: 'Não. O feed é aberto: qualquer pessoa lê os relatos e fotos. O cadastro só é necessário pra postar e interagir.' },
+  { q: 'A comunidade Pistaviva é gratuita?', a: 'Sim, é totalmente gratuita pra ler, postar relatos, indicar paradas e participar dos rolês.' },
+  { q: 'O que posso postar na comunidade?', a: 'Relatos de viagem de moto, fotos de estrada, dicas de parada, convites pra rolê e tudo que ajude outros motociclistas. O foco é mototurismo, de quem roda pra quem roda.' },
+];
 
 export const metadata = {
   title: 'Comunidade do Mototurismo — Relatos e Rolês de Todo o Brasil',
@@ -55,7 +82,7 @@ export default async function Comunidade() {
       </div>
 
       {/* O que dá pra fazer aqui — ações diretas, mobile-first */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, margin: '4px 0 2.2rem' }}>
+      <div className="acoes-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 10, margin: '4px 0 2.2rem' }}>
         <a className="ig-btn ig-btn--primary" href="#feed">✍️ Postar um relato</a>
         <Link className="ig-btn ig-btn--ghost" href="/paradas">📍 Indicar uma parada</Link>
         <Link className="ig-btn ig-btn--ghost" href="/comboio">🛰️ Criar um comboio</Link>
@@ -101,6 +128,8 @@ export default async function Comunidade() {
       <div id="feed">
         <SpaPage name="feed" />
       </div>
+
+      <SeoContent secoes={SECOES} faqs={FAQS} />
     </div>
   );
 }

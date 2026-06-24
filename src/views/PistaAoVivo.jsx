@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { AlertTriangle, CheckCircle, CloudRain, Wind, Droplets, Thermometer, RefreshCw, Send, MapPin, ChevronDown } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { AlertTriangle, CheckCircle, CloudRain, Wind, Droplets, RefreshCw, Send, MapPin } from 'lucide-react';
 import { useCurrentLocationWeather, useWeather } from '../hooks/useWeather';
 import { getReports, addReport } from '../services/storage';
 
@@ -75,7 +75,7 @@ const PistaAoVivo = ({ user, openAuthModal }) => {
     setReportsLoading(false);
   }, []);
 
-  useEffect(() => { loadReports(); }, [loadReports]);
+  useEffect(() => { (async () => { await loadReports(); })(); }, [loadReports]);
 
   const fetchDestSuggestions = async (q) => {
     if (q.length < 3) { setDestSuggestions([]); return; }

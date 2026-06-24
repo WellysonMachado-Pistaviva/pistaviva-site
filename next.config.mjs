@@ -2,8 +2,13 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    // Supabase Storage + capas de blog. Apertar hostnames na Fase 5 (SEO/segurança).
-    remotePatterns: [{ protocol: 'https', hostname: '**' }],
+    // Allowlist apertada — só os hosts que servem imagem via next/image.
+    // Covers/banners/avatars vêm do Supabase Storage; resto é estático conhecido.
+    remotePatterns: [
+      { protocol: 'https', hostname: '**.supabase.co' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'i.ytimg.com' },
+    ],
   },
   eslint: {
     // Lint roda via `npm run lint`; não bloqueia o build de produção.
@@ -17,6 +22,7 @@ const nextConfig = {
       { source: '/expedicoes', destination: '/rotas?tab=expedicoes', permanent: true },
       { source: '/pista-ao-vivo', destination: '/comboio', permanent: true },
       { source: '/busca', destination: '/', permanent: true },
+      { source: '/parceiros', destination: '/comunidade', permanent: true },
     ];
   },
 };

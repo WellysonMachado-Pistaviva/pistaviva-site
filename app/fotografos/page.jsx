@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Cover from '../components/Cover';
 import LiveBadge from '../components/LiveBadge';
-import { getPhotographers, igUrl } from '../lib/photographers';
+import { getPhotographers } from '../lib/photographers';
 import NewPhotographerForm from './NewPhotographerForm';
 
 export const revalidate = 120;

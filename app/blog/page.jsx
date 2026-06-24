@@ -11,10 +11,6 @@ export const metadata = {
   openGraph: { title: 'Blog Pistaviva — Mototurismo', description: 'Guias, rotas e cultura sobre duas rodas.' },
 };
 
-const Icon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="#f3ede1" strokeWidth="1.3"><path d="M4 20l6-14 4 9 2-4 4 9z" /></svg>
-);
-
 export default async function BlogList() {
   const posts = await getPublishedPosts(60);
 

@@ -48,15 +48,17 @@ export const broadcastSOS = async (user, location) => {
 let comboioChannel = null;
 let _comboioUser = null;
 let _comboioPinnedMessage = null;
+let _comboioLeaderId = null;
 let _trackingLocation = null;
 let _lastTrackAt = 0;
 const TRACK_THROTTLE_MS = 5000; // no máximo 1 update de Presence a cada 5s
 
-export const joinComboioChannel = (comboioId, user, location, onSync, onChatReceived, onMemberUpdate) => {
+export const joinComboioChannel = (comboioId, user, location, onSync, onChatReceived, onMemberUpdate, leaderId = null) => {
   if (comboioChannel) supabase.removeChannel(comboioChannel);
 
   _comboioUser = user;
   _comboioPinnedMessage = null;
+  _comboioLeaderId = leaderId;
   _trackingLocation = location;
   _lastTrackAt = 0;
 
@@ -99,6 +101,7 @@ export const joinComboioChannel = (comboioId, user, location, onSync, onChatRece
           user: { id: user.id, name: user.name || user.nome },
           location,
           pinnedMessage: null,
+          leaderId: _comboioLeaderId,
           joinedAt: new Date().toISOString()
         });
       }
@@ -129,6 +132,7 @@ export const updateComboioLocation = async (location) => {
     user: me,
     location,
     pinnedMessage: _comboioPinnedMessage,
+    leaderId: _comboioLeaderId,
     updatedAt: new Date().toISOString()
   });
 };
@@ -156,6 +160,7 @@ export const updatePinnedMessage = async (pinnedMessage) => {
     user: { id: _comboioUser.id, name: _comboioUser.name || _comboioUser.nome },
     location: _trackingLocation,
     pinnedMessage,
+    leaderId: _comboioLeaderId,
     updatedAt: new Date().toISOString()
   });
 };
@@ -167,6 +172,7 @@ export const leaveComboioChannel = () => {
     comboioChannel = null;
     _comboioUser = null;
     _comboioPinnedMessage = null;
+    _comboioLeaderId = null;
     _trackingLocation = null;
   }
 };

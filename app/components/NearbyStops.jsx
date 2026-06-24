@@ -16,12 +16,13 @@ const CAT = {
   outro: { label: 'Outros', ico: '📍' },
 };
 
+// categorias presentes (ordenadas por relevância de rolê)
+const CAT_ORDER = ['restaurante', 'posto', 'pousada', 'mirante', 'oficina', 'atrativo', 'outro'];
+
 export default function NearbyStops({ stops = [], titulo = 'Paradas no caminho' }) {
   const [cat, setCat] = useState('todos');
 
-  // categorias presentes (ordenadas por relevância de rolê)
-  const order = ['restaurante', 'posto', 'pousada', 'mirante', 'oficina', 'atrativo', 'outro'];
-  const presentes = useMemo(() => order.filter((c) => stops.some((s) => s.categoria === c)), [stops]);
+  const presentes = useMemo(() => CAT_ORDER.filter((c) => stops.some((s) => s.categoria === c)), [stops]);
   const lista = useMemo(() => (cat === 'todos' ? stops : stops.filter((s) => s.categoria === cat)), [stops, cat]);
 
   if (!stops.length) return null;

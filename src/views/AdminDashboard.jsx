@@ -1,26 +1,33 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
-  BarChart3, Users, MessageSquare, MapPin, ShieldCheck, Radio,
-  Settings, Trash2, Edit, Key, RefreshCw, Search, Plus, X,
-  Lock, Unlock, Shield, ShieldOff, Check, Navigation, Image,
+  MessageSquare, MapPin, Radio,
+  Settings, Trash2, Edit, Key, RefreshCw, Search, Plus,
+  Lock, Unlock, Shield, ShieldOff, Navigation, Image,
   AlertTriangle, Map, Route, Star, Clock,
 } from 'lucide-react';
 import { getAllUsers, resetUserPassword, blockUser, unblockUser, promoteToAdmin, demoteFromAdmin, deleteUser, getCurrentUser } from '../services/auth';
 import { OverviewTab, EventsTab, ConfigTab } from './AdminTabs';
 import { RadarTab } from './RadarTab';
 import {
-  getPosts as getPostsFromDB, deletePost as deletePostFromDB,
+  deletePost as deletePostFromDB,
   getPartners, addPartner, deletePartner,
   getStampsConfig, addStamp, deleteStamp,
   getSegments, createSegment, updateSegment, deleteSegmentAdmin,
   getAllPostsAdmin, getAllComments, deleteComment,
   getAllPingsAdmin, deletePing,
   getAllRidesAdmin, deleteRide,
-  getRecentComboioMessages,
   getAllRouteComments, deleteRouteComment,
   getSegmentCompletionsAdmin, deleteSegmentCompletion,
   getAllExpeditionsAdmin, saveExpedition, deleteExpedition,
 } from '../services/storage';
+
+// Campo de formulário da Expedição (hoisted — não recriar a cada render).
+const ExpeditionField = ({ label, field, type='text', placeholder='', form, setForm }) => (
+  <div className="calc-field" style={{ marginBottom:'10px' }}>
+    <label>{label}</label>
+    <input type={type} placeholder={placeholder} value={form[field]||''} onChange={e=>setForm(f=>({...f,[field]:e.target.value}))} />
+  </div>
+);
 
 // ── Toast ──────────────────────────────────────────────────
 let _tt;
@@ -68,7 +75,7 @@ const UsersTab = () => {
   const { toast, show } = useToast();
 
   const reload = async () => setUsers(await getAllUsers());
-  useEffect(() => { reload(); }, []);
+  useEffect(() => { (async () => { await reload(); })(); }, []);
 
   const filtered = users.filter(u =>
     u.nome.toLowerCase().includes(search.toLowerCase()) ||
@@ -173,7 +180,7 @@ const FeedAdminTab = () => {
     const [p, c] = await Promise.all([getAllPostsAdmin(), getAllComments()]);
     setPosts(p); setComments(c);
   };
-  useEffect(() => { reload(); }, []);
+  useEffect(() => { (async () => { await reload(); })(); }, []);
 
   const expandPost = (post) => {
     if (expanded?.id === post.id) { setExpanded(null); return; }
@@ -264,7 +271,7 @@ const TrechosAdminTab = () => {
   const { toast, show } = useToast();
 
   const reload = async () => setSegs(await getSegments());
-  useEffect(() => { reload(); }, []);
+  useEffect(() => { (async () => { await reload(); })(); }, []);
 
   const openNew = () => setForm({ ...EMPTY_SEG });
   const openEdit = (s) => setForm({
@@ -372,7 +379,7 @@ const MapAdminTab = () => {
   const { toast, show } = useToast();
 
   const reload = async () => setPings(await getAllPingsAdmin());
-  useEffect(() => { reload(); }, []);
+  useEffect(() => { (async () => { await reload(); })(); }, []);
 
   const TYPE_LABELS = { user:'📍 Visitado', photographer:'📸 Fotógrafo', business:'🏪 Estabelecimento', monument:'🗿 Monumento' };
   const filtered = pings.filter(p => !search || p.title?.toLowerCase().includes(search.toLowerCase()) || p.description?.toLowerCase().includes(search.toLowerCase()));
@@ -417,7 +424,7 @@ const RidesAdminTab = () => {
   const { toast, show } = useToast();
 
   const reload = async () => setRides(await getAllRidesAdmin());
-  useEffect(() => { reload(); }, []);
+  useEffect(() => { (async () => { await reload(); })(); }, []);
 
   const filtered = rides.filter(r => !search || r.user_name?.toLowerCase().includes(search.toLowerCase()) || r.name?.toLowerCase().includes(search.toLowerCase()));
   const del = (id) => setConfirm({ msg:'Excluir este rolê?', ok: async()=>{ await deleteRide(id); show('Rolê excluído.'); reload(); }});
@@ -471,7 +478,7 @@ const ParceirosAdminTab = () => {
   const { toast, show } = useToast();
 
   const reload = async () => setPartners(await getPartners());
-  useEffect(() => { reload(); }, []);
+  useEffect(() => { (async () => { await reload(); })(); }, []);
 
   const save = async () => {
     await addPartner(form);
@@ -523,7 +530,7 @@ const SelosAdminTab = () => {
   const { toast, show } = useToast();
 
   const reload = async () => setStamps(await getStampsConfig());
-  useEffect(() => { reload(); }, []);
+  useEffect(() => { (async () => { await reload(); })(); }, []);
 
   const save = async () => {
     await addStamp(form); show('Selo criado.');
@@ -585,7 +592,7 @@ const ExpedicoesAdminTab = () => {
   const { toast, show }     = useToast();
 
   const reload = async () => setExps(await getAllExpeditionsAdmin());
-  useEffect(() => { reload(); }, []);
+  useEffect(() => { (async () => { await reload(); })(); }, []);
 
   const save = async () => {
     if (!form.title?.trim() || !form.operator_name?.trim()) { show('Título e operador são obrigatórios.','error'); return; }
@@ -597,13 +604,6 @@ const ExpedicoesAdminTab = () => {
 
   const del = (id, title) => setConfirm({ msg:`Excluir "${title}"?`, ok: async()=>{ await deleteExpedition(id); show('Removida.'); reload(); }});
 
-  const F = ({ label, field, type='text', placeholder='' }) => (
-    <div className="calc-field" style={{ marginBottom:'10px' }}>
-      <label>{label}</label>
-      <input type={type} placeholder={placeholder} value={form[field]||''} onChange={e=>setForm(f=>({...f,[field]:e.target.value}))} />
-    </div>
-  );
-
   if (form) return (
     <div>
       <button className="btn-ghost" style={{ marginBottom:'14px', gap:'6px' }} onClick={()=>setForm(null)}>← Voltar</button>
@@ -612,12 +612,12 @@ const ExpedicoesAdminTab = () => {
       <div style={{ background:'var(--bg3)', border:'1px solid var(--border)', borderRadius:'var(--radius-sm)', padding:'14px', marginBottom:'12px' }}>
         <div style={{ fontSize:'12px', fontWeight:700, color:'var(--muted)', letterSpacing:'1px', marginBottom:'10px' }}>OPERADOR</div>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px' }}>
-          <F label="Nome do operador" field="operator_name" placeholder="UPSERRA" />
-          <F label="Badge" field="operator_badge" placeholder="PARCEIRO VERIFICADO" />
+          <ExpeditionField label="Nome do operador" field="operator_name" placeholder="UPSERRA" form={form} setForm={setForm} />
+          <ExpeditionField label="Badge" field="operator_badge" placeholder="PARCEIRO VERIFICADO" form={form} setForm={setForm} />
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px' }}>
-          <F label="Instagram (URL)" field="operator_instagram" placeholder="https://instagram.com/..." />
-          <F label="Site (URL)" field="operator_site" placeholder="https://upserra.com.br" />
+          <ExpeditionField label="Instagram (URL)" field="operator_instagram" placeholder="https://instagram.com/..." form={form} setForm={setForm} />
+          <ExpeditionField label="Site (URL)" field="operator_site" placeholder="https://upserra.com.br" form={form} setForm={setForm} />
         </div>
       </div>
 
@@ -629,8 +629,8 @@ const ExpedicoesAdminTab = () => {
       </div>
 
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px', marginBottom:'10px' }}>
-        <F label="Título" field="title" placeholder="Serra do Rio do Rastro" />
-        <F label="Região" field="region" placeholder="Lauro Müller, SC" />
+        <ExpeditionField label="Título" field="title" placeholder="Serra do Rio do Rastro" form={form} setForm={setForm} />
+        <ExpeditionField label="Região" field="region" placeholder="Lauro Müller, SC" form={form} setForm={setForm} />
       </div>
       <div className="calc-field" style={{ marginBottom:'10px' }}>
         <label>Descrição</label>
@@ -643,7 +643,7 @@ const ExpedicoesAdminTab = () => {
             {['FÁCIL','INTERMEDIÁRIO','AVANÇADO','EXPERT'].map(d=><option key={d}>{d}</option>)}
           </select>
         </div>
-        <F label="Tags (vírgula)" field="tags" placeholder="SC-438,Curvas,Serra" />
+        <ExpeditionField label="Tags (vírgula)" field="tags" placeholder="SC-438,Curvas,Serra" form={form} setForm={setForm} />
       </div>
 
       <div style={{ background:'var(--bg3)', border:'1px solid var(--border)', borderRadius:'var(--radius-sm)', padding:'14px', marginBottom:'12px' }}>
@@ -707,7 +707,7 @@ const TrechosCommentsTab = () => {
   const { toast, show }         = useToast();
 
   const reload = async () => setComments(await getAllRouteComments());
-  useEffect(() => { reload(); }, []);
+  useEffect(() => { (async () => { await reload(); })(); }, []);
 
   const del = (id) => setConfirm({
     msg: 'Excluir este comentário do trecho?',
@@ -781,7 +781,7 @@ const RankingAdminTab = () => {
   const { toast, show }               = useToast();
 
   const reload = async () => setCompletions(await getSegmentCompletionsAdmin());
-  useEffect(() => { reload(); }, []);
+  useEffect(() => { (async () => { await reload(); })(); }, []);
 
   const segments = ['Todos', ...new Set(completions.map(c => c.segmentName))];
 
