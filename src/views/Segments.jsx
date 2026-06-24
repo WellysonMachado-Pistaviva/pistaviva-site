@@ -42,9 +42,14 @@ const Leaderboard = ({ segmentId, userId, refreshKey }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    Promise.all([getSegmentLeaderboard(segmentId), getUserSegmentBest(segmentId, userId)])
-      .then(([b, ub]) => { setBoard(b); setUserBest(ub); setLoading(false); });
+    let alive = true;
+    (async () => {
+      setLoading(true);
+      const [b, ub] = await Promise.all([getSegmentLeaderboard(segmentId), getUserSegmentBest(segmentId, userId)]);
+      if (!alive) return;
+      setBoard(b); setUserBest(ub); setLoading(false);
+    })();
+    return () => { alive = false; };
   }, [segmentId, userId, refreshKey]);
 
   const userRank = userBest ? board.findIndex(r => r.user_id === userId && r.time_secs === userBest.time_secs) + 1 : null;
@@ -89,7 +94,7 @@ const Leaderboard = ({ segmentId, userId, refreshKey }) => {
 };
 
 // ── Banner GPS ativo ──────────────────────────────────────────
-const ActiveBanner = ({ seg, userId, onCancel, onComplete }) => {
+const ActiveBanner = ({ seg, onCancel, onComplete }) => {
   const [phase, setPhase]     = useState('waiting');
   const [elapsed, setElapsed] = useState(0);
   const [distEntry, setDistEntry] = useState(null);
@@ -162,13 +167,13 @@ const ActiveBanner = ({ seg, userId, onCancel, onComplete }) => {
 };
 
 // ── Card unificado ────────────────────────────────────────────
-const SegmentCard = ({ seg, user, activeSegId, onActivate, onComplete }) => {
+const SegmentCard = ({ seg, user, activeSegId, onActivate }) => {
   const [expanded, setExpanded] = useState(false);
   const [comments, setComments] = useState([]);
   const [cmtLoading, setCmtLoading] = useState(false);
   const [cmtText, setCmtText] = useState('');
   const [sending, setSending] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshKey] = useState(0);
   const isActive = activeSegId === seg.id;
   const highlights = Array.isArray(seg.highlights) ? seg.highlights : JSON.parse(seg.highlights || '[]');
   const diffColors = { Fácil:'#22c55e', Intermediário:'#f97316', Avançado:'#ef4444' };
@@ -176,8 +181,13 @@ const SegmentCard = ({ seg, user, activeSegId, onActivate, onComplete }) => {
 
   useEffect(() => {
     if (!expanded || comments.length > 0) return;
-    setCmtLoading(true);
-    getSegmentComments(seg.id).then(d => { setComments(d); setCmtLoading(false); });
+    (async () => {
+      setCmtLoading(true);
+      const d = await getSegmentComments(seg.id);
+      setComments(d); setCmtLoading(false);
+    })();
+    // só busca ao expandir
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expanded]);
 
   const handleSendComment = async () => {
@@ -187,11 +197,6 @@ const SegmentCard = ({ seg, user, activeSegId, onActivate, onComplete }) => {
     if (saved) { setComments(prev => [...prev, saved]); setCmtText(''); }
     setSending(false);
   };
-
-  const handleComplete = useCallback((timeSecs) => {
-    onComplete(seg.id, timeSecs);
-    setRefreshKey(k => k + 1);
-  }, [seg.id, onComplete]);
 
   return (
     <div style={{ background:'var(--bg2)', borderRadius:'var(--radius)', border:`1px solid ${isActive ? 'rgba(249,115,22,.4)' : 'var(--border)'}`, overflow:'hidden', transition:'var(--transition)' }}>
@@ -382,7 +387,7 @@ const Segments = ({ user, openAuthModal }) => {
         <div style={{ display:'flex', flexDirection:'column', gap:'14px' }}>
           {filtered.map(seg => (
             <SegmentCard key={seg.id} seg={seg} user={user} activeSegId={activeSegId}
-              onActivate={handleActivate} onComplete={(id, t) => handleComplete(id, t)} />
+              onActivate={handleActivate} />
           ))}
         </div>
       )}

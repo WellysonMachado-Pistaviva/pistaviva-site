@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap, Polyline, LayersControl } from 'react-leaflet';
 import { TILES } from '../lib/mapTiles';
-import { Camera, Plus, X, Search } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { getPings, addPing } from '../services/storage';
@@ -230,7 +230,7 @@ const MapPage = ({ user }) => {
   const [pingTitle, setPingTitle] = useState('');
   const [pingLocal, setPingLocal] = useState('');
   const [pingInsta, setPingInsta] = useState('');
-  const [routeLine, setRouteLine] = useState(null);
+  const [routeLine] = useState(null);
   const [photographers, setPhotographers] = useState([]);
   const [spots, setSpots] = useState([]);
   const [sosAlerts, setSosAlerts] = useState([]);
@@ -285,8 +285,8 @@ const MapPage = ({ user }) => {
     let watchId;
     const comboioId = sessionStorage.getItem('activeComboio');
     if (comboioId && user) {
-      setActiveComboioId(comboioId);
-      
+      queueMicrotask(() => setActiveComboioId(comboioId));
+
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };

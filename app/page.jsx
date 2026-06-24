@@ -9,6 +9,20 @@ import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
 import { getBanners, getDestinos } from './lib/site';
 import { DESAFIOS } from './lib/desafios';
 
+export const metadata = {
+  title: { absolute: 'Pistaviva — Mototurismo, Rotas, Desafios e Comunidade de Moto' },
+  description: 'O hub do mototurismo no Brasil: estradas icônicas, desafios com certificado grátis, rotas, paradas mapeadas, guias de viagem e a maior comunidade aberta sobre duas rodas.',
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    url: '/',
+    siteName: 'Pistaviva',
+    locale: 'pt_BR',
+    title: 'Pistaviva — Mototurismo, Rotas, Desafios e Comunidade',
+    description: 'Estradas icônicas, desafios com certificado grátis, rotas e a maior comunidade de mototurismo do Brasil.',
+  },
+};
+
 export const revalidate = 300;
 
 // Categorias (rail de cards) — adaptadas ao Pistaviva
@@ -64,6 +78,14 @@ export default async function Home() {
           <span className="bora-band-txt">
             <strong>Bora rodar hoje?</strong>
             <span>Veja o clima e o índice de pilotagem da sua cidade</span>
+          </span>
+          <span className="bora-band-arr" aria-hidden="true">→</span>
+        </Link>
+        <Link href="/estrada-x" className="bora-band bora-band--x" aria-label="Baixar o app Estrada X, parceiro do Pistaviva" style={{ marginTop: 10 }}>
+          <span className="bora-band-ic" aria-hidden="true">📲</span>
+          <span className="bora-band-txt">
+            <strong>Baixe o Estrada X</strong>
+            <span>App da maior comunidade de motociclistas do Brasil · parceiro Pistaviva</span>
           </span>
           <span className="bora-band-arr" aria-hidden="true">→</span>
         </Link>

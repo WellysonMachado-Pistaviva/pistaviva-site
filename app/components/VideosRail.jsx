@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
 import EmblaCarousel from './EmblaCarousel';
 
 // Carrossel "nas redes" da home — alterna YouTube e Instagram.
@@ -25,7 +24,7 @@ export default function VideosRail() {
   const ref = useRef(null);
 
   useEffect(() => {
-    if (typeof IntersectionObserver === 'undefined') { setShow(true); return; }
+    if (typeof IntersectionObserver === 'undefined') { queueMicrotask(() => setShow(true)); return; }
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver((es) => {

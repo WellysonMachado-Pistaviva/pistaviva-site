@@ -170,7 +170,7 @@ export const getPosts = async (currentUserId = null) => {
 
   return (data || []).filter(p => p.hidden !== true).map(p => {
     let contentObj = { city: '', uf: '', category: 'viagem', comment: p.content };
-    try { contentObj = JSON.parse(p.content); } catch (e) {}
+    try { contentObj = JSON.parse(p.content); } catch { /* ignore */ }
     return {
       id: p.id,
       user: p.author_name,
@@ -206,7 +206,7 @@ export const addPost = async (post, userId) => {
   let { data, error } = await supabase.from('pv_posts').insert(payload).select();
   if (error && /images/i.test(error.message || '')) {
     // Banco ainda sem a coluna images — grava só a capa
-    const { images, ...noImg } = payload;
+    const { images: _images, ...noImg } = payload;
     ({ data, error } = await supabase.from('pv_posts').insert(noImg).select());
   }
   if (error) {
@@ -800,7 +800,7 @@ export const getAllPostsAdmin = async () => {
     .select('id, user_id, author_name, content, image_url, created_at, pv_post_comments(id), pv_post_likes(user_id)')
     .order('created_at', { ascending: false }).limit(100);
   return (data || []).map(p => {
-    let c = {}; try { c = JSON.parse(p.content); } catch {}
+    let c = {}; try { c = JSON.parse(p.content); } catch { /* ignore */ }
     return { ...p, city: c.city, category: c.category, comment: c.comment,
       commentsCount: p.pv_post_comments?.length || 0,
       likesCount: p.pv_post_likes?.length || 0 };

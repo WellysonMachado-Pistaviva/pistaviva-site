@@ -36,7 +36,7 @@ export default function SiteFooter() {
             <Link href="/sobre">Sobre · História</Link>
             <Link href="/apoie">Apoie o projeto</Link>
             <a href="https://www.instagram.com/pistavivaoficial" target="_blank" rel="noopener noreferrer">Instagram</a>
-            <Link href="/parceiros">Parceiros</Link>
+            <Link href="/estrada-x">Estrada X</Link>
             <Link href="/loja">Loja</Link>
           </div>
         </div>

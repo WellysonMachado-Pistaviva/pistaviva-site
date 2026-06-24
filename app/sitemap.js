@@ -50,8 +50,8 @@ export default async function sitemap() {
     // Páginas institucionais — prioridade média
     { path: '/sobre', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/apoie', priority: 0.7, changeFrequency: 'monthly' },
-    { path: '/loja', priority: 0.7, changeFrequency: 'weekly' },
-    { path: '/parceiros', priority: 0.7, changeFrequency: 'monthly' },
+    // /loja é doorway pra loja externa (noindex) — fora do sitemap.
+    { path: '/estrada-x', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/contato', priority: 0.6, changeFrequency: 'monthly' },
 
     // Legal — baixa prioridade

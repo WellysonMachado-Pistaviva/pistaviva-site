@@ -1,13 +1,21 @@
 // Admin tab components: Overview, Events CRUD, Site Config
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Users, Calendar, MessageSquare, MapPin, ShieldCheck, Plus,
-  Trash2, Edit, Check, X, Save, BarChart3, Clock, Eye,
+  Trash2, Edit, Save,
 } from 'lucide-react';
 import {
   getEvents, addEvent, updateEvent, deleteEvent as deleteEventStorage,
   getSiteConfig, saveSiteConfig, getPosts, getPartners, getStampsConfig,
 } from '../services/storage';
+
+const F = ({ label, hint, children }) => (
+  <div className="calc-field">
+    <label>{label}</label>
+    {hint && <div style={{ fontSize: '11px', color: 'var(--muted)', marginBottom: '4px' }}>{hint}</div>}
+    {children}
+  </div>
+);
 import { getAllUsers } from '../services/auth';
 
 const loadAsync = (fn, setter) => fn().then(setter).catch(() => {});
@@ -141,8 +149,6 @@ export const EventsTab = ({ toast }) => {
     { value: 'full', label: 'Vagas Esgotadas', color: 'var(--danger)' },
   ];
 
-  const F = ({ label, children }) => <div className="calc-field"><label>{label}</label>{children}</div>;
-
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -235,13 +241,6 @@ export const ConfigTab = ({ toast }) => {
 
   if (!cfg) return <div style={{ padding: '40px', textAlign: 'center', color: 'var(--muted)' }}>Carregando...</div>;
 
-  const F = ({ label, hint, children }) => (
-    <div className="calc-field">
-      <label>{label}</label>
-      {hint && <div style={{ fontSize: '11px', color: 'var(--muted)', marginBottom: '4px' }}>{hint}</div>}
-      {children}
-    </div>
-  );
 
   return (
     <div>

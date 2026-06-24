@@ -29,7 +29,7 @@ export const useWakeLock = (active) => {
       if (!('wakeLock' in navigator)) return;
       try {
         const lock = await navigator.wakeLock.request('screen');
-        if (!mounted) { try { lock.release(); } catch {} return; }
+        if (!mounted) { try { lock.release(); } catch { /* ignore */ } return; }
         lockRef.current = lock;
         lock.addEventListener('release', () => {
           if (mounted) setStatus(s => ({ ...s, wakeLock: false }));
@@ -49,12 +49,12 @@ export const useWakeLock = (active) => {
         audio.preload = 'auto';
         audio.play()
           .then(() => {
-            if (!mounted) { try { audio.pause(); } catch {} return; }
+            if (!mounted) { try { audio.pause(); } catch { /* ignore */ } return; }
             audioRef.current = audio;
             setStatus(s => ({ ...s, audio: true }));
           })
           .catch(err => console.warn('[WakeLock] áudio bloqueado:', err?.message));
-      } catch {}
+      } catch { /* ignore */ }
     };
 
     const onVisibility = async () => {
@@ -74,8 +74,8 @@ export const useWakeLock = (active) => {
     return () => {
       mounted = false;
       document.removeEventListener('visibilitychange', onVisibility);
-      if (lockRef.current) { try { lockRef.current.release(); } catch {} lockRef.current = null; }
-      if (audioRef.current) { try { audioRef.current.pause(); } catch {} audioRef.current = null; }
+      if (lockRef.current) { try { lockRef.current.release(); } catch { /* ignore */ } lockRef.current = null; }
+      if (audioRef.current) { try { audioRef.current.pause(); } catch { /* ignore */ } audioRef.current = null; }
       setStatus({ wakeLock: false, audio: false });
     };
   }, [active]);

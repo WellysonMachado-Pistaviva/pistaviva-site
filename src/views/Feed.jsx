@@ -36,10 +36,6 @@ const Feed = ({ deviceId = 'anon', identity, promptIdentity }) => {
   const [likedPosts, setLikedPosts] = useState({});
   const [activeFilter, setActiveFilter] = useState('todos');
 
-  useEffect(() => {
-    loadPosts();
-  }, []);
-
   const loadPosts = async () => {
     setLoading(true);
     const data = await getPosts(deviceId);
@@ -49,6 +45,12 @@ const Feed = ({ deviceId = 'anon', identity, promptIdentity }) => {
     setLikedPosts(liked);
     setLoading(false);
   };
+
+  useEffect(() => {
+    (async () => { await loadPosts(); })();
+    // carrega uma vez na montagem
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fetchLocationSuggestions = async (query) => {
     if (query.length < 3) { setLocationSuggestions([]); return; }

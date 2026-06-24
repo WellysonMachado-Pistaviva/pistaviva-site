@@ -7,7 +7,7 @@ class ErrorBoundary extends Component {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch(error) {
     // Log de erros sem expor dados sensíveis
     console.error('[ErrorBoundary]', error?.message);
   }

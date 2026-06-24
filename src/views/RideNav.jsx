@@ -28,7 +28,6 @@ const distToSeg = (p, a, b) => {
   return Math.hypot(px - cx, py - cy);
 };
 
-const riderIcon = L.divIcon({ html: `<div style="width:30px;height:30px;border-radius:50%;background:#f97316;border:3px solid #fff;box-shadow:0 0 0 4px rgba(249,115,22,.35),0 2px 8px rgba(0,0,0,.5);display:grid;place-items:center;font-size:15px;">🏍️</div>`, className: '', iconSize: [30, 30], iconAnchor: [15, 15] });
 const destIcon = L.divIcon({ html: `<div style="width:26px;height:26px;border-radius:50%;background:#ef4444;border:2px solid #fff;display:grid;place-items:center;font-size:13px;">🏁</div>`, className: '', iconSize: [26, 26], iconAnchor: [13, 13] });
 
 function Follow({ pos, follow }) {
@@ -58,7 +57,7 @@ export default function RideNav({ line = [], dest, originName, destName, onClose
 
   // Curvas pré-calculadas a partir da geometria da rota.
   const turns = useMemo(() => {
-    const t = []; let lastIdx = -999, lastPt = null;
+    const t = []; let lastPt = null;
     for (let i = 1; i < line.length - 1; i++) {
       let ang = bearing(line[i], line[i + 1]) - bearing(line[i - 1], line[i]);
       ang = ((ang + 540) % 360) - 180;
@@ -66,7 +65,7 @@ export default function RideNav({ line = [], dest, originName, destName, onClose
       if (a > 32) {
         if (lastPt && meters(line[i], lastPt) < 110) continue; // dedup curvas coladas
         t.push({ idx: i, point: line[i], side: ang > 0 ? 'direita' : 'esquerda', sharp: a > 70 });
-        lastIdx = i; lastPt = line[i];
+        lastPt = line[i];
       }
     }
     return t;
@@ -78,7 +77,7 @@ export default function RideNav({ line = [], dest, originName, destName, onClose
   };
 
   useEffect(() => {
-    if (!navigator.geolocation) { setErr('GPS não suportado neste aparelho.'); return; }
+    if (!navigator.geolocation) { queueMicrotask(() => setErr('GPS não suportado neste aparelho.')); return; }
     watchRef.current = navigator.geolocation.watchPosition(
       p => {
         const cur = [p.coords.latitude, p.coords.longitude];

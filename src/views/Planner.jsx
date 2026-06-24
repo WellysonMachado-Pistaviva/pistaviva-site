@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { MapPin, Plus, Calculator, X, Share2, Navigation, Fuel, Clock, Wallet, Map as MapIcon, TrendingUp, Camera } from 'lucide-react';
+import { MapPin, Plus, Calculator, X, Share2, Navigation, Map as MapIcon, Camera } from 'lucide-react';
 import { MapContainer, TileLayer, Polyline, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useWeather } from '../hooks/useWeather';
 import { TILES } from '../lib/mapTiles';
 import RideNav from './RideNav';
-import { addRoute } from '../services/storage';
 import { supabase } from '../lib/supabaseClient';
 
 // distância haversine (km)
@@ -46,7 +45,7 @@ const FitRoute = ({ line }) => {
   return null;
 };
 
-const Planner = ({ user }) => {
+const Planner = () => {
   const [origin, setOrigin]       = useState({ name: '', lat: null, lng: null });
   const [dest, setDest]           = useState({ name: '', lat: null, lng: null });
   const [suggestions, setSuggestions] = useState([]);
@@ -213,9 +212,11 @@ const Planner = ({ user }) => {
     const [oLat, oLng] = o.split(',').map(Number);
     const [dLat, dLng] = d.split(',').map(Number);
     if ([oLat, oLng, dLat, dLng].some(Number.isNaN)) return;
-    setOrigin({ name: q.get('on') || 'Origem', lat: oLat, lng: oLng });
-    setDest({ name: q.get('dn') || 'Destino', lat: dLat, lng: dLng });
-    if (q.get('m')) setRouteMode(q.get('m'));
+    queueMicrotask(() => {
+      setOrigin({ name: q.get('on') || 'Origem', lat: oLat, lng: oLng });
+      setDest({ name: q.get('dn') || 'Destino', lat: dLat, lng: dLng });
+      if (q.get('m')) setRouteMode(q.get('m'));
+    });
     autoCalcRef.current = true;
   }, []);
   useEffect(() => {
@@ -225,25 +226,6 @@ const Planner = ({ user }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [origin.lat, dest.lat]);
-
-  const WeatherMini = ({ weather, label }) => {
-    if (!weather) return null;
-    return (
-      <div style={{ flex: 1, padding: '12px', borderRadius: 'var(--radius-sm)', background: 'var(--bg3)', border: '1px solid var(--border)' }}>
-        <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--muted)', letterSpacing: '1px', marginBottom: '6px' }}>{label}</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '24px' }}>{weather.icon}</span>
-          <div>
-            <div style={{ fontSize: '18px', fontWeight: 900 }}>{weather.temp}°C</div>
-            <div style={{ fontSize: '11px', color: 'var(--muted)' }}>{weather.label}</div>
-          </div>
-        </div>
-        <div style={{ display: 'inline-flex', alignItems: 'center', marginTop: '8px', padding: '3px 9px', borderRadius: '2px', background: `${weather.color}1e`, color: weather.color, fontSize: '10px', fontWeight: 700, letterSpacing: '.1em', fontFamily: 'var(--mono)', textTransform: 'uppercase' }}>
-          {weather.riding}
-        </div>
-      </div>
-    );
-  };
 
   const dateStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
 

@@ -41,7 +41,7 @@ export default function BlogAdmin() {
     const { data } = await supabase.from('pv_blog_posts').select('*').order('created_at', { ascending: false });
     setPosts(data || []); setLoading(false);
   }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
 
   if (!auth?.isAdmin) {
     return <div className="wrap section" style={{ textAlign: 'center' }}><div style={{ fontSize: 48 }}>🔒</div><h2 style={{ fontFamily: 'var(--display)' }}>Acesso Restrito</h2><p className="text-muted">Apenas administradores.</p></div>;

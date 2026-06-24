@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Calendar, MapPin, Clock, Users, X, CheckCircle, ChevronRight, Bike, Timer, Plus, Image as ImageIcon } from 'lucide-react';
+import { Calendar, MapPin, Clock, X, CheckCircle, ChevronRight, Bike, Timer, Plus, Image as ImageIcon } from 'lucide-react';
 import { getEvents, getEventRsvps, setEventRsvp, addEvent } from '../services/storage';
 import { uploadPostImage } from '../services/storage';
 import CoolMode from '../../app/components/CoolMode';
@@ -27,9 +27,10 @@ const fmtDateBR = (iso) => {
 };
 
 const CountdownBadge = ({ dateStr }) => {
+  const [now] = useState(() => Date.now());
   const date = parseEventDate(dateStr);
   if (!date) return null;
-  const diff = Math.ceil((date - Date.now()) / 86400000);
+  const diff = Math.ceil((date - now) / 86400000);
   if (diff < 0) return null;
   if (diff === 0) return <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--danger)', letterSpacing: '1px' }}>HOJE!</span>;
   return (

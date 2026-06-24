@@ -115,7 +115,7 @@ function Analytics() {
 
     setD({ signups, topCat, topUf, topEvents, topPosts, viewSpots, viewBlog });
   }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
 
   if (!d) return <div className="spinner-wrap"><span className="loading-spinner" /></div>;
 
@@ -168,7 +168,7 @@ function Stats({ userStats }) {
     ]);
     setS({ posts, posts7, comments, events, rsvps, spots, spotsHidden, photographers, photogHidden, blog, partners, segments, rides, comboio7, reportsOpen });
   }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
 
   if (!s) return <div className="spinner-wrap"><span className="loading-spinner" /></div>;
 
@@ -250,7 +250,7 @@ function Users({ onStats }) {
       onStats?.({ total: json.users.length, new7 });
     } catch (e) { setErr(e.message); setUsers([]); }
   }, [onStats]);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
 
   const act = async (action, u, password) => {
     const labels = { makeAdmin: 'tornar admin', removeAdmin: 'remover admin', block: 'bloquear', unblock: 'desbloquear', delete: 'EXCLUIR DEFINITIVAMENTE', resetPassword: 'redefinir senha' };
