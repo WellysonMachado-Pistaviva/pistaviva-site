@@ -24,10 +24,40 @@ const SNIP = {
 
 const Ico = ({ d }) => <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{d}</svg>;
 
+// Tamanho ideal da capa (mostrado no admin pra orientar o upload).
+const COVER_SIZE = '1200 × 630 px (16:9)';
+
+// Miniatura da capa com detecção de imagem quebrada — visão completa no admin.
+function CoverThumb({ post, onStatus }) {
+  const url = (post.cover_url || '').trim();
+  const [st, setSt] = useState(url ? 'loading' : 'none');
+  useEffect(() => {
+    const s = url ? 'loading' : 'none';
+    queueMicrotask(() => { setSt(s); if (!url) onStatus(post.id, 'none'); });
+  }, [url, post.id, onStatus]);
+  return (
+    <span className={`ba-thumb ba-thumb--${st}`} title={url || 'Sem foto'}>
+      {url && (
+        <img
+          src={url}
+          alt=""
+          loading="lazy"
+          onLoad={() => { setSt('ok'); onStatus(post.id, 'ok'); }}
+          onError={() => { setSt('broken'); onStatus(post.id, 'broken'); }}
+        />
+      )}
+      {st === 'none' && <span className="ba-thumb__lbl">sem<br />foto</span>}
+      {st === 'broken' && <span className="ba-thumb__lbl ba-thumb__lbl--err">quebrada</span>}
+    </span>
+  );
+}
+
 export default function BlogAdmin() {
   const auth = useAuth();
   const [form, setForm] = useState(EMPTY);
   const [posts, setPosts] = useState([]);
+  const [coverStatus, setCoverStatus] = useState({}); // id -> 'ok' | 'broken' | 'none' | 'loading'
+  const reportCover = useCallback((id, s) => setCoverStatus(m => (m[id] === s ? m : { ...m, [id]: s })), []);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -103,6 +133,11 @@ export default function BlogAdmin() {
   };
 
   const remove = async (id) => { if (!confirm('Excluir esta matéria?')) return; const { error } = await supabase.from('pv_blog_posts').delete().eq('id', id); if (error) return showToast('Erro ao excluir', 'error'); showToast('Excluído', 'success'); load(); };
+
+  const cv = Object.values(coverStatus);
+  const cOk = cv.filter(s => s === 'ok').length;
+  const cNone = cv.filter(s => s === 'none').length;
+  const cBroken = cv.filter(s => s === 'broken').length;
 
   const words = form.body.trim().split(/\s+/).filter(Boolean).length;
   const readMin = Math.max(1, Math.round(words / 200));
@@ -194,6 +229,13 @@ export default function BlogAdmin() {
               </label>
               <div className="pe-or">ou cole uma URL</div>
               <input className="pe-in" placeholder="https://..." value={form.cover_url} onChange={e => set('cover_url', e.target.value)} />
+              <div className="pe-cover-hint">📐 Tamanho ideal: <b>{COVER_SIZE}</b> · JPG ou PNG · hospede no Supabase ou imgur</div>
+              {form.cover_url.trim() && (
+                <div className="pe-cover-test">
+                  Pré-visualização:
+                  <CoverThumb post={{ id: '_form', cover_url: form.cover_url }} onStatus={() => {}} />
+                </div>
+              )}
             </div>
           </section>
 
@@ -222,22 +264,42 @@ export default function BlogAdmin() {
         </aside>
       </div>
 
-      {/* LISTA DE POSTS */}
+      {/* LISTA DE POSTS — com visão de capas */}
       <div className="pe-postlist">
         <h3 style={{ fontFamily: 'var(--display)', marginBottom: 12 }}>Matérias ({posts.length})</h3>
+
+        {/* visão completa: contagem de capas + tamanho ideal */}
+        {!loading && posts.length > 0 && (
+          <div className="ba-overview">
+            <span className="ba-stat ok">✓ {cOk} com foto</span>
+            <span className="ba-stat none">○ {cNone} sem foto</span>
+            <span className="ba-stat err">⚠ {cBroken} quebrada{cBroken === 1 ? '' : 's'}</span>
+            <span className="ba-hint">Capa ideal: <b>{COVER_SIZE}</b></span>
+          </div>
+        )}
+
         {loading ? <div className="spinner-wrap"><span className="loading-spinner" /></div> : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {posts.map(p => (
-              <div key={p.id} style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px' }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: p.published ? 'var(--moss)' : 'var(--paper-mut)', flex: '0 0 auto' }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.title}</div>
-                  <div style={{ fontSize: 12, color: 'var(--paper-mut)', fontFamily: 'var(--mono)' }}>/{p.slug}{p.published ? '' : ' · rascunho'}</div>
+            {posts.map(p => {
+              const st = coverStatus[p.id];
+              const rowFlag = !p.cover_url?.trim() ? 'none' : (st === 'broken' ? 'broken' : '');
+              return (
+                <div key={p.id} className={`ba-row${rowFlag ? ' ba-row--' + rowFlag : ''}`} style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px' }}>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: p.published ? 'var(--moss)' : 'var(--paper-mut)', flex: '0 0 auto' }} />
+                  <CoverThumb post={p} onStatus={reportCover} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.title}</div>
+                    <div style={{ fontSize: 12, color: 'var(--paper-mut)', fontFamily: 'var(--mono)' }}>
+                      /{p.slug}{p.published ? '' : ' · rascunho'}
+                      {rowFlag === 'none' && <span className="ba-tag ba-tag--none"> · sem foto</span>}
+                      {rowFlag === 'broken' && <span className="ba-tag ba-tag--err"> · foto quebrada</span>}
+                    </div>
+                  </div>
+                  <button className="btn btn--ghost" style={{ padding: '.5rem .9rem' }} onClick={() => edit(p)}>Editar</button>
+                  <button className="btn btn--ghost" style={{ padding: '.5rem .9rem', borderColor: 'var(--danger)', color: 'var(--danger)' }} onClick={() => remove(p.id)}>Excluir</button>
                 </div>
-                <button className="btn btn--ghost" style={{ padding: '.5rem .9rem' }} onClick={() => edit(p)}>Editar</button>
-                <button className="btn btn--ghost" style={{ padding: '.5rem .9rem', borderColor: 'var(--danger)', color: 'var(--danger)' }} onClick={() => remove(p.id)}>Excluir</button>
-              </div>
-            ))}
+              );
+            })}
             {posts.length === 0 && <p style={{ color: 'var(--paper-dim)' }}>Nenhuma matéria ainda.</p>}
           </div>
         )}
