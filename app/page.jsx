@@ -102,6 +102,40 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ===== NOTÍCIAS / BLOG (subido pro topo — benchmarking de portal de notícia) ===== */}
+      {news.length > 0 && (
+        <section className="ig-news" id="blog">
+          <div className="wrap">
+            <div className="ig-sechead">
+              <div className="lead">
+                <span className="ig-eyebrow">Do blog</span>
+                <h2 className="ig-title">Leituras de estrada</h2>
+              </div>
+              <Link href="/blog" className="ig-btn ig-btn--ghost">Todas as matérias</Link>
+            </div>
+            <div className="ig-news-grid">
+              {news.map((p, i) => (
+                <article key={p.id} className={`ig-post${i === 0 ? ' feat' : ''}`}>
+                  <Link href={`/blog/${p.slug}`} aria-label={p.title}>
+                    <div className="pic">
+                      {p.cover_url
+                        ? <Cover src={p.cover_url} alt={p.title} sizes="(max-width:600px) 100vw, 600px" />
+                        : <span className="pic-ph">PISTAVIVA</span>}
+                    </div>
+                    <div className="meta">
+                      {p.tags?.[0] && <span className="tag">{p.tags[0]}</span>}
+                      {p.published_at && <span className="date">{fmtDate(p.published_at)}</span>}
+                    </div>
+                    <h3>{p.title}</h3>
+                    {p.excerpt && <p>{p.excerpt}</p>}
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ===== CATEGORIAS ===== */}
       <section className="ig-cats" id="categorias">
         <div className="wrap">
@@ -193,40 +227,6 @@ export default async function Home() {
 
       {/* ===== VÍDEOS / REDES ===== */}
       <VideosRail />
-
-      {/* ===== NOTÍCIAS / BLOG ===== */}
-      {news.length > 0 && (
-        <section className="ig-news" id="blog">
-          <div className="wrap">
-            <div className="ig-sechead">
-              <div className="lead">
-                <span className="ig-eyebrow">Do blog</span>
-                <h2 className="ig-title">Leituras de estrada</h2>
-              </div>
-              <Link href="/blog" className="ig-btn ig-btn--ghost">Todas as matérias</Link>
-            </div>
-            <div className="ig-news-grid">
-              {news.map((p, i) => (
-                <article key={p.id} className={`ig-post${i === 0 ? ' feat' : ''}`}>
-                  <Link href={`/blog/${p.slug}`} aria-label={p.title}>
-                    <div className="pic">
-                      {p.cover_url
-                        ? <Cover src={p.cover_url} alt={p.title} sizes="(max-width:600px) 100vw, 600px" />
-                        : <span className="pic-ph">PISTAVIVA</span>}
-                    </div>
-                    <div className="meta">
-                      {p.tags?.[0] && <span className="tag">{p.tags[0]}</span>}
-                      {p.published_at && <span className="date">{fmtDate(p.published_at)}</span>}
-                    </div>
-                    <h3>{p.title}</h3>
-                    {p.excerpt && <p>{p.excerpt}</p>}
-                  </Link>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
     </div>
   );
 }
