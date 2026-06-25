@@ -29,3 +29,36 @@ export async function getCommunityPosts(limit = 30) {
     return [];
   }
 }
+
+// Destaques pra home: só posts COM foto (o rail é visual). Mostra nome + local.
+export async function getCommunityHighlights(limit = 10) {
+  try {
+    const sb = supabaseServer();
+    const { data, error } = await sb
+      .from('pv_posts')
+      .select('id, author_name, content, image_url, images, created_at, hidden')
+      .order('created_at', { ascending: false })
+      .limit(40);
+    if (error) return [];
+    const out = [];
+    for (const p of data || []) {
+      if (p.hidden === true) continue;
+      let c = { city: '', uf: '', comment: '' };
+      try { c = { ...c, ...JSON.parse(p.content) }; } catch { c.comment = p.content || ''; }
+      const img = p.image_url || (Array.isArray(p.images) && p.images[0]) || null;
+      if (!img) continue;
+      out.push({
+        id: p.id,
+        author: p.author_name || 'Motociclista',
+        city: c.city || '',
+        uf: c.uf || '',
+        comment: (c.comment || '').trim(),
+        image: img,
+      });
+      if (out.length >= limit) break;
+    }
+    return out;
+  } catch {
+    return [];
+  }
+}
