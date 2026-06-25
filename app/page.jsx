@@ -7,7 +7,7 @@ import DestinosRail from './components/DestinosRail';
 import CommunityRail from './components/CommunityRail';
 import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
 import { getBanners, getDestinos } from './lib/site';
-import { getCommunityHighlights } from './lib/community';
+import { getCommunityRailItems } from './lib/community';
 import { DESAFIOS } from './lib/desafios';
 
 export const metadata = {
@@ -62,7 +62,7 @@ export default async function Home() {
   const featured = await getFeaturedPosts(1);
   const banners = await getBanners();
   const destinos = await getDestinos();
-  const community = await getCommunityHighlights(10);
+  const community = await getCommunityRailItems(12);
   const news = [...(featured || []), ...posts.filter(p => !featured?.some(f => f.id === p.id))].slice(0, 3);
 
   return (
