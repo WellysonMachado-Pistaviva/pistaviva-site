@@ -2,30 +2,31 @@
 import Link from 'next/link';
 import EmblaCarousel from './EmblaCarousel';
 
-// Rail "Da comunidade" na home: posts reais com foto, nome e local — instiga o cara a entrar.
+// Rail "Da comunidade" na home: posts reais + paradas novas (com foto), nome e local.
+// Item unificado: { kind, title, city, uf, text, image, href, badge }.
 export default function CommunityRail({ items = [] }) {
   if (!items.length) return null;
 
   const slides = items.map((p) => (
-    <Link key={p.id} href="/comunidade" className="crail-card" aria-label={`Post de ${p.author}`}>
+    <Link key={p.id} href={p.href || '/comunidade'} className="crail-card" aria-label={p.title}>
       <div className="crail-pic">
         <img
           src={p.image}
-          alt={`Foto de ${p.author}${p.city ? ' em ' + p.city : ''}`}
+          alt={`${p.title}${p.city ? ' — ' + p.city : ''}`}
           loading="lazy"
           draggable="false"
         />
         <span className="crail-grad" aria-hidden="true" />
-        <span className="crail-badge">{p.category || 'Comunidade'}</span>
+        <span className={`crail-badge${p.kind === 'parada' ? ' crail-badge--parada' : ''}`}>{p.badge || 'Comunidade'}</span>
         <div className="crail-who">
-          <span className="crail-av">{(p.author[0] || 'M').toUpperCase()}</span>
+          <span className="crail-av">{(p.title?.[0] || 'P').toUpperCase()}</span>
           <span className="crail-meta">
-            <b>{p.author}</b>
+            <b>{p.title}</b>
             {(p.city || p.uf) && <span>📍 {[p.city, p.uf].filter(Boolean).join('/')}</span>}
           </span>
         </div>
       </div>
-      {p.comment && <p className="crail-txt">{p.comment}</p>}
+      {p.text && <p className="crail-txt">{p.text}</p>}
     </Link>
   ));
 
