@@ -59,7 +59,7 @@ export async function getNearbySpots({ lat, lng, radiusKm = 60, limit = 60 } = {
 export async function getAllSpotSlugs() {
   try {
     const sb = supabaseServer();
-    const { data, error } = await sb.from('pv_spots').select('slug, created_at, cover_url, cidade, uf, categoria').eq('published', true);
+    const { data, error } = await sb.from('pv_spots').select('slug, created_at, cover_url, cidade, uf, categoria, descricao, fotos').eq('published', true);
     if (error) return [];
     return data || [];
   } catch {
