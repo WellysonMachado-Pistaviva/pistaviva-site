@@ -1193,6 +1193,31 @@ body.pg-locked{ overflow:hidden; }
 .post-editor .ba-tag--none{ color:var(--pe-mut2); }
 .post-editor .ba-tag--err{ color:var(--pe-accent2); font-weight:700; }
 
+/* ===== Contador "X pessoas online" (prova social) ===== */
+.pv-online{
+  position: fixed; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 60;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 14px; border-radius: 999px;
+  background: rgba(12,12,13,.9); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  color: #fff; font-family: var(--mono); font-size: 12.5px; font-weight: 600; letter-spacing: .01em;
+  pointer-events: none;
+}
+.pv-online__n{ color: var(--accent); font-weight: 800; }
+.pv-online__dot{
+  width: 9px; height: 9px; border-radius: 50%; background: var(--accent); flex: 0 0 auto;
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent);
+  animation: pvOnlinePulse 2s ease-out infinite;
+}
+@keyframes pvOnlinePulse{
+  0%{ box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent); }
+  70%{ box-shadow: 0 0 0 8px transparent; }
+  100%{ box-shadow: 0 0 0 0 transparent; }
+}
+@media(max-width:900px){ .pv-online{ bottom: calc(80px + env(safe-area-inset-bottom)); right: 12px; font-size: 12px; } }
+@media(prefers-reduced-motion: reduce){ .pv-online__dot{ animation: none; } }
+
 /* ===== Toast de atividade da comunidade (prova social real) ===== */
 .pv-livetoast {
   position: fixed; left: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 70;
