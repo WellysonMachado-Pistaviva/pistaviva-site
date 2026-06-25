@@ -51,6 +51,37 @@ export async function getFeaturedPosts(limit = 3) {
   }
 }
 
+// Relacionadas por tag (link interno topical > "últimas"). Cai pras recentes se faltar.
+export async function getRelatedPosts(slug, tags = [], limit = 3) {
+  try {
+    const sb = supabaseServer();
+    let related = [];
+    if (Array.isArray(tags) && tags.length) {
+      const { data } = await sb
+        .from('pv_blog_posts')
+        .select('id, slug, title, excerpt, cover_url, tags, author, published_at')
+        .eq('published', true)
+        .neq('slug', slug)
+        .overlaps('tags', tags)
+        .order('published_at', { ascending: false })
+        .limit(limit);
+      related = data || [];
+    }
+    if (related.length < limit) {
+      const fill = await getPublishedPosts(limit + 4);
+      const seen = new Set(related.map(p => p.slug));
+      for (const p of fill) {
+        if (p.slug === slug || seen.has(p.slug)) continue;
+        related.push(p); seen.add(p.slug);
+        if (related.length >= limit) break;
+      }
+    }
+    return related.slice(0, limit);
+  } catch {
+    return [];
+  }
+}
+
 export async function getAllSlugs() {
   try {
     const sb = supabaseServer();
