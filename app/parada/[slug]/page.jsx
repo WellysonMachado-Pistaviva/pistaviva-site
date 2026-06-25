@@ -20,10 +20,15 @@ export async function generateMetadata({ params }) {
   const s = await getSpotBySlug(slug);
   if (!s) return { title: 'Parada não encontrada' };
   const desc = s.descricao || `${catNome(s.categoria)} para motociclistas em ${s.cidade}/${s.uf}. Parada avaliada pela comunidade Pistaviva.`;
+  // Só indexa parada com conteúdo real (descrição curada ou ≥2 fotos próprias).
+  // Sem isso é página fina — fica noindex,follow até a comunidade enriquecer.
+  const fotosProprias = Array.isArray(s.fotos) ? s.fotos.filter(Boolean).length : 0;
+  const rich = (s.descricao || '').trim().length >= 80 || fotosProprias >= 2;
   return {
     title: `${s.nome} — ${catNome(s.categoria)} em ${s.cidade}/${s.uf}`,
     description: desc,
     alternates: { canonical: `/parada/${slug}` },
+    robots: rich ? { index: true, follow: true } : { index: false, follow: true },
     openGraph: { type: 'article', title: s.nome, description: desc, images: s.cover_url ? [s.cover_url] : [] },
   };
 }

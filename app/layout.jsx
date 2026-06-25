@@ -115,6 +115,24 @@ export default function RootLayout({ children }) {
           </>
         )}
         <AdSenseLoader client={ADSENSE_ID} />
+
+        {/* Reader Revenue Manager (openaccess) — monetização de leitor via Google */}
+        <Script
+          async
+          type="application/javascript"
+          src="https://news.google.com/swg/js/v1/swg-basic.js"
+          strategy="afterInteractive"
+        />
+        <Script id="rrm-swg-basic" strategy="afterInteractive">
+          {`(self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+            basicSubscriptions.init({
+              type: "NewsArticle",
+              isPartOfType: ["Product"],
+              isPartOfProductId: "CAowouvgCw:openaccess",
+              clientOptions: { theme: "light", lang: "pt-BR" },
+            });
+          });`}
+        </Script>
       </body>
     </html>
   );

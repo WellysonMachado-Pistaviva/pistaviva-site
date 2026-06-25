@@ -49,8 +49,8 @@ export async function generateMetadata({ params }) {
     description,
     alternates: { canonical: `/mototurismo/${uf.toLowerCase()}/${cidade}` },
     openGraph: { title: `Paradas de moto em ${cidadeNome}/${ufUp} · Pistaviva`, description, url: `${BASE}/mototurismo/${uf.toLowerCase()}/${cidade}`, type: 'website' },
-    // Cidade com 1 parada ainda é fina — indexa a partir de 2 pra não diluir.
-    robots: spots.length < 2 ? { index: false, follow: true } : { index: true, follow: true },
+    // Cidade com poucas paradas ainda é fina — indexa a partir de 3 pra não diluir.
+    robots: spots.length < 3 ? { index: false, follow: true } : { index: true, follow: true },
   };
 }
 

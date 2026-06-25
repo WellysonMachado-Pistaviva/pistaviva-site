@@ -83,7 +83,9 @@ export default async function sitemap() {
   let paradas = [];
   try {
     const slugs = await getAllSpotSlugs();
-    paradas = slugs.map(s => ({
+    // Espelha o noindex de /parada/[slug]: só lista paradas com conteúdo real.
+    const rich = (s) => ((s.descricao || '').trim().length >= 80) || ((Array.isArray(s.fotos) ? s.fotos.filter(Boolean).length : 0) >= 2);
+    paradas = slugs.filter(rich).map(s => ({
       url: `${BASE}/parada/${s.slug}`,
       lastModified: s.created_at ? new Date(s.created_at).toISOString() : LAST_BUILD,
       changeFrequency: 'weekly',
@@ -123,9 +125,9 @@ export default async function sitemap() {
         hubs.push({ url: `${BASE}/mototurismo/${uf}`, lastModified: LAST_BUILD, changeFrequency: 'weekly', priority: 0.85 });
       }
     }
-    // Hubs de cidade — espelha o noindex (≥2 paradas)
+    // Hubs de cidade — espelha o noindex (≥3 paradas)
     for (const [k, n] of Object.entries(cityCnt)) {
-      if (n >= 2) hubs.push({ url: `${BASE}/mototurismo/${k}`, lastModified: LAST_BUILD, changeFrequency: 'weekly', priority: 0.8 });
+      if (n >= 3) hubs.push({ url: `${BASE}/mototurismo/${k}`, lastModified: LAST_BUILD, changeFrequency: 'weekly', priority: 0.8 });
     }
   } catch { /* DB indisponível no build */ }
 
