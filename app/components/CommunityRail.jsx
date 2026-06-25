@@ -16,6 +16,7 @@ export default function CommunityRail({ items = [] }) {
           draggable="false"
         />
         <span className="crail-grad" aria-hidden="true" />
+        <span className="crail-badge">{p.category || 'Comunidade'}</span>
         <div className="crail-who">
           <span className="crail-av">{(p.author[0] || 'M').toUpperCase()}</span>
           <span className="crail-meta">
@@ -38,7 +39,7 @@ export default function CommunityRail({ items = [] }) {
         <Link className="ig-btn ig-btn--ghost" href="/comunidade">Entrar na comunidade <span className="arr">→</span></Link>
       </div>
       <div className="wrap">
-        <EmblaCarousel slides={slides} basis="clamp(240px,70vw,280px)" gap={14} />
+        <EmblaCarousel slides={slides} basis="clamp(190px,58vw,228px)" gap={14} />
       </div>
     </section>
   );
