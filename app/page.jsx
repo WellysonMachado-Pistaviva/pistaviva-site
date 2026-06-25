@@ -175,7 +175,7 @@ export default async function Home() {
               </div>
             </div>
           </div>
-          <DestinosRail items={destinos} />
+          <div className="wrap"><DestinosRail items={destinos} /></div>
         </section>
       )}
 
