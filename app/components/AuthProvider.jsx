@@ -167,7 +167,9 @@ export default function AuthProvider({ children }) {
         <div className="modal-overlay modal-overlay--center" onClick={cancelIdentity}>
           <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 380, padding: '26px 22px' }}>
             <button className="modal-close" onClick={cancelIdentity}>×</button>
-            <div className="auth-logo" style={{ marginBottom: 6 }}>PISTA<span style={{ color: 'var(--accent)' }}>VIVA</span></div>
+            <div className="auth-logo" style={{ marginBottom: 6, textAlign: 'center' }}>
+              <img src="/logo.svg" alt="Pistaviva" style={{ height: 28, width: 'auto', maxWidth: '75%' }} />
+            </div>
             <p style={{ textAlign: 'center', color: 'var(--paper-mut)', fontSize: 14, marginBottom: 16 }}>Identifique-se pra postar na comunidade.</p>
             <input style={inp} type="text" placeholder="Seu nome" value={identForm.nome} autoFocus autoComplete="name"
               onChange={e => setIdentForm(f => ({ ...f, nome: e.target.value }))}
