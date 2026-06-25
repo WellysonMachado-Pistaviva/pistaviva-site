@@ -36,16 +36,15 @@ export async function getCommunityHighlights(limit = 10) {
     const sb = supabaseServer();
     const { data, error } = await sb
       .from('pv_posts')
-      .select('id, author_name, content, image_url, images, created_at, hidden')
+      .select('id, author_name, content, image_url, created_at')
       .order('created_at', { ascending: false })
       .limit(40);
     if (error) return [];
     const out = [];
     for (const p of data || []) {
-      if (p.hidden === true) continue;
       let c = { city: '', uf: '', category: '', comment: '' };
       try { c = { ...c, ...JSON.parse(p.content) }; } catch { c.comment = p.content || ''; }
-      const img = p.image_url || (Array.isArray(p.images) && p.images[0]) || null;
+      const img = p.image_url || null;
       if (!img) continue;
       out.push({
         id: p.id,
@@ -71,13 +70,13 @@ export async function getRecentSpotsForRail(limit = 12) {
     const sb = supabaseServer();
     const { data, error } = await sb
       .from('pv_spots')
-      .select('id, slug, nome, cidade, uf, cover_url, fotos, descricao, author, created_at, published, hidden')
+      .select('id, slug, nome, cidade, uf, cover_url, fotos, descricao, author, created_at, published')
+      .eq('published', true)
       .order('created_at', { ascending: false })
       .limit(30);
     if (error) return [];
     const out = [];
     for (const s of data || []) {
-      if (s.published === false || s.hidden === true) continue;
       const img = s.cover_url || (Array.isArray(s.fotos) && s.fotos[0]) || null;
       if (!img) continue;
       out.push({
