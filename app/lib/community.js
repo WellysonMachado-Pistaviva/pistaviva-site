@@ -43,7 +43,7 @@ export async function getCommunityHighlights(limit = 10) {
     const out = [];
     for (const p of data || []) {
       if (p.hidden === true) continue;
-      let c = { city: '', uf: '', comment: '' };
+      let c = { city: '', uf: '', category: '', comment: '' };
       try { c = { ...c, ...JSON.parse(p.content) }; } catch { c.comment = p.content || ''; }
       const img = p.image_url || (Array.isArray(p.images) && p.images[0]) || null;
       if (!img) continue;
@@ -52,6 +52,7 @@ export async function getCommunityHighlights(limit = 10) {
         author: p.author_name || 'Motociclista',
         city: c.city || '',
         uf: c.uf || '',
+        category: c.category || '',
         comment: (c.comment || '').trim(),
         image: img,
       });
