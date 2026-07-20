@@ -15,7 +15,6 @@ import SiteHeader from './components/SiteHeader';
 import SiteFooter from './components/SiteFooter';
 import AnnouncementBar from './components/AnnouncementBar';
 import MobileShell from './components/MobileShell';
-import OnlineCounter from './components/OnlineCounter';
 
 // IGNIS spec: Saira (corpo), Saira Condensed (títulos), Saira Semi Condensed (labels/botões)
 const display = Saira_Condensed({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-display', display: 'swap' });
@@ -102,7 +101,6 @@ export default function RootLayout({ children }) {
             <SiteFooter />
           </div>
         </AuthProvider>
-        <OnlineCounter />
         <Analytics />
         <SpeedInsights />
 

@@ -60,7 +60,7 @@ export default function HomeBanner({ banners = [] }) {
 
   return (
     <section
-      className="pvb"
+      className="pvb pvb--overlay"
       aria-roledescription="carrossel"
       onMouseEnter={() => clearInterval(timer.current)}
       onMouseLeave={restart}
@@ -93,7 +93,7 @@ export default function HomeBanner({ banners = [] }) {
                     quality={75}
                     priority={k === 0}
                     unoptimized={!isOptimizable(b.image_url)}
-                    style={{ objectFit: 'contain', objectPosition: 'center' }}
+                    style={{ objectFit: 'cover', objectPosition: 'center' }}
                   />
                   <span className={tag.cls}><span className="dot" />{b.tag_label || tag.label}</span>
                 </div>
