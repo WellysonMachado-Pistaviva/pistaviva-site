@@ -1,41 +1,46 @@
 'use client';
-import { useState, useEffect } from 'react';
-
-// Prova social: "X pessoas online". Número simulado, oscila de 10 a 240,
-// com centro pela hora do dia (pico à noite) e variação suave (parece real).
-const clamp = (v) => Math.max(10, Math.min(240, v));
+import { useState, useEffect, useRef } from 'react';
+import { clampOnlineCount, pickNextOnlineCount } from '../lib/onlineCounter.mjs';
 
 function seedBase() {
   const h = new Date().getHours();
-  // curva por hora: pico ~20h, vale de madrugada
   const peak = Math.max(0.12, 1 - Math.abs(h - 20) / 13);
-  const base = 25 + Math.round(peak * 175); // ~45..200 conforme a hora
-  return clamp(base + Math.floor(Math.random() * 30 - 15));
+  const base = 30 + Math.round(peak * 170);
+  return clampOnlineCount(base + Math.floor(Math.random() * 30 - 15));
 }
 
 export default function OnlineCounter() {
   const [n, setN] = useState(null);
+  const seen = useRef(new Set());
 
   useEffect(() => {
     let cur = seedBase();
+    seen.current.add(cur);
     queueMicrotask(() => setN(cur));
     const id = setInterval(() => {
-      const target = seedBase();                 // centro reavaliado (jitter pela hora)
-      const pull = Math.sign(target - cur) * (Math.random() < 0.5 ? 1 : 0);
-      const step = Math.floor(Math.random() * 7 - 3) + pull; // -3..+3 + leve puxão
-      cur = clamp(cur + step);
+      cur = pickNextOnlineCount(cur, seen.current);
       setN(cur);
-    }, 4500);
+    }, 4200);
     return () => clearInterval(id);
   }, []);
 
   if (n == null) return null;
 
   return (
-    <div className="pv-online" role="status" aria-live="polite">
-      <span className="pv-online__dot" aria-hidden="true" />
-      <span className="pv-online__n">{n}</span>
-      {n === 1 ? ' pessoa online' : ' pessoas online'}
+    <div className="pv-online" aria-label={`${n} motociclistas online agora`}>
+      <span className="pv-online__helmet" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M5 18.5C5 10.5 9.8 5 17 5c6.1 0 10 3.8 10 9.5V18H17.5l-3 5H8.2A3.2 3.2 0 0 1 5 19.8v-1.3Z" />
+          <path d="M18 18h9v4.5h-7.2L18 18Z" />
+          <path d="M8.5 23h6" />
+        </svg>
+        <span className="pv-online__signal" />
+      </span>
+      <span className="pv-online__copy">
+        <span className="pv-online__kicker">Capacetes na pista</span>
+        <span className="pv-online__label">Motociclistas online</span>
+      </span>
+      <strong key={n} className="pv-online__n">{n}</strong>
     </div>
   );
 }

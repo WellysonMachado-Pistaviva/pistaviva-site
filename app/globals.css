@@ -1204,30 +1204,68 @@ body.pg-locked{ overflow:hidden; }
 .post-editor .ba-tag--none{ color:var(--pe-mut2); }
 .post-editor .ba-tag--err{ color:var(--pe-accent2); font-weight:700; }
 
-/* ===== Contador "X pessoas online" (prova social) ===== */
+/* ===== Presença viva — motociclistas online ===== */
 .pv-online{
-  position: fixed; top: 96px; left: 50%; transform: translateX(-50%); z-index: 45;
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 9px 14px; border-radius: 999px;
-  background: rgba(12,12,13,.9); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  box-shadow: 0 8px 24px rgba(0,0,0,.4);
-  color: #fff; font-family: var(--mono); font-size: 12.5px; font-weight: 600; letter-spacing: .01em;
+  position: fixed; top: 86px; right: 22px; z-index: 45;
+  display: inline-grid; grid-template-columns: 38px auto auto; align-items: center; gap: 10px;
+  min-width: 244px; padding: 8px 10px 8px 8px; border-radius: 4px;
+  background:
+    linear-gradient(110deg, rgba(255,90,0,.12), transparent 42%),
+    rgba(12,12,13,.94);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.14); border-left: 2px solid var(--accent);
+  box-shadow: 0 12px 32px rgba(0,0,0,.42);
+  color: #fff; font-family: var(--mono);
   pointer-events: none;
 }
-.pv-online__n{ color: var(--accent); font-weight: 800; }
-.pv-online__dot{
-  width: 9px; height: 9px; border-radius: 50%; background: var(--accent); flex: 0 0 auto;
+.pv-online__helmet{
+  width:38px; height:38px; border-radius:3px; display:grid; place-items:center; position:relative;
+  background:var(--accent); color:#fff; box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);
+}
+.pv-online__helmet svg{ width:27px; height:27px; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.pv-online__signal{
+  position:absolute; width:7px; height:7px; right:-3px; top:-3px; border-radius:50%;
+  background:#46dc82; border:2px solid var(--ink);
   box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent);
   animation: pvOnlinePulse 2s ease-out infinite;
+}
+.pv-online__copy{ display:flex; flex-direction:column; min-width:0; line-height:1.1; }
+.pv-online__kicker{
+  color:var(--accent-2); font-size:9px; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
+}
+.pv-online__label{
+  margin-top:4px; color:rgba(255,255,255,.82); font-size:11.5px; font-weight:700;
+  letter-spacing:.025em; text-transform:uppercase; white-space:nowrap;
+}
+.pv-online__n{
+  min-width:42px; color:#fff; font-family:var(--display); font-size:27px; font-weight:900;
+  line-height:1; text-align:right; letter-spacing:-.03em;
+  animation:pvOnlineCount .34s cubic-bezier(.2,.8,.2,1);
 }
 @keyframes pvOnlinePulse{
   0%{ box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent); }
   70%{ box-shadow: 0 0 0 8px transparent; }
   100%{ box-shadow: 0 0 0 0 transparent; }
 }
-@media(max-width:900px){ .pv-online{ top: 66px; font-size: 12px; padding: 8px 13px; } }
-@media(prefers-reduced-motion: reduce){ .pv-online__dot{ animation: none; } }
+@keyframes pvOnlineCount{
+  from{ opacity:.2; transform:translateY(5px); }
+  to{ opacity:1; transform:none; }
+}
+@media(max-width:768px){
+  .pv-online{
+    top:64px; right:10px; min-width:0; grid-template-columns:32px auto auto; gap:8px;
+    padding:6px 9px 6px 6px; border-radius:4px;
+  }
+  .pv-online__helmet{ width:32px; height:32px; }
+  .pv-online__helmet svg{ width:23px; height:23px; }
+  .pv-online__kicker{ display:none; }
+  .pv-online__label{ margin:0; font-size:9.5px; letter-spacing:.04em; }
+  .pv-online__n{ min-width:32px; font-size:22px; }
+}
+@media(max-width:390px){ .pv-online__label{ max-width:72px; white-space:normal; } }
+@media(prefers-reduced-motion: reduce){
+  .pv-online__signal, .pv-online__n{ animation:none; }
+}
 
 /* ===== Toast de atividade da comunidade (prova social real) ===== */
 .pv-livetoast {
