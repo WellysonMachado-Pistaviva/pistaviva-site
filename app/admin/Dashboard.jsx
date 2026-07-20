@@ -2,19 +2,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../src/lib/supabaseClient';
-import { adminWrite } from '../lib/adminDb';
+import { adminGet, adminImportImageUrl, adminUploadFile, adminWrite, shouldImportRemoteImageUrl } from '../lib/adminDb';
 import { useAuth, showToast } from '../components/AuthProvider';
 
 // ── helpers ─────────────────────────────────────────────────────
-const ISO = (daysAgo) => new Date(Date.now() - daysAgo * 864e5).toISOString();
-async function count(table, build) {
-  try {
-    let q = supabase.from(table).select('*', { count: 'exact', head: true });
-    if (build) q = build(q);
-    const { count: c, error } = await q;
-    return error ? null : (c ?? 0);
-  } catch { return null; }
-}
 const fmtDate = (iso) => iso ? new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: '2-digit' }) : '—';
 const n = (v) => v == null ? '—' : v;
 
@@ -78,51 +69,50 @@ const PageHead = ({ eyebrow, title, sub, actions }) => (
   </div>
 );
 
+function DataStatus({ errors = [], generatedAt, coverage }) {
+  return (
+    <>
+      {errors.length > 0 && (
+        <div className="ig-alert danger">
+          <span className="ai">{ic.warn}</span>
+          <span className="at">
+            <b>Dados parciais: {errors.length} métrica(s) falharam</b>
+            <span>{errors.map(item => `${item.metric}: ${item.message}`).join(' · ')}</span>
+          </span>
+        </div>
+      )}
+      {generatedAt && (
+        <p style={{ color: 'var(--paper-mut)', fontSize: 11.5, margin: '-12px 0 18px', fontFamily: 'var(--mono)' }}>
+          Coleta {new Date(generatedAt).toLocaleString('pt-BR')}
+          {coverage ? ` · cobertura: ${n(coverage.users)} usuários, ${n(coverage.eventRsvps)} confirmações, ${n(coverage.postLikes)} curtidas` : ''}
+        </p>
+      )}
+    </>
+  );
+}
+
 // ════════════════════════════════════════════════════════════════
 // VISÃO GERAL  (KPIs + fila de atenção + atalhos)
 // ════════════════════════════════════════════════════════════════
 function Visao() {
   const [s, setS] = useState(null);
-  const [usersTotal, setUsersTotal] = useState(null);
-  const [usersNew7, setUsersNew7] = useState(null);
+  const [meta, setMeta] = useState({ errors: [], generatedAt: null });
+  const [loadError, setLoadError] = useState('');
 
   const load = useCallback(async () => {
-    const [
-      posts, posts7, comments, events, rsvps,
-      photographers, photogHidden, blog, partners, segments, rides,
-      comboio7, reportsOpen,
-    ] = await Promise.all([
-      count('pv_posts'),
-      count('pv_posts', q => q.gte('created_at', ISO(7))),
-      count('pv_post_comments'),
-      count('pv_events'),
-      count('pv_event_rsvps'),
-      count('pv_photographers'),
-      count('pv_photographers', q => q.eq('published', false)),
-      count('pv_blog_posts', q => q.eq('published', true)),
-      count('pv_partners'),
-      count('pv_segments'),
-      count('pv_rides'),
-      count('pv_comboio_messages', q => q.gte('created_at', ISO(7))),
-      count('pv_reports', q => q.eq('status', 'open')),
-    ]);
-    setS({ posts, posts7, comments, events, rsvps, photographers, photogHidden, blog, partners, segments, rides, comboio7, reportsOpen });
-
-    // total de usuários (rota server)
-    try {
-      const { data: sess } = await supabase.auth.getSession();
-      const res = await fetch('/api/admin/users', { headers: { Authorization: `Bearer ${sess?.session?.access_token || ''}` } });
-      const j = await res.json();
-      if (res.ok) {
-        setUsersTotal(j.users.length);
-        setUsersNew7(j.users.filter(u => u.createdAt && new Date(u.createdAt) > new Date(Date.now() - 7 * 864e5)).length);
-      }
-    } catch { /* sem chave */ }
+    setLoadError('');
+    const { data, error } = await adminGet('/api/admin/analytics');
+    if (error) {
+      setLoadError(error.message);
+      return;
+    }
+    setS(data.summary);
+    setMeta({ errors: data.errors || [], generatedAt: data.generatedAt });
   }, []);
   useEffect(() => { (async () => { await load(); })(); }, [load]);
 
   const KPI = !s ? [] : [
-    { l: 'Usuários',     v: usersTotal, sub: usersNew7 != null ? `+${usersNew7} em 7d` : '', icon: ic.users },
+    { l: 'Usuários',     v: s.users, sub: s.usersNew7 != null ? `+${s.usersNew7} em 7d` : '', icon: ic.users },
     { l: 'Matérias',     v: s.blog,     icon: ic.pen },
     { l: 'Posts no feed',v: s.posts,    sub: s.posts7 != null ? `+${s.posts7} em 7d` : '', icon: ic.feed },
     { l: 'Comentários',  v: s.comments, icon: ic.chat },
@@ -156,6 +146,9 @@ function Visao() {
         sub="Resumo da plataforma e fila de tarefas."
         actions={<button className="ig-btn ig-btn--ghost ig-btn--sm" onClick={load}>Atualizar</button>}
       />
+
+      {loadError && <div className="ig-alert danger"><span className="ai">{ic.warn}</span><span className="at"><b>Falha ao carregar métricas</b><span>{loadError}</span></span></div>}
+      <DataStatus errors={meta.errors} generatedAt={meta.generatedAt} />
 
       {queue.map((q, i) => (
         <Link key={i} href={q.href} className={`ig-alert${q.danger ? ' danger' : ''}`}>
@@ -195,60 +188,20 @@ function Visao() {
 // ════════════════════════════════════════════════════════════════
 // ANÁLISES
 // ════════════════════════════════════════════════════════════════
-const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 function Analytics() {
   const [d, setD] = useState(null);
+  const [meta, setMeta] = useState({ errors: [], generatedAt: null, coverage: null });
+  const [loadError, setLoadError] = useState('');
 
   const load = useCallback(async () => {
-    let signups = [];
-    try {
-      const { data: sess } = await supabase.auth.getSession();
-      const res = await fetch('/api/admin/users', { headers: { Authorization: `Bearer ${sess?.session?.access_token || ''}` } });
-      const j = await res.json();
-      if (res.ok) {
-        const buckets = {};
-        for (let i = 11; i >= 0; i--) { const dt = new Date(); dt.setDate(1); dt.setMonth(dt.getMonth() - i); buckets[`${dt.getFullYear()}-${dt.getMonth()}`] = { label: `${MESES[dt.getMonth()]}/${String(dt.getFullYear()).slice(2)}`, value: 0 }; }
-        (j.users || []).forEach(u => { if (!u.createdAt) return; const dt = new Date(u.createdAt); const k = `${dt.getFullYear()}-${dt.getMonth()}`; if (buckets[k]) buckets[k].value++; });
-        signups = Object.values(buckets);
-      }
-    } catch { /* ignora */ }
-
-
-    let topEvents = [];
-    try {
-      const [{ data: rsvps }, { data: events }] = await Promise.all([
-        supabase.from('pv_event_rsvps').select('event_id, status').limit(5000),
-        supabase.from('pv_events').select('id, title').limit(500),
-      ]);
-      if (rsvps && events) {
-        const title = Object.fromEntries(events.map(e => [e.id, e.title]));
-        const cnt = {};
-        rsvps.forEach(r => { if (r.status === 'no') return; cnt[r.event_id] = (cnt[r.event_id] || 0) + 1; });
-        topEvents = Object.entries(cnt).map(([id, value]) => ({ label: title[id] || 'Evento', value })).sort((a, b) => b.value - a.value).slice(0, 6);
-      }
-    } catch { /* vazio */ }
-
-    let topPosts = [];
-    try {
-      const [{ data: likes }, { data: posts }] = await Promise.all([
-        supabase.from('pv_post_likes').select('post_id').limit(5000),
-        supabase.from('pv_posts').select('id, author_name').limit(2000),
-      ]);
-      if (likes && posts) {
-        const author = Object.fromEntries(posts.map(p => [p.id, p.author_name]));
-        const cnt = {};
-        likes.forEach(l => { cnt[l.post_id] = (cnt[l.post_id] || 0) + 1; });
-        topPosts = Object.entries(cnt).map(([id, value]) => ({ label: author[id] || 'Post', value })).sort((a, b) => b.value - a.value).slice(0, 6);
-      }
-    } catch { /* vazio */ }
-
-    let viewBlog = [];
-    try {
-      const { data, error } = await supabase.from('pv_blog_posts').select('title, views').eq('published', true).order('views', { ascending: false }).limit(8);
-      if (!error) viewBlog = (data || []).filter(r => (r.views || 0) > 0).map(r => ({ label: r.title, value: r.views || 0 }));
-    } catch { /* sem coluna */ }
-
-    setD({ signups, topEvents, topPosts, viewBlog });
+    setLoadError('');
+    const { data, error } = await adminGet('/api/admin/analytics');
+    if (error) {
+      setLoadError(error.message);
+      return;
+    }
+    setD(data.analytics);
+    setMeta({ errors: data.errors || [], generatedAt: data.generatedAt, coverage: data.coverage || null });
   }, []);
   useEffect(() => { (async () => { await load(); })(); }, [load]);
 
@@ -257,13 +210,15 @@ function Analytics() {
       <PageHead
         eyebrow="Métricas"
         title="Análises"
-        sub="Gráficos a partir dos dados existentes — não altera nada no banco."
+        sub="Contagens exatas e rankings calculados no servidor, sem limites fixos."
         actions={<button className="ig-btn ig-btn--ghost ig-btn--sm" onClick={load}>Atualizar</button>}
       />
+      {loadError && <div className="ig-alert danger"><span className="ai">{ic.warn}</span><span className="at"><b>Falha ao carregar análises</b><span>{loadError}</span></span></div>}
+      <DataStatus errors={meta.errors} generatedAt={meta.generatedAt} coverage={meta.coverage} />
       {!d ? <div className="ig-empty">Carregando…</div> : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px,1fr))', gap: 14 }}>
           <Card icon={ic.pen} title="Matérias mais vistas"><Bars data={d.viewBlog} color="var(--accent-2)" empty="Sem dados de visualização ainda." /></Card>
-          <Card icon={ic.users} title="Cadastros por mês (12 meses)"><Bars data={d.signups} empty="Sem cadastros no período (ou chave admin ausente)." /></Card>
+          <Card icon={ic.users} title="Cadastros por mês (12 meses)"><Bars data={d.signups} empty="Sem cadastros no período." /></Card>
           <Card icon={ic.cal} title="Eventos mais confirmados"><Bars data={d.topEvents} color="var(--accent-2)" empty="Sem confirmações ainda." /></Card>
           <Card icon={ic.feed} title="Posts mais curtidos"><Bars data={d.topPosts} empty="Sem curtidas ainda." /></Card>
         </div>
@@ -398,12 +353,9 @@ function HeroSettings() {
     if (file.size > 6 * 1024 * 1024) { showToast('Imagem muito pesada (máx 6MB)', 'error'); return; }
     setBusy(true);
     try {
-      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
-      const path = `site/hero-${Date.now()}.${ext}`;
-      const { error } = await supabase.storage.from('post-images').upload(path, file, { upsert: true, contentType: file.type });
-      if (error) throw error;
-      const { data } = supabase.storage.from('post-images').getPublicUrl(path);
-      setUrl(data.publicUrl);
+      const { url: uploadedUrl, error } = await adminUploadFile({ file, kind: 'hero' });
+      if (error) throw new Error(error.message);
+      setUrl(uploadedUrl);
       showToast('Imagem enviada ✓ Clique em Salvar.', 'success');
     } catch (err) { showToast('Erro no upload: ' + err.message, 'error'); }
     setBusy(false);
@@ -411,7 +363,18 @@ function HeroSettings() {
 
   const save = async () => {
     setBusy(true);
-    const { error } = await adminWrite({ table: 'pv_site_config', op: 'update', data: { hero_bg_image: url || null, updated_at: new Date().toISOString() }, match: { id: 1 } });
+    let storedUrl = url.trim();
+    if (shouldImportRemoteImageUrl(storedUrl)) {
+      const imported = await adminImportImageUrl({ url: storedUrl, kind: 'hero' });
+      if (imported.error) {
+        setBusy(false);
+        showToast('Erro ao copiar imagem: ' + imported.error.message, 'error');
+        return;
+      }
+      storedUrl = imported.url;
+      setUrl(storedUrl);
+    }
+    const { error } = await adminWrite({ table: 'pv_site_config', op: 'update', data: { hero_bg_image: storedUrl || null, updated_at: new Date().toISOString() }, match: { id: 1 } });
     showToast(error ? 'Erro: ' + error.message : 'Hero salvo ✓ (atualiza na home em ~5 min)', error ? 'error' : 'success');
     setBusy(false);
   };
@@ -444,7 +407,7 @@ function HeroSettings() {
                 {busy ? 'Enviando…' : 'Enviar foto'}
                 <input type="file" accept="image/*" hidden onChange={onFile} disabled={busy} />
               </label>
-              <span style={{ fontSize: 12, color: 'var(--paper-mut)' }}>ou cole uma URL:</span>
+              <span style={{ fontSize: 12, color: 'var(--paper-mut)' }}>ou cole uma URL (será copiada para o Supabase):</span>
             </div>
             <input value={url} onChange={e => setUrl(e.target.value)} placeholder="https://..."
               style={{ width: '100%', padding: '11px 13px', marginBottom: 14, background: 'var(--ink-3)', border: '1px solid var(--line)', borderRadius: 8, color: 'var(--text)', fontFamily: 'inherit', fontSize: 14 }} />

@@ -24,14 +24,10 @@ create table if not exists public.pv_users (
 
 create index if not exists pv_users_cpf_hash_idx on public.pv_users (cpf_hash);
 
--- RLS aberto (o app usa auth própria via anon key, sem Supabase Auth)
+-- Tabela legada com hashes sensíveis: somente service_role.
 alter table public.pv_users enable row level security;
 drop policy if exists "pv_users_open" on public.pv_users;
-create policy "pv_users_open"
-  on public.pv_users for all
-  to anon, authenticated
-  using (true)
-  with check (true);
+revoke all on table public.pv_users from anon, authenticated;
 
 
 -- ─────────────────────────────────────────────────────────────────
@@ -340,26 +336,7 @@ insert into public.pv_events (title, category, date, time, local, organizer, max
   ('Rolê Noturno – Luzes da Cidade', 'Rolê',   '31 Mai 2026', '20:00', 'Museu de Arte da Pampulha, BH', 'Comunidade Pista Viva',  150, 'Percurso noturno pelos pontos turísticos mais bonitos de BH.',                                      'Noturno, City Tour, Social',       'open')
 on conflict do nothing;
 
--- ─────────────────────────────────────────────────────────────────
--- 14. SEED: ADMIN PRINCIPAL
--- CPF: 142.135.116-18  |  Senha: pistavivam1admin
---
--- IMPORTANTE: Após o primeiro login, mude a senha pelo painel admin.
--- Os hashes abaixo são SHA-256 (sem salt) gerados via Web Crypto API.
--- ─────────────────────────────────────────────────────────────────
-insert into public.pv_users
-  (nome, cpf_hash, cpf_display, estado, cidade, password_hash, is_admin, is_blocked)
-values (
-  'Administrador',
-  'dc7125fa3261e06db4d26d15740a5fb0dbbd29334ad2d6305b19ed1b185589d2',  -- SHA256('14213511618')
-  '142.***.***-18',
-  'MG',
-  'Belo Horizonte',
-  '22cadfd171a19c9e24e63a67f938c505eeca147d27d2c42099a7d496fb7bfbf2',  -- SHA256('pistavivam1admin')
-  true,
-  false
-)
-on conflict (cpf_hash) do nothing;  -- seguro re-executar
+-- Admin é criado pelo Supabase Auth. Nunca criar credencial padrão em SQL.
 
 
 -- ─────────────────────────────────────────────────────────────────

@@ -1,3 +1,4 @@
+import 'server-only';
 import { createClient } from '@supabase/supabase-js';
 import { supabaseServer } from './supabaseServer';
 import { resolveSupabaseAdminConfig } from './supabaseAdminConfig.mjs';
@@ -6,6 +7,9 @@ import { resolveSupabaseAdminConfig } from './supabaseAdminConfig.mjs';
 // de servidor (rotas /api). Nunca importar em componente client — vazaria a chave.
 export function supabaseAdmin() {
   const { url, key } = resolveSupabaseAdminConfig();
+  if (!url || !key) {
+    throw new Error('Configuração administrativa do Supabase ausente no servidor.');
+  }
   return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 }
 

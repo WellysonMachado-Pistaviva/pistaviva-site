@@ -21,6 +21,12 @@ export function parseArticleBody(body) {
       blocks.push({ t: 'img', v: image[1].trim() });
       continue;
     }
+    const video = line.match(/^\[video:([^|\]]+)(?:\|([^\]]+))?\]$/);
+    if (video) {
+      flushParagraph();
+      blocks.push({ t: 'video', v: video[1].trim(), poster: video[2]?.trim() || '' });
+      continue;
+    }
     if (line.startsWith('### ')) {
       flushParagraph();
       blocks.push({ t: 'h3', v: line.slice(4) });

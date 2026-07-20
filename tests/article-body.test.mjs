@@ -29,3 +29,12 @@ test('does not merge checklist text into paragraph', () => {
   assert.equal(block.t, 'checklist');
   assert.equal(block.items.length, 1);
 });
+
+test('parses native video with optional poster', () => {
+  const [block] = parseArticleBody('[video:https://cdn.example.com/evento.mp4|https://cdn.example.com/capa.jpg]');
+  assert.deepEqual(block, {
+    t: 'video',
+    v: 'https://cdn.example.com/evento.mp4',
+    poster: 'https://cdn.example.com/capa.jpg',
+  });
+});

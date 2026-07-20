@@ -184,6 +184,15 @@ export default async function BlogPost({ params }) {
           <div className="art-col">
             {bodyBlocks.map((b, i) => {
               if (b.t === 'img') return <figure key={i} className="art-inline"><img src={b.v} alt="" /></figure>;
+              if (b.t === 'video') return (
+                <figure key={i} className="art-video">
+                  <video controls playsInline preload="metadata" poster={b.poster || undefined}>
+                    <source src={b.v} type="video/mp4" />
+                    Seu navegador não reproduz este vídeo.
+                  </video>
+                  <figcaption>Encontro Rota Biker no Restaurante Mata Virgem, em Três Corações.</figcaption>
+                </figure>
+              );
               if (b.t === 'h3') return <h3 key={i}>{b.v}</h3>;
               if (b.t === 'h2') return <h2 key={i}>{b.v}</h2>;
               if (b.t === 'checklist') {

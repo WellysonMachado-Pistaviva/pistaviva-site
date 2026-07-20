@@ -30,6 +30,51 @@ export async function getCommunityPosts(limit = 30) {
   }
 }
 
+// Relato individual, usado pela página compartilhável e pela imagem social.
+// Faz fallback para schema antigo, anterior à coluna `images`.
+export async function getCommunityPostById(id) {
+  if (!id) return null;
+  try {
+    const sb = supabaseServer();
+    let { data, error } = await sb
+      .from('pv_posts')
+      .select('id, author_name, content, image_url, images, created_at, hidden')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (error && /images/i.test(error.message || '')) {
+      ({ data, error } = await sb
+        .from('pv_posts')
+        .select('id, author_name, content, image_url, created_at, hidden')
+        .eq('id', id)
+        .maybeSingle());
+    }
+    if (error || !data || data.hidden === true) return null;
+
+    let content = { city: '', uf: '', category: '', comment: '' };
+    try { content = { ...content, ...JSON.parse(data.content) }; }
+    catch { content.comment = data.content || ''; }
+
+    const images = (Array.isArray(data.images) && data.images.length
+      ? data.images
+      : (data.image_url ? [data.image_url] : [])).filter(Boolean);
+
+    return {
+      id: data.id,
+      author: data.author_name || 'Piloto',
+      city: content.city || '',
+      uf: content.uf || '',
+      category: content.category || 'viagem',
+      comment: (content.comment || '').trim(),
+      image: images[0] || null,
+      images,
+      created_at: data.created_at,
+    };
+  } catch {
+    return null;
+  }
+}
+
 // Destaques pra home: só posts COM foto (o rail é visual). Mostra nome + local.
 export async function getCommunityHighlights(limit = 10) {
   try {

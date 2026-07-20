@@ -28,7 +28,6 @@ begin
     'pv_photographers',
     'pv_user_routes',
     'pv_events',
-    'pv_reports',
     'pv_route_comments',
     'pv_rides',
     'pv_map_pings',
@@ -46,12 +45,18 @@ begin
   end loop;
 end $$;
 
+-- Denúncias: envio público, conteúdo e moderação nunca públicos.
+alter table public.pv_reports enable row level security;
+drop policy if exists "pv_reports_open" on public.pv_reports;
+drop policy if exists "pv_reports_read" on public.pv_reports;
+drop policy if exists "pv_reports_insert" on public.pv_reports;
+create policy "pv_reports_insert" on public.pv_reports for insert with check (true);
+
 -- B) SELECT público; NENHUMA escrita anônima (insert/update/delete só service-role).
 do $$
 declare t text;
 begin
   foreach t in array array[
-    'pv_users',
     'pv_segments',
     'pv_expeditions'
   ]
@@ -63,6 +68,13 @@ begin
     execute format('create policy %I on public.%I for select using (true);', t || '_read', t);
   end loop;
 end $$;
+
+-- Legado contém hashes de CPF/senha: acesso somente por service_role.
+alter table public.pv_users enable row level security;
+drop policy if exists "pv_users_open" on public.pv_users;
+drop policy if exists "pv_users_read" on public.pv_users;
+drop policy if exists "pv_users_insert" on public.pv_users;
+revoke all on table public.pv_users from anon, authenticated;
 
 -- ── Verificação (rode depois): não deve sobrar policy ALL/UPDATE/DELETE ──
 -- select tablename, policyname, cmd from pg_policies

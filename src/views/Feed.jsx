@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MessageSquare, Heart, Camera, Send, X, Image as ImageIcon } from 'lucide-react';
+import { MessageSquare, Heart, Camera, Send, Share2, X, Image as ImageIcon } from 'lucide-react';
 import { getPosts, addPost, likePost, addComment, uploadPostImage, reportContent } from '../services/storage';
 import PhotoCarousel from '../../app/components/PhotoCarousel';
 
@@ -66,6 +66,21 @@ const Feed = ({ deviceId = 'anon', identity, promptIdentity }) => {
     setNewPost({ ...newPost, city: `${loc.name}${loc.admin1 ? ', ' + loc.admin1 : ''}`, uf: loc.admin1 || '' });
     setShowSuggestions(false);
     setLocationSuggestions([]);
+  };
+
+  const handleShare = async (post) => {
+    const url = `${window.location.origin}/comunidade/${post.id}`;
+    const title = `${categoryLabels[post.category] || 'Relato'} em ${post.city || 'na estrada'}`;
+    const data = { title, text: post.comment, url };
+    if (navigator.share) {
+      try { await navigator.share(data); } catch { /* compartilhamento cancelado */ }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      const el = document.getElementById('app-toast');
+      if (el) { el.textContent = 'Link copiado'; el.className = 'toast'; el.style.display = 'block'; setTimeout(() => { el.style.display = 'none'; }, 2500); }
+    } catch { showErr('Não foi possível copiar o link.'); }
   };
 
   const handlePost = async () => {
@@ -321,6 +336,10 @@ const Feed = ({ deviceId = 'anon', identity, promptIdentity }) => {
                   <MessageSquare size={18} />
                   <span>{(post.comments || []).length}</span>
                 </div>
+                <button className="post-action-btn" onClick={() => handleShare(post)} aria-label="Compartilhar relato">
+                  <Share2 size={18} />
+                  <span>Compartilhar</span>
+                </button>
                 <button className="post-action-btn" style={{ marginLeft: 'auto', color: 'var(--muted)' }} title="Denunciar"
                   onClick={() => handleReport(post)}>⚠</button>
               </div>

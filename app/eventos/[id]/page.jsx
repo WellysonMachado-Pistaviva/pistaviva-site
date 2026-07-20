@@ -1,11 +1,13 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { Calendar, MapPin, Users, Clock, Music, AtSign } from 'lucide-react';
-import PhotoCarousel from '../../components/PhotoCarousel';
+import { Calendar, MapPin, Users, Clock, Music, ExternalLink } from 'lucide-react';
 import ViewPing from '../../components/ViewPing';
 import EventTicket from './EventTicket';
+import EventHero from './EventHero';
 import EventRouteMap from './EventRouteMap';
 import { getEventById, getEventGoingCount, eventStartISO, eventEndISO } from '../../lib/events';
+import { getEventRsvpBase } from '../../lib/eventRsvpBases.mjs';
 
 export const revalidate = 60;
 const BASE = 'https://www.pistavivamototurismo.com.br';
@@ -14,22 +16,30 @@ const STATUS = { open: 'Inscrições abertas', soon: 'Em breve', full: 'Vagas es
 const priceLabel = (p) => {
   const s = (p ?? '').toString().trim();
   if (!s || /^gr[aá]tis$/i.test(s) || s === '0') return 'Grátis';
+  if (/^(consultar|ingressos?)/i.test(s)) return s;
   return /^r\$/i.test(s) ? s : `R$ ${s}`;
 };
 const parseTags = (t) => !t ? [] : (Array.isArray(t) ? t : String(t).split(',').map(x => x.trim()).filter(Boolean));
 const imgs = (e) => ((e.images && e.images.length ? e.images : (e.image_url ? [e.image_url] : [])) || []).filter(Boolean);
+const InstagramMark = () => (
+  <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+    <rect x="3" y="3" width="18" height="18" rx="5" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="17.5" cy="6.5" r=".75" fill="currentColor" stroke="none" />
+  </svg>
+);
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
   const e = await getEventById(id);
   if (!e) return { title: 'Evento não encontrado', robots: { index: false, follow: true } };
   const desc = (e.description || `${e.category} de moto em ${e.local || 'sua região'} · ${e.date}. Confirme presença na Pistaviva.`).slice(0, 160);
-  const cover = imgs(e)[0];
   return {
     title: `${e.title} — Evento de Moto${e.local ? ' em ' + e.local : ''}`,
     description: desc,
     alternates: { canonical: `/eventos/${id}` },
-    openGraph: { type: 'article', title: e.title, description: desc, url: `${BASE}/eventos/${id}`, images: cover ? [cover] : [] },
+    openGraph: { type: 'article', title: e.title, description: desc, url: `${BASE}/eventos/${id}` },
+    twitter: { card: 'summary_large_image', title: e.title, description: desc },
   };
 }
 
@@ -39,6 +49,7 @@ export default async function EventoPage({ params }) {
   if (!e) notFound();
 
   const going = await getEventGoingCount(id);
+  const goingDisplay = going + getEventRsvpBase(e).going;
   const gallery = imgs(e);
   const cover = gallery[0];
   const tags = parseTags(e.tags);
@@ -49,6 +60,13 @@ export default async function EventoPage({ params }) {
   const mapsUrl = (e.address || e.local) ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address || e.local)}` : null;
   const lineup = Array.isArray(e.lineup) ? e.lineup.filter(a => a && (a.name || a.time)) : [];
   const schedule = Array.isArray(e.schedule) ? e.schedule.filter(s => s && (s.title || s.time)) : [];
+  const heroImages = Array.isArray(e.schedule)
+    ? (e.schedule.find(s => Array.isArray(s?.heroImages))?.heroImages || []).filter(Boolean)
+    : [];
+  const ticketUrl = (() => {
+    const raw = Array.isArray(e.schedule) ? e.schedule.find(s => s?.ticketUrl)?.ticketUrl : '';
+    try { const u = new URL(raw); return ['http:', 'https:'].includes(u.protocol) ? u.toString() : ''; } catch { return ''; }
+  })();
   const igHandle = (e.organizer_ig || '').trim().replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/^@/, '').replace(/\/.*$/, '');
   const igUrl = igHandle ? `https://instagram.com/${igHandle}` : null;
 
@@ -70,7 +88,7 @@ export default async function EventoPage({ params }) {
       ? { '@type': 'Place', name: e.local, address: { '@type': 'PostalAddress', addressLocality: e.local, addressCountry: 'BR' } }
       : { '@type': 'VirtualLocation', url: `${BASE}/eventos/${id}` },
     organizer: { '@type': 'Organization', name: e.organizer || 'Pistaviva', url: BASE },
-    offers: { '@type': 'Offer', price: /^\d/.test(String(e.price || '').replace(/[^\d.,]/g, '')) ? String(e.price).replace(/[^\d.,]/g, '').replace(',', '.') : '0', priceCurrency: 'BRL', availability: e.type === 'full' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock', ...(validFrom ? { validFrom } : {}), url: `${BASE}/eventos/${id}` },
+    offers: { '@type': 'Offer', price: /^\d/.test(String(e.price || '').replace(/[^\d.,]/g, '')) ? String(e.price).replace(/[^\d.,]/g, '').replace(',', '.') : '0', priceCurrency: 'BRL', availability: e.type === 'full' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock', ...(validFrom ? { validFrom } : {}), url: ticketUrl || `${BASE}/eventos/${id}` },
     url: `${BASE}/eventos/${id}`,
   };
   const breadcrumbLd = {
@@ -91,7 +109,11 @@ export default async function EventoPage({ params }) {
       {/* HERO */}
       <section className="evpage-hero">
         <div className="evpage-banner">
-          {cover ? <img src={cover} alt={e.title} /> : <div className="evpage-banner-empty" />}
+          {heroImages.length
+            ? <EventHero images={heroImages} alt={e.title} />
+            : cover
+              ? <Image src={cover} alt={e.title} fill priority sizes="100vw" />
+              : <div className="evpage-banner-empty" />}
         </div>
         <div className="wrap evpage-htext">
           <div className="evpage-chips">
@@ -102,7 +124,7 @@ export default async function EventoPage({ params }) {
           <div className="evpage-quick">
             <div className="qi"><span className="ic"><Calendar size={18} /></span><div><div className="k">Data</div><div className="v">{[e.date, e.time].filter(Boolean).join(' · ')}</div></div></div>
             {e.local && <div className="qi"><span className="ic"><MapPin size={18} /></span><div><div className="k">Local</div><div className="v">{e.local}</div></div></div>}
-            <div className="qi"><span className="ic"><Users size={18} /></span><div><div className="k">Confirmados</div><div className="v">{going} {going === 1 ? 'piloto' : 'pilotos'}</div></div></div>
+            <div className="qi"><span className="ic"><Users size={18} /></span><div><div className="k">Confirmados</div><div className="v">{goingDisplay} {goingDisplay === 1 ? 'piloto' : 'pilotos'}</div></div></div>
           </div>
         </div>
       </section>
@@ -150,8 +172,25 @@ export default async function EventoPage({ params }) {
 
             {gallery.length > 1 && (
               <section className="evpage-block">
-                <h2>Galeria</h2>
-                <PhotoCarousel images={gallery} height={360} alt={e.title} radius={6} fit="cover" />
+                <div className="evpage-gallery-head">
+                  <h2>Galeria</h2>
+                  <span>{gallery.length} fotos</span>
+                </div>
+                <div className="evpage-gallery">
+                  {gallery.map((src, i) => (
+                    <a className="evpage-photo" href={src} target="_blank" rel="noopener noreferrer" key={src} aria-label={`Abrir foto ${i + 1} de ${gallery.length}`}>
+                      <span className="evpage-photo__media">
+                        <Image
+                          src={src}
+                          alt={`${e.title} — foto ${i + 1} de ${gallery.length}`}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 920px) 50vw, 36vw"
+                        />
+                      </span>
+                      <span className="evpage-photo__number">{String(i + 1).padStart(2, '0')}</span>
+                    </a>
+                  ))}
+                </div>
               </section>
             )}
 
@@ -192,6 +231,7 @@ export default async function EventoPage({ params }) {
               price={price}
               goingInitial={going}
               startISO={start}
+              ticketUrl={ticketUrl}
             />
             {e.organizer && (
               <div className="evpage-org">
@@ -199,8 +239,18 @@ export default async function EventoPage({ params }) {
                   <span className="o-av">{(e.organizer || 'PV').slice(0, 2).toUpperCase()}</span>
                   <div className="o-i"><b>{e.organizer}</b><span>Organizador</span></div>
                 </div>
-                {igUrl && <a className="evpage-igbtn" href={igUrl} target="_blank" rel="noopener noreferrer"><AtSign size={16} />{igHandle}</a>}
               </div>
+            )}
+            {igUrl && (
+              <a className="evpage-instagram" href={igUrl} target="_blank" rel="noopener noreferrer" aria-label={`Abrir @${igHandle} no Instagram`}>
+                <span className="evpage-instagram__icon"><InstagramMark /></span>
+                <span className="evpage-instagram__body">
+                  <small>Instagram oficial</small>
+                  <strong>@{igHandle}</strong>
+                  <span>Fotos, novidades e informações oficiais do evento.</span>
+                </span>
+                <ExternalLink className="evpage-instagram__arrow" size={17} aria-hidden="true" />
+              </a>
             )}
             <p className="evpage-helper"><Link href="/eventos">← Voltar pra agenda de eventos</Link></p>
           </aside>
