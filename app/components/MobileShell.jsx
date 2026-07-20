@@ -23,7 +23,7 @@ const MENU = [
   { href: '/guias', t: 'Guias', s: 'Antes da partida', i: <><path d="M4 5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" /><path d="M8 8h6M8 12h8M8 16h5" /></> },
   { href: '/fipe', t: 'FIPE', s: 'Consulta grátis', i: <><path d="M12 14 16 9" /><circle cx="12" cy="14" r="1.6" fill="currentColor" /><path d="M4 18a8 8 0 1 1 16 0" /></> },
   { href: '/eventos', t: 'Eventos', s: 'Calendário', i: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 9h18M8 3v4M16 3v4" /></> },
-  { href: '/blog', t: 'Histórias', s: 'Caderno de bordo', i: <><path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 0-2 2V4Z" /></> },
+  { href: '/blog', t: 'Notícias', s: 'Caderno de bordo', i: <><path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 0-2 2V4Z" /></> },
   { href: '/fotografos', t: 'Fotógrafos', s: 'Fotos na curva', i: <><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L19 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" /><circle cx="12" cy="13" r="3.5" /></> },
   { href: '/comboio', t: 'Comboio', s: 'Rodar ao vivo', i: <><path d="M4 13a8 8 0 0 1 7 7M4 18a3 3 0 0 1 2 2" /><circle cx="18" cy="6" r="3" /></> },
   { href: '/sobre', t: 'Sobre', s: 'Nossa história', i: <><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" /></> },

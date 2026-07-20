@@ -120,7 +120,7 @@ export default async function Home() {
             <div className="ig-sechead">
               <div className="lead">
                 <span className="ig-eyebrow">Caderno de bordo</span>
-                <h2 className="ig-title">Histórias da estrada</h2>
+                <h2 className="ig-title">Notícias</h2>
                 <p>Relatos, guias e aprendizados escritos por quem foi, voltou e conhece caminho.</p>
               </div>
               <Link href="/blog" className="ig-btn ig-btn--ghost">Ler todas</Link>
