@@ -1,11 +1,15 @@
 import Link from 'next/link';
 import Cover from '../../components/Cover';
 import { notFound } from 'next/navigation';
-import { getPostBySlug, getAllSlugs, getPublishedPosts } from '../../lib/blog';
+import { getPostBySlug, getAllSlugs, getRelatedPosts } from '../../lib/blog';
 import ViewPing from '../../components/ViewPing';
 import ReadingProgress from '../../components/ReadingProgress';
 
 export const revalidate = 300;
+
+const SITE_URL = 'https://www.pistavivamototurismo.com.br';
+// Capa padrão (OG dinâmico 1200×630) pra matéria ainda sem imagem própria.
+const DEFAULT_OG = `${SITE_URL}/opengraph-image`;
 
 // Renderiza markdown inline: **[texto](/link)**, [texto](/link) vira <a>/<Link>, **negrito**, *italico*, e raw URLs.
 function renderInline(text) {
@@ -62,10 +66,12 @@ export async function generateMetadata({ params }) {
       type: 'article',
       title: post.title,
       description: post.excerpt || post.title,
-      images: post.cover_url ? [post.cover_url] : [],
+      images: [post.cover_url || DEFAULT_OG],
       publishedTime: post.published_at || undefined,
+      modifiedTime: post.updated_at || post.published_at || undefined,
       authors: post.author ? [post.author] : undefined,
     },
+    twitter: { card: 'summary_large_image', title: post.title, description: post.excerpt || post.title, images: [post.cover_url || DEFAULT_OG] },
   };
 }
 
@@ -106,14 +112,20 @@ export default async function BlogPost({ params }) {
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt || post.title,
-    image: post.cover_url ? [post.cover_url] : undefined,
+    image: [post.cover_url || DEFAULT_OG],
     datePublished: post.published_at || undefined,
+    dateModified: post.updated_at || post.published_at || undefined,
     author: post.author ? { '@type': 'Person', name: post.author } : { '@type': 'Organization', name: 'Pistaviva' },
-    publisher: { '@type': 'Organization', name: 'Pistaviva' },
-    mainEntityOfPage: `https://www.pistavivamototurismo.com.br/blog/${slug}`,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Pistaviva',
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/pwa-512x512.png`, width: 512, height: 512 },
+    },
+    inLanguage: 'pt-BR',
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${slug}` },
   };
 
   const breadcrumbLd = {
@@ -130,8 +142,8 @@ export default async function BlogPost({ params }) {
   const author = post.author || 'Pistaviva';
   const initials = author.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
   const dateFmt = post.published_at ? new Date(post.published_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }) : null;
-  const related = (await getPublishedPosts(4)).filter(p => p.slug !== slug).slice(0, 3);
-  const url = `https://www.pistavivamototurismo.com.br/blog/${slug}`;
+  const related = await getRelatedPosts(slug, post.tags, 3);
+  const url = `${SITE_URL}/blog/${slug}`;
   const share = {
     wa: `https://wa.me/?text=${encodeURIComponent(post.title + ' ' + url)}`,
     x: `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(url)}`,

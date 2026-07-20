@@ -1,0 +1,174 @@
+/* ============================================================
+   IGNIS — Shell do Painel Admin  (escopo: .ignis-admin)
+   Fonts e paleta vêm do globals.css (tokens IGNIS já existem).
+   ============================================================ */
+
+/* Esconde o chrome público do site quando o painel está ativo
+   (AdminShell adiciona .admin-route no <body>). */
+body.admin-route .ed-stack > *:not(#app){display:none!important}
+/* o #app público é uma coluna centralizada (max-width 1100). No painel ele vira full-bleed. */
+body.admin-route #app{flex:1;display:flex;flex-direction:column;max-width:none!important;width:100%!important;margin:0!important;padding:0!important}
+body.admin-route .topo,
+body.admin-route .pv-online{display:none!important}
+body.admin-route{overflow-x:hidden}
+.ignis-admin{
+  /* paleta local (complementa os tokens globais) */
+  --accent:#ff5a00;--accent-2:#ff7a1a;--accent-soft:rgba(255,90,0,.12);
+  --ink:#0c0c0d;--ink-2:#16161a;--ink-3:#1f1f24;--ink-4:#26262c;--ink-5:#2e2e36;
+  --line:rgba(255,255,255,.08);--line-2:rgba(255,255,255,.14);
+  --txt:#f3f3f4;--mut:#8a8a90;--mut-2:#5e5e66;
+  --ok:#33c777;--warn:#ffb300;--danger:#ff4d4d;--info:#5b8cff;
+  --disp:var(--font-display),"Arial Narrow",sans-serif;
+  --semi:var(--font-mono),system-ui,sans-serif;
+  --body:var(--font-sans),system-ui,sans-serif;
+  --sbw:236px;
+
+  font-family:var(--body);background:var(--ink);color:var(--txt);
+  display:grid;grid-template-columns:var(--sbw) 1fr;min-height:100vh;
+  -webkit-font-smoothing:antialiased;line-height:1.45;
+}
+.ignis-admin.collapsed{--sbw:68px}
+.ignis-admin *{box-sizing:border-box}
+.ignis-admin button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.ignis-admin input,.ignis-admin select,.ignis-admin textarea{font-family:inherit;color:inherit}
+.ignis-admin .disp{font-family:var(--disp);text-transform:uppercase;font-weight:800;letter-spacing:-.01em;line-height:.92}
+.ignis-admin .eyebrow{font-family:var(--semi);font-weight:700;text-transform:uppercase;letter-spacing:.18em;font-size:11px;color:var(--accent);display:inline-flex;align-items:center;gap:9px}
+.ignis-admin .eyebrow::before{content:"";width:22px;height:2px;background:var(--accent)}
+
+/* ===================== SIDEBAR ===================== */
+.ig-sidebar{position:sticky;top:0;height:100vh;background:var(--ink-2);border-right:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;z-index:20}
+.ig-sb-top{display:flex;align-items:center;gap:10px;height:60px;padding:0 16px;border-bottom:1px solid var(--line)}
+.ig-brand{display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden;color:var(--txt);text-decoration:none}
+.ig-brand .ig-word{width:auto;max-width:165px;height:auto;object-fit:contain;display:block}
+.ig-brand .ig-mark{width:24px;height:24px;object-fit:contain;display:none;flex-shrink:0}
+.ignis-admin.collapsed .ig-brand{display:none}
+/* legados (não há mais elementos, mantém por segurança) */
+.ig-brand .spark{width:11px;height:19px;background:var(--accent);clip-path:polygon(58% 0,0 58%,42% 58%,42% 100%,100% 42%,58% 42%);flex-shrink:0}
+.ig-brand .txt{transition:opacity .15s}
+.ig-sb-toggle{margin-left:auto;width:30px;height:30px;border-radius:5px;display:grid;place-items:center;color:var(--mut);transition:.15s;flex-shrink:0}
+.ig-sb-toggle:hover{background:var(--ink-4);color:var(--txt)}
+.ignis-admin.collapsed .ig-sb-toggle{margin:0 auto}
+.ignis-admin.collapsed .ig-sb-toggle svg{transform:rotate(180deg)}
+
+.ig-nav{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 10px}
+.ig-group{font-family:var(--semi);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:9.5px;color:var(--mut-2);padding:14px 10px 7px;white-space:nowrap}
+.ignis-admin.collapsed .ig-group{opacity:0;height:8px;padding:4px 0}
+.ig-link{display:flex;align-items:center;gap:12px;padding:10px 11px;border-radius:5px;color:var(--mut);font-family:var(--semi);font-weight:600;font-size:14px;transition:.13s;white-space:nowrap;position:relative;margin-bottom:2px;text-decoration:none;width:100%;text-align:left}
+.ig-link svg{width:19px;height:19px;flex-shrink:0}
+.ig-link .lab{transition:opacity .15s}
+.ig-link .badge{margin-left:auto;font-family:var(--semi);font-weight:700;font-size:10px;background:var(--accent);color:#fff;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;padding:0 5px}
+.ig-link .badge.warn{background:var(--warn);color:#1a1205}
+.ig-link:hover{background:var(--ink-3);color:var(--txt)}
+.ig-link.active{background:var(--accent-soft);color:var(--accent-2)}
+.ig-link.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:0 3px 3px 0;background:var(--accent)}
+.ignis-admin.collapsed .ig-link{justify-content:center;padding:10px}
+.ignis-admin.collapsed .ig-link .lab{opacity:0;width:0;overflow:hidden}
+.ignis-admin.collapsed .ig-link .badge{position:absolute;top:5px;right:5px;width:8px;height:8px;min-width:0;padding:0;font-size:0}
+
+.ig-foot{border-top:1px solid var(--line);padding:12px 10px}
+.ig-userbox{display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:5px;transition:.13s;white-space:nowrap;width:100%;text-align:left}
+.ig-userbox:hover{background:var(--ink-3)}
+.ig-userbox .av{width:34px;height:34px;border-radius:5px;background:var(--accent);display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:15px;flex-shrink:0;color:#fff}
+.ig-userbox .ui{min-width:0;flex:1}
+.ig-userbox .ui b{font-family:var(--semi);font-weight:700;font-size:13px;display:block;overflow:hidden;text-overflow:ellipsis}
+.ig-userbox .ui span{font-size:11px;color:var(--mut);display:block;overflow:hidden;text-overflow:ellipsis}
+.ignis-admin.collapsed .ig-userbox .ui{opacity:0;width:0;overflow:hidden}
+
+/* ===================== MAIN ===================== */
+.ig-main{min-width:0;display:flex;flex-direction:column}
+.ig-topbar{position:sticky;top:0;z-index:15;display:flex;align-items:center;gap:16px;height:60px;padding:0 24px;background:rgba(12,12,13,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ig-crumb{font-family:var(--semi);font-weight:600;font-size:13px;color:var(--mut);display:flex;align-items:center;gap:8px}
+.ig-crumb .now{color:var(--txt);font-weight:700}
+.ig-search{flex:1;max-width:420px;display:flex;align-items:center;gap:10px;background:var(--ink-3);border:1px solid var(--line);border-radius:5px;padding:9px 13px;transition:.15s}
+.ig-search:focus-within{border-color:var(--accent)}
+.ig-search svg{color:var(--mut);flex-shrink:0}
+.ig-search input{flex:1;background:transparent;border:none;outline:none;font-size:14px;min-width:0}
+.ig-search input::placeholder{color:var(--mut-2)}
+.ig-search kbd{font-family:var(--semi);font-size:10px;color:var(--mut);background:var(--ink-4);border:1px solid var(--line-2);border-radius:5px;padding:2px 6px}
+.ig-topbar .sp{flex:1}
+.ig-tbbtn{width:38px;height:38px;border-radius:5px;display:grid;place-items:center;color:var(--mut);background:var(--ink-3);transition:.15s;position:relative}
+.ig-tbbtn:hover{background:var(--ink-4);color:var(--txt)}
+.ig-tbbtn .dot{position:absolute;top:8px;right:9px;width:7px;height:7px;border-radius:50%;background:var(--accent);border:2px solid var(--ink-2)}
+
+.ig-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--semi);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:12.5px;padding:10px 16px;border-radius:5px;transition:.15s;white-space:nowrap;text-decoration:none}
+.ig-btn:active{transform:translateY(1px)}
+.ig-btn--primary{background:var(--accent);color:#fff}.ig-btn--primary:hover{background:#e84e00}
+.ig-btn--ghost{border:1px solid var(--line-2);color:var(--txt)}.ig-btn--ghost:hover{background:var(--ink-3)}
+.ig-btn--sm{padding:8px 12px;font-size:11.5px}
+.ig-btn--danger{color:var(--danger);border:1px solid rgba(255,77,77,.4)}.ig-btn--danger:hover{background:rgba(255,77,77,.12)}
+
+/* ===================== CONTENT ===================== */
+.ig-content{padding:26px 24px 60px;flex:1}
+.ig-screen{animation:igfade .25s ease}
+@keyframes igfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.ig-pagehead{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.ig-pagehead .eyebrow{margin-bottom:10px}
+.ig-pagehead h1{font-family:var(--disp);text-transform:uppercase;font-weight:800;font-size:clamp(30px,4vw,42px);line-height:.9;letter-spacing:-.01em}
+.ig-pagehead p{color:var(--mut);font-size:14px;margin-top:8px}
+.ig-pagehead .ph-actions{display:flex;gap:10px;align-items:center}
+
+.ig-card{background:var(--ink-2);border:1px solid var(--line);border-radius:6px}
+.ig-card .ch{display:flex;align-items:center;gap:9px;padding:15px 18px;border-bottom:1px solid var(--line)}
+.ig-card .ch h2{font-family:var(--semi);font-weight:700;font-size:14.5px}
+.ig-card .ch .ci{color:var(--accent);display:inline-flex}
+.ig-card .ch .opt{margin-left:auto}
+.ig-card .cbody{padding:18px}
+
+.ig-statgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+@media(max-width:1200px){.ig-statgrid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:760px){.ig-statgrid{grid-template-columns:repeat(2,1fr)}}
+.ig-stat{background:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:16px;transition:.15s;position:relative;overflow:hidden;text-align:left;display:block;width:100%}
+.ig-stat:hover{border-color:var(--line-2);background:var(--ink-3)}
+.ig-stat .si{width:34px;height:34px;border-radius:5px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin-bottom:13px}
+.ig-stat .v{font-family:var(--disp);font-weight:800;font-size:34px;line-height:.9}
+.ig-stat .k{font-family:var(--semi);font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:10.5px;color:var(--mut);margin-top:6px}
+.ig-stat .delta{font-family:var(--semi);font-weight:700;font-size:11px;margin-top:7px;display:inline-flex;align-items:center;gap:4px}
+.ig-stat .delta.up{color:var(--ok)}.ig-stat .delta.flat{color:var(--mut)}
+
+.ig-alert{display:flex;align-items:center;gap:13px;background:rgba(255,179,0,.08);border:1px solid rgba(255,179,0,.32);border-radius:6px;padding:14px 18px;margin-bottom:20px}
+.ig-alert.danger{background:rgba(255,77,77,.08);border-color:rgba(255,77,77,.32)}
+.ig-alert .ai{width:34px;height:34px;border-radius:5px;background:rgba(255,179,0,.15);color:var(--warn);display:grid;place-items:center;flex-shrink:0}
+.ig-alert.danger .ai{background:rgba(255,77,77,.15);color:var(--danger)}
+.ig-alert .at{flex:1}
+.ig-alert .at b{font-family:var(--semi);font-weight:700;font-size:14px}
+.ig-alert .at span{color:var(--mut);font-size:12.5px;display:block;margin-top:1px}
+
+.ig-srow{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:26px 0 14px}
+.ig-srow h2{font-family:var(--disp);text-transform:uppercase;font-weight:800;font-size:22px}
+
+.ig-shortcuts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.ig-shortcuts{grid-template-columns:1fr}}
+.ig-shortcut{display:flex;align-items:center;gap:13px;background:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:16px;transition:.15s;text-align:left;text-decoration:none;color:var(--txt);width:100%}
+.ig-shortcut:hover{border-color:var(--accent);background:var(--ink-3)}
+.ig-shortcut .xi{width:42px;height:42px;border-radius:5px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex-shrink:0}
+.ig-shortcut b{font-family:var(--semi);font-weight:700;font-size:15px;display:block}
+.ig-shortcut span{color:var(--mut);font-size:12px;display:block;margin-top:2px;line-height:1.35}
+.ig-shortcut .chev{margin-left:auto;color:var(--mut-2);flex-shrink:0}
+
+.ig-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
+.ig-tab{font-family:var(--semi);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:12px;color:var(--mut);padding:9px 15px;border:1px solid var(--line-2);border-radius:5px;transition:.13s;display:inline-flex;align-items:center;gap:7px}
+.ig-tab:hover{border-color:var(--mut-2);color:var(--txt)}
+.ig-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+.ig-empty{color:var(--mut);font-size:14px;text-align:center;padding:40px 20px;border:1px dashed var(--line-2);border-radius:6px}
+
+/* ===================== MOBILE ===================== */
+.ig-burger{display:none}
+.ig-scrim{display:none}
+@media(max-width:680px){
+  .ignis-admin{grid-template-columns:1fr}
+  .ig-sidebar{position:fixed;left:0;top:0;width:236px;transform:translateX(-100%);transition:transform .25s;box-shadow:0 0 60px rgba(0,0,0,.6)}
+  .ignis-admin.drawer .ig-sidebar{transform:none}
+  .ig-burger{display:grid}
+  .ig-scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:19;opacity:0;pointer-events:none;transition:.2s}
+  .ignis-admin.drawer .ig-scrim{opacity:1;pointer-events:auto}
+  .ig-search kbd{display:none}
+  .ig-sb-toggle{display:none}
+}
+
+/* ===================== GATE (login) ===================== */
+.ig-gate{min-height:100vh;display:grid;place-items:center;background:var(--ink);color:var(--txt);font-family:var(--body);text-align:center;padding:24px}
+.ig-gate .box{max-width:420px}
+.ig-gate .lock{width:64px;height:64px;border-radius:6px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin:0 auto 18px}
+.ig-gate h2{font-family:var(--disp);text-transform:uppercase;font-weight:800;font-size:32px;letter-spacing:-.01em}
+.ig-gate p{color:var(--mut);font-size:14px;margin:10px 0 20px}

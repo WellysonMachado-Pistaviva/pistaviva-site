@@ -4,6 +4,7 @@
 // ============================================================
 
 import { supabase } from '../lib/supabaseClient';
+import { adminWrite } from '../../app/lib/adminDb';
 
 const KEYS = {
   USER:            'pv_user',
@@ -170,7 +171,7 @@ export const getPosts = async (currentUserId = null) => {
 
   return (data || []).filter(p => p.hidden !== true).map(p => {
     let contentObj = { city: '', uf: '', category: 'viagem', comment: p.content };
-    try { contentObj = JSON.parse(p.content); } catch (e) {}
+    try { contentObj = JSON.parse(p.content); } catch { /* ignore */ }
     return {
       id: p.id,
       user: p.author_name,
@@ -206,7 +207,7 @@ export const addPost = async (post, userId) => {
   let { data, error } = await supabase.from('pv_posts').insert(payload).select();
   if (error && /images/i.test(error.message || '')) {
     // Banco ainda sem a coluna images — grava só a capa
-    const { images, ...noImg } = payload;
+    const { images: _images, ...noImg } = payload;
     ({ data, error } = await supabase.from('pv_posts').insert(noImg).select());
   }
   if (error) {
@@ -216,11 +217,12 @@ export const addPost = async (post, userId) => {
   return { ok: true, data };
 };
 
+// Moderação (admin): apaga post + likes/comentários. Via service-role — RLS nega
+// delete anônimo em pv_posts/pv_post_comments.
 export const deletePost = async (postId) => {
-  // Cascade: delete likes and comments first
-  await supabase.from('pv_post_likes').delete().eq('post_id', postId);
-  await supabase.from('pv_post_comments').delete().eq('post_id', postId);
-  const { error } = await supabase.from('pv_posts').delete().eq('id', postId);
+  await adminWrite({ table: 'pv_post_likes', op: 'delete', match: { post_id: postId } });
+  await adminWrite({ table: 'pv_post_comments', op: 'delete', match: { post_id: postId } });
+  const { error } = await adminWrite({ table: 'pv_posts', op: 'delete', match: { id: postId } });
   if (error) console.error(error);
 };
 
@@ -561,15 +563,16 @@ export const getPartners = async () => {
 };
 
 export const addPartner = async (partner) => {
-  const { data, error } = await supabase.from('pv_partners').insert({
+  const { data, error } = await adminWrite({ table: 'pv_partners', op: 'insert', data: {
     name: partner.name, type: partner.type, description: partner.desc, link: partner.link,
-  }).select().single();
+  } });
   if (error) { console.error(error); return null; }
-  return { id: data.id, name: data.name, type: data.type, desc: data.description, link: data.link };
+  const row = data?.[0]; if (!row) return null;
+  return { id: row.id, name: row.name, type: row.type, desc: row.description, link: row.link };
 };
 
 export const deletePartner = async (id) => {
-  const { error } = await supabase.from('pv_partners').delete().eq('id', id);
+  const { error } = await adminWrite({ table: 'pv_partners', op: 'delete', match: { id } });
   if (error) console.error(error);
 };
 
@@ -586,16 +589,17 @@ export const getStampsConfig = async () => {
 };
 
 export const addStamp = async (stamp) => {
-  const { data, error } = await supabase.from('pv_stamps_config').insert({
+  const { data, error } = await adminWrite({ table: 'pv_stamps_config', op: 'insert', data: {
     name: stamp.name, lat: parseFloat(stamp.lat), lng: parseFloat(stamp.lng),
     radius: parseFloat(stamp.radius) || 5, image_url: stamp.image || null,
-  }).select().single();
+  } });
   if (error) { console.error(error); return null; }
-  return { id: data.id, name: data.name, lat: data.lat, lng: data.lng, radius: data.radius, image: data.image_url };
+  const row = data?.[0]; if (!row) return null;
+  return { id: row.id, name: row.name, lat: row.lat, lng: row.lng, radius: row.radius, image: row.image_url };
 };
 
 export const deleteStamp = async (id) => {
-  const { error } = await supabase.from('pv_stamps_config').delete().eq('id', id);
+  const { error } = await adminWrite({ table: 'pv_stamps_config', op: 'delete', match: { id } });
   if (error) console.error(error);
 };
 
@@ -784,12 +788,12 @@ export const getExpeditions = async () => {
 
 export const saveExpedition = async (data) => {
   const payload = { operator_name:data.operator_name, operator_badge:data.operator_badge||'PARCEIRO VERIFICADO', operator_color:data.operator_color||'#ff6200', operator_instagram:data.operator_instagram, operator_site:data.operator_site, image_url:data.image_url, difficulty:data.difficulty, diff_color:data.diff_color||'#ff6200', title:data.title, region:data.region, description:data.description, stat1_label:data.stat1_label, stat1_value:data.stat1_value, stat1_unit:data.stat1_unit, stat2_label:data.stat2_label, stat2_value:data.stat2_value, stat2_unit:data.stat2_unit, stat3_label:data.stat3_label, stat3_value:data.stat3_value, stat3_unit:data.stat3_unit, tags:data.tags, active:data.active!==false };
-  if (data.id) { await supabase.from('pv_expeditions').update(payload).eq('id', data.id); return data.id; }
-  const { data: r } = await supabase.from('pv_expeditions').insert(payload).select('id').single();
-  return r?.id;
+  if (data.id) { await adminWrite({ table: 'pv_expeditions', op: 'update', data: payload, match: { id: data.id } }); return data.id; }
+  const { data: rows } = await adminWrite({ table: 'pv_expeditions', op: 'insert', data: payload });
+  return rows?.[0]?.id;
 };
 
-export const deleteExpedition = async (id) => { await supabase.from('pv_expeditions').delete().eq('id', id); };
+export const deleteExpedition = async (id) => { await adminWrite({ table: 'pv_expeditions', op: 'delete', match: { id } }); };
 export const getAllExpeditionsAdmin = async () => { const { data } = await supabase.from('pv_expeditions').select('*').order('created_at', { ascending: true }); return data || []; };
 
 // ── Admin: funções de gestão completa ─────────────────────────
@@ -800,7 +804,7 @@ export const getAllPostsAdmin = async () => {
     .select('id, user_id, author_name, content, image_url, created_at, pv_post_comments(id), pv_post_likes(user_id)')
     .order('created_at', { ascending: false }).limit(100);
   return (data || []).map(p => {
-    let c = {}; try { c = JSON.parse(p.content); } catch {}
+    let c = {}; try { c = JSON.parse(p.content); } catch { /* ignore */ }
     return { ...p, city: c.city, category: c.category, comment: c.comment,
       commentsCount: p.pv_post_comments?.length || 0,
       likesCount: p.pv_post_likes?.length || 0 };
@@ -815,7 +819,7 @@ export const getAllComments = async () => {
 };
 
 export const deleteComment = async (id) => {
-  await supabase.from('pv_post_comments').delete().eq('id', id);
+  await adminWrite({ table: 'pv_post_comments', op: 'delete', match: { id } });
 };
 
 // Pings admin
@@ -826,7 +830,7 @@ export const getAllPingsAdmin = async () => {
 };
 
 export const deletePing = async (id) => {
-  await supabase.from('pv_map_pings').delete().eq('id', id);
+  await adminWrite({ table: 'pv_map_pings', op: 'delete', match: { id } });
 };
 
 // Rolês admin
@@ -838,7 +842,7 @@ export const getAllRidesAdmin = async () => {
 };
 
 export const deleteRide = async (id) => {
-  await supabase.from('pv_rides').delete().eq('id', id);
+  await adminWrite({ table: 'pv_rides', op: 'delete', match: { id } });
 };
 
 // Ranking dos trechos — remoção de tempos
@@ -861,7 +865,7 @@ export const getSegmentCompletionsAdmin = async () => {
 };
 
 export const deleteSegmentCompletion = async (id) => {
-  await supabase.from('pv_segment_completions').delete().eq('id', id);
+  await adminWrite({ table: 'pv_segment_completions', op: 'delete', match: { id } });
 };
 
 // Comboio messages admin
@@ -874,7 +878,7 @@ export const getRecentComboioMessages = async () => {
 
 // Segmentos admin (CRUD)
 export const createSegment = async (seg) => {
-  const { data, error } = await supabase.from('pv_segments').insert({
+  const { data: rows, error } = await adminWrite({ table: 'pv_segments', op: 'insert', data: {
     name: seg.name, description: seg.description, region: seg.region,
     distance_km: parseFloat(seg.distance_km) || null,
     entry_lat: parseFloat(seg.entry_lat), entry_lng: parseFloat(seg.entry_lng),
@@ -888,13 +892,13 @@ export const createSegment = async (seg) => {
     dest_lat: parseFloat(seg.dest_lat) || null,
     dest_lng: parseFloat(seg.dest_lng) || null,
     active: true,
-  }).select().single();
+  } });
   if (error) { console.error(error); return null; }
-  return data;
+  return rows?.[0] || null;
 };
 
 export const updateSegment = async (id, seg) => {
-  const { error } = await supabase.from('pv_segments').update({
+  const { error } = await adminWrite({ table: 'pv_segments', op: 'update', match: { id }, data: {
     name: seg.name, description: seg.description, region: seg.region,
     distance_km: parseFloat(seg.distance_km) || null,
     entry_lat: parseFloat(seg.entry_lat), entry_lng: parseFloat(seg.entry_lng),
@@ -906,13 +910,13 @@ export const updateSegment = async (id, seg) => {
     dest_lat: parseFloat(seg.dest_lat) || null,
     dest_lng: parseFloat(seg.dest_lng) || null,
     active: seg.active !== false,
-  }).eq('id', id);
+  } });
   if (error) console.error(error);
 };
 
 export const deleteSegmentAdmin = async (id) => {
-  await supabase.from('pv_segment_completions').delete().eq('segment_id', id);
-  await supabase.from('pv_segments').delete().eq('id', id);
+  await adminWrite({ table: 'pv_segment_completions', op: 'delete', match: { segment_id: id } });
+  await adminWrite({ table: 'pv_segments', op: 'delete', match: { id } });
 };
 
 // Route comments admin
@@ -924,7 +928,7 @@ export const getAllRouteComments = async () => {
 };
 
 export const deleteRouteComment = async (id) => {
-  await supabase.from('pv_route_comments').delete().eq('id', id);
+  await adminWrite({ table: 'pv_route_comments', op: 'delete', match: { id } });
 };
 
 // Trechos Lendários ────────────────────────────────────────
@@ -1060,9 +1064,14 @@ const toEvent = (e) => ({
   id: e.id, title: e.title, category: e.category, date: e.date,
   time: e.time, local: e.local, organizer: e.organizer,
   maxParticipants: e.max_participants, description: e.description,
-  tags: e.tags, type: e.type, imageUrl: e.image_url,
+  tags: e.tags, type: e.type, price: e.price ?? '', imageUrl: e.image_url,
+  address: e.address ?? '', organizerIg: e.organizer_ig ?? '',
+  lineup: Array.isArray(e.lineup) ? e.lineup : [], schedule: Array.isArray(e.schedule) ? e.schedule : [],
   images: (e.images && e.images.length ? e.images : (e.image_url ? [e.image_url] : [])),
+  hidden: e.hidden === true,
+  lat: e.lat ?? null, lng: e.lng ?? null,
 });
+const numOrNull = (v) => (Number.isFinite(+v) && v !== '' && v !== null ? +v : null);
 
 export const getEvents = async () => {
   const { data, error } = await supabase.from('pv_events').select('*').order('created_at', { ascending: true });
@@ -1070,47 +1079,98 @@ export const getEvents = async () => {
   return data.filter(e => e.hidden !== true).map(toEvent);
 };
 
+// Admin: TODOS os eventos (inclui ocultos), mais novos primeiro, com campos
+// completos pra edição (lineup/schedule/imagens/preço/endereço/@ig/hidden).
+export const getEventsAdmin = async () => {
+  const { data, error } = await supabase.from('pv_events').select('*').order('created_at', { ascending: false });
+  if (error || !data?.length) return [];
+  return data.map(toEvent);
+};
+
 export const addEvent = async (event) => {
   const evImgs = (event.images && event.images.length ? event.images : (event.imageUrl ? [event.imageUrl] : [])).filter(Boolean);
-  let { data, error } = await supabase.from('pv_events').insert({
+  const base = {
     title: event.title, category: event.category, date: event.date,
     time: event.time, local: event.local, organizer: event.organizer,
     max_participants: event.maxParticipants || 100,
     description: event.description, tags: event.tags, type: event.type || 'open',
-    image_url: evImgs[0] || null, images: evImgs,
-  }).select().single();
-  if (error && /images/i.test(error.message || '')) {
-    const r = await supabase.from('pv_events').insert({
-      title: event.title, category: event.category, date: event.date,
-      time: event.time, local: event.local, organizer: event.organizer,
-      max_participants: event.maxParticipants || 100,
-      description: event.description, tags: event.tags, type: event.type || 'open',
-      image_url: evImgs[0] || null,
-    }).select().single();
-    data = r.data; error = r.error;
+    image_url: evImgs[0] || null,
+  };
+  // colunas opcionais que podem não existir em schemas antigos
+  const optional = {
+    images: evImgs,
+    price: (event.price ?? '').toString().trim() || null,
+    address: (event.address ?? '').toString().trim() || null,
+    organizer_ig: (event.organizerIg ?? '').toString().replace(/^@/, '').trim() || null,
+    lineup: Array.isArray(event.lineup) ? event.lineup.filter(a => a && (a.name || a.time)) : [],
+    schedule: Array.isArray(event.schedule) ? event.schedule.filter(s => s && (s.title || s.time)) : [],
+    lat: numOrNull(event.lat), lng: numOrNull(event.lng),
+  };
+  let payload = { ...base, ...optional };
+  let { data, error } = await supabase.from('pv_events').insert(payload).select().single();
+  // se uma coluna opcional não existir, remove a mencionada e tenta de novo
+  let guard = 0;
+  while (error && guard++ < 8) {
+    const dropped = Object.keys(optional).find(k => new RegExp(`\\b${k}\\b`, 'i').test(error.message || ''));
+    if (!dropped || !(dropped in payload)) break;
+    delete payload[dropped];
+    ({ data, error } = await supabase.from('pv_events').insert(payload).select().single());
   }
   if (error) { console.error(error); return null; }
   return toEvent(data);
 };
 
+// Edição completa do evento (mesmos campos do addEvent + hidden). Antes só salvava
+// 9 colunas e descartava lineup/schedule/imagens/preço/endereço/@ig.
 export const updateEvent = async (id, event) => {
-  const { error } = await supabase.from('pv_events').update({
+  const evImgs = (event.images && event.images.length ? event.images : (event.imageUrl ? [event.imageUrl] : [])).filter(Boolean);
+  const base = {
     title: event.title, category: event.category, date: event.date,
     time: event.time, local: event.local, organizer: event.organizer,
-    max_participants: event.maxParticipants, description: event.description,
-    tags: event.tags, type: event.type,
-  }).eq('id', id);
-  if (error) console.error(error);
+    max_participants: event.maxParticipants ?? 100,
+    description: event.description, tags: event.tags, type: event.type || 'open',
+    image_url: evImgs[0] || null,
+  };
+  const optional = {
+    images: evImgs,
+    price: (event.price ?? '').toString().trim() || null,
+    address: (event.address ?? '').toString().trim() || null,
+    organizer_ig: (event.organizerIg ?? '').toString().replace(/^@/, '').trim() || null,
+    lineup: Array.isArray(event.lineup) ? event.lineup.filter(a => a && (a.name || a.time)) : [],
+    schedule: Array.isArray(event.schedule) ? event.schedule.filter(s => s && (s.title || s.time)) : [],
+    lat: numOrNull(event.lat), lng: numOrNull(event.lng),
+    ...(typeof event.hidden === 'boolean' ? { hidden: event.hidden } : {}),
+  };
+  let payload = { ...base, ...optional };
+  let { error } = await adminWrite({ table: 'pv_events', op: 'update', data: payload, match: { id } });
+  let guard = 0;
+  while (error && guard++ < 8) {
+    const dropped = Object.keys(optional).find(k => new RegExp(`\\b${k}\\b`, 'i').test(error.message || ''));
+    if (!dropped || !(dropped in payload)) break;
+    delete payload[dropped];
+    ({ error } = await adminWrite({ table: 'pv_events', op: 'update', data: payload, match: { id } }));
+  }
+  if (error) { console.error(error); return false; }
+  return true;
 };
 
 export const deleteEvent = async (id) => {
-  const { error } = await supabase.from('pv_events').delete().eq('id', id);
+  const { error } = await adminWrite({ table: 'pv_events', op: 'delete', match: { id } });
   if (error) console.error(error);
 };
 
 // ── Event RSVPs (Supabase) ────────────────────────────────────
 export const getEventRsvps = async () => {
   const { data, error } = await supabase.from('pv_event_rsvps').select('event_id, user_id, user_name, status');
+  if (error) return [];
+  return data;
+};
+
+// RSVPs de um único evento (pra página de detalhe)
+export const getEventRsvpsFor = async (eventId) => {
+  if (!eventId) return [];
+  const { data, error } = await supabase.from('pv_event_rsvps')
+    .select('event_id, user_id, user_name, status').eq('event_id', eventId);
   if (error) return [];
   return data;
 };
@@ -1166,7 +1226,7 @@ export const getSiteConfig = async () => {
 };
 
 export const saveSiteConfig = async (config) => {
-  const { error } = await supabase.from('pv_site_config').upsert({
+  const { error } = await adminWrite({ table: 'pv_site_config', op: 'upsert', data: {
     id: 1,
     hero_title:     config.heroTitle,
     hero_subtitle:  config.heroSubtitle,
@@ -1179,7 +1239,7 @@ export const saveSiteConfig = async (config) => {
     live_enabled:   config.liveEnabled,
     site_name:      config.siteName,
     updated_at:     new Date().toISOString(),
-  });
+  } });
   if (error) console.error(error);
 };
 
@@ -1195,8 +1255,8 @@ export const getReportsQueue = async (status = 'open') => {
   const { data } = await supabase.from('pv_reports').select('*').eq('status', status).order('created_at', { ascending: false }).limit(300);
   return data || [];
 };
-export const resolveReport = async (id) => { await supabase.from('pv_reports').update({ status: 'resolved' }).eq('id', id); };
-export const deleteReport  = async (id) => { await supabase.from('pv_reports').delete().eq('id', id); };
+export const resolveReport = async (id) => { await adminWrite({ table: 'pv_reports', op: 'update', data: { status: 'resolved' }, match: { id } }); };
+export const deleteReport  = async (id) => { await adminWrite({ table: 'pv_reports', op: 'delete', match: { id } }); };
 
 // ── Comentários (moderação global) ────────────────────────────
 export const getAllFeedComments = async () => {
@@ -1210,6 +1270,6 @@ export const getAnnouncement = async () => {
   return data || null;
 };
 export const saveAnnouncement = async (text, active) => {
-  const { error } = await supabase.from('pv_site_config').upsert({ id: 1, announcement: text, announcement_active: active, updated_at: new Date().toISOString() });
+  const { error } = await adminWrite({ table: 'pv_site_config', op: 'upsert', data: { id: 1, announcement: text, announcement_active: active, updated_at: new Date().toISOString() } });
   return !error;
 };

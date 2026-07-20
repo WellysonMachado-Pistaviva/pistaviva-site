@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ExternalLink, MapPin, RefreshCw } from 'lucide-react';
+import { ExternalLink, MapPin } from 'lucide-react';
 import { getExpeditions } from '../services/storage';
 
 const EXPEDITIONS_FALLBACK = [
@@ -87,7 +87,6 @@ const EXPEDITIONS_FALLBACK = [
   },
 ]; // fim do fallback EXPEDITIONS_FALLBACK
 
-const OPERATORS = ['Todos', 'UPSERRA', 'MOTONOMADS'];
 const DIFFICULTIES = ['Todas', 'FÁCIL', 'INTERMEDIÁRIO', 'AVANÇADO', 'EXPERT'];
 
 // ── Card de Expedição ─────────────────────────────────────────
@@ -173,7 +172,7 @@ const ExpeditionCard = ({ exp }) => {
 // ── Página principal ──────────────────────────────────────────
 const Expeditions = () => {
   const [data, setData]             = useState([]);
-  const [loading, setLoading]       = useState(true);
+  const [, setLoading]              = useState(true);
   const [opFilter, setOpFilter]     = useState('Todos');
   const [diffFilter, setDiffFilter] = useState('Todas');
 

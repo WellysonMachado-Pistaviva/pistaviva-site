@@ -10,7 +10,7 @@ import { usePathname } from 'next/navigation';
 const PRIMARY = [
   { href: '/', label: 'Início', icon: <><path d="M3 10.5 12 3l9 7.5" /><path d="M5 9.5V21h14V9.5" /></> },
   { href: '/rotas', label: 'Rotas', icon: <><path d="M9 6 4 4v14l5 2 6-2 5 2V6l-5-2-6 2Z" /><path d="M9 4v14M15 6v14" /></> },
-  { href: '/mapa', label: 'Mapa', icon: <><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></> },
+  { href: '/eventos', label: 'Eventos', icon: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 9h18M8 3v4M16 3v4" /></> },
   { href: '/comunidade', label: 'Comunidade', icon: <><circle cx="9" cy="8" r="3.2" /><circle cx="17" cy="9.5" r="2.6" /><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5M15 19c0-2 1-3.4 3-3.8" /></> },
 ];
 
@@ -22,7 +22,6 @@ const MENU = [
   { href: '/destinos', t: 'Destinos', s: 'Viagens dos sonhos', i: <><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></> },
   { href: '/guias', t: 'Guias', s: 'Dicas pra viajar', i: <><path d="M4 5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" /><path d="M8 8h6M8 12h8M8 16h5" /></> },
   { href: '/fipe', t: 'FIPE', s: 'Consulta grátis', i: <><path d="M12 14 16 9" /><circle cx="12" cy="14" r="1.6" fill="currentColor" /><path d="M4 18a8 8 0 1 1 16 0" /></> },
-  { href: '/paradas', t: 'Paradas', s: 'Amigas do biker', i: <><rect x="4" y="3" width="9" height="18" rx="1.5" /><path d="M4 11h9M16 7l3 3v7a2 2 0 0 1-4 0V5" /></> },
   { href: '/eventos', t: 'Eventos', s: 'Calendário', i: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 9h18M8 3v4M16 3v4" /></> },
   { href: '/blog', t: 'Blog', s: 'Guias & cultura', i: <><path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 0-2 2V4Z" /></> },
   { href: '/fotografos', t: 'Fotógrafos', s: 'Fotos na curva', i: <><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L19 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" /><circle cx="12" cy="13" r="3.5" /></> },
@@ -49,8 +48,8 @@ export default function MobileShell() {
           <img src="/logo.svg" alt="Pistaviva" />
         </Link>
         <span className="igm-sp" />
-        <Link href="/paradas" className="igm-iconbtn" aria-label="Explorar paradas">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></svg>
+        <Link href="/eventos" className="igm-iconbtn" aria-label="Ver eventos">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 9h18M8 3v4M16 3v4" /></svg>
         </Link>
       </header>
 

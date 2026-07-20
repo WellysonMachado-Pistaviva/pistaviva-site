@@ -41,20 +41,6 @@ export default function BoraRodar() {
   const [err, setErr] = useState('');
   const boxRef = useRef(null);
 
-  // Carrega cidade salva ou tenta geolocalização
-  useEffect(() => {
-    let saved = null;
-    try { saved = JSON.parse(localStorage.getItem('pv_bora_place') || 'null'); } catch {}
-    if (saved?.lat) { setPlace(saved); fetchForecast(saved); return; }
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (p) => { const pl = { name: 'Sua localização', lat: p.coords.latitude, lng: p.coords.longitude }; setPlace(pl); fetchForecast(pl); },
-        () => {}, { timeout: 8000 }
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const searchCity = async (q) => {
     if (q.length < 3) { setSuggestions([]); return; }
     try {
@@ -67,7 +53,7 @@ export default function BoraRodar() {
   const pick = (loc) => {
     const pl = { name: `${loc.name}${loc.admin1 ? ', ' + loc.admin1 : ''}`, lat: loc.latitude, lng: loc.longitude };
     setPlace(pl); setQuery(''); setSuggestions([]);
-    try { localStorage.setItem('pv_bora_place', JSON.stringify(pl)); } catch {}
+    try { localStorage.setItem('pv_bora_place', JSON.stringify(pl)); } catch { /* ignore */ }
     fetchForecast(pl);
   };
 
@@ -111,6 +97,19 @@ export default function BoraRodar() {
     }
     setLoading(false);
   }
+
+  // Carrega cidade salva ou tenta geolocalização
+  useEffect(() => {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem('pv_bora_place') || 'null'); } catch { /* ignore */ }
+    if (saved?.lat) { queueMicrotask(() => { setPlace(saved); fetchForecast(saved); }); return; }
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (p) => { const pl = { name: 'Sua localização', lat: p.coords.latitude, lng: p.coords.longitude }; setPlace(pl); fetchForecast(pl); },
+        () => {}, { timeout: 8000 }
+      );
+    }
+  }, []);
 
   const hoje = data?.dias?.[0];
   const st = hoje ? META[indice(hoje)] : null;

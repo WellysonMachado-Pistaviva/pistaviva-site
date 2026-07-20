@@ -11,7 +11,7 @@ import { notifyComboioMessage, notifyNewMember } from '../services/notify';
 import { supabase } from '../lib/supabaseClient';
 import { useWakeLock } from '../hooks/useWakeLock';
 
-const cbToast = (msg) => { const el = document.getElementById('app-toast'); if (el) { el.textContent = msg; el.className = 'toast error'; el.style.display = 'block'; setTimeout(() => { el.style.display = 'none'; }, 3500); } };
+const cbToast = (msg, type = 'error') => { const el = document.getElementById('app-toast'); if (el) { el.textContent = msg; el.className = `toast ${type}`; el.style.display = 'block'; setTimeout(() => { el.style.display = 'none'; }, 3500); } };
 const distKmCB = (aLat, aLng, bLat, bLng) => {
   const R = 6371, toR = Math.PI / 180;
   const dLat = (bLat - aLat) * toR, dLng = (bLng - aLng) * toR;
@@ -75,6 +75,8 @@ const Comboio = ({ user, openAuthModal }) => {
   const typingTimers                        = useRef({});   // limpa após 3s
   const messagesEndRef                      = useRef(null);
   const sosTimer                            = useRef(null);  // intervalo do hold do SOS
+  const dbChannelRef                        = useRef(null);  // canal único de DB/typing/rota (reuso)
+  const lastTypingAt                        = useRef(0);     // throttle do broadcast "digitando"
 
   // Última localização conhecida — persiste mesmo quando o membro cai offline
   // { [userId]: { userId, name, lat, lng, online, lastSeen } }
@@ -88,8 +90,10 @@ const Comboio = ({ user, openAuthModal }) => {
   useEffect(() => {
     const saved = sessionStorage.getItem('activeComboio');
     if (saved) {
-      setActiveComboio(saved);
-      setLeaderId(sessionStorage.getItem('comboioLeader') || null);
+      queueMicrotask(() => {
+        setActiveComboio(saved);
+        setLeaderId(sessionStorage.getItem('comboioLeader') || null);
+      });
       // Carrega mensagens do banco (últimas 2h) imediatamente
       getComboioMessages(saved).then(msgs => {
         if (msgs.length > 0) setMessages(msgs);
@@ -113,7 +117,7 @@ const Comboio = ({ user, openAuthModal }) => {
 
     let watchId;
     let isActive = true;
-    setConnecting(true); // mostra "conectando..." até o primeiro sync
+    queueMicrotask(() => setConnecting(true)); // mostra "conectando..." até o primeiro sync
 
     // Join channel immediately so chat works even if GPS is slow
     try {
@@ -168,6 +172,12 @@ const Comboio = ({ user, openAuthModal }) => {
           setMembers(mems);
           const pinned = mems.find(m => m.pinnedMessage)?.pinnedMessage;
           if (pinned) setPinnedMsg(pinned);
+          // Descobre o líder: quem entra por código aprende quem é o puxador
+          const lid = mems.find(m => m.leaderId)?.leaderId;
+          if (lid) {
+            setLeaderId(prev => prev || lid);
+            sessionStorage.setItem('comboioLeader', lid);
+          }
         },
         (payload) => {
           if (!isActive) return;
@@ -196,6 +206,10 @@ const Comboio = ({ user, openAuthModal }) => {
             ...(memberData.location ? { lat: memberData.location.lat, lng: memberData.location.lng } : {}),
           };
           if (memberData.pinnedMessage) setPinnedMsg(memberData.pinnedMessage);
+          if (memberData.leaderId) {
+            setLeaderId(prev => prev || memberData.leaderId);
+            sessionStorage.setItem('comboioLeader', memberData.leaderId);
+          }
           setLastKnownSnapshot({ ...lastKnownRef.current });
 
           // Notifica quando novo piloto entra (não notifica a si mesmo)
@@ -203,7 +217,8 @@ const Comboio = ({ user, openAuthModal }) => {
             const name = memberData.user.name || memberData.user.nome || 'Piloto';
             notifyNewMember(name);
           }
-        }
+        },
+        leaderId // propaga quem é o puxador pros membros que entram depois
       );
     } catch (err) {
       console.error('Erro ao conectar ao Comboio:', err);
@@ -251,12 +266,21 @@ const Comboio = ({ user, openAuthModal }) => {
       // Wake lock é liberado automaticamente pelo hook quando activeComboio vira null.
       if (watchId) navigator.geolocation.clearWatch(watchId);
     };
+    // leaderId é lido na entrada; não re-conecta ao mudar
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeComboio, user]);
 
-  // ── FALLBACK CONFIÁVEL: Postgres Changes ─────────────────────
-  // Garante entrega mesmo se o broadcast falhar (iOS background, rede instável)
+  // ── Canal de DB único: fallback de mensagens + typing + rota ──
+  // Um só topic `comboio-db-X`. Antes havia DOIS canais com o mesmo nome
+  // (postgres+typing e rota), o que colide no servidor e derruba o broadcast.
+  // Reusamos a ref pra enviar "digitando" sem recriar canal a cada tecla.
   useEffect(() => {
-    if (!activeComboio || !user) return;
+    if (!activeComboio) { queueMicrotask(() => setRouteStops([])); dbChannelRef.current = null; return; }
+    if (!user) return;
+
+    const loadRoute = () => supabase.from('pv_comboio_routes').select('stops').eq('comboio_code', activeComboio).maybeSingle()
+      .then(({ data }) => setRouteStops(Array.isArray(data?.stops) ? data.stops : []));
+    loadRoute();
 
     const dbChannel = supabase
       .channel(`comboio-db-${activeComboio}`)
@@ -287,20 +311,13 @@ const Comboio = ({ user, openAuthModal }) => {
           setTypingUsers(prev => prev.filter(t => t.userId !== userId));
         }, 3000);
       })
+      // ── Rota atualizada pelo líder ────────────────────────────
+      .on('broadcast', { event: 'route' }, loadRoute)
       .subscribe();
 
-    return () => { supabase.removeChannel(dbChannel); };
+    dbChannelRef.current = dbChannel;
+    return () => { dbChannelRef.current = null; supabase.removeChannel(dbChannel); };
   }, [activeComboio, user]);
-
-  // Rota do comboio (paradas) — carrega + escuta broadcast de atualização do líder
-  useEffect(() => {
-    if (!activeComboio) { setRouteStops([]); return; }
-    const loadRoute = () => supabase.from('pv_comboio_routes').select('stops').eq('comboio_code', activeComboio).maybeSingle()
-      .then(({ data }) => setRouteStops(Array.isArray(data?.stops) ? data.stops : []));
-    loadRoute();
-    const ch = supabase.channel(`comboio-db-${activeComboio}`).on('broadcast', { event: 'route' }, loadRoute).subscribe();
-    return () => { supabase.removeChannel(ch); };
-  }, [activeComboio]);
 
   // Mensagens com +2h são filtradas no SELECT do banco — sem cleanup local necessário
 
@@ -386,12 +403,15 @@ const Comboio = ({ user, openAuthModal }) => {
   };
   const sosCancel = () => { if (sosTimer.current) { clearInterval(sosTimer.current); sosTimer.current = null; } setSosHold(0); };
 
-  // Broadcast de "digitando" — sem salvar no banco (efêmero)
+  // Broadcast de "digitando" — sem salvar no banco (efêmero).
+  // Reusa o canal já inscrito (ref) — antes criava um canal novo a cada tecla (vazamento).
   const handleTyping = (value) => {
     setChatInput(value);
-    if (!value.trim() || !activeComboio) return;
-    // Envia evento de typing pelo canal de DB (já tem broadcast listener)
-    supabase.channel(`comboio-db-${activeComboio}`).send({
+    if (!value.trim() || !dbChannelRef.current) return;
+    const now = Date.now();
+    if (now - lastTypingAt.current < 1500) return; // no máx. 1 evento a cada 1,5s
+    lastTypingAt.current = now;
+    dbChannelRef.current.send({
       type: 'broadcast', event: 'typing',
       payload: { userId: user.id, name: user.nome || user.name },
     });
@@ -436,7 +456,9 @@ const Comboio = ({ user, openAuthModal }) => {
   };
 
   const copyCode = () => {
-    navigator.clipboard.writeText(activeComboio);
+    navigator.clipboard?.writeText(activeComboio)
+      .then(() => cbToast('Código copiado ✓', 'success'))
+      .catch(() => cbToast('Não foi possível copiar'));
   };
 
   const shareCode = () => {
@@ -445,7 +467,7 @@ const Comboio = ({ user, openAuthModal }) => {
         title: 'Comboio Pista Viva',
         text: `Venha rodar comigo no Pista Viva! Código do Comboio: ${activeComboio}`,
         url: window.location.href.split('#')[0] + '#comboio'
-      }).catch(console.error);
+      }).catch(() => {});
     } else {
       copyCode();
     }
@@ -461,8 +483,8 @@ const Comboio = ({ user, openAuthModal }) => {
       )}
 
       {activeComboio ? (
-        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
-          
+        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden' }}>
+
           {/* Indicador de segurança GPS — modo segundo plano */}
           {(wake.wakeLock || wake.audio) && (
             <div style={{ display:'flex', alignItems:'center', gap:'8px', padding:'8px 14px', borderRadius:'var(--radius-sm)', background:'rgba(34,197,94,.08)', border:'1px solid rgba(34,197,94,.2)', marginBottom:'8px', fontSize:'12px', fontWeight:700, color:'#22c55e' }}>
@@ -474,10 +496,10 @@ const Comboio = ({ user, openAuthModal }) => {
 
           {/* Header Compacto do Comboio Ativo */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: 'var(--bg2)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', marginBottom: '12px' }}>
-            <div>
-              <div style={{ fontSize: '11px', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700 }}>Comboio Ativo</div>
+            <button onClick={copyCode} title="Toque pra copiar o código" style={{ background: 'transparent', border: 'none', padding: 0, textAlign: 'left', cursor: 'pointer' }}>
+              <div style={{ fontSize: '11px', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700 }}>Comboio Ativo · toque pra copiar</div>
               <div style={{ fontSize: '18px', fontWeight: '900', fontFamily: 'monospace', letterSpacing: '2px', color: 'var(--accent)' }}>{activeComboio}</div>
-            </div>
+            </button>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               {/* Membros online */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', fontWeight: 700 }}>
@@ -490,8 +512,8 @@ const Comboio = ({ user, openAuthModal }) => {
             </div>
           </div>
 
-          {/* PAINEL DE BORDO */}
-          {(() => {
+          {/* PAINEL DE BORDO — escondido no chat pra dar tela cheia */}
+          {activeTab !== 'chat' && (() => {
             const snap = lastKnownSnapshot;
             const myPos = snap[user.id];
             const leaderPos = leaderId ? snap[leaderId] : null;
@@ -528,6 +550,29 @@ const Comboio = ({ user, openAuthModal }) => {
             );
           })()}
 
+          {/* ROSTER DE PILOTOS — quem tá no comboio agora */}
+          {activeTab !== 'chat' && (() => {
+            const roster = Object.values(lastKnownSnapshot)
+              .filter(p => p.userId)
+              .sort((a, b) => (b.online - a.online) || (a.userId === leaderId ? -1 : 1));
+            if (roster.length === 0) return null;
+            return (
+              <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 4, marginBottom: 10 }}>
+                {roster.map(p => {
+                  const isMe = p.userId === user.id;
+                  const isLead = p.userId === leaderId;
+                  return (
+                    <div key={p.userId} title={p.online ? 'Online' : 'Offline'} style={{ display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0, padding: '5px 10px', borderRadius: 999, fontSize: 12, fontWeight: 700, background: 'var(--bg2)', border: `1px solid ${isMe ? 'var(--accent)' : 'var(--border)'}`, color: p.online ? '#fff' : 'var(--muted)' }}>
+                      <span style={{ width: 7, height: 7, borderRadius: '50%', background: p.online ? '#22c55e' : '#6b7280', flexShrink: 0 }} />
+                      {isLead && <Flag size={11} color="var(--accent)" />}
+                      <span style={{ whiteSpace: 'nowrap' }}>{isMe ? 'Você' : (p.name || 'Piloto')}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+
           {/* TABS */}
           <div style={{ display: 'flex', background: 'var(--bg2)', padding: '4px', borderRadius: 'var(--radius)', marginBottom: '12px' }}>
             <button 
@@ -552,7 +597,7 @@ const Comboio = ({ user, openAuthModal }) => {
 
           {/* CHAT TAB */}
           {activeTab === 'chat' && (
-            <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden', background: 'var(--bg)', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden', background: 'var(--bg)', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}>
               
               {/* Pinned Message */}
               <div style={{ background: 'rgba(139,92,246,0.1)', borderBottom: '1px solid rgba(139,92,246,0.2)' }}>
@@ -598,7 +643,7 @@ const Comboio = ({ user, openAuthModal }) => {
               </div>
 
               {/* Messages Area */}
-              <div style={{ flex: 1, overflowY: 'auto', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'hidden', WebkitOverflowScrolling: 'touch', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {connecting && (
                   <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', padding:'10px', background:'rgba(249,98,0,.06)', borderBottom:'1px solid rgba(249,98,0,.15)', fontSize:'12px', color:'var(--accent)', fontWeight:700 }}>
                     <span className="loading-spinner" style={{ width:'14px', height:'14px', borderTopColor:'var(--accent)' }} />

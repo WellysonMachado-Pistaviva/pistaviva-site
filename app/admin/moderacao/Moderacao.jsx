@@ -2,7 +2,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../../src/lib/supabaseClient';
-import { getReportsQueue, resolveReport, deleteReport, getAllRouteComments, deleteRouteComment, getAnnouncement, saveAnnouncement } from '../../../src/services/storage';
+import { adminWrite } from '../../lib/adminDb';
+import { getReportsQueue, resolveReport, getAllRouteComments, deleteRouteComment, getAnnouncement, saveAnnouncement } from '../../../src/services/storage';
 import { useAuth, showToast } from '../../components/AuthProvider';
 
 // Configuração de cada tipo de conteúdo moderável.
@@ -12,11 +13,6 @@ const SECTIONS = [
     title: r => r.title, sub: r => `/${r.slug}${r.published ? '' : ' · oculto'}${r.featured ? ' · ⭐destaque' : ''}`,
     edit: [{ k: 'title', l: 'Título' }, { k: 'excerpt', l: 'Resumo' }, { k: 'tags', l: 'Tags (vírgula)', arr: true }],
     extra: () => ({ href: '/admin/blog', label: 'Editor completo' }),
-  },
-  {
-    id: 'paradas', table: 'pv_spots', label: 'Paradas', mode: 'published', featured: true, photos: true,
-    title: r => r.nome, sub: r => `${r.categoria} · ${[r.cidade, r.uf].filter(Boolean).join('/')}${r.featured ? ' · ⭐destaque' : ''}`,
-    edit: [{ k: 'nome', l: 'Nome' }, { k: 'categoria', l: 'Categoria' }, { k: 'cidade', l: 'Cidade' }, { k: 'uf', l: 'UF' }, { k: 'descricao', l: 'Descrição' }, { k: 'maps_url', l: 'Link Google Maps' }, { k: 'instagram', l: 'Instagram (@perfil ou link)' }, { k: 'selos', l: 'Selos (vírgula: asfalto,descanso,gear,sabor)', arr: true }],
   },
   {
     id: 'rotas', table: 'pv_user_routes', label: 'Rotas', mode: 'published', photos: true, cover: false,
@@ -32,6 +28,7 @@ const SECTIONS = [
     id: 'eventos', table: 'pv_events', label: 'Eventos', mode: 'hidden',
     title: r => r.title, sub: r => `${r.date || ''} · ${r.local || ''}`,
     edit: [{ k: 'title', l: 'Título' }, { k: 'date', l: 'Data (DD Mmm AAAA)' }, { k: 'time', l: 'Horário' }, { k: 'local', l: 'Local' }, { k: 'description', l: 'Descrição' }],
+    extra: () => ({ href: '/admin/eventos', label: 'Editor completo (lineup, programação, galeria…)' }),
   },
   {
     id: 'feed', table: 'pv_posts', label: 'Feed', mode: 'hidden',
@@ -53,23 +50,23 @@ function Section({ cfg }) {
     const { data } = await supabase.from(cfg.table).select('*').order('created_at', { ascending: false }).limit(300);
     setRows(data || []); setLoading(false);
   }, [cfg.table]);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
 
   const toggle = async (row) => {
     const vis = isVisible(row, cfg.mode);
     const patch = cfg.mode === 'published' ? { published: !vis } : { hidden: vis };
-    const { error } = await supabase.from(cfg.table).update(patch).eq('id', row.id);
+    const { error } = await adminWrite({ table: cfg.table, op: 'update', data: patch, match: { id: row.id } });
     if (error) return showToast('Erro: ' + error.message, 'error');
     showToast(vis ? 'Ocultado' : 'Reativado', 'success'); load();
   };
   const remove = async (row) => {
     if (!confirm('Excluir definitivamente?')) return;
-    const { error } = await supabase.from(cfg.table).delete().eq('id', row.id);
+    const { error } = await adminWrite({ table: cfg.table, op: 'delete', match: { id: row.id } });
     if (error) return showToast('Erro: ' + error.message, 'error');
     showToast('Excluído', 'success'); load();
   };
   const toggleFeatured = async (row) => {
-    const { error } = await supabase.from(cfg.table).update({ featured: !row.featured }).eq('id', row.id);
+    const { error } = await adminWrite({ table: cfg.table, op: 'update', data: { featured: !row.featured }, match: { id: row.id } });
     if (error) return showToast('Erro: ' + error.message, 'error');
     showToast(row.featured ? 'Destaque removido' : 'Destacado na home ⭐', 'success'); load();
   };
@@ -81,7 +78,7 @@ function Section({ cfg }) {
   const saveEdit = async () => {
     const patch = {};
     cfg.edit.forEach(({ k, arr }) => { patch[k] = arr ? String(form[k] || '').split(',').map(s => s.trim()).filter(Boolean) : form[k]; });
-    const { error } = await supabase.from(cfg.table).update(patch).eq('id', editing.id);
+    const { error } = await adminWrite({ table: cfg.table, op: 'update', data: patch, match: { id: editing.id } });
     if (error) return showToast('Erro: ' + error.message, 'error');
     showToast('Salvo ✓', 'success'); setEditing(null); load();
   };
@@ -113,7 +110,7 @@ function Section({ cfg }) {
     setPbusy(true);
     const patch = { fotos: pfotos };
     if (cfg.cover !== false) patch.cover_url = pfotos[0] || null;
-    const { error } = await supabase.from(cfg.table).update(patch).eq('id', photoRow.id);
+    const { error } = await adminWrite({ table: cfg.table, op: 'update', data: patch, match: { id: photoRow.id } });
     setPbusy(false);
     if (error) return showToast('Erro: ' + error.message, 'error');
     showToast('Fotos salvas ✓', 'success'); setPhotoRow(null); load();
@@ -198,13 +195,13 @@ function ReportsQueue() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const load = useCallback(async () => { setLoading(true); setRows(await getReportsQueue('open')); setLoading(false); }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
   const TARGET = { post: 'Post', comment: 'Comentário', spot: 'Parada', photographer: 'Fotógrafo', blog: 'Matéria', event: 'Evento' };
   const TABLE = { post: 'pv_posts', spot: 'pv_spots', photographer: 'pv_photographers', blog: 'pv_blog_posts', event: 'pv_events', comment: 'pv_post_comments' };
   const delTarget = async (r) => {
     if (!confirm(`Excluir o ${TARGET[r.target_type] || r.target_type} denunciado?`)) return;
     const t = TABLE[r.target_type];
-    if (t) await supabase.from(t).delete().eq('id', r.target_id);
+    if (t) await adminWrite({ table: t, op: 'delete', match: { id: r.target_id } });
     await resolveReport(r.id); showToast('Conteúdo excluído + denúncia resolvida', 'success'); load();
   };
   return (
@@ -233,7 +230,7 @@ function CommentsMod() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const load = useCallback(async () => { setLoading(true); setRows(await getAllRouteComments()); setLoading(false); }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
   const del = async (id) => { if (!confirm('Excluir comentário?')) return; await deleteRouteComment(id); showToast('Excluído', 'success'); load(); };
   return (
     <div>
@@ -280,7 +277,7 @@ function InstagramEditor() {
   useEffect(() => { supabase.from('pv_site_config').select('instagram_posts').eq('id', 1).maybeSingle().then(({ data }) => { setText((data?.instagram_posts || []).join('\n')); setLoaded(true); }); }, []);
   const save = async () => {
     const arr = text.split('\n').map(s => s.trim()).filter(Boolean);
-    const { error } = await supabase.from('pv_site_config').upsert({ id: 1, instagram_posts: arr, updated_at: new Date().toISOString() });
+    const { error } = await adminWrite({ table: 'pv_site_config', op: 'upsert', data: { id: 1, instagram_posts: arr, updated_at: new Date().toISOString() } });
     showToast(error ? 'Erro: ' + error.message : 'Instagram salvo ✓', error ? 'error' : 'success');
   };
   if (!loaded) return <div className="spinner-wrap"><span className="loading-spinner" /></div>;
@@ -307,10 +304,9 @@ const KINDS = [
 // Tipos de destino do link — cada um sabe carregar opções e montar o href.
 const LINK_TYPES = [
   { v: 'blog', l: 'Matéria (blog)', table: 'pv_blog_posts', name: 'title', href: r => `/blog/${r.slug}` },
-  { v: 'parada', l: 'Parada', table: 'pv_spots', name: 'nome', href: r => `/parada/${r.slug}` },
   { v: 'fotografo', l: 'Fotógrafo', table: 'pv_photographers', name: 'nome', href: r => `/fotografo/${r.slug}` },
   { v: 'evento', l: 'Eventos (página)', fixed: '/eventos' },
-  { v: 'pagina', l: 'Página do site', pages: ['/rotas', '/estradas', '/paradas', '/comboio', '/mapa', '/fotografos', '/fipe', '/comunidade', '/mototurismo', '/loja', '/parceiros'] },
+  { v: 'pagina', l: 'Página do site', pages: ['/rotas', '/estradas', '/comboio', '/fotografos', '/fipe', '/comunidade', '/eventos', '/loja', '/parceiros'] },
   { v: 'url', l: 'URL livre' },
 ];
 
@@ -321,9 +317,11 @@ function LinkPicker({ onPick }) {
 
   useEffect(() => {
     const t = LINK_TYPES.find(x => x.v === type);
-    if (!t?.table) { setOpts([]); return; }
-    supabase.from(t.table).select(`slug, ${t.name}`).order(t.name, { ascending: true }).limit(300)
-      .then(({ data }) => setOpts(data || []));
+    (async () => {
+      if (!t?.table) { setOpts([]); return; }
+      const { data } = await supabase.from(t.table).select(`slug, ${t.name}`).order(t.name, { ascending: true }).limit(300);
+      setOpts(data || []);
+    })();
   }, [type]);
 
   const t = LINK_TYPES.find(x => x.v === type);
@@ -364,7 +362,7 @@ function BannersEditor() {
     const { data } = await supabase.from('pv_banners').select('*').order('sort_order', { ascending: true }).order('created_at', { ascending: true });
     setRows(data || []);
   }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
 
   const save = async () => {
     const b = editing;
@@ -378,8 +376,8 @@ function BannersEditor() {
       sort_order: b.sort_order ?? 0, updated_at: new Date().toISOString(),
     };
     const res = b.id
-      ? await supabase.from('pv_banners').update(payload).eq('id', b.id)
-      : await supabase.from('pv_banners').insert({ ...payload, sort_order: rows?.length || 0 });
+      ? await adminWrite({ table: 'pv_banners', op: 'update', data: payload, match: { id: b.id } })
+      : await adminWrite({ table: 'pv_banners', op: 'insert', data: { ...payload, sort_order: rows?.length || 0 } });
     setBusy(false);
     if (res.error) return showToast('Erro: ' + res.error.message, 'error');
     showToast('Banner salvo ✓', 'success'); setEditing(null); load();
@@ -387,13 +385,13 @@ function BannersEditor() {
 
   const remove = async (row) => {
     if (!confirm(`Excluir banner "${row.title}"?`)) return;
-    const { error } = await supabase.from('pv_banners').delete().eq('id', row.id);
+    const { error } = await adminWrite({ table: 'pv_banners', op: 'delete', match: { id: row.id } });
     if (error) return showToast('Erro: ' + error.message, 'error');
     showToast('Excluído', 'success'); load();
   };
 
   const toggleActive = async (row) => {
-    const { error } = await supabase.from('pv_banners').update({ active: !row.active }).eq('id', row.id);
+    const { error } = await adminWrite({ table: 'pv_banners', op: 'update', data: { active: !row.active }, match: { id: row.id } });
     if (error) return showToast('Erro: ' + error.message, 'error');
     load();
   };
@@ -404,8 +402,8 @@ function BannersEditor() {
     if (j < 0 || j >= rows.length) return;
     const a = rows[idx], b = rows[j];
     await Promise.all([
-      supabase.from('pv_banners').update({ sort_order: b.sort_order }).eq('id', a.id),
-      supabase.from('pv_banners').update({ sort_order: a.sort_order }).eq('id', b.id),
+      adminWrite({ table: 'pv_banners', op: 'update', data: { sort_order: b.sort_order }, match: { id: a.id } }),
+      adminWrite({ table: 'pv_banners', op: 'update', data: { sort_order: a.sort_order }, match: { id: b.id } }),
     ]);
     load();
   };
@@ -535,7 +533,7 @@ function DestinosEditor() {
     const { data } = await supabase.from('pv_destinos').select('*').order('sort_order', { ascending: true }).order('created_at', { ascending: true });
     setRows(data || []);
   }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
 
   const save = async () => {
     const b = editing;
@@ -544,28 +542,28 @@ function DestinosEditor() {
     setBusy(true);
     const payload = { nome: b.nome.trim(), image_url: b.image_url, link: b.link?.trim() || null, active: b.active, sort_order: b.sort_order ?? 0, updated_at: new Date().toISOString() };
     const res = b.id
-      ? await supabase.from('pv_destinos').update(payload).eq('id', b.id)
-      : await supabase.from('pv_destinos').insert({ ...payload, sort_order: rows?.length || 0 });
+      ? await adminWrite({ table: 'pv_destinos', op: 'update', data: payload, match: { id: b.id } })
+      : await adminWrite({ table: 'pv_destinos', op: 'insert', data: { ...payload, sort_order: rows?.length || 0 } });
     setBusy(false);
     if (res.error) return showToast('Erro: ' + res.error.message, 'error');
     showToast('Destino salvo ✓', 'success'); setEditing(null); load();
   };
   const remove = async (row) => {
     if (!confirm(`Excluir destino "${row.nome}"?`)) return;
-    const { error } = await supabase.from('pv_destinos').delete().eq('id', row.id);
+    const { error } = await adminWrite({ table: 'pv_destinos', op: 'delete', match: { id: row.id } });
     if (error) return showToast('Erro: ' + error.message, 'error');
     showToast('Excluído', 'success'); load();
   };
   const toggleActive = async (row) => {
-    const { error } = await supabase.from('pv_destinos').update({ active: !row.active }).eq('id', row.id);
+    const { error } = await adminWrite({ table: 'pv_destinos', op: 'update', data: { active: !row.active }, match: { id: row.id } });
     if (error) return showToast('Erro: ' + error.message, 'error'); load();
   };
   const move = async (idx, dir) => {
     const j = idx + dir; if (j < 0 || j >= rows.length) return;
     const a = rows[idx], b = rows[j];
     await Promise.all([
-      supabase.from('pv_destinos').update({ sort_order: b.sort_order }).eq('id', a.id),
-      supabase.from('pv_destinos').update({ sort_order: a.sort_order }).eq('id', b.id),
+      adminWrite({ table: 'pv_destinos', op: 'update', data: { sort_order: b.sort_order }, match: { id: a.id } }),
+      adminWrite({ table: 'pv_destinos', op: 'update', data: { sort_order: a.sort_order }, match: { id: b.id } }),
     ]);
     load();
   };
@@ -655,16 +653,21 @@ const EXTRA_TABS = [
 export default function Moderacao() {
   const auth = useAuth();
   const [tab, setTab] = useState('blog');
-  if (!auth?.isAdmin) {
-    return <div className="wrap section" style={{ textAlign: 'center' }}><div style={{ fontSize: 48 }}>🔒</div><h2 style={{ fontFamily: 'var(--display)' }}>Acesso Restrito</h2><p className="text-muted">Apenas administradores.</p></div>;
-  }
+  if (!auth?.isAdmin) return null; // a shell do painel já protege
+
   const cfg = SECTIONS.find(s => s.id === tab);
   return (
-    <div className="wrap section" style={{ paddingTop: 'clamp(24px,4vw,48px)' }}>
-      <div className="section-head"><div><p className="eyebrow eyebrow--moss">Admin</p><h2>Moderação</h2></div><Link className="link" href="/admin">← Painel</Link></div>
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: '1.6rem' }}>
+    <div className="ig-screen">
+      <div className="ig-pagehead">
+        <div>
+          <p className="eyebrow">Conteúdo</p>
+          <h1>Moderação</h1>
+          <p>Publique, oculte, destaque ou remova conteúdo do site.</p>
+        </div>
+      </div>
+      <div className="ig-tabs">
         {[...SECTIONS, ...EXTRA_TABS].map(s => (
-          <button key={s.id} onClick={() => setTab(s.id)} style={{ fontFamily: 'var(--mono)', fontSize: 12, padding: '8px 14px', borderRadius: 6, border: '1px solid var(--border)', textTransform: 'uppercase', letterSpacing: '.06em', cursor: 'pointer', color: tab === s.id ? 'var(--ink)' : 'var(--paper-dim)', background: tab === s.id ? 'var(--clay)' : 'transparent' }}>{s.label}</button>
+          <button key={s.id} className={`ig-tab${tab === s.id ? ' active' : ''}`} onClick={() => setTab(s.id)}>{s.label}</button>
         ))}
       </div>
       {cfg ? <Section key={cfg.id} cfg={cfg} />

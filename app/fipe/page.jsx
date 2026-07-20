@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import FipeSearch from './FipeSearch';
 
 export const metadata = {

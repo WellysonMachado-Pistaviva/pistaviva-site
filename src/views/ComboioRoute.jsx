@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Polyline, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { Search, MapPin, Trash2, Plus, Save } from 'lucide-react';
+import { Search, MapPin, Trash2, Save } from 'lucide-react';
 import { TILES } from '../lib/mapTiles';
 import { supabase } from '../lib/supabaseClient';
 
-const stopIcon = (n, tipo) => L.divIcon({
+const stopIcon = (n) => L.divIcon({
   html: `<div style="display:flex;flex-direction:column;align-items:center"><div style="width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#f97316;border:2px solid #fff;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.5)"><span style="transform:rotate(45deg);font-size:12px;font-weight:800;color:#fff">${n}</span></div></div>`,
   className: '', iconSize: [26, 26], iconAnchor: [13, 26],
 });
@@ -31,7 +31,8 @@ export default function ComboioRoute({ comboioCode, isLeader }) {
 
   const load = () => supabase.from('pv_comboio_routes').select('stops').eq('comboio_code', comboioCode).maybeSingle()
     .then(({ data }) => { setStops(Array.isArray(data?.stops) ? data.stops : []); setDirty(false); });
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, [comboioCode]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { load(); }, [comboioCode]);
 
   const buscar = (val) => {
     setQ(val);
@@ -56,7 +57,15 @@ export default function ComboioRoute({ comboioCode, isLeader }) {
     setSaving(true);
     const { error } = await supabase.from('pv_comboio_routes').upsert({ comboio_code: comboioCode, stops, updated_at: new Date().toISOString() });
     setSaving(false);
-    if (!error) { setDirty(false); try { supabase.channel(`comboio-db-${comboioCode}`).send({ type: 'broadcast', event: 'route', payload: {} }); } catch { /* */ } }
+    if (!error) {
+      setDirty(false);
+      // Avisa os membros via broadcast HTTP e remove o canal temporário (não vaza)
+      try {
+        const ch = supabase.channel(`comboio-db-${comboioCode}`);
+        await ch.send({ type: 'broadcast', event: 'route', payload: {} });
+        supabase.removeChannel(ch);
+      } catch { /* */ }
+    }
   };
 
   const center = stops[0] ? [stops[0].lat, stops[0].lng] : [-15, -50];

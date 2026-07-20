@@ -80,7 +80,7 @@ REGRAS:
 - 600 a 900 palavras.
 - Estrutura do campo "body": parágrafos separados por LINHA EM BRANCO. Use "## " para títulos de seção. NÃO repita o título principal no body.
 - Inclua no final uma seção "## Perguntas frequentes" com 3 perguntas, cada pergunta como "### Pergunta?" seguida de um parágrafo de resposta (isso vira rich result no Google).
-- Onde fizer sentido, insira links internos em markdown para: [rotas](/rotas), [paradas](/paradas), [Tabela FIPE](/fipe), [comboio ao vivo](/comboio). Não force.
+- Onde fizer sentido, insira links internos em markdown para: [rotas](/rotas), [estradas](/estradas), [Tabela FIPE](/fipe), [comboio ao vivo](/comboio). Não force.
 - "excerpt": 1-2 frases, máx 160 caracteres, com a palavra-chave.
 - "tags": 3 a 5 tags curtas.
 - "slug": minúsculo, com hífens, sem acento, baseado no título.

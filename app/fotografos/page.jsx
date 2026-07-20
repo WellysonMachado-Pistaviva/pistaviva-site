@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Cover from '../components/Cover';
 import LiveBadge from '../components/LiveBadge';
-import { getPhotographers, igUrl } from '../lib/photographers';
+import { getPhotographers } from '../lib/photographers';
 import NewPhotographerForm from './NewPhotographerForm';
 
 export const revalidate = 120;
@@ -24,7 +24,6 @@ export default async function Fotografos() {
               <span className="ig-eyebrow" style={{ color: 'var(--ink-soft)' }}>Fotógrafos de estrada</span>
               <h1>Quem fotografa<br />nas curvas</h1>
             </div>
-            <Link className="ph-linkarrow" href="/mapa">Ver no mapa <span className="arr">→</span></Link>
           </div>
           <p className="lede">Cadastre-se como fotógrafo de um trecho. Quando um motociclista planeja uma rota que passa pelo seu ponto, ele vê seu nome, Instagram e galeria.</p>
         </div>

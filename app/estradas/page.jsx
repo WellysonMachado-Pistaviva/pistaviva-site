@@ -73,11 +73,10 @@ export default function EstradasIndex() {
         <section className="ph-cta" style={{ marginTop: 30 }}>
           <div className="inner">
             <h2>Conhece uma estrada que faltou?</h2>
-            <p>Cadastre paradas no caminho, planeje sua rota no planejador Pistaviva e rode em grupo com comboio ao vivo.</p>
+            <p>Planeje sua rota no planejador Pistaviva e rode em grupo com comboio ao vivo.</p>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 12 }}>
-              <Link className="ig-btn ig-btn--primary" href="/paradas">Cadastrar parada</Link>
-              <Link className="ig-btn ig-btn--ghost" href="/rotas">Planejar rota</Link>
-              <Link className="ig-btn ig-btn--ghost" href="/mototurismo">Mototurismo por estado</Link>
+              <Link className="ig-btn ig-btn--primary" href="/rotas">Planejar rota</Link>
+              <Link className="ig-btn ig-btn--ghost" href="/comboio">Comboio ao vivo</Link>
             </div>
           </div>
         </section>

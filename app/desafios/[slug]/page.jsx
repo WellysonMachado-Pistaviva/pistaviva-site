@@ -1,11 +1,9 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { DESAFIOS, REGRAS_GERAIS, COMO_VALIDAR, getDesafio, allDesafioSlugs, desafioCentro } from '../../lib/desafios';
+import { DESAFIOS, REGRAS_GERAIS, COMO_VALIDAR, getDesafio, allDesafioSlugs } from '../../lib/desafios';
 import { getEstrada } from '../../lib/estradas';
-import { getNearbySpots } from '../../lib/spots';
 import DesafioMapa from '../../components/DesafioMapa';
 import DesafioCheckin from '../../components/DesafioCheckin';
-import NearbyStops from '../../components/NearbyStops';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 export const revalidate = 3600;
@@ -33,15 +31,6 @@ export default async function DesafioPage({ params }) {
   const { slug } = await params;
   const d = getDesafio(slug);
   if (!d) notFound();
-
-  // Paradas da comunidade perto do circuito (Turf, server-side)
-  const centro = desafioCentro(d);
-  let nearby = [];
-  if (centro) {
-    try {
-      nearby = await getNearbySpots({ lat: centro.lat, lng: centro.lng, radiusKm: 90, limit: 40 });
-    } catch { /* DB indisponível — segue sem o bloco */ }
-  }
 
   const estradasRel = (d.estradas || []).map((s) => getEstrada(s)).filter(Boolean);
 
@@ -206,9 +195,6 @@ export default async function DesafioPage({ params }) {
               </div>
             </div>
           )}
-
-          {/* Paradas no circuito */}
-          {nearby.length > 0 && <NearbyStops stops={nearby} titulo="Onde parar no circuito" />}
 
           {/* FAQ */}
           {d.faqs?.length > 0 && (

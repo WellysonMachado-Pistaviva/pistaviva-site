@@ -9,8 +9,6 @@ const LINKS = [
   { href: '/desafios', label: 'Desafios' },
   { href: '/destinos', label: 'Destinos' },
   { href: '/guias', label: 'Guias' },
-  { href: '/mapa', label: 'Mapa' },
-  { href: '/paradas', label: 'Paradas' },
   { href: '/fipe', label: 'FIPE' },
   { href: '/comunidade', label: 'Comunidade' },
   { href: '/blog', label: 'Blog' },
