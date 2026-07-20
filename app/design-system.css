@@ -440,6 +440,45 @@ textarea:focus{
   line-height:1.7;
 }
 
+.art-checklist{
+  list-style:none;
+  margin:8px 0 32px;
+  padding:0;
+  border-top:1px solid var(--pv-line-light);
+}
+
+.art-checklist li{
+  margin:0;
+  border-bottom:1px solid var(--pv-line-light);
+}
+
+.art-checklist label{
+  min-height:54px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:10px 2px;
+  color:var(--pv-text-dark);
+  font-size:17px;
+  line-height:1.4;
+  cursor:pointer;
+}
+
+.art-checklist input{
+  width:21px;
+  height:21px;
+  min-height:0;
+  flex:0 0 auto;
+  accent-color:var(--pv-orange);
+  cursor:pointer;
+}
+
+.art-checklist li.is-checked span{
+  color:var(--pv-muted-dark);
+  text-decoration:line-through;
+  text-decoration-thickness:1px;
+}
+
 .art-col p:first-of-type::first-letter{
   color:var(--pv-orange);
 }
