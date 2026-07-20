@@ -1,22 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 import { supabaseServer } from './supabaseServer';
+import { resolveSupabaseAdminConfig } from './supabaseAdminConfig.mjs';
 
 // Cliente Supabase com a chave SECRETA (service role). SÓ pode ser importado em código
 // de servidor (rotas /api). Nunca importar em componente client — vazaria a chave.
 export function supabaseAdmin() {
-  const url =
-    process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    process.env.NEXT_PUBLIC_SUPABASE_URL_SUPABASE_URL ||
-    process.env.SUPABASE_DATABASE_URL ||
-    '';
-  // Prefere a service_role criada pela integração do Supabase (projeto atual).
-  // A SUPABASE_SECRET_KEY antiga fica por último (estava desatualizada).
-  const key =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_URL_SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_URL_SUPABASE_SECRET_KEY ||
-    process.env.SUPABASE_SECRET_KEY ||
-    '';
+  const { url, key } = resolveSupabaseAdminConfig();
   return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 }
 
