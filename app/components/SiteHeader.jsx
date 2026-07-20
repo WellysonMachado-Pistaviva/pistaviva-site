@@ -1,18 +1,22 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { Menu, X } from 'lucide-react';
 
-const LINKS = [
-  { href: '/bora-rodar', label: 'Bora rodar?' },
-  { href: '/rotas', label: 'Planejador' },
+const PRIMARY_LINKS = [
+  { href: '/destinos', label: 'Destinos' },
+  { href: '/rotas', label: 'Planejar' },
+  { href: '/eventos', label: 'Eventos' },
+  { href: '/comunidade', label: 'Comunidade' },
+];
+
+const MORE_LINKS = [
   { href: '/estradas', label: 'Estradas' },
   { href: '/desafios', label: 'Desafios' },
-  { href: '/destinos', label: 'Destinos' },
   { href: '/guias', label: 'Guias' },
-  { href: '/fipe', label: 'FIPE' },
-  { href: '/comunidade', label: 'Comunidade' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/eventos', label: 'Eventos' },
+  { href: '/blog', label: 'Histórias' },
+  { href: '/fipe', label: 'Tabela FIPE' },
+  { href: '/loja', label: 'Loja' },
   { href: '/sobre', label: 'Sobre' },
   { href: '/apoie', label: 'Apoie' },
 ];
@@ -29,13 +33,28 @@ export default function SiteHeader() {
         </Link>
 
         <nav className={`nav${open ? ' open' : ''}`} aria-label="Navegação principal">
-          {LINKS.map(l => (
+          {PRIMARY_LINKS.map(l => (
             <Link key={l.href} href={l.href} onClick={close}>{l.label}</Link>
           ))}
-          <Link className="shop" href="/loja" onClick={close}>Loja</Link>
+          <details className="nav-more">
+            <summary>Mais</summary>
+            <div className="nav-more-panel">
+              {MORE_LINKS.map(l => (
+                <Link key={l.href} href={l.href} onClick={close}>{l.label}</Link>
+              ))}
+            </div>
+          </details>
+          <Link className="shop" href="/bora-rodar" onClick={close}>Bora rodar?</Link>
         </nav>
 
-        <button className="menu-btn" aria-label="Abrir menu" aria-expanded={open} onClick={() => setOpen(o => !o)}>≡</button>
+        <button
+          className="menu-btn"
+          aria-label={open ? 'Fechar menu' : 'Abrir menu'}
+          aria-expanded={open}
+          onClick={() => setOpen(o => !o)}
+        >
+          {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+        </button>
       </div>
     </header>
   );

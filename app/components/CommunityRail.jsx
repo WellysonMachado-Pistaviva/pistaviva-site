@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { MapPin } from 'lucide-react';
 import EmblaCarousel from './EmblaCarousel';
 
 // Rail "Da comunidade" na home: posts reais + paradas novas (com foto), nome e local.
@@ -22,7 +23,12 @@ export default function CommunityRail({ items = [] }) {
           <span className="crail-av">{(p.title?.[0] || 'P').toUpperCase()}</span>
           <span className="crail-meta">
             <b>{p.title}</b>
-            {(p.city || p.uf) && <span>📍 {[p.city, p.uf].filter(Boolean).join('/')}</span>}
+            {(p.city || p.uf) && (
+              <span className="crail-location">
+                <MapPin aria-hidden="true" />
+                {[p.city, p.uf].filter(Boolean).join('/')}
+              </span>
+            )}
           </span>
         </div>
       </div>
@@ -34,10 +40,10 @@ export default function CommunityRail({ items = [] }) {
     <section className="crail-sec" id="comunidade-home">
       <div className="wrap crail-head">
         <div className="lead">
-          <span className="ig-eyebrow">Quem tá na estrada</span>
-          <h2 className="ig-title">Da comunidade</h2>
+          <span className="ig-eyebrow">Gente de verdade</span>
+          <h2 className="ig-title">Quem está na estrada</h2>
         </div>
-        <Link className="ig-btn ig-btn--ghost" href="/comunidade">Entrar na comunidade <span className="arr">→</span></Link>
+        <Link className="ig-btn ig-btn--ghost" href="/comunidade">Conhecer histórias <span className="arr">→</span></Link>
       </div>
       <div className="wrap">
         <EmblaCarousel slides={slides} basis="clamp(190px,58vw,228px)" gap={14} />
