@@ -2,7 +2,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, showToast } from '../../components/AuthProvider';
-import { addEvent, updateEvent, uploadPostImage, uploadCoverImage } from '../../../src/services/storage';
+import { addEvent, updateEvent, uploadPostImage, uploadCoverImage, prepareCoverImageDataUrl, preparePostImageDataUrl } from '../../../src/services/storage';
+import { adminUploadDataUrl } from '../../lib/adminDb';
 import LocationPicker from './LocationPicker';
 
 const MES = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
@@ -41,7 +42,7 @@ const I = {
   spec: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></svg>,
 };
 
-const TYPES = ['Encontro', 'Expedição', 'Workshop', 'Rolê', 'Competição'];
+const TYPES = ['Encontro', 'Festival', 'Expedição', 'Workshop', 'Rolê', 'Competição'];
 const fileToDataUrl = (f) => new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(f); });
 
 // `initial` (evento existente, shape do toEvent) → modo edição. `onDone`/`onClose`
@@ -58,12 +59,13 @@ export default function EventBuilder({ initial = null, onDone = null, onClose = 
     title: initial?.title || '', type: initial?.category || 'Encontro', cat: initial?.tags || '',
     dateIso: toIso(initial?.date), time: initial?.time || '', local: initial?.local || '', addr: initial?.address || '',
     desc: initial?.description || '', org: initial?.organizer || '', ig: initial?.organizerIg || '',
-    entry: (initial?.price ? 'paid' : 'free'), price: initial?.price || '',
+    entry: (initial?.price || initial?.ticketUrl ? 'paid' : 'free'), price: initial?.price || '',
+    ticketUrl: initial?.ticketUrl || '',
   });
   const [banner, setBanner] = useState(imgs0[0] || initial?.imageUrl || '');
   const [gallery, setGallery] = useState(imgs0.slice(1));
-  const [lineup, setLineup] = useState(initial?.lineup?.length ? initial.lineup.map(a => ({ time: a.time || '', name: a.name || '', image: a.image || '' })) : [{ time: '', name: '', image: '' }]);
-  const [schedule, setSchedule] = useState(initial?.schedule?.length ? initial.schedule.map(s => ({ time: s.time || '', title: s.title || '' })) : []);
+  const [lineup, setLineup] = useState(initial?.lineup?.length ? initial.lineup.map(a => ({ time: a.time || '', name: a.name || '', image: a.image || '', role: a.role || '' })) : [{ time: '', name: '', image: '', role: '' }]);
+  const [schedule, setSchedule] = useState(initial?.schedule?.length ? initial.schedule.filter(s => s?.title || s?.time).map(s => ({ time: s.time || '', title: s.title || '' })) : []);
   const [coord, setCoord] = useState({ lat: initial?.lat ?? null, lng: initial?.lng ?? null });
   const [tog, setTog] = useState({ rsvp: true, count: true, share: true });
   const [status, setStatus] = useState(initial ? 'saved' : 'draft'); // draft | saved | published
@@ -84,24 +86,43 @@ export default function EventBuilder({ initial = null, onDone = null, onClose = 
   const needLogin = () => { if (auth?.isAdmin) return false; if (!auth?.user) { showToast('Entre na sua conta pra enviar imagens'); auth?.openAuthModal?.('login'); return true; } return false; };
   const uid = () => auth?.user?.id || 'admin';
 
+  // Upload de imagem. Admin usa a rota server (/api/admin/upload, service-role):
+  // o upload direto pelo client é bloqueado pela RLS do Storage p/ sessão logada.
+  // Comunidade (não-admin) mantém o caminho client-side. `kind`: 'covers' (banner
+  // 1200x630) | 'body' (quadrado 1080). Surface o erro real do servidor no toast.
+  const uploadImg = async (file, kind) => {
+    const dataUrl = await fileToDataUrl(file);
+    if (auth?.isAdmin) {
+      const prepared = kind === 'covers'
+        ? await prepareCoverImageDataUrl(dataUrl)
+        : await preparePostImageDataUrl(dataUrl);
+      const { url, error } = await adminUploadDataUrl({ dataUrl: prepared, kind });
+      if (error) { showToast('Erro no upload: ' + error.message); return null; }
+      return url;
+    }
+    return kind === 'covers'
+      ? uploadCoverImage(dataUrl, uid())
+      : uploadPostImage(dataUrl, uid());
+  };
+
   const onBannerFile = async (file) => {
     if (!file) return;
     if (needLogin()) return;
     setUpBanner(true);
-    const url = await uploadCoverImage(await fileToDataUrl(file), uid());
-    if (url) setBanner(url); else showToast('Falha no upload da capa. Tente outra imagem.');
+    const url = await uploadImg(file, 'covers');
+    if (url) setBanner(url); else if (!auth?.isAdmin) showToast('Falha no upload da capa. Tente outra imagem.');
     setUpBanner(false);
   };
   const onGalleryFile = async (file) => {
     if (!file) return;
     if (needLogin()) return;
     setGalUp(true);
-    const url = await uploadPostImage(await fileToDataUrl(file), uid());
-    if (url) setGallery(g => [...g, url]); else showToast('Falha no upload da imagem.');
+    const url = await uploadImg(file, 'body');
+    if (url) setGallery(g => [...g, url]); else if (!auth?.isAdmin) showToast('Falha no upload da imagem.');
     setGalUp(false);
   };
 
-  const addAct = () => setLineup(l => [...l, { time: '', name: '', image: '' }]);
+  const addAct = () => setLineup(l => [...l, { time: '', name: '', image: '', role: '' }]);
   const updAct = (i, k, v) => setLineup(l => l.map((a, idx) => idx === i ? { ...a, [k]: v } : a));
   const rmAct = (i) => setLineup(l => l.filter((_, idx) => idx !== i));
 
@@ -112,8 +133,8 @@ export default function EventBuilder({ initial = null, onDone = null, onClose = 
     if (!file) return;
     if (needLogin()) return;
     setActUp(i);
-    const url = await uploadPostImage(await fileToDataUrl(file), uid());
-    if (url) updAct(i, 'image', url); else showToast('Falha no upload da foto.');
+    const url = await uploadImg(file, 'body');
+    if (url) updAct(i, 'image', url); else if (!auth?.isAdmin) showToast('Falha no upload da foto.');
     setActUp(-1);
   };
 
@@ -132,6 +153,8 @@ export default function EventBuilder({ initial = null, onDone = null, onClose = 
       organizerIg: f.ig.trim(),
       description: f.desc.trim(), tags: f.cat.trim(),
       price: f.entry === 'paid' ? f.price.trim() : '',
+      ticketUrl: f.entry === 'paid' ? f.ticketUrl.trim() : '',
+      heroImages: initial?.heroImages || [],
       lineup: lineup.filter(a => a.name?.trim() || a.time?.trim()),
       schedule: schedule.filter(s => s.title?.trim() || s.time?.trim()),
       imageUrl: imgs[0] || null, images: imgs,
@@ -151,7 +174,7 @@ export default function EventBuilder({ initial = null, onDone = null, onClose = 
     }
   };
 
-  const pricePreview = f.entry === 'free' ? 'Grátis' : ('R$ ' + (f.price || '0'));
+  const pricePreview = f.entry === 'free' ? 'Grátis' : (f.price || 'Consultar');
   const pill = status === 'published'
     ? { c: 'var(--ok)', t: 'Publicado' } : status === 'saved'
       ? { c: 'var(--warn)', t: 'Rascunho salvo' } : { c: 'var(--mut)', t: 'Rascunho' };
@@ -312,7 +335,10 @@ export default function EventBuilder({ initial = null, onDone = null, onClose = 
               <div className="field"><span className="lbl">Tipo de entrada</span>
                 <select className="sel" value={f.entry} onChange={e => set('entry', e.target.value)}><option value="free">Gratuito</option><option value="paid">Pago</option></select>
               </div>
-              {f.entry === 'paid' && <div className="field"><span className="lbl">Valor (R$)</span><input className="in" type="number" placeholder="0,00" value={f.price} onChange={e => set('price', e.target.value)} /></div>}
+              {f.entry === 'paid' && <>
+                <div className="field"><span className="lbl">Valor</span><input className="in" type="text" placeholder="Ex: 149,90 ou Consultar" value={f.price} onChange={e => set('price', e.target.value)} /></div>
+                <div className="field"><span className="lbl">Link oficial para comprar ingresso</span><input className="in" type="url" placeholder="https://..." value={f.ticketUrl} onChange={e => set('ticketUrl', e.target.value)} /></div>
+              </>}
               <div className="toggle-row"><div className="t"><b>Confirmação “Eu vou”</b><span>Pilotos confirmam presença</span></div><button className={`sw ${tog.rsvp ? 'on' : ''}`} onClick={() => setTog(t => ({ ...t, rsvp: !t.rsvp }))} /></div>
               <div className="toggle-row"><div className="t"><b>Mostrar nº de confirmados</b><span>Exibe contador na página</span></div><button className={`sw ${tog.count ? 'on' : ''}`} onClick={() => setTog(t => ({ ...t, count: !t.count }))} /></div>
               <div className="toggle-row"><div className="t"><b>Permitir compartilhar</b><span>Botões de compartilhar e copiar link</span></div><button className={`sw ${tog.share ? 'on' : ''}`} onClick={() => setTog(t => ({ ...t, share: !t.share }))} /></div>
