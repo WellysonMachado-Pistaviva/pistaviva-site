@@ -14,7 +14,7 @@ const MORE_LINKS = [
   { href: '/estradas', label: 'Estradas' },
   { href: '/desafios', label: 'Desafios' },
   { href: '/guias', label: 'Guias' },
-  { href: '/blog', label: 'Histórias' },
+  { href: '/blog', label: 'Notícias' },
   { href: '/fipe', label: 'Tabela FIPE' },
   { href: '/loja', label: 'Loja' },
   { href: '/sobre', label: 'Sobre' },

@@ -21,7 +21,7 @@ export default async function BlogList() {
           <div className="head">
             <div>
               <span className="ig-eyebrow" style={{ color: 'var(--ink-soft)' }}>Caderno de bordo</span>
-              <h1>Histórias da estrada</h1>
+              <h1>Notícias</h1>
             </div>
           </div>
           <p className="lede">Guias de rotas, preparação de viagem, garagem e a cultura do mototurismo brasileiro — conteúdo de quem pega estrada.</p>
