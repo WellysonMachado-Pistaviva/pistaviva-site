@@ -1,6 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Plus, Trash2, Edit, Image as ImageIcon, MapPin } from 'lucide-react';
 import { getSiteConfig, saveSiteConfig, getPresetRoutes, savePresetRoutes } from '../services/storage';
+
+const F = ({ label, hint, children }) => (
+  <div className="calc-field" style={{ marginBottom: '16px' }}>
+    <label>{label}</label>
+    {hint && <div style={{ fontSize: '11px', color: 'var(--muted)', marginBottom: '6px' }}>{hint}</div>}
+    {children}
+  </div>
+);
 
 export const CmsTab = ({ toast }) => {
   const [activeSection, setActiveSection] = useState('home'); // 'home' | 'routes'
@@ -13,7 +21,7 @@ export const CmsTab = ({ toast }) => {
   const [editRouteId, setEditRouteId] = useState(null);
 
   useEffect(() => {
-    setRoutes(getPresetRoutes() || []);
+    queueMicrotask(() => setRoutes(getPresetRoutes() || []));
   }, []);
 
   const handleSaveConfig = () => {
@@ -73,14 +81,6 @@ export const CmsTab = ({ toast }) => {
     setRoutes(updated);
     toast?.('Roteiro removido do app.');
   };
-
-  const F = ({ label, hint, children }) => (
-    <div className="calc-field" style={{ marginBottom: '16px' }}>
-      <label>{label}</label>
-      {hint && <div style={{ fontSize: '11px', color: 'var(--muted)', marginBottom: '6px' }}>{hint}</div>}
-      {children}
-    </div>
-  );
 
   return (
     <div>

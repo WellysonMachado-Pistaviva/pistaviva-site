@@ -1,42 +1,25 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# dependências
+/node_modules
+/.pnp
+.pnp.js
 
-node_modules
-dist
-dist-ssr
-*.local
-.output
+# build Next.js
+/.next/
+/out/
+/build
 
-# Environment
-.env
-.env.local
-.env.*.local
-
-# Vercel
-.vercel
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-.netlify/
-
-# Next.js
-.next/
-out/
-.vercel
-.env.local
-.env*.local
+# ambiente / segredos (NUNCA commitar)
 .env*
+!.env.example
+
+# integrações / deploy
+.vercel
+.netlify
+
+# editor / agentes locais
+.claude/settings.local.json
+.claude/launch.json
+.DS_Store
+*.pem
+npm-debug.log*
+yarn-error.log*

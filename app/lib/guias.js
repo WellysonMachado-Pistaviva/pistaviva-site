@@ -206,7 +206,6 @@ export const GUIAS = [
     relacionados: [
       { href: '/rotas', label: 'Abrir o planejador de rotas' },
       { href: '/estradas', label: 'Estradas icônicas pra rodar' },
-      { href: '/paradas', label: 'Paradas da comunidade' },
     ],
   },
   {

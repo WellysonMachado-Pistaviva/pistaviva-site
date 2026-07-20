@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import SpaPage from '../../components/SpaPage';
 
 export const metadata = {
@@ -7,12 +6,5 @@ export const metadata = {
 };
 
 export default function AdminAvancadoPage() {
-  return (
-    <div>
-      <div className="wrap" style={{ paddingTop: '1.2rem' }}>
-        <Link className="link" href="/admin">← Painel</Link>
-      </div>
-      <SpaPage name="admin" />
-    </div>
-  );
+  return <SpaPage name="admin" />;
 }

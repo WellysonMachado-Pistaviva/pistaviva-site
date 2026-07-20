@@ -1,10 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ESTRADAS, ESTRADA_GEO, getEstrada, allEstradaSlugs } from '../../lib/estradas';
+import { ESTRADAS, getEstrada, allEstradaSlugs } from '../../lib/estradas';
 import { ufName } from '../../lib/ufs';
-import { getNearbySpots } from '../../lib/spots';
-import { getNearbyPOIs } from '../../lib/pois';
-import NearbyStops from '../../components/NearbyStops';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 export const revalidate = 3600;
@@ -34,16 +31,6 @@ export default async function EstradaPage({ params }) {
   const e = getEstrada(slug);
   if (!e) notFound();
   const ufs = e.uf.map((u) => ufName(u));
-
-  // Paradas no caminho (Turf): curadas do banco + postos/hospedagem on-demand (OSM/Overpass)
-  const geo = ESTRADA_GEO[e.slug];
-  const [curadas, pois] = geo
-    ? await Promise.all([
-        getNearbySpots({ lat: geo.lat, lng: geo.lng, radiusKm: geo.raio, limit: 60 }),
-        getNearbyPOIs({ lat: geo.lat, lng: geo.lng, radiusKm: geo.raio, limit: 24, kinds: ['fuel', 'hotel'] }),
-      ])
-    : [[], []];
-  const nearby = [...curadas, ...pois]; // curadas (com foto/parceiro) primeiro
 
   const touristLd = {
     '@context': 'https://schema.org', '@type': 'TouristAttraction',
@@ -125,20 +112,6 @@ export default async function EstradaPage({ params }) {
             </div>
           )}
 
-          {/* Paradas no caminho — dropdown por categoria (Turf) */}
-          <NearbyStops stops={nearby} titulo={`Onde parar na ${e.nome}`} />
-
-          {/* Paradas nos estados */}
-          <div style={{ marginTop: 26 }}>
-            <h2 style={{ fontFamily: 'var(--display)', marginBottom: 12 }}>Paradas e mototurismo na região</h2>
-            <p style={{ color: 'var(--ink-soft)', fontSize: 14, marginBottom: 12 }}>Veja paradas amigas do motociclista cadastradas pela comunidade nos estados da {e.nome}:</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-              {e.uf.map((u) => (
-                <Link key={u} className="ig-btn ig-btn--ghost" href={`/mototurismo/${u}`}>Mototurismo em {ufName(u)}</Link>
-              ))}
-            </div>
-          </div>
-
           {/* FAQ */}
           {e.faqs?.length > 0 && (
             <div style={{ marginTop: 28 }}>
@@ -169,11 +142,10 @@ export default async function EstradaPage({ params }) {
           <section className="ph-cta" style={{ marginTop: 30 }}>
             <div className="inner">
               <h2>Vai rodar a {e.nome}?</h2>
-              <p>Planeje a rota no modo curvas, monte um comboio pra ir em grupo com rastreamento ao vivo e cadastre as paradas que achar no caminho.</p>
+              <p>Planeje a rota no modo curvas e monte um comboio pra ir em grupo com rastreamento ao vivo.</p>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 12 }}>
                 <Link className="ig-btn ig-btn--primary" href="/rotas">Planejar rota</Link>
                 <Link className="ig-btn ig-btn--ghost" href="/comboio">Criar comboio</Link>
-                <Link className="ig-btn ig-btn--ghost" href="/paradas">Cadastrar parada</Link>
               </div>
             </div>
           </section>

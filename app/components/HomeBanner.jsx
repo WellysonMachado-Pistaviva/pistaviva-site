@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { isOptimizable } from '../lib/img';
 
 // Carrossel de banners da home (porta do layout IGNIS, 100% funcional):
 // autoplay 6s, dots com barra de progresso, setas, swipe e pause no hover.
@@ -91,6 +92,7 @@ export default function HomeBanner({ banners = [] }) {
                     sizes="100vw"
                     quality={75}
                     priority={k === 0}
+                    unoptimized={!isOptimizable(b.image_url)}
                     style={{ objectFit: 'contain', objectPosition: 'center' }}
                   />
                   <span className={tag.cls}><span className="dot" />{b.tag_label || tag.label}</span>

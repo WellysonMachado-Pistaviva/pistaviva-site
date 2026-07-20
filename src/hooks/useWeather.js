@@ -66,12 +66,20 @@ export const useWeather = (lat, lng) => {
 
   useEffect(() => {
     if (lat == null || lng == null) return;
-    setLoading(true);
-    setError(null);
-    fetchWeatherByCoords(lat, lng)
-      .then(setWeather)
-      .catch(() => setError('Não foi possível carregar o clima.'))
-      .finally(() => setLoading(false));
+    let alive = true;
+    (async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const w = await fetchWeatherByCoords(lat, lng);
+        if (alive) setWeather(w);
+      } catch {
+        if (alive) setError('Não foi possível carregar o clima.');
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+    return () => { alive = false; };
   }, [lat, lng]);
 
   return { weather, loading, error };
@@ -85,7 +93,7 @@ export const useCurrentLocationWeather = () => {
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setGpsError('GPS não disponível.');
+      queueMicrotask(() => setGpsError('GPS não disponível.'));
       return;
     }
     navigator.geolocation.getCurrentPosition(

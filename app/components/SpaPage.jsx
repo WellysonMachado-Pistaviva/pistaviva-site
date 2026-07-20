@@ -19,7 +19,6 @@ const Spinner = () => (
 
 const PAGES = {
   feed:        dynamic(() => import('../../src/views/Feed'), { ssr: false, loading: Spinner }),
-  mapa:        dynamic(() => import('../../src/views/MapPage'), { ssr: false, loading: Spinner }),
   eventos:     dynamic(() => import('../../src/views/Events'), { ssr: false, loading: Spinner }),
   parceiros:   dynamic(() => import('../../src/views/Partners'), { ssr: false, loading: Spinner }),
   comboio:     dynamic(() => import('../../src/views/Comboio'), { ssr: false, loading: Spinner }),

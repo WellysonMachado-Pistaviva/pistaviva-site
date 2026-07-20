@@ -15,7 +15,7 @@ import SiteHeader from './components/SiteHeader';
 import SiteFooter from './components/SiteFooter';
 import AnnouncementBar from './components/AnnouncementBar';
 import MobileShell from './components/MobileShell';
-import LiveToast from './components/LiveToast';
+import OnlineCounter from './components/OnlineCounter';
 
 // IGNIS spec: Saira (corpo), Saira Condensed (títulos), Saira Semi Condensed (labels/botões)
 const display = Saira_Condensed({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-display', display: 'swap' });
@@ -102,7 +102,7 @@ export default function RootLayout({ children }) {
             <SiteFooter />
           </div>
         </AuthProvider>
-        <LiveToast />
+        <OnlineCounter />
         <Analytics />
         <SpeedInsights />
 
@@ -115,6 +115,24 @@ export default function RootLayout({ children }) {
           </>
         )}
         <AdSenseLoader client={ADSENSE_ID} />
+
+        {/* Reader Revenue Manager (openaccess) — monetização de leitor via Google */}
+        <Script
+          async
+          type="application/javascript"
+          src="https://news.google.com/swg/js/v1/swg-basic.js"
+          strategy="afterInteractive"
+        />
+        <Script id="rrm-swg-basic" strategy="afterInteractive">
+          {`(self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+            basicSubscriptions.init({
+              type: "NewsArticle",
+              isPartOfType: ["Product"],
+              isPartOfProductId: "CAowouvgCw:openaccess",
+              clientOptions: { theme: "light", lang: "pt-BR" },
+            });
+          });`}
+        </Script>
       </body>
     </html>
   );

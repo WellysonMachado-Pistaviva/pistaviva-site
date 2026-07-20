@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Navigation, Send, Camera, X, Plus } from 'lucide-react';
+import { MapPin, Navigation, Send, Plus } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { uploadPostImage, getRouteComments, addRouteComment } from '../services/storage';
 import PhotoCarousel from '../../app/components/PhotoCarousel';

@@ -5,6 +5,7 @@
 // ============================================================
 
 import { supabase } from '../lib/supabaseClient';
+import { adminWrite } from '../../app/lib/adminDb';
 
 const SESSION_KEY  = 'pv_user';      // mantém compatibilidade com storage.js
 
@@ -188,26 +189,26 @@ export const resetUserPassword = async (userId, novaSenha) => {
     return { ok: false, error: 'A nova senha deve ter ao menos 6 caracteres.' };
 
   const hash = await hashPassword(novaSenha);
-  const { error } = await supabase.from('pv_users').update({ temp_password: hash }).eq('id', userId);
-  
+  const { error } = await adminWrite({ table: 'pv_users', op: 'update', data: { temp_password: hash }, match: { id: userId } });
+
   if (error) return { ok: false, error: 'Erro ao redefinir senha.' };
   return { ok: true };
 };
 
 // ── ADMIN: BLOQUEAR / DESBLOQUEAR ────────────────────────────
 export const blockUser = async (userId) => {
-  const { error } = await supabase.from('pv_users').update({ is_blocked: true }).eq('id', userId);
+  const { error } = await adminWrite({ table: 'pv_users', op: 'update', data: { is_blocked: true }, match: { id: userId } });
   return { ok: !error };
 };
 
 export const unblockUser = async (userId) => {
-  const { error } = await supabase.from('pv_users').update({ is_blocked: false }).eq('id', userId);
+  const { error } = await adminWrite({ table: 'pv_users', op: 'update', data: { is_blocked: false }, match: { id: userId } });
   return { ok: !error };
 };
 
 // ── ADMIN: PROMOVER / REBAIXAR ───────────────────────────────
 export const promoteToAdmin = async (userId) => {
-  const { error } = await supabase.from('pv_users').update({ is_admin: true }).eq('id', userId);
+  const { error } = await adminWrite({ table: 'pv_users', op: 'update', data: { is_admin: true }, match: { id: userId } });
   if (!error) {
     const session = readSession();
     if (session?.id === userId) writeSession({ ...session, isAdmin: true });
@@ -216,7 +217,7 @@ export const promoteToAdmin = async (userId) => {
 };
 
 export const demoteFromAdmin = async (userId) => {
-  const { error } = await supabase.from('pv_users').update({ is_admin: false }).eq('id', userId);
+  const { error } = await adminWrite({ table: 'pv_users', op: 'update', data: { is_admin: false }, match: { id: userId } });
   if (!error) {
     const session = readSession();
     if (session?.id === userId) writeSession({ ...session, isAdmin: false });
@@ -226,7 +227,7 @@ export const demoteFromAdmin = async (userId) => {
 
 // ── ADMIN: REMOVER USUÁRIO ───────────────────────────────────
 export const deleteUser = async (userId) => {
-  const { error } = await supabase.from('pv_users').delete().eq('id', userId);
+  const { error } = await adminWrite({ table: 'pv_users', op: 'delete', match: { id: userId } });
   return { ok: !error };
 };
 

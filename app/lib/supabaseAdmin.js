@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { supabaseServer } from './supabaseServer';
 
 // Cliente Supabase com a chave SECRETA (service role). SÓ pode ser importado em código
 // de servidor (rotas /api). Nunca importar em componente client — vazaria a chave.
@@ -31,7 +32,10 @@ export async function requireAdmin(req) {
   const auth = req.headers.get('authorization') || '';
   const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
   if (!token) return { ok: false, status: 401, error: 'Sem token.' };
-  const sb = supabaseAdmin();
+  // Valida o JWT do usuário com a anon key (mesmo projeto do client). Não usa a
+  // service key aqui de propósito — assim a validação não quebra se a service key
+  // do ambiente estiver desatualizada (a service key só é usada na escrita).
+  const sb = supabaseServer();
   const { data, error } = await sb.auth.getUser(token);
   if (error || !data?.user) return { ok: false, status: 401, error: 'Token inválido.' };
   const email = (data.user.email || '').toLowerCase();
