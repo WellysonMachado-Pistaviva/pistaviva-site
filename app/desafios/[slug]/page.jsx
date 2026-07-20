@@ -75,7 +75,7 @@ export default async function DesafioPage({ params }) {
 
       <main className="ph-prof">
         <div className="wrap">
-          <span className="eyebrow">🏁 Desafio Pistaviva · {d.regiao}</span>
+          <span className="eyebrow">Desafio Pistaviva · {d.regiao}</span>
           <h1>{d.nome}</h1>
           <p className="lede" style={{ maxWidth: 760 }}>{d.resumo}</p>
 

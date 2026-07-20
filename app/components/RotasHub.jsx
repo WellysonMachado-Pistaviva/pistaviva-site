@@ -25,7 +25,7 @@ export default function RotasHub({ initial = 'planejar' }) {
   const Active = (TABS.find(t => t.id === tab) || TABS[0]).comp;
 
   return (
-    <>
+    <div className="rotas-hub">
       <div className="rotas-tabs" role="tablist" aria-label="Rotas e planejamento">
         {TABS.map(t => (
           <button
@@ -47,6 +47,6 @@ export default function RotasHub({ initial = 'planejar' }) {
         deviceId={auth?.deviceId}
         isAdmin={auth?.isAdmin}
       />
-    </>
+    </div>
   );
 }

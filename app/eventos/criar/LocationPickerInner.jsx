@@ -42,7 +42,7 @@ export default function LocationPickerInner({ lat = null, lng = null, onChange, 
   return (
     <div>
       <div style={{ display: 'flex', gap: 8, marginBottom: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-        <button type="button" className="btn btn--ghost btn--sm" onClick={buscar} disabled={busy}>{busy ? 'Buscando…' : '📍 Buscar pelo endereço'}</button>
+        <button type="button" className="btn btn--ghost btn--sm" onClick={buscar} disabled={busy}>{busy ? 'Buscando…' : 'Buscar pelo endereço'}</button>
         {has && <button type="button" className="btn btn--ghost btn--sm" onClick={() => onChange(null, null)}>Limpar pino</button>}
         <span style={{ fontSize: 12.5, color: 'var(--mut-2, #999)' }}>{has ? `${lat.toFixed(5)}, ${lng.toFixed(5)}` : 'Clique no mapa pra marcar o ponto exato'}</span>
       </div>

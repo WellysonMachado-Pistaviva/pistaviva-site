@@ -1,5 +1,6 @@
 import EstradaXDownload from '../components/EstradaXDownload';
 import EstradaXLogo from '../components/EstradaXLogo';
+import { Route, Smartphone, UsersRound } from 'lucide-react';
 
 export const metadata = {
   title: 'Estrada X + Pistaviva — baixe o app da maior comunidade de motociclistas do Brasil',
@@ -68,9 +69,9 @@ export default function EstradaXPage() {
           </p>
 
           <div className="exd-feats">
-            <div className="exd-feat"><span className="ic">🏍️</span><div><b>Comunidade</b><p>Milhares de motociclistas conectados pelo Brasil.</p></div></div>
-            <div className="exd-feat"><span className="ic">🗺️</span><div><b>Rota + galera</b><p>Planeje no Pistaviva, role com a comunidade do Estrada X.</p></div></div>
-            <div className="exd-feat"><span className="ic">📲</span><div><b>Grátis</b><p>Baixe sem pagar nada, no iPhone ou no Android.</p></div></div>
+            <div className="exd-feat"><span className="ic"><UsersRound size={30} /></span><div><b>Comunidade</b><p>Milhares de motociclistas conectados pelo Brasil.</p></div></div>
+            <div className="exd-feat"><span className="ic"><Route size={30} /></span><div><b>Rota + galera</b><p>Planeje no Pistaviva, role com a comunidade do Estrada X.</p></div></div>
+            <div className="exd-feat"><span className="ic"><Smartphone size={30} /></span><div><b>Grátis</b><p>Baixe sem pagar nada, no iPhone ou no Android.</p></div></div>
           </div>
 
           <div className="exd-cta2">

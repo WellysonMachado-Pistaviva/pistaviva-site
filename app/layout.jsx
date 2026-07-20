@@ -9,6 +9,7 @@ import '../src/index.css';
 import '../src/App.css';
 import 'leaflet/dist/leaflet.css';
 import './globals.css';
+import './design-system.css';
 import AuthProvider from './components/AuthProvider';
 import AdSenseLoader from './components/AdSenseLoader';
 import SiteHeader from './components/SiteHeader';

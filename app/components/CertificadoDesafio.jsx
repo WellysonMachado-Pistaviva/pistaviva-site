@@ -88,8 +88,8 @@ export default function CertificadoDesafio({ desafio, nomeInicial = '' }) {
           {/* preview do certificado gerado */}
           <img src={img} alt={`Certificado de conclusão do ${desafio.nome}`} style={{ width: '100%', borderRadius: 14, border: '1px solid var(--snow-line)' }} />
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-            <button className="ig-btn ig-btn--primary" onClick={compartilhar} style={{ flex: 1, minWidth: 150, padding: '14px 18px', fontSize: 16 }}>📲 Compartilhar</button>
-            <button className="ig-btn ig-btn--ghost" onClick={baixar} style={{ flex: 1, minWidth: 130, padding: '14px 18px', fontSize: 16 }}>⬇️ Baixar PNG</button>
+            <button className="ig-btn ig-btn--primary" onClick={compartilhar} style={{ flex: 1, minWidth: 150, padding: '14px 18px', fontSize: 16 }}>Compartilhar</button>
+            <button className="ig-btn ig-btn--ghost" onClick={baixar} style={{ flex: 1, minWidth: 130, padding: '14px 18px', fontSize: 16 }}>Baixar PNG</button>
           </div>
           <button className="ig-btn ig-btn--ghost" onClick={() => setImg(null)} style={{ fontSize: 14 }}>↩︎ Editar dados</button>
           <p style={{ fontSize: 13, color: 'var(--ink-soft)', margin: 0 }}>

@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Calendar, MapPin, Clock, X, CheckCircle, Bike, Plus, Flame } from 'lucide-react';
 import { getEvents, getEventRsvps, setEventRsvp } from '../services/storage';
-import CoolMode from '../../app/components/CoolMode';
 import PhotoCarousel from '../../app/components/PhotoCarousel';
 
 const MONTH_MAP = { jan: 0, fev: 1, mar: 2, abr: 3, mai: 4, jun: 5, jul: 6, ago: 7, set: 8, out: 9, nov: 10, dez: 11 };
@@ -53,6 +52,7 @@ const Events = ({ user, openAuthModal }) => {
   const [rsvpData, setRsvpData] = useState([]);
   const [rsvpLoading, setRsvpLoading] = useState(false);
   const [activeCategory, setActiveCategory] = useState('Todos');
+  const [now] = useState(() => Date.now());
 
   const reload = useCallback(() => {
     getEvents().then(setEvents);
@@ -114,7 +114,6 @@ const Events = ({ user, openAuthModal }) => {
           return d ? d.getTime() + 86400000 : null; // válido até o fim do dia
         };
         const startOf = (e) => { const d = parseEventDate(e.date); return d ? d.getTime() : Infinity; };
-        const now = Date.now();
         const filtered = events
           .filter(e => activeCategory === 'Todos' || e.category === activeCategory)
           .filter(e => { const end = endOf(e); return !end || end >= now; })
@@ -221,11 +220,9 @@ const Events = ({ user, openAuthModal }) => {
 
                 {/* Botões sim/não */}
                 <div style={{ display: 'flex', gap: 10 }}>
-                  <CoolMode emojis={['🏍️', '🤘', '🔥', '✨', '🛣️']} style={{ flex: 1 }}>
-                    <button className={mine === 'going' ? 'btn-primary' : 'btn-outline'} onClick={() => handleRsvp(ev, 'going')} disabled={rsvpLoading} style={{ width: '100%' }}>
-                      <CheckCircle size={16} /> Vou nessa
-                    </button>
-                  </CoolMode>
+                  <button className={mine === 'going' ? 'btn-primary' : 'btn-outline'} onClick={() => handleRsvp(ev, 'going')} disabled={rsvpLoading} style={{ flex: 1 }}>
+                    <CheckCircle size={16} /> Vou nessa
+                  </button>
                   <button className="btn-outline" onClick={() => handleRsvp(ev, 'no')} disabled={rsvpLoading} style={{ flex: 1, borderColor: mine === 'no' ? 'var(--danger)' : 'var(--border)', color: mine === 'no' ? 'var(--danger)' : 'var(--text)' }}>
                     <X size={16} /> Não vou
                   </button>

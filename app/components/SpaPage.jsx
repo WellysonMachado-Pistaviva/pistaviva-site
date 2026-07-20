@@ -42,13 +42,15 @@ export default function SpaPage({ name }) {
   }
 
   return (
-    <Comp
-      user={auth?.user}
-      openAuthModal={auth?.openAuthModal}
-      promptIdentity={auth?.promptIdentity}
-      identity={auth?.identity}
-      deviceId={auth?.deviceId}
-      isAdmin={auth?.isAdmin}
-    />
+    <div className={`spa-surface spa-surface--${name}`}>
+      <Comp
+        user={auth?.user}
+        openAuthModal={auth?.openAuthModal}
+        promptIdentity={auth?.promptIdentity}
+        identity={auth?.identity}
+        deviceId={auth?.deviceId}
+        isAdmin={auth?.isAdmin}
+      />
+    </div>
   );
 }

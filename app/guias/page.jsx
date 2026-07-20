@@ -45,8 +45,8 @@ export default function GuiasIndex() {
         <div className="wrap">
           <div className="head">
             <div>
-              <span className="ig-eyebrow" style={{ color: 'var(--ink-soft)' }}>Antes de rodar</span>
-              <h1>Guias de<br />mototurismo</h1>
+              <span className="ig-eyebrow" style={{ color: 'var(--ink-soft)' }}>Antes da partida</span>
+              <h1>Caderno de<br />viagem</h1>
             </div>
           </div>
           <p className="lede">Tudo que você precisa saber antes de cair na estrada: planejamento, equipamento, segurança e os perrengues que dá pra evitar. Guias práticos da comunidade Pistaviva.</p>

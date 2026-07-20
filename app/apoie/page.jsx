@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Globe2, LockKeyhole, MapPinned, RadioTower, UsersRound } from 'lucide-react';
 
 const SITE_URL = 'https://www.pistavivamototurismo.com.br';
 const CHECKOUT = 'https://checkout.infinitepay.io/wellysonm/YRkxwPxC5g';
@@ -20,10 +21,10 @@ export const metadata = {
 };
 
 const USOS = [
-  { ico: '🌐', t: 'Servidor & domínio', d: 'Manter o site no ar, rápido e seguro pra todo mundo — todo mês.' },
-  { ico: '🛰️', t: 'Comboio ao vivo & mapas', d: 'Rastreamento em tempo real, mapas e ferramentas que custam pra rodar.' },
-  { ico: '📍', t: 'Rotas, paradas e conteúdo', d: 'Tempo de estrada pra testar roteiros, cadastrar paradas e escrever guias.' },
-  { ico: '🤝', t: 'Comunidade aberta', d: 'Tudo gratuito, sem paywall. Quem pode, ajuda; quem precisa, usa.' },
+  { Icon: Globe2, t: 'Servidor & domínio', d: 'Manter o site no ar, rápido e seguro pra todo mundo — todo mês.' },
+  { Icon: RadioTower, t: 'Comboio ao vivo & mapas', d: 'Rastreamento em tempo real, mapas e ferramentas que custam pra rodar.' },
+  { Icon: MapPinned, t: 'Rotas, paradas e conteúdo', d: 'Tempo de estrada pra testar roteiros, cadastrar paradas e escrever guias.' },
+  { Icon: UsersRound, t: 'Comunidade aberta', d: 'Tudo gratuito, sem paywall. Quem pode, ajuda; quem precisa, usa.' },
 ];
 
 export default function ApoiePage() {
@@ -55,11 +56,11 @@ export default function ApoiePage() {
             </div>
           </div>
           <div className="apoie-grid">
-            {USOS.map(u => (
-              <div key={u.t} className="apoie-card">
-                <span className="apoie-ico" aria-hidden="true">{u.ico}</span>
-                <h3>{u.t}</h3>
-                <p>{u.d}</p>
+            {USOS.map(({ Icon, t, d }) => (
+              <div key={t} className="apoie-card">
+                <span className="apoie-ico" aria-hidden="true"><Icon size={30} strokeWidth={1.8} /></span>
+                <h3>{t}</h3>
+                <p>{d}</p>
               </div>
             ))}
           </div>
@@ -78,7 +79,8 @@ export default function ApoiePage() {
             Apoiar o Pistaviva <span className="arr">→</span>
           </a>
           <p style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--paper-mut)', marginTop: 18 }}>
-            🔒 Checkout seguro InfinitePay · Pix & cartão
+            <LockKeyhole size={13} aria-hidden="true" style={{ verticalAlign: '-2px', marginRight: 6 }} />
+            Checkout seguro InfinitePay · Pix & cartão
           </p>
         </div>
       </section>
