@@ -140,7 +140,7 @@ const RouteStory = ({ result, origin, dest, isRoundtrip, avgKmL, motoName, user,
             width: '540px', height: '960px',
             background: '#090911',
             overflow: 'hidden', position: 'relative',
-            fontFamily: "'Inter', 'SF Pro Display', 'Helvetica Neue', sans-serif",
+            fontFamily: 'var(--font)',
             color: '#ffffff',
           }}
         >
@@ -237,7 +237,7 @@ const RouteStory = ({ result, origin, dest, isRoundtrip, avgKmL, motoName, user,
               </>}
               {!svgPoints && (
                 <text x={MW / 2} y={MH / 2 + 5} textAnchor="middle" fill="rgba(255,255,255,.2)"
-                  fontSize="12" fontFamily="Inter, sans-serif" fontWeight="600">Rota não disponível</text>
+                  fontSize="12" fontFamily="var(--font)" fontWeight="600">Rota não disponível</text>
               )}
               {startPt && <>
                 <circle cx={startPt.x} cy={startPt.y} r="18" fill="#22c55e" fillOpacity="0.12" />

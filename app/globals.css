@@ -44,24 +44,35 @@
   --border:       #2a2a30;
   --border-hover: #3a3a42;
 
-  /* Tipografia (vars vêm do next/font no <html>) */
+  /* Tipografia oficial (vars vêm do next/font no <html>) */
   --display: var(--font-display), "Arial Narrow", sans-serif;
-  --headline:var(--font-display), sans-serif;
-  --font:    var(--font-sans), system-ui, -apple-system, sans-serif;   /* Poppins — corpo/UI */
-  --serif:   var(--font-serif), Georgia, serif;
-  --mono:    var(--font-mono), "Courier New", monospace;
+  --headline:var(--font-display), "Arial Narrow", sans-serif;
+  --font:    var(--font-sans), "Arial Narrow", sans-serif;
+  --serif:   var(--font-serif), var(--font-sans), "Arial Narrow", sans-serif;
+  --mono:    var(--font-mono), var(--font-sans), "Arial Narrow", sans-serif;
 
   --maxw: 1180px;
   --gut: clamp(20px, 5vw, 64px);
 }
 
-body{
+body,
+button,
+input,
+select,
+textarea{
   font-family:var(--font);
+}
+
+body{
   background:var(--ink);
   color:var(--paper);
   line-height:1.6;
   font-size:18px;
   overflow-x:hidden;
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-family:var(--display);
 }
 
 img{ max-width:100%; display:block; }
@@ -1762,7 +1773,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   --ink:#0c0c0d; --ink-2:#141418; --ink-3:#1a1a1f; --ink-4:#24242b;
   --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
   --txt:#f3f3f4; --mut:#8a8a90; --mut-2:#5e5e66; --ok:#33c777; --warn:#ffb300; --danger:#ff4d4d;
-  --disp:var(--font-display),system-ui,sans-serif; --semi:var(--font-mono),system-ui,sans-serif; --body2:var(--font-sans),system-ui,sans-serif;
+  --disp:var(--display); --semi:var(--mono); --body2:var(--font);
   background:var(--ink); color:var(--txt); font-family:var(--body2); line-height:1.45; -webkit-font-smoothing:antialiased; min-height:100vh;
 }
 .evb *{ box-sizing:border-box; }

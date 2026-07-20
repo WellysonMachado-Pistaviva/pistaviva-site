@@ -17,10 +17,11 @@ import SiteFooter from './components/SiteFooter';
 import AnnouncementBar from './components/AnnouncementBar';
 import MobileShell from './components/MobileShell';
 
-// IGNIS spec: Saira (corpo), Saira Condensed (títulos), Saira Semi Condensed (labels/botões)
-const display = Saira_Condensed({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-display', display: 'swap' });
-const semi = Saira_Semi_Condensed({ subsets: ['latin'], weight: ['600', '700'], variable: '--font-mono', display: 'swap', preload: false });
-const poppins = Saira({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-sans', display: 'swap' });
+// Tipografia oficial: Saira Condensed (impacto), Saira (leitura) e
+// Saira Semi Condensed (navegação, labels e botões).
+const display = Saira_Condensed({ subsets: ['latin'], weight: ['600', '700', '800', '900'], variable: '--font-display', display: 'swap' });
+const semi = Saira_Semi_Condensed({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-mono', display: 'swap', preload: false });
+const body = Saira({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-sans', display: 'swap' });
 const serif = Saira({ subsets: ['latin'], weight: ['500'], style: ['italic'], variable: '--font-serif', display: 'swap', preload: false });
 
 const SITE_URL = 'https://www.pistavivamototurismo.com.br';
@@ -89,7 +90,7 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="pt-BR" className={`${display.variable} ${serif.variable} ${semi.variable} ${poppins.variable}`}>
+    <html lang="pt-BR" className={`${display.variable} ${serif.variable} ${semi.variable} ${body.variable}`}>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
         <div className="topo" aria-hidden="true" />

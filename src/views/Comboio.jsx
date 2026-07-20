@@ -498,7 +498,7 @@ const Comboio = ({ user, openAuthModal }) => {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: 'var(--bg2)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', marginBottom: '12px' }}>
             <button onClick={copyCode} title="Toque pra copiar o código" style={{ background: 'transparent', border: 'none', padding: 0, textAlign: 'left', cursor: 'pointer' }}>
               <div style={{ fontSize: '11px', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700 }}>Comboio Ativo · toque pra copiar</div>
-              <div style={{ fontSize: '18px', fontWeight: '900', fontFamily: 'monospace', letterSpacing: '2px', color: 'var(--accent)' }}>{activeComboio}</div>
+              <div style={{ fontSize: '18px', fontWeight: '800', fontFamily: 'var(--mono)', letterSpacing: '2px', color: 'var(--accent)' }}>{activeComboio}</div>
             </button>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               {/* Membros online */}
