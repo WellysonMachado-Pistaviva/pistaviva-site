@@ -112,6 +112,9 @@ const cropWide1200 = (dataUrl, tw = 1200, th = 630) => new Promise((resolve) => 
   } catch { resolve(dataUrl); }
 });
 
+export const prepareCoverImageDataUrl = cropWide1200;
+export const preparePostImageDataUrl = cropSquare1080;
+
 // Upload de CAPA (banner 1200x630). Mesma proporção do hero da matéria.
 export const uploadCoverImage = async (base64DataUrl, userId) => {
   if (!base64DataUrl || !base64DataUrl.startsWith('data:')) return null;

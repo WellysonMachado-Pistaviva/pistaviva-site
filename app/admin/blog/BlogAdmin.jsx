@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../../../src/lib/supabaseClient';
-import { adminWrite } from '../../lib/adminDb';
-import { uploadPostImage, uploadCoverImage } from '../../../src/services/storage';
+import { adminUploadDataUrl, adminWrite } from '../../lib/adminDb';
+import { prepareCoverImageDataUrl, preparePostImageDataUrl } from '../../../src/services/storage';
 import { useAuth, showToast } from '../../components/AuthProvider';
 
 const slugify = (s) =>
@@ -26,6 +26,13 @@ const Ico = ({ d }) => <svg width="17" height="17" viewBox="0 0 24 24" fill="non
 
 // Tamanho ideal da capa (mostrado no admin pra orientar o upload).
 const COVER_SIZE = '1200 × 630 px (16:9)';
+
+const readFile = (file) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = () => reject(new Error('Não foi possível ler o arquivo.'));
+  reader.readAsDataURL(file);
+});
 
 // Miniatura da capa com detecção de imagem quebrada — visão completa no admin.
 function CoverThumb({ post, onStatus }) {
@@ -90,19 +97,39 @@ export default function BlogAdmin() {
     });
   };
 
-  const onCover = async (file) => {
+  const onCover = async (file, input = null) => {
     if (!file) return;
     setUploading(true);
-    const r = new FileReader();
-    r.onload = async () => { const url = await uploadCoverImage(r.result, auth.user?.id || 'admin'); if (url) set('cover_url', url); else showToast('Falha no upload', 'error'); setUploading(false); };
-    r.readAsDataURL(file);
+    try {
+      const source = await readFile(file);
+      const prepared = await prepareCoverImageDataUrl(source);
+      const { url, error } = await adminUploadDataUrl({ dataUrl: prepared, kind: 'covers' });
+      if (error) throw new Error(error.message);
+      set('cover_url', url);
+      showToast('Imagem pronta. Publique a matéria para salvar.', 'success');
+    } catch (error) {
+      showToast('Erro no upload: ' + error.message, 'error');
+    } finally {
+      setUploading(false);
+      if (input) input.value = '';
+    }
   };
   const onBodyImage = async (e) => {
     const file = e.target.files?.[0]; if (!file) return;
     setUploading(true);
-    const r = new FileReader();
-    r.onload = async () => { const url = await uploadPostImage(r.result, auth.user?.id || 'admin'); if (url) insertAtCursor(`\n\n[img:${url}]\n\n`); else showToast('Falha no upload', 'error'); setUploading(false); };
-    r.readAsDataURL(file); e.target.value = '';
+    try {
+      const source = await readFile(file);
+      const prepared = await preparePostImageDataUrl(source);
+      const { url, error } = await adminUploadDataUrl({ dataUrl: prepared, kind: 'body' });
+      if (error) throw new Error(error.message);
+      insertAtCursor(`\n\n[img:${url}]\n\n`);
+      showToast('Imagem inserida na matéria.', 'success');
+    } catch (error) {
+      showToast('Erro no upload: ' + error.message, 'error');
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
   };
 
   const addTag = (raw) => { const v = raw.trim().replace(/,$/, ''); if (v && !form.tags.includes(v)) set('tags', [...form.tags, v]); setTagInput(''); };
@@ -111,6 +138,7 @@ export default function BlogAdmin() {
   const reset = () => { slugTouched.current = false; setForm(EMPTY); };
 
   const save = async (publishNow) => {
+    if (uploading) { showToast('Aguarde o envio da imagem terminar.', 'error'); return; }
     if (!form.title.trim()) { showToast('Dê um título à matéria', 'error'); return; }
     const pub = publishNow != null ? publishNow : form.published;
     setSaving(true);
@@ -150,8 +178,8 @@ export default function BlogAdmin() {
         <span className="pe-crumb">Blog / <b>{form.id ? 'Editar' : 'Novo post'}</b></span>
         <span className="pe-sp" />
         <span className={`pe-pill${live ? ' live' : ''}`}><span className="d" />{live ? 'Publicado' : 'Rascunho'}</span>
-        <button className="pe-btn pe-btn--ghost" onClick={() => save(false)} disabled={saving}>Salvar rascunho</button>
-        <button className="pe-btn pe-btn--primary" onClick={() => save(true)} disabled={saving}>{saving ? '...' : 'Publicar'}</button>
+        <button className="pe-btn pe-btn--ghost" onClick={() => save(false)} disabled={saving || uploading}>Salvar rascunho</button>
+        <button className="pe-btn pe-btn--primary" onClick={() => save(true)} disabled={saving || uploading}>{uploading ? 'Enviando imagem…' : saving ? '...' : 'Publicar'}</button>
       </div>
 
       <div className="pe-grid">
@@ -206,7 +234,7 @@ export default function BlogAdmin() {
               <div className="pe-row"><span className="k">Data</span><span className="v">{form.id ? 'Editando' : 'Agora'}</span></div>
               <div className="pe-row"><span className="k">Leitura</span><span className="v">~{readMin} min</span></div>
               <div className="pe-pubacts">
-                <button className="pe-btn pe-btn--primary" onClick={() => save(true)} disabled={saving}>{form.id ? 'Atualizar e publicar' : 'Publicar matéria'}</button>
+                <button className="pe-btn pe-btn--primary" onClick={() => save(true)} disabled={saving || uploading}>{uploading ? 'Enviando imagem…' : form.id ? 'Atualizar e publicar' : 'Publicar matéria'}</button>
                 {form.id && form.slug && <a className="pe-btn pe-btn--ghost" href={`/blog/${form.slug}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>Pré-visualizar</a>}
                 {form.id && <button className="pe-btn pe-btn--ghost" onClick={reset}>Novo post</button>}
               </div>
@@ -223,7 +251,7 @@ export default function BlogAdmin() {
                 {form.cover_url
                   ? <img src={form.cover_url} alt="" />
                   : <><span className="di"><Ico d={<><path d="M12 16V4M8 8l4-4 4 4" /><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" /></>} /></span><b>{uploading ? 'Enviando…' : 'Enviar imagem'}</b><small>Arraste aqui ou clique · JPG, PNG</small></>}
-                <input type="file" accept="image/*" hidden onChange={e => onCover(e.target.files?.[0])} />
+                <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden onChange={e => onCover(e.target.files?.[0], e.target)} />
               </label>
               <div className="pe-or">ou cole uma URL</div>
               <input className="pe-in" placeholder="https://..." value={form.cover_url} onChange={e => set('cover_url', e.target.value)} />
