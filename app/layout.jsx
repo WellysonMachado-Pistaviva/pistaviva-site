@@ -16,6 +16,7 @@ import SiteHeader from './components/SiteHeader';
 import SiteFooter from './components/SiteFooter';
 import AnnouncementBar from './components/AnnouncementBar';
 import MobileShell from './components/MobileShell';
+import OnlineCounter from './components/OnlineCounter';
 
 // Tipografia oficial: Saira Condensed (impacto), Saira (leitura) e
 // Saira Semi Condensed (navegação, labels e botões).
@@ -103,6 +104,7 @@ export default function RootLayout({ children }) {
             <SiteFooter />
           </div>
         </AuthProvider>
+        <OnlineCounter />
         <Analytics />
         <SpeedInsights />
 
