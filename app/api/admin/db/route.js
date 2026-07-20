@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { supabaseAdmin, requireAdmin } from '../../../lib/supabaseAdmin';
+import { getAdminRevalidationTargets } from '../../../lib/adminRevalidation.mjs';
 
 // Escrita admin via service-role (bypassa RLS). Só admin (Bearer + requireAdmin).
 // As telas admin chamam isto em vez de escrever direto pelo client anon — assim a
@@ -57,5 +59,11 @@ export async function POST(req) {
 
   const { data: out, error } = await q.select();
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+
+  for (const target of getAdminRevalidationTargets({ table, data, rows: out || [] })) {
+    if (target.type) revalidatePath(target.path, target.type);
+    else revalidatePath(target.path);
+  }
+
   return NextResponse.json({ data: out });
 }
