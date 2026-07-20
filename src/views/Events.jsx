@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Calendar, MapPin, Clock, X, CheckCircle, Bike, Plus, Flame } from 'lucide-react';
+import { Calendar, MapPin, Clock, X, CheckCircle, Bike, Plus, Flame, Ticket, ExternalLink } from 'lucide-react';
 import { getEvents, getEventRsvps, setEventRsvp } from '../services/storage';
 import PhotoCarousel from '../../app/components/PhotoCarousel';
+import { getEventRsvpBase } from '../../app/lib/eventRsvpBases.mjs';
 
 const MONTH_MAP = { jan: 0, fev: 1, mar: 2, abr: 3, mai: 4, jun: 5, jul: 6, ago: 7, set: 8, out: 9, nov: 10, dez: 11 };
 const parseEventDate = (str) => {
@@ -29,12 +30,13 @@ const parseTags = (tags) => {
   return tags.split(',').map(t => t.trim()).filter(Boolean);
 };
 
-const CATEGORIES = ['Todos', 'Encontro', 'Expedição', 'Workshop', 'Rolê', 'Competição'];
+const CATEGORIES = ['Todos', 'Encontro', 'Festival', 'Expedição', 'Workshop', 'Rolê', 'Competição'];
 
 // Preço pra exibição: vazio/0 = Grátis
 const priceLabel = (p) => {
   const s = (p ?? '').toString().trim();
   if (!s || /^gr[aá]tis$/i.test(s) || s === '0') return 'Grátis';
+  if (/^(consultar|ingressos?)/i.test(s)) return s;
   return /^r\$/i.test(s) ? s : `R$ ${s}`;
 };
 // Dias até o evento, pra badge "faltam Xd" na capa
@@ -70,8 +72,11 @@ const Events = ({ user, openAuthModal }) => {
     const r = rsvpData.find(r => r.event_id === eventId && r.user_id === user.id);
     return r ? (r.status || 'going') : null;
   };
-  const goingCount = (eventId) => rsvpData.filter(r => r.event_id === eventId && (r.status === 'going' || !r.status)).length;
-  const noCount = (eventId) => rsvpData.filter(r => r.event_id === eventId && r.status === 'no').length;
+  const eventById = (eventId) => events.find(event => event.id === eventId);
+  const goingCount = (eventId) => getEventRsvpBase(eventById(eventId) || eventId).going
+    + rsvpData.filter(r => r.event_id === eventId && (r.status === 'going' || !r.status)).length;
+  const noCount = (eventId) => getEventRsvpBase(eventById(eventId) || eventId).no
+    + rsvpData.filter(r => r.event_id === eventId && r.status === 'no').length;
 
   const handleRsvp = async (event, status) => {
     if (!user) { openAuthModal?.(); return; }
@@ -228,6 +233,7 @@ const Events = ({ user, openAuthModal }) => {
                   </button>
                 </div>
                 {!user && <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--muted)', marginTop: '10px' }}>Identifique-se para confirmar presença</p>}
+                {ev.ticketUrl && <a href={ev.ticketUrl} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: 12, display: 'flex' }}><Ticket size={16} />Comprar ingresso<ExternalLink size={14} /></a>}
                 <a href={`/eventos/${ev.id}`} className="btn-outline" style={{ width: '100%', justifyContent: 'center', marginTop: 12, display: 'flex' }}>Ver página completa do evento →</a>
               </div>
             </div>

@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../../../src/lib/supabaseClient';
-import { adminUploadDataUrl, adminWrite } from '../../lib/adminDb';
+import { adminImportImageUrl, adminUploadDataUrl, adminWrite, shouldImportRemoteImageUrl } from '../../lib/adminDb';
 import { prepareCoverImageDataUrl, preparePostImageDataUrl } from '../../../src/services/storage';
 import { useAuth, showToast } from '../../components/AuthProvider';
 
@@ -142,10 +142,21 @@ export default function BlogAdmin() {
     if (!form.title.trim()) { showToast('Dê um título à matéria', 'error'); return; }
     const pub = publishNow != null ? publishNow : form.published;
     setSaving(true);
+    let coverUrl = form.cover_url.trim();
+    if (shouldImportRemoteImageUrl(coverUrl)) {
+      const imported = await adminImportImageUrl({ url: coverUrl, kind: 'covers' });
+      if (imported.error) {
+        setSaving(false);
+        showToast('Erro ao copiar imagem: ' + imported.error.message, 'error');
+        return;
+      }
+      coverUrl = imported.url;
+      set('cover_url', coverUrl);
+    }
     const payload = {
       title: form.title.trim(), slug: (form.slug.trim() || slugify(form.title)),
       excerpt: form.excerpt.trim() || null, body: form.body,
-      tags: form.tags, cover_url: form.cover_url.trim() || null,
+      tags: form.tags, cover_url: coverUrl || null,
       author: auth.user?.nome || auth.user?.name || 'Pistaviva',
       published: pub, published_at: pub ? new Date().toISOString() : null,
     };
@@ -255,7 +266,7 @@ export default function BlogAdmin() {
               </label>
               <div className="pe-or">ou cole uma URL</div>
               <input className="pe-in" placeholder="https://..." value={form.cover_url} onChange={e => set('cover_url', e.target.value)} />
-              <div className="pe-cover-hint">📐 Tamanho ideal: <b>{COVER_SIZE}</b> · JPG ou PNG · hospede no Supabase ou imgur</div>
+              <div className="pe-cover-hint">📐 Tamanho ideal: <b>{COVER_SIZE}</b> · JPG, PNG, WebP ou GIF · URL externa será copiada para o Supabase ao salvar</div>
               {form.cover_url.trim() && (
                 <div className="pe-cover-test">
                   Pré-visualização:

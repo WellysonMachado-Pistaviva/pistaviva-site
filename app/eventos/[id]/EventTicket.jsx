@@ -1,10 +1,11 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
-import { CheckCircle, X, CalendarPlus, Share2, Copy } from 'lucide-react';
+import { CheckCircle, X, CalendarPlus, Share2, Copy, Ticket, ExternalLink } from 'lucide-react';
 import { useAuth, showToast } from '../../components/AuthProvider';
 import { getEventRsvpsFor, setEventRsvp } from '../../../src/services/storage';
+import { getEventRsvpBase } from '../../lib/eventRsvpBases.mjs';
 
-export default function EventTicket({ event, price, goingInitial = 0, startISO }) {
+export default function EventTicket({ event, price, goingInitial = 0, startISO, ticketUrl = '' }) {
   const auth = useAuth();
   const user = auth?.user;
   const [rsvps, setRsvps] = useState(null);
@@ -13,8 +14,11 @@ export default function EventTicket({ event, price, goingInitial = 0, startISO }
   const reload = useCallback(() => { getEventRsvpsFor(event.id).then(setRsvps); }, [event.id]);
   useEffect(() => { reload(); }, [reload]);
 
-  const going = rsvps ? rsvps.filter(r => r.status === 'going' || !r.status).length : goingInitial;
-  const no = rsvps ? rsvps.filter(r => r.status === 'no').length : 0;
+  const base = getEventRsvpBase(event);
+  const goingActual = rsvps ? rsvps.filter(r => r.status === 'going' || !r.status).length : goingInitial;
+  const noActual = rsvps ? rsvps.filter(r => r.status === 'no').length : 0;
+  const going = base.going + goingActual;
+  const no = base.no + noActual;
   const mine = user && rsvps ? (rsvps.find(r => r.user_id === user.id)?.status || null) : null;
 
   const handleRsvp = async (status) => {
@@ -70,6 +74,11 @@ export default function EventTicket({ event, price, goingInitial = 0, startISO }
         </div>
       </div>
       <div className="ev-cta">
+        {ticketUrl && (
+          <a className="ev-buy" href={ticketUrl} target="_blank" rel="noopener noreferrer">
+            <Ticket size={18} />Comprar ingresso<ExternalLink size={15} />
+          </a>
+        )}
         <span className="ev-label">Você vai?</span>
         <div className="ev-rsvp">
           <button className={`ev-rb yes ${mine === 'going' ? 'on' : ''}`} onClick={() => handleRsvp('going')} disabled={loading}>

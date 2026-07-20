@@ -1063,6 +1063,37 @@ export const getCurrentRoute = () => read('pv_current_route', null);
 export const saveCurrentRoute = (line) => write('pv_current_route', line);
 
 // ── Events (Supabase) ─────────────────────────────────────────
+const ticketUrlFromSchedule = (schedule) => {
+  const raw = Array.isArray(schedule) ? schedule.find(item => item?.ticketUrl)?.ticketUrl : '';
+  if (!raw) return '';
+  try {
+    const url = new URL(raw);
+    return ['http:', 'https:'].includes(url.protocol) ? url.toString() : '';
+  } catch { return ''; }
+};
+const heroImagesFromSchedule = (schedule) => {
+  const list = Array.isArray(schedule) ? schedule.find(item => Array.isArray(item?.heroImages))?.heroImages : [];
+  return (list || []).filter(src => {
+    try { return ['http:', 'https:'].includes(new URL(src).protocol); } catch { return false; }
+  });
+};
+const scheduleWithEventMeta = (schedule, ticketUrl, heroImages) => {
+  const visible = Array.isArray(schedule) ? schedule.filter(s => s && (s.title || s.time)) : [];
+  const raw = (ticketUrl ?? '').toString().trim();
+  const meta = {};
+  if (raw) {
+    try {
+      const url = new URL(raw);
+      if (['http:', 'https:'].includes(url.protocol)) meta.ticketUrl = url.toString();
+    } catch { /* URL inválida: não persiste */ }
+  }
+  const validHeroes = (heroImages || []).filter(src => {
+    try { return ['http:', 'https:'].includes(new URL(src).protocol); } catch { return false; }
+  });
+  if (validHeroes.length) meta.heroImages = validHeroes;
+  if (Object.keys(meta).length) visible.push(meta);
+  return visible;
+};
 const toEvent = (e) => ({
   id: e.id, title: e.title, category: e.category, date: e.date,
   time: e.time, local: e.local, organizer: e.organizer,
@@ -1070,6 +1101,8 @@ const toEvent = (e) => ({
   tags: e.tags, type: e.type, price: e.price ?? '', imageUrl: e.image_url,
   address: e.address ?? '', organizerIg: e.organizer_ig ?? '',
   lineup: Array.isArray(e.lineup) ? e.lineup : [], schedule: Array.isArray(e.schedule) ? e.schedule : [],
+  ticketUrl: ticketUrlFromSchedule(e.schedule),
+  heroImages: heroImagesFromSchedule(e.schedule),
   images: (e.images && e.images.length ? e.images : (e.image_url ? [e.image_url] : [])),
   hidden: e.hidden === true,
   lat: e.lat ?? null, lng: e.lng ?? null,
@@ -1106,7 +1139,7 @@ export const addEvent = async (event) => {
     address: (event.address ?? '').toString().trim() || null,
     organizer_ig: (event.organizerIg ?? '').toString().replace(/^@/, '').trim() || null,
     lineup: Array.isArray(event.lineup) ? event.lineup.filter(a => a && (a.name || a.time)) : [],
-    schedule: Array.isArray(event.schedule) ? event.schedule.filter(s => s && (s.title || s.time)) : [],
+    schedule: scheduleWithEventMeta(event.schedule, event.ticketUrl, event.heroImages),
     lat: numOrNull(event.lat), lng: numOrNull(event.lng),
   };
   let payload = { ...base, ...optional };
@@ -1140,7 +1173,7 @@ export const updateEvent = async (id, event) => {
     address: (event.address ?? '').toString().trim() || null,
     organizer_ig: (event.organizerIg ?? '').toString().replace(/^@/, '').trim() || null,
     lineup: Array.isArray(event.lineup) ? event.lineup.filter(a => a && (a.name || a.time)) : [],
-    schedule: Array.isArray(event.schedule) ? event.schedule.filter(s => s && (s.title || s.time)) : [],
+    schedule: scheduleWithEventMeta(event.schedule, event.ticketUrl, event.heroImages),
     lat: numOrNull(event.lat), lng: numOrNull(event.lng),
     ...(typeof event.hidden === 'boolean' ? { hidden: event.hidden } : {}),
   };

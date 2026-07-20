@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../../src/lib/supabaseClient';
-import { adminWrite } from '../../lib/adminDb';
+import { adminImportImageUrl, adminUploadFile, adminWrite, shouldImportRemoteImageUrl } from '../../lib/adminDb';
 import { getReportsQueue, resolveReport, getAllRouteComments, deleteRouteComment, getAnnouncement, saveAnnouncement } from '../../../src/services/storage';
 import { useAuth, showToast } from '../../components/AuthProvider';
 
@@ -97,12 +97,9 @@ function Section({ cfg }) {
     if (file.size > 6 * 1024 * 1024) { showToast('Imagem muito pesada (máx 6MB)', 'error'); return; }
     setPbusy(true);
     try {
-      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
-      const path = `spots/spot-${Date.now()}.${ext}`;
-      const { error } = await supabase.storage.from('post-images').upload(path, file, { upsert: true, contentType: file.type });
-      if (error) throw error;
-      const { data } = supabase.storage.from('post-images').getPublicUrl(path);
-      setPfotos(p => [...p, data.publicUrl].slice(0, 3));
+      const { url, error } = await adminUploadFile({ file, kind: 'spots' });
+      if (error) throw new Error(error.message);
+      setPfotos(p => [...p, url].slice(0, 3));
     } catch (err) { showToast('Erro no upload: ' + err.message, 'error'); }
     setPbusy(false); e.target.value = '';
   };
@@ -369,9 +366,19 @@ function BannersEditor() {
     if (!b.title?.trim()) return showToast('Dê um título ao banner.', 'error');
     if (!b.image_url?.trim()) return showToast('Envie a imagem do banner.', 'error');
     setBusy(true);
+    let imageUrl = b.image_url.trim();
+    if (shouldImportRemoteImageUrl(imageUrl)) {
+      const imported = await adminImportImageUrl({ url: imageUrl, kind: 'banners' });
+      if (imported.error) {
+        setBusy(false);
+        return showToast('Erro ao copiar imagem: ' + imported.error.message, 'error');
+      }
+      imageUrl = imported.url;
+      setEditing(ed => ({ ...ed, image_url: imageUrl }));
+    }
     const payload = {
       kind: b.kind, tag_label: b.tag_label || null, title: b.title, subtitle: b.subtitle || null,
-      image_url: b.image_url, cta_label: b.cta_label || null, cta_href: b.cta_href || null,
+      image_url: imageUrl, cta_label: b.cta_label || null, cta_href: b.cta_href || null,
       cta2_label: b.cta2_label || null, cta2_href: b.cta2_href || null, active: b.active,
       sort_order: b.sort_order ?? 0, updated_at: new Date().toISOString(),
     };
@@ -414,12 +421,9 @@ function BannersEditor() {
     if (file.size > 6 * 1024 * 1024) return showToast('Imagem muito pesada (máx 6MB)', 'error');
     setBusy(true);
     try {
-      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
-      const path = `banners/banner-${Date.now()}.${ext}`;
-      const { error } = await supabase.storage.from('post-images').upload(path, file, { upsert: true, contentType: file.type });
-      if (error) throw error;
-      const { data } = supabase.storage.from('post-images').getPublicUrl(path);
-      setEditing(ed => ({ ...ed, image_url: data.publicUrl }));
+      const { url, error } = await adminUploadFile({ file, kind: 'banners' });
+      if (error) throw new Error(error.message);
+      setEditing(ed => ({ ...ed, image_url: url }));
       showToast('Imagem enviada ✓', 'success');
     } catch (err) { showToast('Erro no upload: ' + err.message, 'error'); }
     setBusy(false);
@@ -492,6 +496,7 @@ function BannersEditor() {
               <span style={{ fontSize: 12, color: 'var(--paper-mut)' }}>ou cole URL:</span>
             </div>
             <input style={inp} value={editing.image_url} onChange={e => set('image_url', e.target.value)} placeholder="https://..." />
+            <p style={{ fontSize: 11, color: 'var(--paper-mut)', margin: '-3px 0 10px' }}>URL externa será copiada para o Supabase ao salvar.</p>
 
             <hr style={{ border: 0, borderTop: '1px solid var(--border)', margin: '14px 0' }} />
             <p style={{ fontWeight: 700, marginBottom: 8 }}>Botão principal</p>
@@ -540,7 +545,17 @@ function DestinosEditor() {
     if (!b.nome?.trim()) return showToast('Dê um nome ao destino.', 'error');
     if (!b.image_url?.trim()) return showToast('Envie a foto do destino.', 'error');
     setBusy(true);
-    const payload = { nome: b.nome.trim(), image_url: b.image_url, link: b.link?.trim() || null, active: b.active, sort_order: b.sort_order ?? 0, updated_at: new Date().toISOString() };
+    let imageUrl = b.image_url.trim();
+    if (shouldImportRemoteImageUrl(imageUrl)) {
+      const imported = await adminImportImageUrl({ url: imageUrl, kind: 'destinations' });
+      if (imported.error) {
+        setBusy(false);
+        return showToast('Erro ao copiar imagem: ' + imported.error.message, 'error');
+      }
+      imageUrl = imported.url;
+      setEditing(ed => ({ ...ed, image_url: imageUrl }));
+    }
+    const payload = { nome: b.nome.trim(), image_url: imageUrl, link: b.link?.trim() || null, active: b.active, sort_order: b.sort_order ?? 0, updated_at: new Date().toISOString() };
     const res = b.id
       ? await adminWrite({ table: 'pv_destinos', op: 'update', data: payload, match: { id: b.id } })
       : await adminWrite({ table: 'pv_destinos', op: 'insert', data: { ...payload, sort_order: rows?.length || 0 } });
@@ -572,12 +587,9 @@ function DestinosEditor() {
     if (file.size > 6 * 1024 * 1024) return showToast('Imagem muito pesada (máx 6MB)', 'error');
     setBusy(true);
     try {
-      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
-      const path = `destinos/dest-${Date.now()}.${ext}`;
-      const { error } = await supabase.storage.from('post-images').upload(path, file, { upsert: true, contentType: file.type });
-      if (error) throw error;
-      const { data } = supabase.storage.from('post-images').getPublicUrl(path);
-      setEditing(ed => ({ ...ed, image_url: data.publicUrl }));
+      const { url, error } = await adminUploadFile({ file, kind: 'destinations' });
+      if (error) throw new Error(error.message);
+      setEditing(ed => ({ ...ed, image_url: url }));
       showToast('Foto enviada ✓', 'success');
     } catch (err) { showToast('Erro no upload: ' + err.message, 'error'); }
     setBusy(false);
@@ -628,6 +640,7 @@ function DestinosEditor() {
               <span style={{ fontSize: 12, color: 'var(--paper-mut)' }}>ou cole URL:</span>
             </div>
             <input style={inp} value={editing.image_url} onChange={e => set('image_url', e.target.value)} placeholder="https://..." />
+            <p style={{ fontSize: 11, color: 'var(--paper-mut)', margin: '-3px 0 10px' }}>URL externa será copiada para o Supabase ao salvar.</p>
             <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Link (pra onde vai ao clicar)</label>
             <input style={inp} value={editing.link || ''} onChange={e => set('link', e.target.value)} placeholder="/blog/... ou /rotas ou https://..." />
             <label style={{ display: 'flex', gap: 8, alignItems: 'center', margin: '8px 0 16px' }}>

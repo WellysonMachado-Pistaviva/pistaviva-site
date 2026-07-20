@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireAdmin } from '../../../lib/supabaseAdmin';
+import { downloadRemoteText } from '../../../lib/remoteText.mjs';
+import { enforceBodyLimit, enforceRateLimit } from '../../../lib/requestSecurity.mjs';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -20,6 +22,7 @@ async function gemini(prompt, schema) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(30_000),
   });
   const json = await res.json();
   if (!res.ok) {
@@ -33,13 +36,7 @@ async function gemini(prompt, schema) {
 // Busca o texto de uma página externa (fonte de pesquisa). Falha silenciosa.
 async function fetchRefText(url) {
   try {
-    if (!/^https?:\/\//i.test(url)) return '';
-    const ctrl = new AbortController();
-    const to = setTimeout(() => ctrl.abort(), 12000);
-    const res = await fetch(url, { signal: ctrl.signal, headers: { 'User-Agent': 'Mozilla/5.0 (compatible; PistavivaBot/1.0)' } });
-    clearTimeout(to);
-    if (!res.ok) return '';
-    let html = await res.text();
+    let html = (await downloadRemoteText(url)).text;
     html = html.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ');
     const main = html.match(/<(article|main)[\s\S]*?<\/\1>/i)?.[0] || html;
     const text = main.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ').replace(/\s+/g, ' ').trim();
@@ -107,12 +104,23 @@ const PARADA_SCHEMA = {
 };
 
 export async function POST(req) {
+  const sizeError = enforceBodyLimit(req, 16 * 1024);
+  if (sizeError) return NextResponse.json({ error: sizeError.error }, { status: sizeError.status });
   const gate = await requireAdmin(req);
   if (!gate.ok) return NextResponse.json({ error: gate.error }, { status: gate.status });
-
+  const limited = enforceRateLimit(req, { scope: 'admin-gemini', limit: 20, windowMs: 60_000 });
+  if (limited) {
+    return NextResponse.json({ error: limited.error }, {
+      status: limited.status,
+      headers: { 'Retry-After': String(limited.retryAfter) },
+    });
+  }
   const { task, ...args } = await req.json().catch(() => ({}));
 
   if (task === 'blog') {
+    if (args.tema?.length > 300 || args.keyword?.length > 120 || args.ref?.length > 2_048) {
+      return NextResponse.json({ error: 'Parâmetros grandes demais.' }, { status: 400 });
+    }
     if (!args.tema?.trim() && !args.ref?.trim()) return NextResponse.json({ error: 'Informe o tema ou um link de referência.' }, { status: 400 });
     let refText = '';
     if (args.ref?.trim()) {
@@ -127,6 +135,9 @@ export async function POST(req) {
   }
 
   if (task === 'parada') {
+    if ([args.nome, args.cidade, args.uf, args.categoria].some(value => value?.length > 200)) {
+      return NextResponse.json({ error: 'Parâmetros grandes demais.' }, { status: 400 });
+    }
     if (!args.nome?.trim()) return NextResponse.json({ error: 'Informe o nome da parada.' }, { status: 400 });
     const { text, error } = await gemini(paradaPrompt(args), PARADA_SCHEMA);
     if (error) { console.error('[Gemini] parada error:', error); return NextResponse.json({ error }, { status: 502 }); }

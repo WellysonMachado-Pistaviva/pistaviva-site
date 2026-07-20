@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Calendar, MapPin, Flame } from 'lucide-react';
 import EmblaCarousel from './EmblaCarousel';
+import { getEventRsvpBase } from '../lib/eventRsvpBases.mjs';
 
 // Rail de eventos na home — card IDÊNTICO ao da aba /eventos (.ig-evcard): capa
 // 4/5, badge de status, categoria, contador de dias, data, título, local, preço e
@@ -24,6 +25,7 @@ const STATUS_LABEL = { open: 'INSCRIÇÕES ABERTAS', soon: 'EM BREVE', full: 'VA
 const priceLabel = (p) => {
   const s = (p ?? '').toString().trim();
   if (!s || /^gr[aá]tis$/i.test(s) || s === '0') return 'Grátis';
+  if (/^(consultar|ingressos?)/i.test(s)) return s;
   return /^r\$/i.test(s) ? s : `R$ ${s}`;
 };
 
@@ -33,7 +35,7 @@ export default function EventsRail({ items = [], going = {} }) {
 
   const slides = list.map((e, i) => {
     const type = e.type || 'open';
-    const go = going[e.id] || 0;
+    const go = (going[e.id] || 0) + getEventRsvpBase(e).going;
     const cover = (e.images && e.images[0]) || e.image_url;
     const dleft = daysUntil(e.date);
     return (

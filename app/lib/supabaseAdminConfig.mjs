@@ -1,5 +1,5 @@
-// Mantém URL e chave do mesmo projeto juntas. A integração Vercel/Supabase
-// cria nomes compostos; eles precisam ter prioridade sobre variáveis antigas.
+// Mantém URL e chave do mesmo projeto juntas. Chave administrativa nunca pode
+// usar prefixo NEXT_PUBLIC_: esse prefixo autoriza inclusão no bundle do browser.
 export function resolveSupabaseAdminConfig(env = process.env) {
   const integratedUrl = env.NEXT_PUBLIC_SUPABASE_URL_SUPABASE_URL || '';
   const publicUrl =
@@ -9,13 +9,10 @@ export function resolveSupabaseAdminConfig(env = process.env) {
     '';
 
   const pairs = [
-    [integratedUrl, env.NEXT_PUBLIC_SUPABASE_URL_SUPABASE_SERVICE_ROLE_KEY],
-    [integratedUrl, env.NEXT_PUBLIC_SUPABASE_URL_SUPABASE_SECRET_KEY],
+    [integratedUrl, env.SUPABASE_URL_SUPABASE_SERVICE_ROLE_KEY],
+    [integratedUrl, env.SUPABASE_URL_SUPABASE_SECRET_KEY],
     [publicUrl, env.SUPABASE_SERVICE_ROLE_KEY],
     [publicUrl, env.SUPABASE_SECRET_KEY],
-    // Fallback para ambientes onde a integração forneceu a chave, mas não repetiu a URL.
-    [publicUrl, env.NEXT_PUBLIC_SUPABASE_URL_SUPABASE_SERVICE_ROLE_KEY],
-    [publicUrl, env.NEXT_PUBLIC_SUPABASE_URL_SUPABASE_SECRET_KEY],
   ];
 
   const [url = '', key = ''] = pairs.find(([candidateUrl, candidateKey]) =>
