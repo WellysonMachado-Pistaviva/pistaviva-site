@@ -67,12 +67,12 @@ export default async function Comunidade() {
   } : null;
 
   return (
-    <div className="wrap section" style={{ paddingTop: 'clamp(28px,5vw,56px)' }}>
+    <div className="wrap section page-light community-page" style={{ paddingTop: 'clamp(40px,6vw,72px)' }}>
       {feedLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(feedLd) }} />}
       <div className="section-head">
         <div>
-          <p className="eyebrow eyebrow--moss">Aberta · de piloto pra piloto</p>
-          <h1>Comunidade do Mototurismo</h1>
+          <p className="eyebrow eyebrow--moss">Gente de verdade</p>
+          <h1>Quem está na estrada</h1>
           <p className="lede" style={{ maxWidth: 720, marginTop: 8 }}>
             O ponto de encontro de quem roda o Brasil: relatos de estrada, paradas indicadas e rolês ao vivo.
             Sem cadastro pra ler, sem algoritmo escondendo post — quem manda aqui é quem tá na estrada.
@@ -83,9 +83,9 @@ export default async function Comunidade() {
 
       {/* O que dá pra fazer aqui — ações diretas, mobile-first */}
       <div className="acoes-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 10, margin: '4px 0 2.2rem' }}>
-        <a className="ig-btn ig-btn--primary" href="#feed">✍️ Postar um relato</a>
-        <Link className="ig-btn ig-btn--ghost" href="/comboio">🛰️ Criar um comboio</Link>
-        <Link className="ig-btn ig-btn--ghost" href="/desafios">🏁 Encarar um desafio</Link>
+        <a className="ig-btn ig-btn--primary" href="#feed">Postar um relato</a>
+        <Link className="ig-btn ig-btn--ghost" href="/comboio">Criar um comboio</Link>
+        <Link className="ig-btn ig-btn--ghost" href="/desafios">Encarar um desafio</Link>
       </div>
 
       {posts.length > 0 && (

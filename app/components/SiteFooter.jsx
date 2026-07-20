@@ -7,30 +7,30 @@ export default function SiteFooter() {
         <div className="foot-grid">
           <div className="foot-col">
             <Link className="brand" href="/"><img src="/logo.svg" alt="Pistaviva" width="1222" height="88" style={{ height: 24, width: 'auto', maxWidth: '70%' }} /></Link>
-            <p>O hub do mototurismo brasileiro: estradas, desafios, paradas e comunidade aberta — feito por quem roda, pra quem roda. Da Serra da Mantiqueira pro Brasil inteiro.</p>
+            <p>Estradas, roteiros e histórias reais de quem viaja de moto pelo Brasil. Feito por quem roda, para quem está preparando próxima saída.</p>
           </div>
           <div className="foot-col">
-            <h5>Conteúdo</h5>
-            <Link href="/comunidade">Comunidade</Link>
-            <Link href="/estradas">Estradas icônicas</Link>
+            <h5>Na estrada</h5>
+            <Link href="/destinos">Próxima saída</Link>
+            <Link href="/estradas">Estradas para rodar</Link>
             <Link href="/desafios">Desafios</Link>
-            <Link href="/destinos">Destinos dos sonhos</Link>
-            <Link href="/guias">Guias de mototurismo</Link>
-            <Link href="/blog">Blog</Link>
-            <Link href="/diretorio-duas-rodas">Diretório Duas Rodas</Link>
-            <Link href="/rotas">Planejar rota</Link>
-            <Link href="/eventos">Eventos</Link>
+            <Link href="/eventos">Pontos de encontro</Link>
+            <Link href="/rotas">Planejar viagem</Link>
           </div>
           <div className="foot-col">
-            <h5>Ferramentas</h5>
-            <Link href="/bora-rodar">Bora Rodar? (clima)</Link>
-            <Link href="/comboio">Comboio</Link>
-            <Link href="/fotografos">Fotógrafos</Link>
+            <h5>Antes de sair</h5>
+            <Link href="/bora-rodar">Clima para rodar</Link>
+            <Link href="/guias">Guias práticos</Link>
             <Link href="/fipe">Tabela FIPE</Link>
+            <Link href="/comboio">Comboio ao vivo</Link>
+            <Link href="/fotografos">Fotógrafos de estrada</Link>
           </div>
           <div className="foot-col">
-            <h5>Conecte</h5>
-            <Link href="/sobre">Sobre · História</Link>
+            <h5>Comunidade</h5>
+            <Link href="/comunidade">Quem está na estrada</Link>
+            <Link href="/blog">Caderno de bordo</Link>
+            <Link href="/diretorio-duas-rodas">Diretório Duas Rodas</Link>
+            <Link href="/sobre">Nossa história</Link>
             <Link href="/apoie">Apoie o projeto</Link>
             <a href="https://www.instagram.com/pistavivaoficial" target="_blank" rel="noopener noreferrer">Instagram</a>
             <Link href="/estrada-x">Estrada X</Link>
@@ -45,8 +45,8 @@ export default function SiteFooter() {
           <Link href="/apoie">Apoie</Link>
         </div>
         <div className="foot-base">
-          <span>© {new Date().getFullYear()} Pistaviva · Comunidade de Mototurismo</span>
-          <span>Feito na curva, não no escritório</span>
+          <span>© {new Date().getFullYear()} Pistaviva · Mototurismo brasileiro</span>
+          <span>Feito na estrada, com gente de verdade</span>
         </div>
       </div>
     </footer>

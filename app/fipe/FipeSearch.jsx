@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import CoolMode from '../components/CoolMode';
 
 const API = 'https://parallelum.com.br/fipe/api/v1/motos/marcas';
 
@@ -72,14 +71,12 @@ export default function FipeSearch() {
           <div style={{ color: 'var(--paper-dim)', fontSize: 14, marginTop: 4 }}>{res.AnoModelo === 32000 ? 'Zero KM' : res.AnoModelo} · {res.Combustivel} · cód. {res.CodigoFipe}</div>
 
           <div style={{ marginTop: 20, paddingTop: 18, borderTop: '1px solid var(--line)' }}>
-            <p style={{ color: 'var(--paper-dim)', fontSize: 14, marginBottom: 12 }}>Te ajudou? Compartilha e segue a gente 🏍️</p>
+            <p style={{ color: 'var(--paper-dim)', fontSize: 14, marginBottom: 12 }}>Te ajudou? Compartilhe a consulta e acompanhe a gente.</p>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
-              <CoolMode>
-                <a className="btn btn--primary ihb" target="_blank" rel="noopener noreferrer"
-                  href={`https://wa.me/?text=${encodeURIComponent(`💰 FIPE ${res.Marca} ${res.Modelo} (${res.AnoModelo === 32000 ? '0km' : res.AnoModelo}): ${res.Valor}\n\nConsulta grátis no Pistaviva: https://www.pistavivamototurismo.com.br/fipe`)}`}>
-                  <span>Compartilhar no WhatsApp</span>
-                </a>
-              </CoolMode>
+              <a className="btn btn--primary ihb" target="_blank" rel="noopener noreferrer"
+                href={`https://wa.me/?text=${encodeURIComponent(`FIPE ${res.Marca} ${res.Modelo} (${res.AnoModelo === 32000 ? '0km' : res.AnoModelo}): ${res.Valor}\n\nConsulta grátis no Pistaviva: https://www.pistavivamototurismo.com.br/fipe`)}`}>
+                <span>Compartilhar no WhatsApp</span>
+              </a>
               <a className="btn btn--ghost" href="https://www.instagram.com/pistavivaoficial" target="_blank" rel="noopener noreferrer">Seguir @pistavivaoficial</a>
             </div>
           </div>

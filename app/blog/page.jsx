@@ -20,8 +20,8 @@ export default async function BlogList() {
         <div className="wrap">
           <div className="head">
             <div>
-              <span className="ig-eyebrow" style={{ color: 'var(--ink-soft)' }}>Leituras de estrada</span>
-              <h1>Blog Pistaviva</h1>
+              <span className="ig-eyebrow" style={{ color: 'var(--ink-soft)' }}>Caderno de bordo</span>
+              <h1>Histórias da estrada</h1>
             </div>
           </div>
           <p className="lede">Guias de rotas, preparação de viagem, garagem e a cultura do mototurismo brasileiro — conteúdo de quem pega estrada.</p>
@@ -37,7 +37,7 @@ export default async function BlogList() {
               <Link className="ph-card" key={p.id} href={`/blog/${p.slug}`}>
                 <div className="pic">
                   {p.tags?.[0] && <span className="spot">{p.tags[0]}</span>}
-                  {p.cover_url ? <Cover src={p.cover_url} alt={p.title} sizes="(max-width:600px) 100vw, 380px" /> : <span className="pic-ph">📖</span>}
+                  {p.cover_url ? <Cover src={p.cover_url} alt={p.title} sizes="(max-width:600px) 100vw, 380px" /> : <span className="pic-ph">PISTAVIVA</span>}
                 </div>
                 <div className="body">
                   <h3 style={{ fontSize: 22 }}>{p.title}</h3>

@@ -45,11 +45,11 @@ export default function DestinosIndex() {
         <div className="wrap">
           <div className="head">
             <div>
-              <span className="ig-eyebrow" style={{ color: 'var(--ink-soft)' }}>Os grandes sonhos</span>
-              <h1>Destinos dos sonhos<br />do mototurismo</h1>
+              <span className="ig-eyebrow" style={{ color: 'var(--ink-soft)' }}>Próxima saída</span>
+              <h1>Estradas que<br />pedem viagem</h1>
             </div>
           </div>
-          <p className="lede">As viagens que todo motociclista guarda na cabeça pra fazer um dia. O que saber antes de ir, quando ir e como chegar — da Patagônia à Rota 66.</p>
+          <p className="lede">Destinos escolhidos por quem conhece cada curva. Melhor época, caminho e preparação — da Patagônia à Rota 66.</p>
         </div>
       </section>
 

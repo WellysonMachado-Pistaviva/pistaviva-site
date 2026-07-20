@@ -45,7 +45,7 @@ export default function DesafiosPage() {
 
       <main className="ph-prof">
         <div className="wrap">
-          <span className="eyebrow">🏁 Complete e carimbe</span>
+          <span className="eyebrow">Complete e carimbe</span>
           <h1>Desafios Pistaviva</h1>
           <p className="lede" style={{ maxWidth: 760 }}>
             Roteiros pra você completar no seu ritmo: checkpoints, mapa com o traçado e certificado digital grátis no final.

@@ -128,7 +128,7 @@ export default function NewPhotographerForm() {
           <div style={{ fontWeight: 800, marginBottom: 10 }}>3. Localização e foto</div>
           <p style={{ fontSize: 13, color: 'var(--paper-mut)', marginBottom: 10 }}>Sua localização já vem da <b>cidade</b> que você escolheu na lista. Só marque o GPS se <b>estiver no ponto agora</b> e quiser precisão exata (opcional).</p>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
-            <button className="btn btn--ghost" type="button" onClick={pegarGeo}>📍 Marcar GPS exato (opcional)</button>
+            <button className="btn btn--ghost" type="button" onClick={pegarGeo}>Marcar GPS exato (opcional)</button>
             <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--paper-dim)' }}>{geo || (f.lat ? `✓ ${f.lat.toFixed(3)}, ${f.lng.toFixed(3)}` : '')}</span>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>

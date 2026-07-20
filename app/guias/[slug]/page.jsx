@@ -68,7 +68,7 @@ export default async function GuiaPage({ params }) {
 
       <main className="ph-prof">
         <div className="wrap">
-          <span className="eyebrow">📖 {g.categoria}</span>
+          <span className="eyebrow">{g.categoria}</span>
           <h1>{g.h1}</h1>
           <p className="lede" style={{ maxWidth: 760 }}>{g.resumo}</p>
 

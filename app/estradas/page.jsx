@@ -46,8 +46,8 @@ export default function EstradasIndex() {
         <div className="wrap">
           <div className="head">
             <div>
-              <span className="ig-eyebrow" style={{ color: 'var(--ink-soft)' }}>Roteiros icônicos</span>
-              <h1>Estradas de moto<br />no Brasil</h1>
+              <span className="ig-eyebrow" style={{ color: 'var(--ink-soft)' }}>No mapa</span>
+              <h1>Estradas para<br />rodar no Brasil</h1>
             </div>
           </div>
           <p className="lede">As serras e estradas que todo motociclista quer rodar pelo menos uma vez. Onde fica cada uma, a melhor época, o tipo de piso e o que esperar — selecionadas pela comunidade Pistaviva.</p>

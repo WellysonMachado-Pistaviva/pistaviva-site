@@ -71,7 +71,7 @@ export default async function EstradaPage({ params }) {
 
       <main className="ph-prof">
         <div className="wrap">
-          <span className="eyebrow">🏍️ {e.regiao}</span>
+          <span className="eyebrow">{e.regiao}</span>
           <h1>{e.nome}</h1>
           <p className="lede" style={{ maxWidth: 760 }}>{e.resumo}</p>
 

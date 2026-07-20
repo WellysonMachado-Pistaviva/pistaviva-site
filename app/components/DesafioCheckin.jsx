@@ -141,7 +141,7 @@ export default function DesafioCheckin({ desafio, checkpoints }) {
                       style={{ width: '100%', minHeight: 64, padding: '12px 14px', fontSize: 16, borderRadius: 12, border: '1px solid var(--snow-line)', background: '#fff', color: 'var(--ink)', resize: 'vertical', fontFamily: 'inherit' }}
                     />
                     <label className="ig-btn ig-btn--primary" style={{ cursor: 'pointer', textAlign: 'center', padding: '14px 18px', fontSize: 16 }}>
-                      {enviando ? 'Enviando…' : '📸 Bater a foto e carimbar'}
+                      {enviando ? 'Enviando…' : 'Bater a foto e carimbar'}
                       <input type="file" accept="image/*" capture="environment" hidden disabled={enviando} onChange={(e) => baterPonto(i, e)} />
                     </label>
                     <p style={{ fontSize: 12, color: 'var(--ink-soft)', margin: 0 }}>Foto sua/da moto no ponto. Ela aparece na galeria do desafio.</p>

@@ -65,7 +65,7 @@ export default async function FotografoPage({ params }) {
 
       <main className="ph-prof">
         <div className="wrap">
-          <span className="eyebrow">📸 Fotógrafo{f.local ? ' · ' + f.local : ''}</span>
+          <span className="eyebrow">Fotógrafo{f.local ? ' · ' + f.local : ''}</span>
           <h1>{f.nome}</h1>
           <div style={{ marginTop: 10 }}><LiveBadge dias={f.horario_dias} inicio={f.horario_inicio} fim={f.horario_fim} /></div>
 
