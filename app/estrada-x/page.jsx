@@ -62,10 +62,9 @@ export default function EstradaXPage() {
         <div className="wrap">
           <h2>Por que Pistaviva + Estrada X</h2>
           <p>
-            A Pistaviva organiza o mototurismo — rotas, paradas amigas do motociclista, fotógrafos
-            de estrada e o planejador de rolê. O Estrada X reúne a maior comunidade de motociclistas
-            do país. Juntos, a gente conecta quem ama rodar: você planeja a viagem aqui e encontra
-            a galera lá.
+            A Pistaviva organiza o mototurismo. O Estrada X fica responsável por compilar as rotas
+            e as paradas amigas do motociclista, e a Pistaviva leva essa informação até o motociclista.
+            Uma parceria estratégica e bem curada.
           </p>
 
           <div className="exd-feats">
