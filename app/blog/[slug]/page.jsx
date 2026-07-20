@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { getPostBySlug, getAllSlugs, getRelatedPosts } from '../../lib/blog';
 import ViewPing from '../../components/ViewPing';
 import ReadingProgress from '../../components/ReadingProgress';
+import ArticleChecklist from '../../components/ArticleChecklist';
+import { parseArticleBody } from '../../lib/articleBody.mjs';
 
 export const revalidate = 300;
 
@@ -80,20 +82,7 @@ export default async function BlogPost({ params }) {
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  // Parse linha a linha (robusto a 1 ou 2 quebras): blocos h2/h3/img/p.
-  const blocks = [];
-  let buf = [];
-  const flush = () => { if (buf.length) { blocks.push({ t: 'p', v: buf.join(' ') }); buf = []; } };
-  for (const raw of String(post.body || '').split('\n')) {
-    const l = raw.trim();
-    if (!l) { flush(); continue; }
-    const img = l.match(/^\[img:(.+)\]$/);
-    if (img) { flush(); blocks.push({ t: 'img', v: img[1].trim() }); continue; }
-    if (l.startsWith('### ')) { flush(); blocks.push({ t: 'h3', v: l.slice(4) }); continue; }
-    if (l.startsWith('## ')) { flush(); blocks.push({ t: 'h2', v: l.slice(3) }); continue; }
-    buf.push(l);
-  }
-  flush();
+  const blocks = parseArticleBody(post.body);
 
   // FAQPage: dentro da seção "## Perguntas frequentes", cada h3 (pergunta) + p seguinte (resposta).
   const faq = [];
@@ -197,6 +186,9 @@ export default async function BlogPost({ params }) {
               if (b.t === 'img') return <figure key={i} className="art-inline"><img src={b.v} alt="" /></figure>;
               if (b.t === 'h3') return <h3 key={i}>{b.v}</h3>;
               if (b.t === 'h2') return <h2 key={i}>{b.v}</h2>;
+              if (b.t === 'checklist') {
+                return <ArticleChecklist key={i} items={b.items} storageKey={`pv:checklist:${post.slug}:${i}`} />;
+              }
               return <p key={i}>{renderInline(b.v)}</p>;
             })}
 
