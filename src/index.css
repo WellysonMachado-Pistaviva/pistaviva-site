@@ -35,10 +35,10 @@
 --radius-sm: 4px;
 --radius-xs: 2px;
 
-/* Fontes — padronizadas via Google Fonts */
---font:    'Inter', system-ui, -apple-system, sans-serif;   /* corpo, UI */
---display: 'Outfit', sans-serif;                            /* subtítulos, cards */
---headline:'Bebas Neue', 'Outfit', sans-serif;              /* números grandes, heroes */
+/* Fontes oficiais — carregadas pelo next/font em app/layout.jsx */
+--font:    var(--font-sans), "Arial Narrow", sans-serif;
+--display: var(--font-display), "Arial Narrow", sans-serif;
+--headline:var(--font-display), "Arial Narrow", sans-serif;
 
 /* Sombra */
 --shadow-sm: 0 1px 8px rgba(0,0,0,.35);

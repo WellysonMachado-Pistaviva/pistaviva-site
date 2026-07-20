@@ -18,9 +18,9 @@ body.admin-route{overflow-x:hidden}
   --line:rgba(255,255,255,.08);--line-2:rgba(255,255,255,.14);
   --txt:#f3f3f4;--mut:#8a8a90;--mut-2:#5e5e66;
   --ok:#33c777;--warn:#ffb300;--danger:#ff4d4d;--info:#5b8cff;
-  --disp:var(--font-display),"Arial Narrow",sans-serif;
-  --semi:var(--font-mono),system-ui,sans-serif;
-  --body:var(--font-sans),system-ui,sans-serif;
+  --disp:var(--display);
+  --semi:var(--mono);
+  --body:var(--font);
   --sbw:236px;
 
   font-family:var(--body);background:var(--ink);color:var(--txt);

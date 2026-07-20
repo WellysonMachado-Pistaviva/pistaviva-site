@@ -100,7 +100,7 @@ export default function CertificadoDesafio({ desafio, nomeInicial = '' }) {
 
       {/* arte do certificado — renderizada fora da tela, html2canvas fotografa daqui */}
       <div style={{ position: 'fixed', left: -99999, top: 0, pointerEvents: 'none' }} aria-hidden="true">
-        <div ref={certRef} style={{ width: 1080, height: 1350, background: 'linear-gradient(160deg, #0e1311 0%, #161e1a 55%, #0e1311 100%)', color: '#f3ede1', fontFamily: 'var(--sans), system-ui, sans-serif', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 72, boxSizing: 'border-box' }}>
+        <div ref={certRef} style={{ width: 1080, height: 1350, background: 'linear-gradient(160deg, #0e1311 0%, #161e1a 55%, #0e1311 100%)', color: '#f3ede1', fontFamily: 'var(--font)', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 72, boxSizing: 'border-box' }}>
           {/* moldura */}
           <div style={{ position: 'absolute', inset: 28, border: '2px solid rgba(255,90,0,.55)', borderRadius: 24 }} />
           <div style={{ position: 'absolute', inset: 40, border: '1px solid rgba(243,237,225,.18)', borderRadius: 18 }} />

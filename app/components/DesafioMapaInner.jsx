@@ -12,7 +12,7 @@ import { TILES } from '../../src/lib/mapTiles';
 const numIcon = (n, chegada) =>
   L.divIcon({
     className: 'dsf-pin',
-    html: `<span style="display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:${chegada ? '#0e1311' : '#ff5a00'};color:#fff;font-weight:800;font-size:13px;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35);font-family:system-ui">${chegada ? '🏁' : n}</span>`,
+    html: `<span style="display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:${chegada ? '#0e1311' : '#ff5a00'};color:#fff;font-weight:800;font-size:13px;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35);font-family:var(--font)">${chegada ? '🏁' : n}</span>`,
     iconSize: [30, 30],
     iconAnchor: [15, 15],
     popupAnchor: [0, -14],
