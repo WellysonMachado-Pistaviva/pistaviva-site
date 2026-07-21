@@ -2154,99 +2154,121 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   gap:18px;
   margin-bottom:54px;
 }
-.community-mosaic{
+.community-carousel{
   position:relative;
   min-width:0;
-  min-height:clamp(520px,42vw,620px);
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  grid-template-rows:repeat(3,minmax(0,1fr));
-  gap:6px;
+  height:clamp(520px,42vw,620px);
   overflow:hidden;
+  border-radius:24px;
   background:var(--ink);
+  box-shadow:0 22px 52px rgba(12,12,13,.14);
 }
-.community-photo{
+.community-carousel .embla,
+.community-carousel .embla__viewport,
+.community-carousel .embla__container,
+.community-carousel .embla__slide{
+  height:100%;
+}
+.community-carousel .embla__viewport{
+  padding:0;
+  border-radius:24px;
+}
+.community-carousel .embla__slide{
+  display:flex;
+}
+.community-carousel-story{
   position:relative;
-  min-width:0;
-  min-height:0;
+  width:100%;
+  height:100%;
+  margin:0;
   overflow:hidden;
-  background:#272727;
+  border-radius:24px;
+  background:#252527;
+  isolation:isolate;
 }
-.community-photo img{
-  object-fit:cover;
-  transition:transform .7s cubic-bezier(.2,.7,.2,1), filter .35s ease;
-}
-.community-photo:hover img{
-  transform:scale(1.035);
-  filter:contrast(1.04);
-}
-.community-photo--1{
-  grid-column:1 / 3;
-  grid-row:1 / 4;
-}
-.community-photo--1 img{ object-position:center 28%; }
-.community-photo--2{
-  grid-column:3 / 5;
-  grid-row:1;
-}
-.community-photo--2 img{ object-position:center 28%; }
-.community-photo--3{
-  grid-column:3;
-  grid-row:2;
-}
-.community-photo--3 img{ object-position:center 30%; }
-.community-photo--4{
-  grid-column:4;
-  grid-row:2;
-}
-.community-photo--4 img{ object-position:center; }
-.community-photo--5{
-  grid-column:3;
-  grid-row:3;
-}
-.community-photo--5 img{ object-position:center 34%; }
-.community-photo--6{
-  grid-column:4;
-  grid-row:3;
-}
-.community-photo--6 img{ object-position:center; }
-.community-mosaic-copy{
+.community-carousel-story::after{
+  content:"";
   position:absolute;
-  z-index:3;
-  right:calc(50% + 18px);
-  bottom:18px;
-  left:18px;
+  inset:0;
+  z-index:1;
+  background:
+    linear-gradient(180deg,rgba(8,8,9,.05) 38%,rgba(8,8,9,.88) 100%),
+    linear-gradient(90deg,rgba(8,8,9,.46),transparent 54%);
+  pointer-events:none;
+}
+.community-carousel-story img{
+  object-fit:cover;
+  transition:transform .75s cubic-bezier(.2,.7,.2,1), filter .4s ease;
+}
+.community-carousel-story:hover img{
+  transform:scale(1.025);
+  filter:contrast(1.025);
+}
+.community-carousel-story--1 img{ object-position:center 28%; }
+.community-carousel-story--2 img{ object-position:center 30%; }
+.community-carousel-story--3 img{ object-position:center 30%; }
+.community-carousel-story--4 img{ object-position:center; }
+.community-carousel-story--5 img{ object-position:center 34%; }
+.community-carousel-story--6 img{ object-position:center; }
+.community-carousel-story figcaption{
+  position:absolute;
+  z-index:2;
+  right:110px;
+  bottom:24px;
+  left:26px;
   display:flex;
   flex-direction:column;
   align-items:flex-start;
-  padding:16px 17px 15px;
-  background:rgba(12,12,13,.88);
   color:#fff;
-  -webkit-backdrop-filter:blur(7px);
-  backdrop-filter:blur(7px);
 }
-.community-mosaic-copy span,
-.community-mosaic-copy small{
+.community-carousel-story figcaption span,
+.community-carousel-story figcaption small{
   font-family:var(--mono);
   font-size:9px;
   font-weight:800;
   letter-spacing:.1em;
   text-transform:uppercase;
 }
-.community-mosaic-copy span{
+.community-carousel-story figcaption span{
   color:#ff8a4b;
 }
-.community-mosaic-copy strong{
-  max-width:13ch;
+.community-carousel-story figcaption strong{
+  max-width:15ch;
   margin:7px 0 10px;
   font-family:var(--display);
-  font-size:clamp(24px,2.5vw,38px);
-  line-height:.92;
+  font-size:clamp(28px,3vw,44px);
+  line-height:.9;
   letter-spacing:-.02em;
   text-transform:uppercase;
 }
-.community-mosaic-copy small{
+.community-carousel-story figcaption small{
   color:rgba(255,255,255,.62);
+}
+.community-carousel .embla__btn{
+  top:50%;
+  width:44px;
+  height:44px;
+  border:1px solid rgba(255,255,255,.32);
+  background:rgba(12,12,13,.55);
+  color:#fff;
+  -webkit-backdrop-filter:blur(7px);
+  backdrop-filter:blur(7px);
+}
+.community-carousel .embla__btn--prev{ left:16px; }
+.community-carousel .embla__btn--next{ right:16px; }
+.community-carousel .embla__dots{
+  position:absolute;
+  z-index:4;
+  right:24px;
+  bottom:26px;
+  justify-content:flex-end;
+  margin:0;
+}
+.community-carousel .embla__dot{
+  background:rgba(255,255,255,.46);
+}
+.community-carousel .embla__dot.is-on{
+  background:#fff;
 }
 .home-shop-priority{
   min-width:0;
@@ -2255,6 +2277,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   padding:18px;
   background:var(--ink);
   color:#fff;
+  border-radius:24px;
 }
 .home-shop-priority-head{
   display:flex;
@@ -2305,6 +2328,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   overflow:hidden;
   background:#fff;
   color:var(--ink);
+  border-radius:10px;
   transition:transform .22s ease;
 }
 .priority-product:hover{
@@ -2621,8 +2645,8 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   .home-shop-social-commerce{
     grid-template-columns:1fr;
   }
-  .community-mosaic{
-    min-height:560px;
+  .community-carousel{
+    height:clamp(520px,72vw,620px);
   }
   .home-shop-priority{
     min-height:340px;
@@ -3088,18 +3112,28 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
     gap:12px;
     margin-bottom:40px;
   }
-  .community-mosaic{
-    min-height:500px;
-    gap:4px;
+  .community-carousel{
+    height:500px;
+    border-radius:18px;
+    box-shadow:0 16px 36px rgba(12,12,13,.13);
   }
-  .community-mosaic-copy{
-    right:calc(50% + 12px);
-    bottom:12px;
-    left:12px;
-    padding:13px;
+  .community-carousel .embla__viewport,
+  .community-carousel-story{
+    border-radius:18px;
   }
-  .community-mosaic-copy strong{
-    font-size:clamp(21px,6vw,30px);
+  .community-carousel-story figcaption{
+    right:18px;
+    bottom:47px;
+    left:18px;
+  }
+  .community-carousel-story figcaption strong{
+    font-size:clamp(28px,9vw,38px);
+  }
+  .community-carousel .embla__dots{
+    right:auto;
+    bottom:18px;
+    left:18px;
+    justify-content:flex-start;
   }
   .home-shop-priority{
     min-height:0;
