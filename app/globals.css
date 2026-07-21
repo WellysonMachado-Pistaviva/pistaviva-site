@@ -2145,15 +2145,31 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   background:var(--ink);
   color:var(--paper);
 }
-.home-shop-grid{
+.home-shop-carousel{
   position:relative;
   z-index:1;
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:18px;
+  --product-slide-basis:calc((100% - 54px) / 4);
+}
+.home-shop-carousel .embla__viewport{
+  padding:2px 4px 22px;
+}
+.home-shop-carousel .embla__slide{
+  display:flex;
+}
+.home-shop-carousel .embla__btn{
+  top:30%;
+}
+.home-shop-carousel .embla__dot{
+  background:#d7d7d2;
+}
+.home-shop-carousel .embla__dot.is-on{
+  background:var(--accent);
 }
 .product-card{
   min-width:0;
+  width:100%;
+  display:flex;
+  flex-direction:column;
   background:var(--paper);
 }
 .product-card-media{
@@ -2215,6 +2231,11 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   -webkit-backdrop-filter:blur(5px);
   backdrop-filter:blur(5px);
 }
+.product-card-gallery.is-bestseller{
+  border-color:var(--accent);
+  background:var(--accent);
+  color:#fff;
+}
 .product-card-view{
   position:absolute;
   right:10px;
@@ -2244,6 +2265,9 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 }
 .product-card-body{
   padding:17px 2px 0;
+  display:flex;
+  flex:1;
+  flex-direction:column;
 }
 .product-card-topline{
   display:flex;
@@ -2310,7 +2334,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   justify-content:flex-start;
   gap:8px;
   min-height:46px;
-  margin-top:15px;
+  margin-top:auto;
   padding-inline:14px;
   background:var(--accent);
   color:#fff;
@@ -2342,6 +2366,11 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   grid-template-columns:repeat(3,1fr);
   margin-top:42px;
   border-block:1px solid var(--snow-line);
+}
+@media(max-width:1050px){
+  .home-shop-carousel{
+    --product-slide-basis:calc((100% - 36px) / 3);
+  }
 }
 .home-shop-benefit{
   display:flex;
@@ -2579,23 +2608,8 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   .home-shop-all{
     margin-top:20px;
   }
-  .home-shop-grid{
-    display:flex;
-    gap:13px;
-    overflow-x:auto;
-    margin-inline:calc(-1 * var(--gut));
-    padding:2px var(--gut) 18px;
-    scroll-padding-left:var(--gut);
-    scroll-snap-type:x mandatory;
-    scrollbar-width:none;
-    -webkit-overflow-scrolling:touch;
-  }
-  .home-shop-grid::-webkit-scrollbar{
-    display:none;
-  }
-  .product-card{
-    flex:0 0 78%;
-    scroll-snap-align:start;
+  .home-shop-carousel{
+    --product-slide-basis:78%;
   }
   .product-card-view{
     display:none;
