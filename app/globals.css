@@ -2340,7 +2340,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   display:block;
   flex:1;
   overflow:hidden;
-  background:#e9e9e7;
+  background:#fff;
 }
 .priority-product-media img{
   object-fit:cover;
@@ -2451,7 +2451,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   display:block;
   overflow:hidden;
   aspect-ratio:40/41;
-  background:#ececea;
+  background:#fff;
 }
 .product-card-image{
   object-fit:cover;
