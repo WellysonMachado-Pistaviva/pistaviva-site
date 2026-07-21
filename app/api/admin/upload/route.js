@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { requireAdmin, supabaseAdmin } from '../../../lib/supabaseAdmin';
 import { validateAdminImage } from '../../../lib/adminUploadValidation.mjs';
@@ -12,7 +13,7 @@ async function storeImage({ gate, kind, buffer, type, ext }) {
   }
 
   const userId = gate.user.id.replace(/[^a-zA-Z0-9_-]/g, '');
-  const path = `admin/${kind}/${userId}/${Date.now()}-${crypto.randomUUID()}.${ext || validation.ext}`;
+  const path = `admin/${kind}/${userId}/${Date.now()}-${randomUUID()}.${ext || validation.ext}`;
   const sb = supabaseAdmin();
   const { data, error } = await sb.storage.from('post-images').upload(path, buffer, {
     contentType: type,
@@ -78,7 +79,15 @@ export async function POST(req) {
     return NextResponse.json({ error: 'Conteúdo do arquivo não corresponde a uma imagem válida.' }, { status: 400 });
   }
 
-  const stored = await storeImage({ gate, kind, buffer, type: detected.mime, ext: detected.ext });
-  if (stored.response) return stored.response;
-  return NextResponse.json({ url: stored.url });
+  try {
+    const stored = await storeImage({ gate, kind, buffer, type: detected.mime, ext: detected.ext });
+    if (stored.response) return stored.response;
+    return NextResponse.json({ url: stored.url });
+  } catch (error) {
+    console.error('[Admin image upload failed]', {
+      userId: gate.user.id,
+      reason: error?.message || 'unknown',
+    });
+    return NextResponse.json({ error: error?.message || 'Falha ao salvar a imagem.' }, { status: 500 });
+  }
 }
