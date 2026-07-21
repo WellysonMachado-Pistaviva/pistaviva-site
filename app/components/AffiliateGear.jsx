@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { ExternalLink, Eye } from 'lucide-react';
+import EmblaCarousel from './EmblaCarousel';
 
 const PRODUCTS = [
   {
@@ -117,7 +118,56 @@ function viewCount(itemId) {
   return 9 + (digits % 39); // 9..47
 }
 
+function AffiliateCard({ product, index }) {
+  return (
+    <article className={`affiliate-card${product.featured ? ' is-featured' : ''}`}>
+      <a
+        className="affiliate-card-media"
+        href={product.href}
+        target="_blank"
+        rel="sponsored nofollow noopener noreferrer"
+        aria-label={`Ver ${product.name} no Mercado Livre`}
+        onClick={() => sendEvent('affiliate_click', product)}
+      >
+        <Image
+          src={product.image}
+          alt={product.name}
+          fill
+          sizes="(max-width: 768px) 82vw, (max-width: 1050px) 46vw, 30vw"
+        />
+        <span className="affiliate-card-number">{String(index + 1).padStart(2, '0')}</span>
+        {product.featured && <span className="affiliate-card-pick">Escolha Pistaviva</span>}
+      </a>
+
+      <div className="affiliate-card-body">
+        <span className="affiliate-card-category">{product.category}</span>
+        <h3>{product.shortName}</h3>
+        <p>{product.description}</p>
+        <span className="affiliate-card-views">
+          <Eye aria-hidden="true" />
+          <strong>{viewCount(product.itemId)}</strong> pessoas visualizaram
+        </span>
+        <div className="affiliate-card-actions">
+          <a
+            href={product.href}
+            target="_blank"
+            rel="sponsored nofollow noopener noreferrer"
+            onClick={() => sendEvent('affiliate_click', product)}
+          >
+            <span>Ver preço no Mercado Livre</span>
+            <ExternalLink aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 export default function AffiliateGear() {
+  const slides = PRODUCTS.map((product, index) => (
+    <AffiliateCard product={product} index={index} key={product.itemId} />
+  ));
+
   return (
     <section className="home-affiliate" aria-labelledby="home-affiliate-title">
       <div className="wrap">
@@ -130,49 +180,8 @@ export default function AffiliateGear() {
           <span className="home-affiliate-label">Links de afiliado</span>
         </div>
 
-        <div className="affiliate-grid">
-          {PRODUCTS.map((product, index) => (
-            <article className={`affiliate-card${product.featured ? ' is-featured' : ''}`} key={product.itemId}>
-              <a
-                className="affiliate-card-media"
-                href={product.href}
-                target="_blank"
-                rel="sponsored nofollow noopener noreferrer"
-                aria-label={`Ver ${product.name} no Mercado Livre`}
-                onClick={() => sendEvent('affiliate_click', product)}
-              >
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  sizes={product.featured ? '(max-width: 768px) 90vw, 42vw' : '(max-width: 768px) 90vw, 28vw'}
-                />
-                <span className="affiliate-card-number">{String(index + 1).padStart(2, '0')}</span>
-                {product.featured && <span className="affiliate-card-pick">Escolha Pistaviva</span>}
-              </a>
-
-              <div className="affiliate-card-body">
-                <span className="affiliate-card-category">{product.category}</span>
-                <h3>{product.shortName}</h3>
-                <p>{product.description}</p>
-                <span className="affiliate-card-views">
-                  <Eye aria-hidden="true" />
-                  <strong>{viewCount(product.itemId)}</strong> pessoas visualizaram
-                </span>
-                <div className="affiliate-card-actions">
-                  <a
-                    href={product.href}
-                    target="_blank"
-                    rel="sponsored nofollow noopener noreferrer"
-                    onClick={() => sendEvent('affiliate_click', product)}
-                  >
-                    <span>Ver preço no Mercado Livre</span>
-                    <ExternalLink aria-hidden="true" />
-                  </a>
-                </div>
-              </div>
-            </article>
-          ))}
+        <div className="home-affiliate-carousel" aria-label="Produtos afiliados Pistaviva">
+          <EmblaCarousel slides={slides} basis="var(--aff-slide-basis)" gap={14} dots />
         </div>
 
         <p className="home-affiliate-disclosure">
