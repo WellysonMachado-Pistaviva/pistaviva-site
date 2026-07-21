@@ -65,6 +65,62 @@ const BENEFITS = [
   { icon: Truck, title: 'Entrega nacional', copy: 'Envio para todo Brasil' },
 ];
 
+const COMMUNITY_PHOTOS = [
+  {
+    src: '/products/community/casal-moto-real.jpg',
+    alt: 'Casal motociclista usando camisetas Pistaviva ao lado de uma moto',
+  },
+  {
+    src: '/products/community/familia-offroad.jpg',
+    alt: 'Família usando camisetas Pistaviva em um passeio off-road',
+  },
+  {
+    src: '/products/community/mulher-moto.jpg',
+    alt: 'Motociclista usando camiseta Pistaviva ao lado de uma moto vermelha',
+  },
+  {
+    src: '/products/community/menino-pista.jpg',
+    alt: 'Criança usando camiseta Pistaviva entre miniaturas de carros',
+  },
+  {
+    src: '/products/community/casal-domingo.jpg',
+    alt: 'Casal usando camisetas Pistaviva durante uma viagem',
+  },
+  {
+    src: '/products/community/casal-piloto-garupa.jpg',
+    alt: 'Casal usando camisetas Eu amo meu piloto e Eu amo minha garupa',
+  },
+];
+
+function PriorityProductCard({ product }) {
+  return (
+    <a
+      className="priority-product"
+      href={product.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Comprar camiseta ${product.name}`}
+    >
+      <span className="priority-product-media">
+        <Image
+          src={product.image}
+          alt={`Camiseta ${product.name}`}
+          fill
+          sizes="(max-width: 850px) 42vw, (max-width: 1050px) 22vw, 18vw"
+        />
+        <small>Mais vendido</small>
+      </span>
+      <span className="priority-product-body">
+        <strong>{product.name}</strong>
+        <span className="priority-product-price">
+          <b>R$ 89,90</b>
+          <i>Comprar <span aria-hidden="true">↗</span></i>
+        </span>
+      </span>
+    </a>
+  );
+}
+
 function ProductCard({ product }) {
   return (
     <article className="product-card">
@@ -122,19 +178,63 @@ function ProductCard({ product }) {
 
 export default function ProductShowcase() {
   const slides = PRODUCTS.map((product) => <ProductCard product={product} key={product.name} />);
+  const bestSellers = PRODUCTS.filter((product) => product.bestSeller);
 
   return (
     <section className="home-shop" aria-labelledby="home-shop-title">
       <div className="wrap">
         <div className="home-shop-head">
           <div className="lead">
-            <span className="ig-eyebrow">Coleção Pistaviva</span>
-            <h2 className="ig-title" id="home-shop-title">Vista o que te move.</h2>
-            <p>Camisetas para carregar paixão por motores, curvas e estrada também fora da moto.</p>
+            <span className="ig-eyebrow">Feita para gente de verdade</span>
+            <h2 className="ig-title" id="home-shop-title">Quem veste, vive.</h2>
+            <p>Camisetas que saem da tela e vão para a pista, a estrada e as histórias de quem ama esse mundo.</p>
           </div>
           <a className="home-shop-all" href={STORE_URL} target="_blank" rel="noopener noreferrer">
             Ver coleção completa <ExternalLink aria-hidden="true" />
           </a>
+        </div>
+
+        <div className="home-shop-social-commerce">
+          <div className="community-mosaic" aria-label="Comunidade Pistaviva usando nossas camisetas">
+            {COMMUNITY_PHOTOS.map((photo, index) => (
+              <div className={`community-photo community-photo--${index + 1}`} key={photo.src}>
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  sizes={index === 0 ? '(max-width: 1050px) 50vw, 28vw' : '(max-width: 1050px) 25vw, 14vw'}
+                />
+              </div>
+            ))}
+            <div className="community-mosaic-copy">
+              <span>Gente real · paixão real</span>
+              <strong>Na pista, na estrada, na vida.</strong>
+              <small>#Pistaviva</small>
+            </div>
+          </div>
+
+          <div className="home-shop-priority">
+            <div className="home-shop-priority-head">
+              <div>
+                <span>Favoritos da comunidade</span>
+                <strong>Os 4 que mais aceleram</strong>
+              </div>
+              <small>Mais vendidos</small>
+            </div>
+            <div className="priority-product-grid">
+              {bestSellers.map((product) => (
+                <PriorityProductCard product={product} key={product.name} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="home-shop-rail-head">
+          <div>
+            <span className="ig-eyebrow">Mais da coleção</span>
+            <h3>Escolha a sua.</h3>
+          </div>
+          <p>Deslize para ver todos os modelos.</p>
         </div>
 
         <div className="home-shop-carousel" aria-label="Produtos em destaque">
