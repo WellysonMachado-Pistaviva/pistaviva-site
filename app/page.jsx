@@ -5,6 +5,7 @@ import HomeBanner from './components/HomeBanner';
 import DestinosRail from './components/DestinosRail';
 import EventsRail from './components/EventsRail';
 import CommunityRail from './components/CommunityRail';
+import ProductShowcase from './components/ProductShowcase';
 import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
 import { getBanners, getDestinos } from './lib/site';
 import { getEventsForSeo, getGoingCounts } from './lib/events';
@@ -71,6 +72,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <ProductShowcase />
 
       {destinos.length > 0 && (
         <section className="ig-cats home-destinations" id="destinos">
