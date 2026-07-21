@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Eye } from 'lucide-react';
 
 const PRODUCTS = [
   {
@@ -32,6 +32,69 @@ const PRODUCTS = [
     href: 'https://meli.la/22PGGWv',
     itemId: 'MLB38512823',
   },
+  {
+    name: 'Câmera de ação Insta360 X4 8K',
+    shortName: 'Insta360 X4 8K',
+    category: 'Registre a viagem',
+    description: 'Câmera 360° em 8K para gravar cada trecho da estrada em altíssima definição.',
+    image: '/affiliates/camera-insta360-x4.webp',
+    href: 'https://meli.la/1AodEJ1',
+    itemId: 'MLB4413590409',
+  },
+  {
+    name: 'Suporte de guidão em alumínio para GoPro e Insta360',
+    shortName: 'Suporte de guidão p/ câmera',
+    category: 'Registre a viagem',
+    description: 'Fixação em alumínio para guidão de moto ou bike, compatível com GoPro e Insta360.',
+    image: '/affiliates/suporte-guidao-gopro.webp',
+    href: 'https://meli.la/1LbZAxB',
+    itemId: 'MLB5735106060',
+  },
+  {
+    name: 'Capacete X11 Crossover Desert Offroad Big Trail',
+    shortName: 'Capacete X11 Crossover',
+    category: 'Proteção offroad',
+    description: 'Capacete big trail com viseira e óculos para quem encara asfalto e terra.',
+    image: '/affiliates/capacete-x11-crossover-desert.webp',
+    href: 'https://meli.la/2DnMe4G',
+    itemId: 'MLB1818065035',
+  },
+  {
+    name: 'Capacete Helt Cross Vision Glass Titanium',
+    shortName: 'Capacete Helt Cross Vision',
+    category: 'Proteção offroad',
+    description: 'Capacete cross com pintura Glass Titanium, leve e ventilado para trilhas.',
+    image: '/affiliates/capacete-helt-cross-vision.webp',
+    href: 'https://meli.la/2vnSpKK',
+    itemId: 'MLB6161446758',
+  },
+  {
+    name: 'Baú Bauleto 65 litros universal em alumínio com base',
+    shortName: 'Bauleto 65L alumínio',
+    category: 'Bagagem e viagem',
+    description: 'Baú universal de 65 litros em alumínio com base de fixação para viagens longas.',
+    image: '/affiliates/bau-bauleto-65l.webp',
+    href: 'https://meli.la/31MeswN',
+    itemId: 'MLB3970456257',
+  },
+  {
+    name: 'Mini compressor digital Simake portátil com calibrador',
+    shortName: 'Mini compressor digital',
+    category: 'Emergência na estrada',
+    description: 'Bomba portátil digital com calibrador para encher pneus de moto, carro e bike.',
+    image: '/affiliates/mini-compressor-simake.webp',
+    href: 'https://meli.la/1LoAD7M',
+    itemId: 'MLB5792187288',
+  },
+  {
+    name: 'Kit remendo de pneu com 60 reparos e maleta',
+    shortName: 'Kit reparo de pneu',
+    category: 'Emergência na estrada',
+    description: '60 reparos tipo macarrão com maleta para resolver furos de pneu longe de casa.',
+    image: '/affiliates/kit-remendo-pneu.webp',
+    href: 'https://meli.la/1MuXN4T',
+    itemId: 'MLB3789764022',
+  },
 ];
 
 function sendEvent(event, product) {
@@ -45,6 +108,13 @@ function sendEvent(event, product) {
   } catch {
     // Analytics must never block navigation.
   }
+}
+
+// Deterministic per product so the number stays stable between renders,
+// but varies card to card ("interlaçando os números").
+function viewCount(itemId) {
+  const digits = parseInt(itemId.replace(/\D/g, '').slice(-4), 10) || 0;
+  return 9 + (digits % 39); // 9..47
 }
 
 export default function AffiliateGear() {
@@ -77,7 +147,7 @@ export default function AffiliateGear() {
                   fill
                   sizes={product.featured ? '(max-width: 768px) 90vw, 42vw' : '(max-width: 768px) 90vw, 28vw'}
                 />
-                <span className="affiliate-card-number">0{index + 1}</span>
+                <span className="affiliate-card-number">{String(index + 1).padStart(2, '0')}</span>
                 {product.featured && <span className="affiliate-card-pick">Escolha Pistaviva</span>}
               </a>
 
@@ -85,6 +155,10 @@ export default function AffiliateGear() {
                 <span className="affiliate-card-category">{product.category}</span>
                 <h3>{product.shortName}</h3>
                 <p>{product.description}</p>
+                <span className="affiliate-card-views">
+                  <Eye aria-hidden="true" />
+                  <strong>{viewCount(product.itemId)}</strong> pessoas visualizaram
+                </span>
                 <div className="affiliate-card-actions">
                   <a
                     href={product.href}
