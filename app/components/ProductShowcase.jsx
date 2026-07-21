@@ -69,26 +69,32 @@ const COMMUNITY_PHOTOS = [
   {
     src: '/products/community/casal-moto-real.jpg',
     alt: 'Casal motociclista usando camisetas Pistaviva ao lado de uma moto',
+    caption: 'Paixão que vai junto.',
   },
   {
     src: '/products/community/familia-offroad.jpg',
     alt: 'Família usando camisetas Pistaviva em um passeio off-road',
+    caption: 'Família que acelera unida.',
   },
   {
     src: '/products/community/mulher-moto.jpg',
     alt: 'Motociclista usando camiseta Pistaviva ao lado de uma moto vermelha',
+    caption: 'Hoje não posso. Vou rodar.',
   },
   {
     src: '/products/community/menino-pista.jpg',
     alt: 'Criança usando camiseta Pistaviva entre miniaturas de carros',
+    caption: 'A pista começa cedo.',
   },
   {
     src: '/products/community/casal-domingo.jpg',
     alt: 'Casal usando camisetas Pistaviva durante uma viagem',
+    caption: 'Todo domingo vira história.',
   },
   {
     src: '/products/community/casal-piloto-garupa.jpg',
     alt: 'Casal usando camisetas Eu amo meu piloto e Eu amo minha garupa',
+    caption: 'Piloto e garupa. Mesma estrada.',
   },
 ];
 
@@ -179,6 +185,21 @@ function ProductCard({ product }) {
 export default function ProductShowcase() {
   const slides = PRODUCTS.map((product) => <ProductCard product={product} key={product.name} />);
   const bestSellers = PRODUCTS.filter((product) => product.bestSeller);
+  const communitySlides = COMMUNITY_PHOTOS.map((photo, index) => (
+    <figure className={`community-carousel-story community-carousel-story--${index + 1}`} key={photo.src}>
+      <Image
+        src={photo.src}
+        alt={photo.alt}
+        fill
+        sizes="(max-width: 1050px) 100vw, 56vw"
+      />
+      <figcaption>
+        <span>Gente real · paixão real</span>
+        <strong>{photo.caption}</strong>
+        <small>#{String(index + 1).padStart(2, '0')} · Pistaviva</small>
+      </figcaption>
+    </figure>
+  ));
 
   return (
     <section className="home-shop" aria-labelledby="home-shop-title">
@@ -195,22 +216,8 @@ export default function ProductShowcase() {
         </div>
 
         <div className="home-shop-social-commerce">
-          <div className="community-mosaic" aria-label="Comunidade Pistaviva usando nossas camisetas">
-            {COMMUNITY_PHOTOS.map((photo, index) => (
-              <div className={`community-photo community-photo--${index + 1}`} key={photo.src}>
-                <Image
-                  src={photo.src}
-                  alt={photo.alt}
-                  fill
-                  sizes={index === 0 ? '(max-width: 1050px) 50vw, 28vw' : '(max-width: 1050px) 25vw, 14vw'}
-                />
-              </div>
-            ))}
-            <div className="community-mosaic-copy">
-              <span>Gente real · paixão real</span>
-              <strong>Na pista, na estrada, na vida.</strong>
-              <small>#Pistaviva</small>
-            </div>
+          <div className="community-carousel" aria-label="Comunidade Pistaviva usando nossas camisetas">
+            <EmblaCarousel slides={communitySlides} basis="100%" gap={0} dots loop align="center" />
           </div>
 
           <div className="home-shop-priority">
