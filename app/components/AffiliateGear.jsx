@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
-import { Check, Copy, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 
 const PRODUCTS = [
   {
@@ -12,7 +11,6 @@ const PRODUCTS = [
     description: 'Capacete adventure em carbono para quem alterna estrada, terra e viagens longas.',
     image: '/affiliates/capacete-ls2-mx701.webp',
     href: 'https://meli.la/1haRhyo',
-    code: 'LKLQSY-X6CL',
     itemId: 'MLB4641611382',
     featured: true,
   },
@@ -23,7 +21,6 @@ const PRODUCTS = [
     description: 'Camada base para enfrentar mudança de temperatura sem perder mobilidade.',
     image: '/affiliates/segunda-pele-x11.webp',
     href: 'https://meli.la/31WzL1N',
-    code: 'LKLQSY-62N4',
     itemId: 'MLB6632312326',
   },
   {
@@ -33,7 +30,6 @@ const PRODUCTS = [
     description: 'Seleção completa para rotina de limpeza, acabamento e conservação.',
     image: '/affiliates/kit-lavagem-vonixx.webp',
     href: 'https://meli.la/22PGGWv',
-    code: 'LKLQSY-9WKZ',
     itemId: 'MLB38512823',
   },
 ];
@@ -52,19 +48,6 @@ function sendEvent(event, product) {
 }
 
 export default function AffiliateGear() {
-  const [copiedCode, setCopiedCode] = useState('');
-
-  const copyCode = async (product) => {
-    try {
-      await navigator.clipboard.writeText(product.code);
-      setCopiedCode(product.code);
-      sendEvent('affiliate_code_copy', product);
-      window.setTimeout(() => setCopiedCode(''), 1800);
-    } catch {
-      setCopiedCode('');
-    }
-  };
-
   return (
     <section className="home-affiliate" aria-labelledby="home-affiliate-title">
       <div className="wrap">
@@ -103,17 +86,14 @@ export default function AffiliateGear() {
                 <h3>{product.shortName}</h3>
                 <p>{product.description}</p>
                 <div className="affiliate-card-actions">
-                  <button type="button" onClick={() => copyCode(product)} aria-label={`Copiar código ${product.code}`}>
-                    {copiedCode === product.code ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
-                    <span aria-live="polite">{copiedCode === product.code ? 'Copiado' : product.code}</span>
-                  </button>
                   <a
                     href={product.href}
                     target="_blank"
                     rel="sponsored nofollow noopener noreferrer"
                     onClick={() => sendEvent('affiliate_click', product)}
                   >
-                    Ver preço <ExternalLink aria-hidden="true" />
+                    <span>Ver preço no Mercado Livre</span>
+                    <ExternalLink aria-hidden="true" />
                   </a>
                 </div>
               </div>

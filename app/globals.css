@@ -2766,38 +2766,58 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   min-width:0;
   display:flex;
   flex-direction:column;
-  background:#fff;
-  color:var(--ink);
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  background:#19191c;
+  color:#fff;
+  box-shadow:0 18px 42px rgba(0,0,0,.2);
+  transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.affiliate-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(255,138,75,.42);
+  box-shadow:0 24px 56px rgba(0,0,0,.3);
 }
 .affiliate-card-media{
   position:relative;
   display:block;
   overflow:hidden;
   aspect-ratio:1;
-  background:#f1f1ef;
+  isolation:isolate;
+  background:
+    radial-gradient(circle at 72% 18%,rgba(255,255,255,.92),transparent 33%),
+    linear-gradient(145deg,#f1eee8 0%,#dcd6cc 100%);
+  border-bottom:1px solid rgba(255,255,255,.1);
 }
 .affiliate-card.is-featured .affiliate-card-media{
   aspect-ratio:4/3;
 }
 .affiliate-card-media img{
+  z-index:1;
   object-fit:contain;
   padding:clamp(22px,3vw,42px);
-  transition:transform .55s cubic-bezier(.2,.7,.2,1);
+  mix-blend-mode:multiply;
+  filter:contrast(1.04) saturate(1.04);
+  transition:transform .55s cubic-bezier(.2,.7,.2,1), filter .35s ease;
 }
 .affiliate-card:hover .affiliate-card-media img{
   transform:scale(1.045);
+  filter:contrast(1.08) saturate(1.08);
 }
 .affiliate-card-number{
   position:absolute;
+  z-index:2;
   right:12px;
   bottom:6px;
-  color:rgba(12,12,13,.12);
+  color:rgba(12,12,13,.14);
   font-family:var(--display);
   font-size:56px;
   line-height:1;
 }
 .affiliate-card-pick{
   position:absolute;
+  z-index:2;
   top:12px;
   left:12px;
   padding:7px 9px;
@@ -2813,7 +2833,10 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   display:flex;
   flex:1;
   flex-direction:column;
-  padding:20px;
+  padding:22px 20px 20px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.035),transparent 45%),
+    #19191c;
 }
 .affiliate-card-category{
   color:var(--accent);
@@ -2825,6 +2848,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 }
 .affiliate-card h3{
   margin-top:8px;
+  color:#fff;
   font-family:var(--display);
   font-size:clamp(25px,2.3vw,34px);
   line-height:.95;
@@ -2833,54 +2857,39 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 .affiliate-card-body > p{
   max-width:44ch;
   margin:11px 0 20px;
-  color:var(--ink-soft);
+  color:rgba(255,255,255,.58);
   font-size:12px;
   line-height:1.5;
 }
 .affiliate-card-actions{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
   margin-top:auto;
-  border:1px solid #d9d9d5;
 }
-.affiliate-card-actions button,
 .affiliate-card-actions > a{
-  min-width:0;
-  min-height:46px;
+  width:100%;
+  min-height:50px;
   display:flex;
   align-items:center;
-  justify-content:center;
-  gap:7px;
-  padding:8px 10px;
+  justify-content:space-between;
+  gap:14px;
+  padding:10px 15px;
+  border-radius:10px;
   font-family:var(--mono);
-  font-size:9px;
+  font-size:10px;
   font-weight:800;
-  letter-spacing:.06em;
+  letter-spacing:.055em;
   text-transform:uppercase;
-}
-.affiliate-card-actions button{
-  border:0;
-  background:#fff;
-  color:var(--ink);
-  cursor:pointer;
-}
-.affiliate-card-actions > a{
   background:#ffe600;
   color:#171717;
-}
-.affiliate-card-actions button + a{
-  border-left:1px solid #d9d9d5;
+  transition:background .2s ease, transform .2s ease;
 }
 .affiliate-card-actions svg{
-  width:14px;
-  height:14px;
+  width:15px;
+  height:15px;
   flex:0 0 auto;
-}
-.affiliate-card-actions button:hover{
-  background:#f1f1ef;
 }
 .affiliate-card-actions > a:hover{
   background:#f4dc00;
+  transform:translateY(-1px);
 }
 .home-affiliate-disclosure{
   margin-top:18px;
