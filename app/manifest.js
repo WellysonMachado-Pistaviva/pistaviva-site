@@ -1,6 +1,6 @@
 export default function manifest() {
   return {
-    name: 'Pista Viva — Mototurismo',
+    name: 'Pistaviva — Mototurismo no Brasil',
     short_name: 'PistaViva',
     description: 'A maior comunidade de mototurismo do Brasil.',
     start_url: '/',

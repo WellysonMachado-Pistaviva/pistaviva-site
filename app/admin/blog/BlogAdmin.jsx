@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../../../src/lib/supabaseClient';
-import { adminImportImageUrl, adminUploadDataUrl, adminWrite, shouldImportRemoteImageUrl } from '../../lib/adminDb';
+import { adminGet, adminImportImageUrl, adminUploadDataUrl, adminWrite, shouldImportRemoteImageUrl } from '../../lib/adminDb';
 import { prepareCoverImageDataUrl, preparePostImageDataUrl } from '../../../src/services/storage';
 import { useAuth, showToast } from '../../components/AuthProvider';
 
@@ -69,6 +69,8 @@ export default function BlogAdmin() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [tagInput, setTagInput] = useState('');
+  const [doctor, setDoctor] = useState(null);
+  const [doctorBusy, setDoctorBusy] = useState(false);
   const slugTouched = useRef(false);
   const bodyRef = useRef(null);
   const posRef = useRef(0);
@@ -134,6 +136,13 @@ export default function BlogAdmin() {
 
   const addTag = (raw) => { const v = raw.trim().replace(/,$/, ''); if (v && !form.tags.includes(v)) set('tags', [...form.tags, v]); setTagInput(''); };
 
+  const runDoctor = async () => {
+    setDoctorBusy(true);
+    const { data, error } = await adminGet('/api/admin/doctor');
+    setDoctor(error ? { ok: false, error: error.message } : data);
+    setDoctorBusy(false);
+  };
+
   const edit = (p) => { slugTouched.current = true; setForm({ id: p.id, title: p.title, slug: p.slug, excerpt: p.excerpt || '', body: p.body || '', tags: p.tags || [], cover_url: p.cover_url || '', published: p.published }); window.scrollTo({ top: 0, behavior: 'smooth' }); };
   const reset = () => { slugTouched.current = false; setForm(EMPTY); };
 
@@ -196,6 +205,23 @@ export default function BlogAdmin() {
       <div className="pe-grid">
         {/* COLUNA PRINCIPAL */}
         <main>
+          <section className="pe-card">
+            <div className="pe-ch">
+              <span className="ci">✓</span>
+              <h2>Diagnóstico de publicação</h2>
+            </div>
+            <div className="pe-cb">
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+                <button type="button" className="pe-btn pe-btn--ghost" onClick={runDoctor} disabled={doctorBusy}>{doctorBusy ? 'Verificando…' : 'Verificar publicação'}</button>
+                {doctor && (
+                  <span className={`pe-pill${doctor.ok ? ' live' : ''}`}>
+                    {doctor.error || `Publicação: ${doctor.services?.supabase?.ok ? 'OK' : doctor.services?.supabase?.message || 'erro'}`}
+                  </span>
+                )}
+              </div>
+            </div>
+          </section>
+
           {/* título + slug */}
           <section className="pe-card"><div className="pe-cb">
             <input className="pe-title-in" placeholder="Título da matéria" value={form.title} onChange={e => onTitle(e.target.value)} />

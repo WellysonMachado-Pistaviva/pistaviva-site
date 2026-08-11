@@ -3,7 +3,7 @@ import { ImageResponse } from 'next/og';
 // OG image padrão do site (1200×630) — usada no compartilhamento social de toda
 // página que não define a sua própria. Gerada por código (sem arquivo estático).
 export const runtime = 'edge';
-export const alt = 'Pistaviva — Mototurismo, Rotas e Cultura sobre Duas Rodas';
+export const alt = 'Pistaviva — Mototurismo no Brasil';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 

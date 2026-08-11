@@ -18,7 +18,12 @@ export default function EventsAdmin() {
     setRows(await getEventsAdmin());
     setLoading(false);
   }, []);
-  useEffect(() => { if (auth?.isAdmin) load(); }, [auth?.isAdmin, load]);
+  useEffect(() => {
+    if (!auth?.isAdmin) return;
+    let cancelled = false;
+    queueMicrotask(() => { if (!cancelled) void load(); });
+    return () => { cancelled = true; };
+  }, [auth?.isAdmin, load]);
 
   if (!auth?.isAdmin) return null; // a shell do painel já protege
 

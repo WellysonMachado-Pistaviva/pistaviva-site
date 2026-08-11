@@ -67,7 +67,10 @@ export default function EventRouteMapInner({ dest, destName = 'Evento', lat = nu
   }, [dest, lat, lng]);
 
   // auto-traça assim que o bloco aparece (pede a localização sozinho)
-  useEffect(() => { traçar(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => { void traçar(); });
+    return () => cancelAnimationFrame(frame);
+  }, [traçar]);
 
   const bounds = useMemo(() => (r ? L.latLngBounds(r.line).pad(0.2) : null), [r]);
 

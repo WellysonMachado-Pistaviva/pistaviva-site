@@ -14,7 +14,7 @@ import { getCommunityRailItems } from './lib/community';
 import { DESAFIOS } from './lib/desafios';
 
 export const metadata = {
-  title: { absolute: 'Pistaviva — Mototurismo, Rotas, Desafios e Comunidade de Moto' },
+  title: { absolute: 'Pistaviva — Mototurismo no Brasil' },
   description: 'Estradas, roteiros, eventos e histórias reais de quem viaja de moto pelo Brasil.',
   alternates: { canonical: '/' },
   openGraph: {
@@ -22,7 +22,7 @@ export const metadata = {
     url: '/',
     siteName: 'Pistaviva',
     locale: 'pt_BR',
-    title: 'Pistaviva — Mototurismo, Rotas e Comunidade',
+    title: 'Pistaviva — Mototurismo no Brasil',
     description: 'Estradas, roteiros, eventos e histórias reais de quem viaja de moto pelo Brasil.',
   },
 };

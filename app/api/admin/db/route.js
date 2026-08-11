@@ -50,15 +50,22 @@ export async function POST(req) {
     return NextResponse.json({ error: 'update/delete exigem match (ex: { id }).' }, { status: 400 });
   }
 
-  const sb = supabaseAdmin();
-  let q = sb.from(table);
-  if (op === 'insert') q = q.insert(data);
-  else if (op === 'upsert') q = q.upsert(data);
-  else if (op === 'update') { q = q.update(data); for (const [k, v] of Object.entries(match)) q = q.eq(k, v); }
-  else if (op === 'delete') { q = q.delete(); for (const [k, v] of Object.entries(match)) q = q.eq(k, v); }
+  let out;
+  try {
+    const sb = supabaseAdmin();
+    let q = sb.from(table);
+    if (op === 'insert') q = q.insert(data);
+    else if (op === 'upsert') q = q.upsert(data);
+    else if (op === 'update') { q = q.update(data); for (const [k, v] of Object.entries(match)) q = q.eq(k, v); }
+    else if (op === 'delete') { q = q.delete(); for (const [k, v] of Object.entries(match)) q = q.eq(k, v); }
 
-  const { data: out, error } = await q.select();
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+    const result = await q.select();
+    if (result.error) return NextResponse.json({ error: result.error.message }, { status: 400 });
+    out = result.data;
+  } catch (error) {
+    console.error('[Admin DB] Falha de configuração/conexão:', error?.message || error);
+    return NextResponse.json({ error: error?.message || 'Falha ao acessar banco administrativo.' }, { status: 503 });
+  }
 
   for (const target of getAdminRevalidationTargets({ table, data, rows: out || [] })) {
     if (target.type) revalidatePath(target.path, target.type);

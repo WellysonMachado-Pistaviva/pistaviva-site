@@ -6,8 +6,8 @@ import { supabase } from '../../src/lib/supabaseClient';
 //
 // Se o token tiver expirado (401), força um refresh da sessão e tenta de novo —
 // evita "Token inválido" quando o admin ficou tempo com a aba aberta.
-async function post(token, body) {
-  const res = await fetch('/api/admin/db', {
+async function postJson(token, path, body) {
+  const res = await fetch(path, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify(body),
@@ -53,13 +53,13 @@ export async function adminWrite({ table, op, data, match }) {
     let token = s?.session?.access_token;
     if (!token) return { data: null, error: { message: 'Sessão admin expirada. Saia e entre de novo no painel.' } };
 
-    let { res, j } = await post(token, body);
+    let { res, j } = await postJson(token, '/api/admin/db', body);
 
     if (res.status === 401) {
       // token provavelmente expirou — renova a sessão e tenta 1x
       const { data: r } = await supabase.auth.refreshSession();
       token = r?.session?.access_token;
-      if (token) ({ res, j } = await post(token, body));
+      if (token) ({ res, j } = await postJson(token, '/api/admin/db', body));
     }
 
     if (!res.ok) return { data: null, error: { message: j.error || `Erro ${res.status}` } };

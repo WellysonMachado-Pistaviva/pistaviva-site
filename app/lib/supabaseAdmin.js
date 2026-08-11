@@ -8,7 +8,7 @@ import { resolveSupabaseAdminConfig } from './supabaseAdminConfig.mjs';
 export function supabaseAdmin() {
   const { url, key } = resolveSupabaseAdminConfig();
   if (!url || !key) {
-    throw new Error('Configuração administrativa do Supabase ausente no servidor.');
+    throw new Error('Configuração administrativa do Supabase ausente. Defina SUPABASE_SECRET_KEY (ou SUPABASE_SERVICE_ROLE_KEY) no servidor e faça novo deploy.');
   }
   return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 }

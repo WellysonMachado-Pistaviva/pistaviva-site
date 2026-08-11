@@ -30,7 +30,7 @@ const SITE_URL = 'https://www.pistavivamototurismo.com.br';
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Pistaviva — Mototurismo, Rotas e Cultura sobre Duas Rodas',
+    default: 'Pistaviva — Mototurismo no Brasil',
     template: '%s · Pistaviva',
   },
   description:
@@ -45,7 +45,7 @@ export const metadata = {
     siteName: 'Pistaviva',
     locale: 'pt_BR',
     url: SITE_URL,
-    title: 'Pistaviva — Mototurismo, Rotas e Cultura sobre Duas Rodas',
+    title: 'Pistaviva — Mototurismo no Brasil',
     description: 'Comunidade aberta de mototurismo: rotas, eventos, blog e cultura sobre duas rodas.',
     // images: gerada automaticamente por app/opengraph-image.js (1200×630)
   },
