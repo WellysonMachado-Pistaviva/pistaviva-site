@@ -271,6 +271,23 @@ const PARCEIROS = [
   { nome: 'Mantiqueira Moto Experience', src: '/motosul/parceiros/mantiqueira.png' },
   { nome: 'Boteco Seo Sumido', src: '/motosul/parceiros/seo-sumido.png' },
   { nome: 'Banlek', src: '/motosul/parceiros/banlek.png', tema: 'dark' },
+  { nome: 'Carazza', src: '/motosul/parceiros/carazza.png' },
+  { nome: 'Mei da Roça', src: '/motosul/parceiros/mei-da-roca.png' },
+  { nome: 'SindHBR Itajubá', src: '/motosul/parceiros/sindhbr.png' },
+  { nome: 'O Poderoso Açaí', src: '/motosul/parceiros/poderoso-acai.png', tema: 'dark' },
+  { nome: 'Gymflix Academia', src: '/motosul/parceiros/gymflix.png', tema: 'dark' },
+  { nome: 'Panificadora Guimarães', src: '/motosul/parceiros/panificadora-guimaraes.png' },
+  { nome: 'e-MOBI Scooters Elétricas', src: '/motosul/parceiros/e-mobi.png' },
+  { nome: 'Baldaçara Joias', src: '/motosul/parceiros/baldacara.png' },
+  { nome: 'Itasilk Estamparia', src: '/motosul/parceiros/itasilk.png' },
+  { nome: 'Big Boss Barbearia', src: '/motosul/parceiros/big-boss.png', tema: 'dark' },
+  { nome: 'Posto Leão do Sul', src: '/motosul/parceiros/posto-leao-do-sul.png' },
+  { nome: 'Calhas Alencar', src: '/motosul/parceiros/calhas-alencar.png' },
+  { nome: 'First Racer', src: '/motosul/parceiros/first-racer.png' },
+  { nome: 'Rock Movel T-Shirts', src: '/motosul/parceiros/rock-movel.png' },
+  { nome: 'Master Botas', src: '/motosul/parceiros/master-botas.png' },
+  { nome: 'Clothes Canvas', src: '/motosul/parceiros/clothes-canvas.png', tema: 'dark' },
+  { nome: 'Higienização Capacete', src: '/motosul/parceiros/higienizacao-capacete.png' },
 ];
 
 const COTAS = [
@@ -857,7 +874,7 @@ export default function MotosulPage() {
           <p className="ms-lead">6.736 pessoas no parque, 9 em cada 10 vindas de fora, dois terços em big trail — e 4,7 milhões de visualizações na comunicação do evento.</p>
 
           <div className="ms-parceiros">
-            <p className="ms-parceiros__label">Marcas que já estiveram no pátio</p>
+            <p className="ms-parceiros__label">Marcas que apoiaram as edições</p>
             <ul>
               {PARCEIROS.map((m) => (
                 <li className={m.tema === 'dark' ? 'is-dark' : undefined} key={m.nome}>
