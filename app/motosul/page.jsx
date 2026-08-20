@@ -234,9 +234,9 @@ export default function MotosulPage() {
           <div className="ms-hero__poster">
             <div>
               <h1 className="ms-hero__h1">
-                <span className="ms-hero__pre">Moto, comida mineira e rock</span>
-                <span className="ms-hero__big">A serra vira</span>
-                <span className="ms-hero__big ms-hero__big--accent">ponto de encontro.</span>
+                <span className="ms-hero__pre">O maior encontro de</span>
+                <span className="ms-hero__big">Mototurismo gastronômico</span>
+                <span className="ms-hero__big ms-hero__big--sub">do Sul de Minas</span>
               </h1>
               <p className="ms-hero__dek">Dois dias para chegar rodando, estacionar no parque e viver Itajubá com quem gosta da mesma estrada.</p>
               <div className="ms-actions ms-actions--left ms-hero__actions">

@@ -3374,6 +3374,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 .ms-hero__pre{ display:block; margin-bottom:12px; font-size:clamp(15px,1.7vw,22px); letter-spacing:.06em; color:#d4d0c8; line-height:1.2; }
 .ms-hero__big{ display:block; font-size:clamp(54px,7.5vw,106px); color:#f4f1eb; }
 .ms-hero__big--accent{ color:var(--accent); }
+.ms-hero__big--sub{ font-size:clamp(38px,5.2vw,74px); color:#f4f1eb; }
 .ms-hero__dek{ max-width:52ch; margin:24px 0 0; color:#d4d0c8; font-size:clamp(16px,1.5vw,20px); line-height:1.5; }
 .ms-hero__actions{ margin-top:24px; }
 .ms-hero__ticket{ position:relative; min-height:260px; padding:22px; border:1px solid rgba(255,255,255,.24); border-top:5px solid var(--accent); background:rgba(12,12,13,.72); display:flex; flex-direction:column; justify-content:space-between; box-shadow:inset 0 0 0 1px rgba(255,90,0,.08); }
@@ -3608,6 +3609,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   .ms-hero__brand span{ display:block; margin-top:12px; padding:8px 0 0; border-left:0; border-top:2px solid var(--accent); width:max-content; max-width:100%; font-size:.64rem; }
   .ms-hero__poster{ grid-template-columns:1fr; gap:22px; margin-top:72px; }
   .ms-hero__big{ font-size:clamp(45px,13.8vw,60px); }
+  .ms-hero__big--sub{ font-size:clamp(32px,9.6vw,44px); }
   .ms-hero__dek{ max-width:35ch; margin-top:18px; }
   .ms-hero__actions{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
   .ms-hero__actions .ms-btn{ min-width:0; padding-inline:12px; font-size:.7rem; }
