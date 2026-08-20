@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Marquee from '../components/Marquee';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 const IG_EVENTO = 'https://instagram.com/motosulfestival';
@@ -15,16 +14,6 @@ function Shield({ className = '', children }) {
       </svg>
       <span className="ms-shield__in">{children}</span>
     </span>
-  );
-}
-
-// Rodapé de seção no padrão do material impresso do evento.
-function SecFoot({ n }) {
-  return (
-    <div className="ms-secfoot">
-      <span>Motosul Festival · Itajubá · Serra da Mantiqueira</span>
-      <Shield className="ms-shield--badge">{n}</Shield>
-    </div>
   );
 }
 
@@ -52,6 +41,16 @@ const ALCANCE = [
   { v: '30,3 mil', k: 'Cliques' },
 ];
 
+// Hotéis parceiros da edição 2026, com telefone para reserva direta.
+const HOTEIS = [
+  { nome: 'Hotel Coronados', tel: '(35) 3622-1977', href: 'tel:+553536221977' },
+  { nome: 'Gontijo Inn Hotel', tel: '(35) 3622-4646', href: 'tel:+553536224646' },
+  { nome: 'Hotel Oriente', tel: '(35) 9 9865-8860', href: 'tel:+5535998658860' },
+  { nome: 'Hotel Bramig', tel: '(35) 9 8862-6749', href: 'tel:+5535988626749' },
+  { nome: 'Novo Hotel', tel: '(35) 9 9937-9276', href: 'tel:+5535999379276' },
+  { nome: 'Hotel Amantykir', tel: '(35) 3622-5252', href: 'tel:+553536225252' },
+];
+
 const FROTA = [
   { marca: 'BMW · GS', n: 229 },
   { marca: 'Honda · XRE / NC / Africa', n: 186 },
@@ -61,6 +60,31 @@ const FROTA = [
 ];
 
 const SABORES = ['Queijo', 'Pastel de milho', 'Costela', 'Doce de leite', 'Cachaça'];
+
+// Reconhecimentos recentes de Minas na imprensa de turismo.
+const IMPRENSA = [
+  { fonte: 'Condé Nast Traveler', titulo: 'Minas Gerais é eleito um dos melhores destinos do mundo para 2026', nota: 'A revista destaca cultura, gastronomia e hospitalidade mineiras como diferenciais globais.' },
+  { fonte: 'Melhores Destinos', titulo: 'Comida mineira é eleita a melhor do Brasil', nota: 'A cozinha regional de Minas lidera o ranking nacional de gastronomia.' },
+  { fonte: 'Estado de Minas', titulo: 'Minas Gerais no topo do mundo', nota: 'Tradição e modernidade colocam o estado na lista dos destinos mais desejados do planeta.' },
+];
+
+// Estrutura fixa do Parque da Cidade, onde o festival acontece.
+const PARQUE = [
+  {
+    t: 'Gastronomia & conveniência',
+    itens: ['Sakê Sushi e Bar', 'Jazz Café', 'Boteco Seo Sumido', 'Vicenza Massas Especiais', 'A Mexicana', 'Meio da Roça', 'El Terrazzo', 'Joanitas', 'Jybá Beergarden', 'Crepe Maria Bonita', 'Pastelaria', 'Hot Dog do Fiel', 'Churros', 'Sorveteria Point Mix', 'Brejas To Go', 'In Box'],
+  },
+  {
+    t: 'Lazer & entretenimento',
+    itens: ['Kartódromo', 'Arena Park Futebol Society', 'Real Tennis Club', 'Praia Di Minas', 'Bowl Fun & Food', 'Deck Only Brasil', 'Área kids', 'Expo Center Parque Itajubá'],
+  },
+  {
+    t: 'Comércio & serviços',
+    itens: ['KD Presentes', 'Toy Mobi', 'CoperCar · mobilidade'],
+  },
+];
+
+const PARQUE_BASE = ['Ampla área verde', 'Lago central', 'Estacionamento organizado', 'Banheiros estruturados', 'Segurança 24h'];
 
 const PROGRAMACAO = [
   {
@@ -85,10 +109,10 @@ const PROGRAMACAO = [
 ];
 
 const EXPERIENCIAS = [
-  { t: 'Gastronomia mineira', d: 'Queijo da serra, pastel de milho, costela, doce de leite e cachaça. A praça de alimentação é o roteiro, não o apêndice dele.' },
-  { t: 'Exposição de motos', d: 'Big trails, customizadas e clássicas ocupando o parque, com área dedicada aos motoclubes que descem a serra.' },
-  { t: 'Palco principal', d: 'Bandas da região nos dois dias, com rock ao vivo do meio-dia ao fim da tarde.' },
-  { t: 'Rotas da Mantiqueira', d: 'O festival é a base: em volta dele estão os mirantes, as curvas e as paradas da serra mineira e paulista.' },
+  { t: 'Gastronomia mineira', d: 'Queijo da serra, pastel de milho, costela, doce de leite e cachaça. A praça de alimentação faz parte do roteiro.', src: '/motosul/gastronomia.jpg', alt: 'Prato servido na área gastronômica do Motosul' },
+  { t: 'Motos no parque', d: 'Big trails, customizadas e clássicas ocupam o pátio ao lado dos motoclubes que descem a serra.', src: '/motosul/g-fila-motos.jpg', alt: 'Fila de motos estacionadas no Parque da Cidade' },
+  { t: 'Rock ao vivo', d: 'Bandas da região tocam nos dois dias, com palco aberto no coração do parque.', src: '/motosul/g-palco-mic.jpg', alt: 'Show de rock no palco do Motosul Festival' },
+  { t: 'Serra antes e depois', d: 'O festival vira ponto de partida para mirantes, curvas e paradas da Mantiqueira mineira e paulista.', src: '/motosul/g-rua.jpg', alt: 'Motociclista chegando a Itajubá pelas estradas da Mantiqueira' },
 ];
 
 const GALERIA = [
@@ -113,6 +137,16 @@ const FICHA = [
   { k: 'Formato', v: 'Aberto ao público' },
 ];
 
+// Marcas presentes nas edições realizadas. tema 'dark' = logo claro, precisa de tile escuro.
+const PARCEIROS = [
+  { nome: 'Herbert Motos · KTM Racing', src: '/motosul/parceiros/herbert-ktm.png' },
+  { nome: 'BMW Motorrad · Osten', src: '/motosul/parceiros/bmw-osten.png', tema: 'dark' },
+  { nome: 'Triumph · Osten', src: '/motosul/parceiros/triumph-osten.png' },
+  { nome: 'Mantiqueira Moto Experience', src: '/motosul/parceiros/mantiqueira.png' },
+  { nome: 'Boteco Seo Sumido', src: '/motosul/parceiros/seo-sumido.png' },
+  { nome: 'Banlek', src: '/motosul/parceiros/banlek.png', tema: 'dark' },
+];
+
 const COTAS = [
   { t: 'Apresentação', d: 'Marca no nome do festival, no palco, no portal de entrada e em toda a comunicação oficial.' },
   { t: 'Patrocínio', d: 'Ativação com estande no parque, presença no palco e nas peças de divulgação.' },
@@ -121,16 +155,16 @@ const COTAS = [
 ];
 
 const ANCORAS = [
-  { href: '#publico', label: 'Público' },
-  { href: '#origem', label: 'De onde vem' },
-  { href: '#cidade', label: 'A cidade' },
-  { href: '#frota', label: 'A frota' },
-  { href: '#gastronomia', label: 'Gastronomia' },
-  { href: '#festival', label: 'O festival' },
-  { href: '#galeria', label: 'Galeria' },
-  { href: '#alcance', label: 'Alcance' },
-  { href: '#patrocinio', label: 'Patrocínio' },
-  { href: '#proxima', label: '3ª edição' },
+  { href: '#experiencia', label: 'Experiência' },
+  { href: '#festival', label: 'Programação' },
+  { href: '#itajuba', label: 'Itajubá' },
+  { href: '#parque', label: 'O parque' },
+  { href: '#galeria', label: 'Fotos' },
+  { href: '#publico', label: 'Última edição' },
+  { href: '#minas', label: 'Minas' },
+  { href: '#hoteis', label: 'Hospedagem' },
+  { href: '#patrocinio', label: 'Para marcas' },
+  { href: '#proxima', label: 'Abril 2027' },
 ];
 
 export const metadata = {
@@ -192,35 +226,81 @@ export default function MotosulPage() {
         <div className="ms-hero__glow" aria-hidden="true" />
 
         <div className="ms-hero__in">
-          <Shield className="ms-shield--hero">
+          <div className="ms-hero__brand">
             <img src="/motosul/logo.png" alt="Motosul Festival" width="1316" height="775" />
-            <span className="ms-shield__cap">Serra da Mantiqueira</span>
-          </Shield>
+            <span>Itajubá · MG · Serra da Mantiqueira</span>
+          </div>
 
-          <h1 className="ms-hero__h1">
-            <span className="ms-hero__pre">O maior encontro de</span>
-            <span className="ms-hero__big">Mototurismo</span>
-            <span className="ms-hero__big ms-hero__big--accent">Gastronômico</span>
-            <span className="ms-hero__pos">do Sul de Minas</span>
-          </h1>
+          <div className="ms-hero__poster">
+            <div>
+              <h1 className="ms-hero__h1">
+                <span className="ms-hero__pre">Moto, comida mineira e rock</span>
+                <span className="ms-hero__big">A serra vira</span>
+                <span className="ms-hero__big ms-hero__big--accent">ponto de encontro.</span>
+              </h1>
+              <p className="ms-hero__dek">Dois dias para chegar rodando, estacionar no parque e viver Itajubá com quem gosta da mesma estrada.</p>
+              <div className="ms-actions ms-actions--left ms-hero__actions">
+                <a className="ms-btn" href="#proxima">Acompanhar 3ª edição</a>
+                <a className="ms-btn ms-btn--ghost" href={MAPS} target="_blank" rel="noopener noreferrer">Como chegar</a>
+              </div>
+            </div>
+
+            <aside className="ms-hero__ticket" aria-label="Próxima edição em abril de 2027">
+              <span>Próxima saída</span>
+              <strong>ABR<br />2027</strong>
+              <small>Parque da Cidade<br />Itajubá · MG</small>
+            </aside>
+          </div>
 
           <div className="ms-hero__foot">
-            <span>4.000 motos · 2ª edição · abril de 2026</span>
-            <a href="#publico">Role ↓</a>
+            <span>Na última edição: 4.000 motos · 6.736 pessoas</span>
+            <a href="#experiencia">Ver como foi ↓</a>
           </div>
         </div>
       </section>
 
-      <Marquee items={['Gastronomia mineira', 'Mototurismo', 'Rock ao vivo', 'Exposição de motos', 'Serra da Mantiqueira', 'Espírito biker']} />
+      <div className="ms-roadbook" aria-label="Essência do Motosul Festival">
+        <span>01 · Estrada</span>
+        <span>02 · Mesa mineira</span>
+        <span>03 · Rock no parque</span>
+        <span>04 · Gente de todo Brasil</span>
+      </div>
 
       <nav className="ms-anchors" aria-label="Seções do Motosul Festival">
         <div className="ms-anchors__in">
           {ANCORAS.map((a) => (
             <a key={a.href} href={a.href}>{a.label}</a>
           ))}
-          <a className="ms-anchors__cta" href={IG_EVENTO} target="_blank" rel="noopener noreferrer">@motosulfestival</a>
+          <a className="ms-anchors__cta" href={IG_EVENTO} target="_blank" rel="noopener noreferrer">Acompanhar evento ↗</a>
         </div>
       </nav>
+
+      {/* ── O EVENTO EM CENA ── */}
+      <section className="ms-pulse" id="experiencia" aria-labelledby="ms-pulse-title">
+        <div className="ms-wrap--wide">
+          <header className="ms-pulse__head">
+            <div>
+              <p className="ms-eyebrow">O Motosul em cena</p>
+              <h2 className="ms-display ms-display--sm" id="ms-pulse-title">Chega de moto.<br />Fica pela história.</h2>
+            </div>
+            <p>Motoclubes chegando juntos, comida saindo quente e rock de frente para o lago. Motosul é encontro vivido, não exposição para olhar de longe.</p>
+          </header>
+          <div className="ms-pulse__photos">
+            <figure className="ms-pulse__photo ms-pulse__photo--arrival">
+              <img src="/motosul/g-chegada.jpg" alt="Motociclistas chegando juntos ao Motosul Festival" loading="eager" />
+              <figcaption>Chegada dos motoclubes · Parque da Cidade</figcaption>
+            </figure>
+            <figure className="ms-pulse__photo ms-pulse__photo--people">
+              <img src="/motosul/g-publico-palco.jpg" alt="Público reunido diante do palco do festival" loading="eager" />
+              <figcaption>Rock, conversa e reencontro</figcaption>
+            </figure>
+            <figure className="ms-pulse__photo ms-pulse__photo--table">
+              <img src="/motosul/gastronomia.jpg" alt="Comida servida durante o Motosul Festival" loading="lazy" />
+              <figcaption>Sabores da Mantiqueira</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
 
       {/* ── O PÚBLICO ── */}
       <section className="ms-sec ms-sec--photo" id="publico">
@@ -252,7 +332,6 @@ export default function MotosulPage() {
             </div>
           </div>
 
-          <SecFoot n="01" />
         </div>
       </section>
 
@@ -301,7 +380,6 @@ export default function MotosulPage() {
             </ul>
           </div>
 
-          <SecFoot n="02" />
         </div>
       </section>
 
@@ -330,7 +408,28 @@ export default function MotosulPage() {
 
           <p className="ms-kicker-big">A cidade abraçou<br /><span className="is-accent">o motociclismo.</span></p>
 
-          <SecFoot n="03" />
+        </div>
+      </section>
+
+      {/* ── HOTÉIS PARCEIROS ── */}
+      <section className="ms-sec ms-sec--light" id="hoteis">
+        <div className="ms-wrap">
+          <p className="ms-eyebrow">Onde dormir</p>
+          <h2 className="ms-display">Hotéis<br />parceiros.</h2>
+          <span className="ms-rule" aria-hidden="true" />
+          <p className="ms-lead">Itajubá tem rede hoteleira preparada para receber motociclista — e ela lota. Reserve com antecedência.</p>
+
+          <ul className="ms-hoteis">
+            {HOTEIS.map((h) => (
+              <li key={h.nome}>
+                <span className="ms-hoteis__nome">{h.nome}</span>
+                <a href={h.href}>{h.tel}</a>
+              </li>
+            ))}
+          </ul>
+
+          <p className="ms-note">Parceiros da 2ª edição. Confirme disponibilidade e condições direto com o hotel.</p>
+
         </div>
       </section>
 
@@ -366,7 +465,27 @@ export default function MotosulPage() {
             ))}
           </ul>
 
-          <SecFoot n="04" />
+        </div>
+      </section>
+
+      {/* ── MINAS NA IMPRENSA ── */}
+      <section className="ms-sec ms-sec--light" id="minas">
+        <div className="ms-wrap">
+          <p className="ms-eyebrow">Minas no radar</p>
+          <h2 className="ms-display">Quando o mundo<br />olha para <span className="is-accent">Minas</span>,<br />a estrada aponta<br />para o Motosul.</h2>
+          <span className="ms-rule" aria-hidden="true" />
+          <p className="ms-lead">O estado entrou nas listas internacionais de destino e a cozinha mineira foi eleita a melhor do país. O festival é a porta de entrada dessa Minas em duas rodas.</p>
+
+          <ul className="ms-clipping">
+            {IMPRENSA.map((c) => (
+              <li key={c.titulo}>
+                <span className="ms-clipping__fonte">{c.fonte}</span>
+                <h3>{c.titulo}</h3>
+                <p>{c.nota}</p>
+              </li>
+            ))}
+          </ul>
+
         </div>
       </section>
 
@@ -387,7 +506,6 @@ export default function MotosulPage() {
             ))}
           </ul>
 
-          <SecFoot n="05" />
         </div>
       </section>
 
@@ -404,7 +522,6 @@ export default function MotosulPage() {
           <div className="ms-hair" aria-hidden="true" />
           <p className="ms-lead">Vem rodar, comer, conversar e voltar contando.<br />É essa comunidade que apresenta Itajubá ao país.</p>
 
-          <SecFoot n="06" />
         </div>
       </section>
 
@@ -419,9 +536,12 @@ export default function MotosulPage() {
           <div className="ms-exps">
             {EXPERIENCIAS.map((e, i) => (
               <article className="ms-exp" key={e.t}>
-                <span className="ms-exp__n">{String(i + 1).padStart(2, '0')}</span>
-                <h3>{e.t}</h3>
-                <p>{e.d}</p>
+                <img src={e.src} alt={e.alt} loading="lazy" />
+                <div className="ms-exp__body">
+                  <span className="ms-exp__n">{String(i + 1).padStart(2, '0')}</span>
+                  <h3>{e.t}</h3>
+                  <p>{e.d}</p>
+                </div>
               </article>
             ))}
           </div>
@@ -448,7 +568,49 @@ export default function MotosulPage() {
           </div>
           <p className="ms-note">A grade da 3ª edição ainda está sendo montada.</p>
 
-          <SecFoot n="07" />
+        </div>
+      </section>
+
+      {/* ── ESTRUTURA DO PARQUE ── */}
+      <section className="ms-sec" id="parque">
+        <div className="ms-wrap--wide">
+          <p className="ms-eyebrow">O parque</p>
+          <h2 className="ms-display">O parque mais completo<br />do Sul de Minas.</h2>
+          <span className="ms-rule" aria-hidden="true" />
+          <p className="ms-lead">O Motosul não monta uma estrutura provisória num terreno: acontece dentro de um parque que já funciona o ano inteiro, com restaurantes, quadras, kartódromo e área kids.</p>
+
+          <div className="ms-parque">
+            <div className="ms-reel">
+              {/* Praça de alimentação do parque, em formato vertical. */}
+              <video
+                src="/motosul/praca.mp4"
+                poster="/motosul/praca-poster.jpg"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="none"
+                aria-label="Praça de alimentação do Parque da Cidade, em Itajubá"
+              />
+              <span className="ms-reel__tag">Praça de alimentação</span>
+            </div>
+
+            <div className="ms-parque__listas">
+              {PARQUE.map((g) => (
+                <div className="ms-parque__grupo" key={g.t}>
+                  <h3>{g.t}</h3>
+                  <ul>
+                    {g.itens.map((i) => <li key={i}>{i}</li>)}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <ul className="ms-parque__base">
+            {PARQUE_BASE.map((b) => <li key={b}>{b}</li>)}
+          </ul>
+
         </div>
       </section>
 
@@ -469,7 +631,6 @@ export default function MotosulPage() {
               </figure>
             ))}
           </div>
-          <SecFoot n="08" />
         </div>
       </section>
 
@@ -530,7 +691,6 @@ export default function MotosulPage() {
             ))}
           </div>
 
-          <SecFoot n="09" />
         </div>
       </section>
 
@@ -541,6 +701,21 @@ export default function MotosulPage() {
           <h2 className="ms-display">Sua marca<br />no pátio.</h2>
           <span className="ms-rule" aria-hidden="true" />
           <p className="ms-lead">6.736 pessoas no parque, 9 em cada 10 vindas de fora, dois terços em big trail — e 4,7 milhões de visualizações na comunicação do evento.</p>
+
+          <div className="ms-parceiros">
+            <p className="ms-parceiros__label">Marcas que já estiveram no pátio</p>
+            <ul>
+              {PARCEIROS.map((m) => (
+                <li className={m.tema === 'dark' ? 'is-dark' : undefined} key={m.nome}>
+                  <img src={m.src} alt={m.nome} loading="lazy" />
+                </li>
+              ))}
+            </ul>
+            <p className="ms-parceiros__inst">
+              <span>Realização com apoio institucional</span>
+              <img src="/motosul/parceiros/prefeitura-itajuba.png" alt="Prefeitura de Itajubá" loading="lazy" />
+            </p>
+          </div>
 
           <div className="ms-cotas">
             {COTAS.map((c) => (
@@ -556,7 +731,6 @@ export default function MotosulPage() {
             <a className="ms-btn" href="mailto:contato@motosulfestival.com.br?subject=Patroc%C3%ADnio%20Motosul%20Festival">Falar com a organização</a>
           </div>
 
-          <SecFoot n="10" />
         </div>
       </section>
 
