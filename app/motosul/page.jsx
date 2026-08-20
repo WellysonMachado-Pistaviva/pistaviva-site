@@ -38,12 +38,12 @@ const RODOVIAS = [
 ];
 
 const ORIGENS = [
-  { uf: 'São Paulo', p: 47 },
-  { uf: 'Minas Gerais', p: 46 },
-  { uf: 'Rio de Janeiro', p: 6 },
+  { uf: 'São Paulo', sigla: 'SP', p: 47, src: '/motosul/mapas/sp.png' },
+  { uf: 'Minas Gerais', sigla: 'MG', p: 46, src: '/motosul/mapas/mg.png' },
+  { uf: 'Rio de Janeiro', sigla: 'RJ', p: 6, src: '/motosul/mapas/rj.png' },
 ];
 
-const OUTROS_ESTADOS = ['SC', 'RS', 'GO', 'ES', 'RN', 'DF', 'AM'];
+const OUTROS_ESTADOS = ['sc', 'rs', 'go', 'es', 'rn', 'df', 'am'];
 
 // Alcance digital da 2ª edição (relatório de mídia do evento).
 const ALCANCE = [
@@ -277,17 +277,28 @@ export default function MotosulPage() {
 
           <div className="ms-origens">
             {ORIGENS.map((o) => (
-              <div key={o.uf}>
-                <span className="ms-origens__uf">{o.uf}</span>
-                <b>{o.p}%</b>
+              <div className="ms-origem" key={o.sigla}>
+                <img src={o.src} alt={`Mapa de ${o.uf}`} loading="lazy" width="560" height="560" />
+                <div>
+                  <b>{o.p}%</b>
+                  <span className="ms-origem__uf">{o.uf}</span>
+                  <span className="ms-origem__sigla">{o.sigla}</span>
+                </div>
               </div>
             ))}
           </div>
 
-          <p className="ms-outros">
-            <span>Outros estados · menos de 1%</span>
-            {OUTROS_ESTADOS.map((uf) => <b key={uf}>{uf}</b>)}
-          </p>
+          <div className="ms-outros">
+            <p className="ms-outros__label">Outros estados<b>&lt;1%</b></p>
+            <ul>
+              {OUTROS_ESTADOS.map((uf) => (
+                <li key={uf}>
+                  <img src={`/motosul/mapas/${uf}.png`} alt={`Mapa de ${uf.toUpperCase()}`} loading="lazy" width="240" height="240" />
+                  <span>{uf.toUpperCase()}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           <SecFoot n="02" />
         </div>
