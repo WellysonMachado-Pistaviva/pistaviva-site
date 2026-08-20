@@ -3403,15 +3403,15 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 .ms-pulse{ padding:clamp(68px,8vw,112px) var(--gut); background:#ece8df; color:#16161a; }
 .ms-pulse__head{ display:grid; grid-template-columns:minmax(0,1.15fr) minmax(280px,.6fr); gap:clamp(28px,6vw,86px); align-items:end; margin-bottom:clamp(36px,5vw,64px); }
 .ms-pulse__head > p{ max-width:42ch; margin:0 0 4px; color:#4d4d54; font-size:clamp(17px,1.5vw,20px); line-height:1.55; }
-.ms-pulse__photos{ display:grid; grid-template-columns:repeat(12,1fr); gap:12px; align-items:end; }
+.ms-pulse__photos{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; align-items:stretch; }
 .ms-pulse__photo{ position:relative; margin:0; overflow:hidden; background:#17171a; }
 .ms-pulse__photo::after{ content:""; position:absolute; inset:45% 0 0; background:linear-gradient(transparent,rgba(10,10,12,.86)); pointer-events:none; }
 .ms-pulse__photo img{ width:100%; height:100%; object-fit:cover; filter:saturate(.9) contrast(1.04); transition:transform .7s cubic-bezier(.2,.7,.2,1), filter .3s; }
 .ms-pulse__photo:hover img{ transform:scale(1.025); filter:saturate(1) contrast(1.02); }
 .ms-pulse__photo figcaption{ position:absolute; z-index:2; left:18px; right:18px; bottom:16px; font-family:var(--mono); font-weight:700; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:#f4f1eb; }
-.ms-pulse__photo--arrival{ grid-column:span 6; height:470px; }
-.ms-pulse__photo--people{ grid-column:span 4; height:390px; }
-.ms-pulse__photo--table{ grid-column:span 2; height:310px; }
+.ms-pulse__photo--arrival,
+.ms-pulse__photo--people,
+.ms-pulse__photo--table{ grid-column:auto; aspect-ratio:4/3; height:auto; }
 
 /* Serviço antes dos números: leitura de placa de estrada, não coleção de cards. */
 .ms-plan{ padding:clamp(64px,7vw,96px) var(--gut); background:var(--accent); color:#101014; scroll-margin-top:124px; }
@@ -3722,8 +3722,8 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   .ms-pulse{ padding:68px 18px; }
   .ms-pulse__head{ grid-template-columns:1fr; gap:24px; }
   .ms-pulse__photos{ grid-template-columns:1fr 1fr; gap:8px; }
-  .ms-pulse__photo--arrival{ grid-column:1/-1; height:330px; }
-  .ms-pulse__photo--people,.ms-pulse__photo--table{ grid-column:span 1; height:230px; }
+  .ms-pulse__photo--arrival{ grid-column:1/-1; }
+  .ms-pulse__photo--people,.ms-pulse__photo--table{ grid-column:span 1; }
   .ms-pulse__photo figcaption{ left:12px; right:12px; bottom:12px; font-size:.62rem; line-height:1.4; }
 
   .ms-exps{ grid-template-columns:1fr; gap:10px; }

@@ -236,7 +236,7 @@ const PROGRAMACAO = [
 
 const EXPERIENCIAS = [
   { t: 'Gastronomia mineira', d: 'Queijo da serra, pastel de milho, costela, doce de leite e cachaça. A praça de alimentação faz parte do roteiro.', src: '/motosul/gastronomia.jpg', alt: 'Prato servido na área gastronômica do Motosul' },
-  { t: 'Motos no parque', d: 'Big trails, customizadas e clássicas ocupam o pátio ao lado dos motoclubes que descem a serra.', src: '/motosul/g-fila-motos.jpg', alt: 'Fila de motos estacionadas no Parque da Cidade' },
+  { t: 'Motos no parque', d: 'Big trails, customizadas e clássicas ocupam o pátio — a maioria chega rodando, vinda de outro estado.', src: '/motosul/g-fila-motos.jpg', alt: 'Fila de motos estacionadas no Parque da Cidade' },
   { t: 'Rock ao vivo', d: 'Bandas da região tocam nos dois dias, com palco aberto no coração do parque.', src: '/motosul/g-palco-mic.jpg', alt: 'Show de rock no palco do Motosul Festival' },
   { t: 'Serra antes e depois', d: 'O festival vira ponto de partida para mirantes, curvas e paradas da Mantiqueira mineira e paulista.', src: '/motosul/g-rua.jpg', alt: 'Motociclista chegando a Itajubá pelas estradas da Mantiqueira' },
 ];
@@ -407,12 +407,12 @@ export default function MotosulPage() {
               <p className="ms-eyebrow">O Motosul em cena</p>
               <h2 className="ms-display ms-display--sm" id="ms-pulse-title">Chega de moto.<br />Fica pela história.</h2>
             </div>
-            <p>Motoclubes chegando juntos, comida saindo quente e rock de frente para o lago. Motosul é encontro vivido, não exposição para olhar de longe.</p>
+            <p>Gente chegando de estrada, comida saindo quente do fogão e rock de frente para o lago. O Motosul é turismo de experiência: um fim de semana que se vive, não um encontro para olhar moto parada.</p>
           </header>
           <div className="ms-pulse__photos">
             <figure className="ms-pulse__photo ms-pulse__photo--arrival">
               <img src="/motosul/g-chegada.jpg" alt="Motociclistas chegando juntos ao Motosul Festival" loading="eager" />
-              <figcaption>Chegada dos motoclubes · Parque da Cidade</figcaption>
+              <figcaption>Chegada pela serra · Parque da Cidade</figcaption>
             </figure>
             <figure className="ms-pulse__photo ms-pulse__photo--people">
               <img src="/motosul/g-publico-palco.jpg" alt="Público reunido diante do palco do festival" loading="eager" />
@@ -895,7 +895,7 @@ export default function MotosulPage() {
             <p className="ms-eyebrow">Quem faz acontecer</p>
             <h2 className="ms-display ms-display--sm">Organização</h2>
             <span className="ms-rule" aria-hidden="true" />
-            <p className="ms-p">O Motosul Festival é realizado pela equipe do <b>Pistaviva</b> em parceria com a cidade de Itajubá — do desenho do evento à articulação com comércio, hotelaria e motoclubes da região.</p>
+            <p className="ms-p">O Motosul Festival é realizado pela equipe do <b>Pistaviva</b> em parceria com a cidade de Itajubá — do desenho do evento à articulação com comércio, hotelaria e a rede de turismo da região.</p>
             <p className="ms-p">O festival dura dois dias. O Pistaviva é o ano inteiro: rotas, encontros, conteúdo e a comunidade que sustenta o movimento na serra.</p>
             <div className="ms-actions ms-actions--left">
               <Link className="ms-btn" href="/comunidade">Entrar na comunidade</Link>
