@@ -350,9 +350,9 @@ export default function MotosulPage() {
               <span>Itajubá · Minas Gerais</span>
             </div>
             <div>
-              <dt>Chegada</dt>
-              <dd>BR-381 · BR-459</dd>
-              <span>Conexão pela MG-295.</span>
+              <dt>Acessos</dt>
+              <dd>Quatro caminhos</dd>
+              <span>Piquete · São Bento do Sapucaí · São Lourenço · Pouso Alegre.</span>
             </div>
             <div>
               <dt>Formato</dt>
