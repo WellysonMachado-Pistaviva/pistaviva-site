@@ -134,7 +134,8 @@ const ANCORAS = [
 ];
 
 export const metadata = {
-  title: 'Motosul Festival — Mototurismo Gastronômico no Sul de Minas',
+  // absolute: sem o sufixo '· Pistaviva' do template do layout — a aba mostra só o nome do evento.
+  title: { absolute: 'Motosul Festival' },
   description:
     'O maior encontro de mototurismo gastronômico do Sul de Minas, no Parque da Cidade em Itajubá — Serra da Mantiqueira. 4.000 motos e 6.736 pessoas na 2ª edição. 3ª edição em abril de 2027.',
   alternates: { canonical: '/motosul' },
