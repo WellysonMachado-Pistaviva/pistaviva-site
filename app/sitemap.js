@@ -43,6 +43,7 @@ export default async function sitemap() {
     { path: '/fipe', priority: 0.8, changeFrequency: 'weekly' },
     { path: '/comboio', priority: 0.8, changeFrequency: 'weekly' },
     { path: '/eventos', priority: 0.8, changeFrequency: 'weekly' },
+    { path: '/motosul', priority: 0.8, changeFrequency: 'weekly' },
 
     // Páginas institucionais — prioridade média
     { path: '/sobre', priority: 0.7, changeFrequency: 'monthly' },

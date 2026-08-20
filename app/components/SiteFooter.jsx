@@ -15,6 +15,7 @@ export default function SiteFooter() {
             <Link href="/estradas">Estradas para rodar</Link>
             <Link href="/desafios">Desafios</Link>
             <Link href="/eventos">Pontos de encontro</Link>
+            <Link href="/motosul">Motosul Festival</Link>
             <Link href="/rotas">Planejar viagem</Link>
           </div>
           <div className="foot-col">
