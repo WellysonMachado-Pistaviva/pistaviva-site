@@ -63,9 +63,34 @@ const SABORES = ['Queijo', 'Pastel de milho', 'Costela', 'Doce de leite', 'Cacha
 
 // Reconhecimentos recentes de Minas na imprensa de turismo.
 const IMPRENSA = [
-  { fonte: 'Condé Nast Traveler', titulo: 'Minas Gerais é eleito um dos melhores destinos do mundo para 2026', nota: 'A revista destaca cultura, gastronomia e hospitalidade mineiras como diferenciais globais.' },
-  { fonte: 'Melhores Destinos', titulo: 'Comida mineira é eleita a melhor do Brasil', nota: 'A cozinha regional de Minas lidera o ranking nacional de gastronomia.' },
-  { fonte: 'Estado de Minas', titulo: 'Minas Gerais no topo do mundo', nota: 'Tradição e modernidade colocam o estado na lista dos destinos mais desejados do planeta.' },
+  {
+    fonte: 'Condé Nast Traveler',
+    data: 'Nov · 2025',
+    titulo: 'Minas entre os melhores lugares para visitar em 2026',
+    nota: 'Tradições culinárias, hospitalidade e estradas gastronômicas colocaram o estado na seleção mundial.',
+    href: 'https://www.cntraveler.com/story/the-best-places-to-go-in-2026',
+  },
+  {
+    fonte: 'Estado de Minas',
+    data: '19 dez · 2025',
+    titulo: 'Minas é um dos melhores lugares do mundo para comer',
+    nota: 'Queijo Minas Artesanal, café, vinhos e a cena gastronômica mineira ganham destaque internacional.',
+    href: 'https://www.em.com.br/degusta/2025/12/7317812-minas-gerais-e-eleita-um-dos-melhores-lugares-para-comer-no-mundo.html',
+  },
+  {
+    fonte: 'O Tempo',
+    data: '4 nov · 2025',
+    titulo: 'Minas é destino para visitar em 2026',
+    nota: 'A publicação brasileira contextualiza o reconhecimento da Condé Nast ao estado.',
+    href: 'https://www.otempo.com.br/turismo/2025/11/4/minas-e-eleita-pela-conde-nast-traveler-como-um-dos-destinos-para-visitar-em-2026',
+  },
+  {
+    fonte: 'Agência Minas',
+    data: '21 out · 2025',
+    titulo: 'Turismo mineiro vive melhor momento internacional da série',
+    nota: 'Reservas internacionais para o fim de 2025 cresceram 74%, segundo o Observatório do Turismo.',
+    href: 'https://www.agenciaminas.mg.gov.br/news/pdf/127946.pdf',
+  },
 ];
 
 // Estrutura fixa do Parque da Cidade, onde o festival acontece.
@@ -156,13 +181,11 @@ const COTAS = [
 
 const ANCORAS = [
   { href: '#experiencia', label: 'Experiência' },
+  { href: '#planeje', label: 'Planeje sua ida' },
   { href: '#festival', label: 'Programação' },
-  { href: '#itajuba', label: 'Itajubá' },
   { href: '#parque', label: 'O parque' },
   { href: '#galeria', label: 'Fotos' },
   { href: '#publico', label: 'Última edição' },
-  { href: '#minas', label: 'Minas' },
-  { href: '#hoteis', label: 'Hospedagem' },
   { href: '#patrocinio', label: 'Para marcas' },
   { href: '#proxima', label: 'Abril 2027' },
 ];
@@ -299,6 +322,44 @@ export default function MotosulPage() {
               <figcaption>Sabores da Mantiqueira</figcaption>
             </figure>
           </div>
+        </div>
+      </section>
+
+      {/* ── SERVIÇO ── */}
+      <section className="ms-plan" id="planeje" aria-labelledby="ms-plan-title">
+        <div className="ms-wrap--wide ms-plan__grid">
+          <header className="ms-plan__head">
+            <p className="ms-eyebrow">Planeje sua subida</p>
+            <h2 className="ms-display ms-display--sm" id="ms-plan-title">Sua viagem começa antes do portão.</h2>
+            <p>Próxima edição em abril de 2027. Itajubá fica no encontro das estradas da Mantiqueira, com chegada fácil para quem vem de Minas, São Paulo e Rio.</p>
+            <div className="ms-actions ms-actions--left">
+              <a className="ms-btn" href={MAPS} target="_blank" rel="noopener noreferrer">Traçar rota ↗</a>
+              <a className="ms-plan__link" href="#hoteis">Ver hospedagem ↓</a>
+            </div>
+          </header>
+
+          <dl className="ms-plan__facts">
+            <div>
+              <dt>Quando</dt>
+              <dd>Abril de 2027</dd>
+              <span>Data completa em breve.</span>
+            </div>
+            <div>
+              <dt>Onde</dt>
+              <dd>Parque da Cidade</dd>
+              <span>Itajubá · Minas Gerais</span>
+            </div>
+            <div>
+              <dt>Chegada</dt>
+              <dd>BR-381 · BR-459</dd>
+              <span>Conexão pela MG-295.</span>
+            </div>
+            <div>
+              <dt>Formato</dt>
+              <dd>Dois dias no parque</dd>
+              <span>Motos, rock e gastronomia.</span>
+            </div>
+          </dl>
         </div>
       </section>
 
@@ -471,20 +532,27 @@ export default function MotosulPage() {
       {/* ── MINAS NA IMPRENSA ── */}
       <section className="ms-sec ms-sec--light" id="minas">
         <div className="ms-wrap">
-          <p className="ms-eyebrow">Minas no radar</p>
-          <h2 className="ms-display">Quando o mundo<br />olha para <span className="is-accent">Minas</span>,<br />a estrada aponta<br />para o Motosul.</h2>
+          <p className="ms-eyebrow">Minas no mapa de 2026</p>
+          <h2 className="ms-display">O mundo está<br />olhando para<br /><span className="is-accent">Minas.</span></h2>
           <span className="ms-rule" aria-hidden="true" />
-          <p className="ms-lead">O estado entrou nas listas internacionais de destino e a cozinha mineira foi eleita a melhor do país. O festival é a porta de entrada dessa Minas em duas rodas.</p>
+          <p className="ms-lead">O Motosul acontece no encontro de três forças que fazem Minas viajar longe: estrada, hospitalidade e comida com identidade.</p>
 
-          <ul className="ms-clipping">
-            {IMPRENSA.map((c) => (
+          <ol className="ms-clipping">
+            {IMPRENSA.map((c, i) => (
               <li key={c.titulo}>
-                <span className="ms-clipping__fonte">{c.fonte}</span>
-                <h3>{c.titulo}</h3>
-                <p>{c.nota}</p>
+                <a href={c.href} target="_blank" rel="noopener noreferrer">
+                  <span className="ms-clipping__index">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="ms-clipping__body">
+                    <span className="ms-clipping__fonte">{c.fonte} · {c.data}</span>
+                    <h3>{c.titulo}</h3>
+                    <p>{c.nota}</p>
+                    <span className="ms-clipping__read">Ler fonte ↗</span>
+                  </span>
+                </a>
               </li>
             ))}
-          </ul>
+          </ol>
+          <p className="ms-source-note">Reconhecimentos citados referem-se ao destino Minas Gerais. Fontes abertas acima.</p>
 
         </div>
       </section>

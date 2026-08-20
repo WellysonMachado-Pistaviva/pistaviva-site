@@ -3413,6 +3413,28 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 .ms-pulse__photo--people{ grid-column:span 4; height:390px; }
 .ms-pulse__photo--table{ grid-column:span 2; height:310px; }
 
+/* Serviço antes dos números: leitura de placa de estrada, não coleção de cards. */
+.ms-plan{ padding:clamp(64px,7vw,96px) var(--gut); background:var(--accent); color:#101014; scroll-margin-top:124px; }
+.ms-plan__grid{ display:grid; grid-template-columns:minmax(0,.9fr) minmax(520px,1.1fr); gap:clamp(42px,7vw,104px); align-items:start; }
+.ms-plan__head .ms-eyebrow{ color:#101014; margin-bottom:20px; }
+.ms-plan__head > p:not(.ms-eyebrow){ max-width:48ch; margin:26px 0 0; font-size:clamp(16px,1.35vw,19px); line-height:1.55; color:rgba(16,16,20,.78); }
+.ms-plan .ms-actions{ align-items:center; margin-top:30px; }
+.ms-plan .ms-btn{ background:#101014; border-color:#101014; color:#fff; }
+.ms-plan .ms-btn:hover{ background:#fff; border-color:#fff; color:#101014; }
+.ms-plan__link{ font-family:var(--mono); font-weight:800; font-size:.76rem; letter-spacing:.1em; text-transform:uppercase; color:#101014; border-bottom:1px solid rgba(16,16,20,.48); padding:8px 0 6px; }
+.ms-plan__link:hover{ border-color:#101014; color:#101014; }
+.ms-plan__facts{ margin:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:2px solid #101014; border-left:1px solid rgba(16,16,20,.38); }
+.ms-plan__facts > div{ min-height:180px; padding:24px clamp(18px,2.4vw,32px); border-right:1px solid rgba(16,16,20,.38); border-bottom:1px solid rgba(16,16,20,.38); }
+.ms-plan__facts dt{ font-family:var(--mono); font-weight:800; font-size:.66rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(16,16,20,.62); }
+.ms-plan__facts dd{ margin:24px 0 10px; font-family:var(--display); font-weight:800; font-size:clamp(24px,2.7vw,38px); line-height:.95; text-transform:uppercase; }
+.ms-plan__facts span{ display:block; font-size:.86rem; line-height:1.45; color:rgba(16,16,20,.66); }
+@media(max-width:980px){ .ms-plan__grid{ grid-template-columns:1fr; } }
+@media(max-width:560px){
+  .ms-plan{ padding:62px 18px; }
+  .ms-plan__facts{ grid-template-columns:1fr; }
+  .ms-plan__facts > div{ min-height:0; }
+}
+
 /* Dot matrix — piloto x garupa */
 .ms-dots{ display:grid; grid-template-columns:repeat(25,1fr); gap:clamp(5px,.7vw,9px); margin:0 0 24px; }
 .ms-dots span{ aspect-ratio:1; border-radius:50%; background:var(--ms-fg); }
@@ -3562,12 +3584,24 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 @media(max-width:640px){ .ms-alcance{ grid-template-columns:1fr; } }
 
 /* Clipping de imprensa */
-.ms-clipping{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--ms-line); }
-.ms-clipping li{ background:var(--ms-bg); padding:28px 24px; }
-.ms-clipping__fonte{ display:inline-block; font-family:var(--mono); font-weight:700; font-size:.6rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); border:1px solid var(--accent); border-radius:20px; padding:4px 11px; }
-.ms-clipping h3{ font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:clamp(17px,1.7vw,23px); line-height:1.06; margin:18px 0 12px; text-wrap:pretty; }
+.ms-clipping{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr); border-top:2px solid var(--ms-fg); }
+.ms-clipping li{ border-bottom:1px solid var(--ms-line); }
+.ms-clipping li:first-child{ grid-row:span 3; border-right:1px solid var(--ms-line); }
+.ms-clipping a{ min-height:100%; display:grid; grid-template-columns:42px minmax(0,1fr); gap:16px; padding:clamp(22px,3vw,34px); color:var(--ms-fg); transition:background .2s; }
+.ms-clipping a:hover{ background:rgba(255,90,0,.075); }
+.ms-clipping__index{ font-family:var(--mono); font-weight:800; font-size:.68rem; letter-spacing:.14em; color:var(--accent); padding-top:3px; }
+.ms-clipping__body{ display:block; }
+.ms-clipping__fonte{ display:block; font-family:var(--mono); font-weight:700; font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ms-mut); }
+.ms-clipping h3{ font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:clamp(18px,1.8vw,25px); line-height:1.02; margin:17px 0 11px; text-wrap:pretty; }
+.ms-clipping li:first-child h3{ font-size:clamp(30px,4vw,54px); margin-top:clamp(30px,6vw,72px); }
 .ms-clipping p{ font-size:.9rem; line-height:1.6; color:var(--ms-dim); margin:0; }
-@media(max-width:860px){ .ms-clipping{ grid-template-columns:1fr; } }
+.ms-clipping__read{ display:block; margin-top:22px; font-family:var(--mono); font-weight:800; font-size:.64rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+.ms-source-note{ margin:18px 0 0; font-family:var(--mono); font-size:.62rem; line-height:1.55; letter-spacing:.08em; text-transform:uppercase; color:var(--ms-mut); }
+@media(max-width:860px){
+  .ms-clipping{ grid-template-columns:1fr; }
+  .ms-clipping li:first-child{ grid-row:auto; border-right:0; }
+  .ms-clipping li:first-child h3{ font-size:clamp(25px,7vw,38px); margin-top:17px; }
+}
 
 /* Estrutura do parque + reel vertical */
 .ms-parque{ display:grid; grid-template-columns:minmax(230px,300px) 1fr; gap:clamp(24px,4vw,56px); align-items:start; }
