@@ -3415,7 +3415,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 
 /* Serviço antes dos números: leitura de placa de estrada, não coleção de cards. */
 .ms-plan{ padding:clamp(64px,7vw,96px) var(--gut); background:var(--accent); color:#101014; scroll-margin-top:124px; }
-.ms-plan__grid{ display:grid; grid-template-columns:minmax(0,.9fr) minmax(520px,1.1fr); gap:clamp(42px,7vw,104px); align-items:start; }
+.ms-plan__grid{ display:grid; grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr); gap:clamp(34px,5vw,78px); align-items:start; }
 .ms-plan__head .ms-eyebrow{ color:#101014; margin-bottom:20px; }
 .ms-plan__head > p:not(.ms-eyebrow){ max-width:48ch; margin:26px 0 0; font-size:clamp(16px,1.35vw,19px); line-height:1.55; color:rgba(16,16,20,.78); }
 .ms-plan .ms-actions{ align-items:center; margin-top:30px; }
@@ -3423,16 +3423,52 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 .ms-plan .ms-btn:hover{ background:#fff; border-color:#fff; color:#101014; }
 .ms-plan__link{ font-family:var(--mono); font-weight:800; font-size:.76rem; letter-spacing:.1em; text-transform:uppercase; color:#101014; border-bottom:1px solid rgba(16,16,20,.48); padding:8px 0 6px; }
 .ms-plan__link:hover{ border-color:#101014; color:#101014; }
-.ms-plan__facts{ margin:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:2px solid #101014; border-left:1px solid rgba(16,16,20,.38); }
-.ms-plan__facts > div{ min-height:180px; padding:24px clamp(18px,2.4vw,32px); border-right:1px solid rgba(16,16,20,.38); border-bottom:1px solid rgba(16,16,20,.38); }
-.ms-plan__facts dt{ font-family:var(--mono); font-weight:800; font-size:.66rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(16,16,20,.62); }
-.ms-plan__facts dd{ margin:24px 0 10px; font-family:var(--display); font-weight:800; font-size:clamp(24px,2.7vw,38px); line-height:.95; text-transform:uppercase; }
-.ms-plan__facts span{ display:block; font-size:.86rem; line-height:1.45; color:rgba(16,16,20,.66); }
-@media(max-width:980px){ .ms-plan__grid{ grid-template-columns:1fr; } }
+.ms-plan__meta{ margin:34px 0 0; border-top:2px solid #101014; }
+.ms-plan__meta > div{ display:grid; grid-template-columns:76px 1fr; gap:14px; padding:12px 0; border-bottom:1px solid rgba(16,16,20,.34); }
+.ms-plan__meta dt{ font-family:var(--mono); font-weight:800; font-size:.61rem; letter-spacing:.16em; text-transform:uppercase; color:rgba(16,16,20,.58); }
+.ms-plan__meta dd{ margin:0; font-family:var(--display); font-weight:800; font-size:1rem; line-height:1.15; text-transform:uppercase; }
+
+/* Mapa esquemático de acessos: linguagem de roadbook. */
+.ms-arrival-map{ margin:0; background:#101014; color:#f1ede5; border-top:4px solid #101014; overflow:hidden; }
+.ms-arrival-map__head{ display:flex; align-items:flex-end; justify-content:space-between; gap:22px; padding:24px clamp(20px,2.4vw,30px) 20px; border-bottom:1px solid rgba(255,255,255,.14); }
+.ms-arrival-map__head > span{ font-family:var(--mono); font-weight:800; font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); }
+.ms-arrival-map__head strong{ font-family:var(--display); font-weight:800; font-size:clamp(25px,2.7vw,38px); line-height:.9; text-transform:uppercase; text-align:right; }
+.ms-arrival-map__svg{ display:block; width:100%; height:auto; border-bottom:1px solid rgba(255,255,255,.14); }
+.ms-map__terrain path{ fill:none; stroke:rgba(255,255,255,.08); stroke-width:1.5; stroke-dasharray:3 9; }
+.ms-map__route,.ms-map__finish{ fill:none; stroke:#d7d2c9; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
+.ms-map__route--a{ stroke:var(--accent); stroke-width:6; }
+.ms-map__route--b{ stroke-dasharray:11 7; }
+.ms-map__route--c{ stroke-dasharray:2 7; stroke-width:4; }
+.ms-map__route--d{ stroke-dasharray:18 6 3 6; }
+.ms-map__finish{ stroke:var(--accent); stroke-width:5; }
+.ms-map__label circle{ fill:#101014; stroke:#f1ede5; stroke-width:2; vector-effect:non-scaling-stroke; }
+.ms-map__label text,.ms-map__destination text,.ms-map__park text{ fill:#f1ede5; font-family:var(--mono); font-weight:800; font-size:12px; letter-spacing:1.1px; text-anchor:middle; }
+.ms-map__label .ms-map__uf,.ms-map__destination .ms-map__uf,.ms-map__park .ms-map__uf{ fill:#8f8a83; font-size:10px; letter-spacing:2px; }
+.ms-map__destination circle{ fill:var(--accent); stroke:#f1ede5; stroke-width:3; }
+.ms-map__destination text{ fill:var(--accent); font-size:17px; }
+.ms-map__destination .ms-map__uf{ fill:#f1ede5; }
+.ms-map__park circle{ fill:#f1ede5; stroke:var(--accent); stroke-width:3; }
+.ms-map__park text{ font-size:12px; }
+.ms-map__keys text{ fill:var(--accent); font-family:var(--display); font-weight:800; font-size:22px; }
+.ms-arrival-map__routes{ list-style:none; margin:0; padding:0; }
+.ms-arrival-map__routes li{ border-bottom:1px solid rgba(255,255,255,.12); }
+.ms-arrival-map__routes a{ min-height:58px; display:grid; grid-template-columns:34px minmax(145px,.85fr) minmax(220px,1.6fr) auto; align-items:center; gap:14px; padding:9px clamp(18px,2.4vw,28px); color:#f1ede5; transition:background .2s; }
+.ms-arrival-map__routes a:hover{ background:rgba(255,90,0,.12); }
+.ms-route__id{ font-family:var(--display); font-weight:800; font-size:1.25rem; color:var(--accent); }
+.ms-route__origin{ font-family:var(--display); font-weight:800; font-size:1rem; line-height:1; text-transform:uppercase; }
+.ms-route__via{ font-size:.76rem; line-height:1.35; color:#aaa59d; }
+.ms-route__open{ font-family:var(--mono); font-weight:800; font-size:.61rem; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); white-space:nowrap; }
+.ms-arrival-map__note{ margin:0; padding:13px clamp(18px,2.4vw,28px) 16px; font-family:var(--mono); font-size:.57rem; line-height:1.5; letter-spacing:.1em; text-transform:uppercase; color:#77736d; }
+@media(max-width:1100px){ .ms-plan__grid{ grid-template-columns:1fr; } }
 @media(max-width:560px){
   .ms-plan{ padding:62px 18px; }
-  .ms-plan__facts{ grid-template-columns:1fr; }
-  .ms-plan__facts > div{ min-height:0; }
+  .ms-plan__meta > div{ grid-template-columns:68px 1fr; }
+  .ms-arrival-map__head{ align-items:flex-start; }
+  .ms-arrival-map__head strong{ font-size:25px; }
+  .ms-arrival-map__svg{ display:none; }
+  .ms-arrival-map__routes a{ grid-template-columns:28px 1fr auto; gap:10px; min-height:92px; }
+  .ms-route__via{ grid-column:2/-1; }
+  .ms-route__open{ grid-column:3; grid-row:1; }
 }
 
 /* Dot matrix — piloto x garupa */
@@ -3474,13 +3510,36 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 .ms-ocup__bar span.is-full{ background:#f2efe9; border-color:#f2efe9; }
 
 /* Frota */
-.ms-frota__claim{ display:flex; align-items:center; gap:clamp(20px,3vw,38px); flex-wrap:wrap; margin-bottom:clamp(36px,5vw,58px); }
+.ms-frota__feature{ display:grid; grid-template-columns:minmax(0,7fr) minmax(300px,5fr); margin-bottom:clamp(36px,5vw,58px); border-top:3px solid var(--accent); }
+.ms-frota__photo{ position:relative; margin:0; background:#1a1a1d; }
+.ms-frota__photo img{ display:block; width:100%; height:100%; min-height:430px; object-fit:cover; }
+.ms-frota__photo figcaption{ position:absolute; left:0; bottom:0; max-width:90%; padding:11px 16px; background:#101014; color:#d8d3cb; font-family:var(--mono); font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; }
+.ms-frota__claim{ display:flex; flex-direction:column; justify-content:center; align-items:flex-start; margin:0; padding:clamp(30px,4.5vw,62px); background:#151519; }
+.ms-frota__number{ font-family:var(--display); font-weight:800; font-size:clamp(84px,11vw,156px); line-height:.72; color:var(--accent); }
+.ms-frota__label{ margin:24px 0 34px; font-family:var(--display); font-weight:800; font-size:clamp(24px,3vw,42px); line-height:.88; text-transform:uppercase; }
+.ms-frota__claim .ms-mono{ margin-bottom:16px; }
 .ms-bars{ list-style:none; margin:0; padding:26px 0 0; border-top:1px solid var(--accent); }
 .ms-bars li{ display:grid; grid-template-columns:1fr auto; align-items:center; gap:6px 18px; padding:14px 0; }
 .ms-bars__k{ grid-column:1/2; font-family:var(--mono); font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ms-dim); }
 .ms-bars__v{ grid-column:2/3; grid-row:1/3; font-family:var(--display); font-weight:800; font-size:clamp(24px,3vw,38px); line-height:1; min-width:78px; text-align:right; }
 .ms-bars__track{ grid-column:1/2; height:6px; background:rgba(255,255,255,.12); display:block; }
 .ms-bars__fill{ display:block; height:100%; background:var(--accent); }
+
+/* Comunidade: fotografia documental visível, sem bloco de slogan isolado. */
+.ms-community{ display:grid; grid-template-columns:minmax(280px,5fr) minmax(0,7fr); gap:clamp(34px,6vw,90px); align-items:center; }
+.ms-community__copy .ms-p{ max-width:44ch; }
+.ms-community__photo{ position:relative; margin:0; min-height:clamp(480px,52vw,720px); overflow:hidden; background:#17171a; }
+.ms-community__photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; transition:transform .65s cubic-bezier(.2,.7,.2,1); }
+.ms-community__photo:hover img{ transform:scale(1.02); }
+.ms-community__photo::after{ content:""; position:absolute; inset:48% 0 0; background:linear-gradient(transparent,rgba(10,10,12,.88)); }
+.ms-community__photo figcaption{ position:absolute; z-index:2; left:clamp(20px,3vw,38px); right:clamp(20px,3vw,38px); bottom:clamp(20px,3vw,34px); color:#fff; }
+.ms-community__photo figcaption strong{ display:block; max-width:13ch; font-family:var(--display); font-weight:800; font-size:clamp(34px,5vw,68px); line-height:.88; text-transform:uppercase; }
+.ms-community__photo figcaption span{ display:block; margin-top:16px; font-family:var(--mono); font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:#d4cfc6; }
+@media(max-width:860px){
+  .ms-frota__feature,.ms-community{ grid-template-columns:1fr; }
+  .ms-frota__photo img{ min-height:0; aspect-ratio:4/3; }
+  .ms-community__photo{ grid-row:1; min-height:620px; }
+}
 
 /* Gastronomia */
 .ms-band{ background:var(--accent); color:#0c0c0d; font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:clamp(20px,3vw,38px); line-height:1.1; padding:26px clamp(20px,3vw,38px); margin:0 0 clamp(36px,5vw,56px); }
@@ -3673,7 +3732,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 }
 
 @media(prefers-reduced-motion:reduce){
-  .ms-pulse__photo img,.ms-exp > img{ transition:none; }
+  .ms-pulse__photo img,.ms-exp > img,.ms-community__photo img{ transition:none; }
 }
 
 /* Faixa de parceiros */

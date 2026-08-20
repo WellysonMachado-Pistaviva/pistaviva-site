@@ -5,6 +5,44 @@ const IG_EVENTO = 'https://instagram.com/motosulfestival';
 const IG_PISTAVIVA = 'https://www.instagram.com/pistavivaoficial';
 const MAPS = 'https://www.google.com/maps/search/-22.4109112,-45.4380434';
 
+const routeOnMaps = (origin, waypoints = []) => {
+  const params = new URLSearchParams({
+    api: '1',
+    origin,
+    destination: '-22.4109112,-45.4380434',
+    travelmode: 'driving',
+  });
+  if (waypoints.length) params.set('waypoints', waypoints.join('|'));
+  return `https://www.google.com/maps/dir/?${params.toString()}`;
+};
+
+const ROTAS_CHEGADA = [
+  {
+    id: 'A',
+    origem: 'São José dos Campos',
+    via: 'São Bento do Sapucaí · Paraisópolis · Piranguinho',
+    href: routeOnMaps('São José dos Campos, SP', ['São Bento do Sapucaí, SP', 'Paraisópolis, MG', 'Piranguinho, MG']),
+  },
+  {
+    id: 'B',
+    origem: 'Piquete',
+    via: 'Wenceslau Braz',
+    href: routeOnMaps('Piquete, SP', ['Wenceslau Braz, MG']),
+  },
+  {
+    id: 'C',
+    origem: 'São Lourenço',
+    via: 'Cristina · Pedralva · Piranguinho',
+    href: routeOnMaps('São Lourenço, MG', ['Cristina, MG', 'Pedralva, MG', 'Piranguinho, MG']),
+  },
+  {
+    id: 'D',
+    origem: 'Pouso Alegre',
+    via: 'Santa Rita do Sapucaí · Piranguinho',
+    href: routeOnMaps('Pouso Alegre, MG', ['Santa Rita do Sapucaí, MG', 'Piranguinho, MG']),
+  },
+];
+
 // Brasão do festival — usado como moldura do logo e como selo numerado das seções.
 function Shield({ className = '', children }) {
   return (
@@ -14,6 +52,69 @@ function Shield({ className = '', children }) {
       </svg>
       <span className="ms-shield__in">{children}</span>
     </span>
+  );
+}
+
+function ArrivalMap() {
+  return (
+    <figure className="ms-arrival-map">
+      <figcaption className="ms-arrival-map__head">
+        <span>Mapa de chegada</span>
+        <strong>Quatro caminhos.<br />Mesmo destino.</strong>
+      </figcaption>
+
+      <svg className="ms-arrival-map__svg" viewBox="0 0 960 580" role="img" aria-labelledby="ms-map-title ms-map-desc">
+        <title id="ms-map-title">Rotas de chegada ao Motosul Festival em Itajubá</title>
+        <desc id="ms-map-desc">São José dos Campos via São Bento do Sapucaí; Piquete via Wenceslau Braz; São Lourenço via Cristina e Pedralva; Pouso Alegre via Santa Rita do Sapucaí. Todas chegam a Itajubá.</desc>
+
+        <g className="ms-map__terrain" aria-hidden="true">
+          <path d="M20 70C170 5 255 92 380 60S620 15 748 72s145 30 192-12" />
+          <path d="M8 525c138-72 238 22 350-20s239-67 342-24 164 52 252 3" />
+          <path d="M70 260c115-72 205-26 282 2s138 24 210-13 142-46 244 13" />
+        </g>
+
+        <g className="ms-map__routes" aria-hidden="true">
+          <path className="ms-map__route ms-map__route--a" d="M82 478C178 478 220 438 298 418S470 372 520 352s82-30 132-35 67-17 98-17" />
+          <path className="ms-map__route ms-map__route--b" d="M86 112c128 0 170 55 274 73s245 72 390 115" />
+          <path className="ms-map__route ms-map__route--c" d="M558 62c0 86 56 106 63 160s50 69 129 78" />
+          <path className="ms-map__route ms-map__route--d" d="M590 525c43-59 58-104 84-140s38-66 76-85" />
+          <path className="ms-map__finish" d="M750 300H902" />
+        </g>
+
+        <g className="ms-map__labels" aria-hidden="true">
+          <g className="ms-map__label"><circle cx="82" cy="478" r="8" /><text x="82" y="510">SÃO JOSÉ DOS CAMPOS</text><text className="ms-map__uf" x="82" y="529">SP</text></g>
+          <g className="ms-map__label"><circle cx="298" cy="418" r="6" /><text x="298" y="452">SÃO BENTO DO SAPUCAÍ</text></g>
+          <g className="ms-map__label"><circle cx="520" cy="352" r="5" /><text x="520" y="384">PARAISÓPOLIS</text></g>
+          <g className="ms-map__label"><circle cx="86" cy="112" r="7" /><text x="86" y="92">PIQUETE</text><text className="ms-map__uf" x="86" y="72">SP</text></g>
+          <g className="ms-map__label"><circle cx="360" cy="185" r="5" /><text x="360" y="164">WENCESLAU BRAZ</text></g>
+          <g className="ms-map__label"><circle cx="558" cy="62" r="7" /><text x="558" y="38">SÃO LOURENÇO</text></g>
+          <g className="ms-map__label"><circle cx="621" cy="222" r="5" /><text x="621" y="201">CRISTINA · PEDRALVA</text></g>
+          <g className="ms-map__label"><circle cx="590" cy="525" r="7" /><text x="590" y="557">POUSO ALEGRE</text></g>
+          <g className="ms-map__label"><circle cx="674" cy="385" r="5" /><text x="674" y="416">SANTA RITA DO SAPUCAÍ</text></g>
+          <g className="ms-map__label ms-map__label--junction"><circle cx="652" cy="317" r="5" /><text x="652" y="295">PIRANGUINHO</text></g>
+          <g className="ms-map__destination"><circle cx="750" cy="300" r="13" /><text x="750" y="273">ITAJUBÁ</text><text className="ms-map__uf" x="750" y="335">MG</text></g>
+          <g className="ms-map__park"><circle cx="902" cy="300" r="10" /><text x="902" y="273">PARQUE DA CIDADE</text><text className="ms-map__uf" x="902" y="335">MOTOSUL</text></g>
+        </g>
+
+        <g className="ms-map__keys" aria-hidden="true">
+          <text x="112" y="466">A</text><text x="112" y="126">B</text><text x="576" y="83">C</text><text x="610" y="514">D</text>
+        </g>
+      </svg>
+
+      <ol className="ms-arrival-map__routes">
+        {ROTAS_CHEGADA.map((rota) => (
+          <li key={rota.id}>
+            <a href={rota.href} target="_blank" rel="noopener noreferrer">
+              <span className="ms-route__id">{rota.id}</span>
+              <span className="ms-route__origin">{rota.origem}</span>
+              <span className="ms-route__via">via {rota.via}</span>
+              <span className="ms-route__open">Abrir rota ↗</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+      <p className="ms-arrival-map__note">Diagrama esquemático · confira trajeto e condições da via antes de sair.</p>
+    </figure>
   );
 }
 
@@ -332,34 +433,17 @@ export default function MotosulPage() {
             <p className="ms-eyebrow">Planeje sua subida</p>
             <h2 className="ms-display ms-display--sm" id="ms-plan-title">Sua viagem começa antes do portão.</h2>
             <p>Próxima edição em abril de 2027. Itajubá fica no encontro das estradas da Mantiqueira, com chegada fácil para quem vem de Minas, São Paulo e Rio.</p>
+            <dl className="ms-plan__meta">
+              <div><dt>Quando</dt><dd>Abril de 2027</dd></div>
+              <div><dt>Destino</dt><dd>Parque da Cidade · Itajubá</dd></div>
+              <div><dt>Formato</dt><dd>Dois dias · motos, rock e gastronomia</dd></div>
+            </dl>
             <div className="ms-actions ms-actions--left">
               <a className="ms-btn" href={MAPS} target="_blank" rel="noopener noreferrer">Traçar rota ↗</a>
               <a className="ms-plan__link" href="#hoteis">Ver hospedagem ↓</a>
             </div>
           </header>
-
-          <dl className="ms-plan__facts">
-            <div>
-              <dt>Quando</dt>
-              <dd>Abril de 2027</dd>
-              <span>Data completa em breve.</span>
-            </div>
-            <div>
-              <dt>Onde</dt>
-              <dd>Parque da Cidade</dd>
-              <span>Itajubá · Minas Gerais</span>
-            </div>
-            <div>
-              <dt>Acessos</dt>
-              <dd>Quatro caminhos</dd>
-              <span>Piquete · São Bento do Sapucaí · São Lourenço · Pouso Alegre.</span>
-            </div>
-            <div>
-              <dt>Formato</dt>
-              <dd>Dois dias no parque</dd>
-              <span>Motos, rock e gastronomia.</span>
-            </div>
-          </dl>
+          <ArrivalMap />
         </div>
       </section>
 
@@ -495,20 +579,21 @@ export default function MotosulPage() {
       </section>
 
       {/* ── A FROTA ── */}
-      <section className="ms-sec ms-sec--photo" id="frota">
-        <img className="ms-sec__bg" src="/motosul/frota-fila.jpg" alt="" aria-hidden="true" loading="lazy" />
-        <div className="ms-wrap">
+      <section className="ms-sec" id="frota">
+        <div className="ms-wrap--wide">
           <p className="ms-eyebrow">A frota</p>
           <h2 className="ms-display">Terra de<br />big trail.</h2>
           <span className="ms-rule" aria-hidden="true" />
           <p className="ms-lead">2 em cada 3 motos no pátio.</p>
 
-          <div className="ms-frota__claim">
-            <Shield className="ms-shield--stat">
-              <b>66%</b>
-              <span>Big trail</span>
-            </Shield>
-            <div>
+          <div className="ms-frota__feature">
+            <figure className="ms-frota__photo">
+              <img src="/motosul/frota-fila.jpg" alt="Casal chegando ao Motosul em uma BMW GS, com outras motos no pátio" loading="lazy" width="1600" height="898" />
+              <figcaption>Big trails chegando ao Parque da Cidade · 2ª edição</figcaption>
+            </figure>
+            <div className="ms-frota__claim">
+              <b className="ms-frota__number">66%</b>
+              <span className="ms-frota__label">Big trail<br />ou adventure</span>
               <p className="ms-mono">Das motos identificadas são big trail ou adventure.</p>
               <p className="ms-p">É o público que mais gasta em pneu, mala, capacete, revisão, hotel e combustível de estrada.</p>
             </div>
@@ -579,17 +664,18 @@ export default function MotosulPage() {
 
       {/* ── A COMUNIDADE ── */}
       <section className="ms-sec ms-sec--light" id="comunidade">
-        <div className="ms-wrap">
-          <p className="ms-eyebrow">A comunidade</p>
-          <h2 className="ms-display">O mototurista<br />não é plateia.</h2>
-          <span className="ms-rule" aria-hidden="true" />
-          <p className="ms-lead">Quem sobe a serra não vem assistir.</p>
-
-          <p className="ms-display ms-display--huge is-accent">Ele é<br />o evento.</p>
-
-          <div className="ms-hair" aria-hidden="true" />
-          <p className="ms-lead">Vem rodar, comer, conversar e voltar contando.<br />É essa comunidade que apresenta Itajubá ao país.</p>
-
+        <div className="ms-wrap--wide ms-community">
+          <div className="ms-community__copy">
+            <p className="ms-eyebrow">A comunidade</p>
+            <h2 className="ms-display ms-display--sm">O mototurista<br />não é plateia.</h2>
+            <span className="ms-rule" aria-hidden="true" />
+            <p className="ms-lead">Quem sobe a serra não vem assistir. Vem rodar, comer, conversar e voltar contando.</p>
+            <p className="ms-p">É essa comunidade que apresenta Itajubá ao país — moto por moto, história por história.</p>
+          </div>
+          <figure className="ms-community__photo">
+            <img src="/motosul/g-bikers.jpg" alt="Motociclista de braços abertos entre big trails no pátio do Motosul" loading="lazy" width="1200" height="800" />
+            <figcaption><strong>Quem chega rodando faz parte.</strong><span>Itajubá · 2ª edição · comunidade em duas rodas</span></figcaption>
+          </figure>
         </div>
       </section>
 
@@ -825,7 +911,7 @@ export default function MotosulPage() {
 
       {/* ── 3ª EDIÇÃO ── */}
       <section className="ms-cta" id="proxima">
-        <img className="ms-cta__bg" src="/motosul/g-bikers.jpg" alt="" aria-hidden="true" loading="lazy" />
+        <img className="ms-cta__bg" src="/motosul/g-publico-palco.jpg" alt="" aria-hidden="true" loading="lazy" />
         <div className="ms-cta__veil" aria-hidden="true" />
         <div className="ms-cta__in">
           <Shield className="ms-shield--hero">
