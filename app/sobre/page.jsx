@@ -37,7 +37,7 @@ const TIMELINE = [
   { n: '09', t: 'Recanto do Morango', l: 'Serra da Mantiqueira', d: 'Parada queridinha entre as curvas da serra.' },
   { n: '10', t: '1.000 motos · Garganta do Registro', l: 'Itamonte, MG', d: 'Dia histórico: mil motos reunidas num café de domingo nas alturas.' },
   { n: '11', t: 'Rota 68', l: 'São José do Barreiro, SP', d: '800 motos num único domingo desbravando o lado paulista da Mantiqueira.' },
-  { n: '12', t: 'Motosul 2026', l: 'Serra da Mantiqueira', d: 'A explosão do movimento: 5 mil motos e mais de R$ 2 milhões de impacto na cidade em um fim de semana.' },
+  { n: '12', t: 'Motosul 2026', l: 'Serra da Mantiqueira', d: 'A explosão do movimento: 4 mil motos, 6.736 pessoas e a cidade com lotação máxima na rede hoteleira em um fim de semana.' },
 ];
 
 export default function SobrePage() {
@@ -90,8 +90,8 @@ export default function SobrePage() {
       <section className="sobre-nums">
         <div className="wrap">
           {[
-            ['5 mil', 'Motos no Motosul 2026'],
-            ['R$ 2 mi+', 'Impacto na cidade num fim de semana'],
+            ['4 mil', 'Motos no Motosul 2026'],
+            ['6.736', 'Pessoas na 2ª edição'],
             ['1.000', 'Motos na Garganta do Registro'],
             ['800', 'Motos na Rota 68 (1 domingo)'],
           ].map(([v, k]) => (
