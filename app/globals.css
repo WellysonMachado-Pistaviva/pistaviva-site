@@ -3662,20 +3662,50 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   .ms-clipping li:first-child h3{ font-size:clamp(25px,7vw,38px); margin-top:17px; }
 }
 
+/* Ensaio aéreo do Parque da Cidade */
+.ms-aerial{ display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:12px; margin:clamp(34px,5vw,68px) 0 clamp(40px,6vw,76px); }
+.ms-aerial__shot{ position:relative; margin:0; overflow:hidden; background:#171719; isolation:isolate; }
+.ms-aerial__shot--hero{ grid-column:1/-1; min-height:clamp(470px,66vw,780px); }
+.ms-aerial__shot--event{ grid-column:span 8; aspect-ratio:16/9; }
+.ms-aerial__shot picture{ display:block; width:100%; height:100%; }
+.ms-aerial__shot img{ display:block; width:100%; height:100%; object-fit:cover; filter:saturate(.88) contrast(1.04); transition:transform .8s cubic-bezier(.2,.7,.2,1); }
+.ms-aerial__shot::after{ content:""; position:absolute; inset:auto 0 0; height:34%; z-index:1; background:linear-gradient(transparent,rgba(10,10,12,.82)); pointer-events:none; }
+.ms-aerial__shot:hover img{ transform:scale(1.018); }
+.ms-aerial__shot figcaption{ position:absolute; left:18px; bottom:16px; z-index:2; margin:0; font-family:var(--mono); font-weight:700; font-size:.64rem; line-height:1.4; letter-spacing:.13em; text-transform:uppercase; color:#f4f1eb; }
+.ms-aerial__note{ grid-column:span 4; align-self:end; padding:clamp(24px,4vw,48px) clamp(8px,2vw,24px) 8px clamp(18px,3vw,42px); border-left:2px solid var(--accent); }
+.ms-aerial__note span{ display:block; font-family:var(--mono); font-weight:700; font-size:.64rem; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); }
+.ms-aerial__note p{ max-width:17ch; margin:18px 0 0; font-family:var(--display); font-weight:800; font-size:clamp(24px,3vw,42px); line-height:.96; text-transform:uppercase; text-wrap:balance; }
+
 /* Estrutura do parque + reel vertical */
 .ms-parque{ display:grid; grid-template-columns:minmax(230px,300px) 1fr; gap:clamp(24px,4vw,56px); align-items:start; }
 .ms-reel{ position:relative; border:1px solid var(--ms-line); overflow:hidden; background:var(--ink); }
 .ms-reel video{ display:block; width:100%; aspect-ratio:9/16; object-fit:cover; background:var(--ink); }
 .ms-reel__tag{ position:absolute; left:12px; bottom:12px; background:var(--accent); color:#fff; font-family:var(--mono); font-weight:800; font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; padding:6px 11px; border-radius:2px; }
-.ms-parque__listas{ display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:1px; background:var(--ms-line); }
-.ms-parque__grupo{ background:var(--ms-bg); padding:24px 22px; }
+.ms-parque__listas{ display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); border-top:1px solid var(--ms-line); border-bottom:1px solid var(--ms-line); }
+.ms-parque__grupo{ padding:24px 22px 24px 0; border-right:1px solid var(--ms-line); }
+.ms-parque__grupo:last-child{ padding-left:22px; border-right:0; }
 .ms-parque__grupo h3{ font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:1.12rem; color:var(--accent); margin:0 0 16px; }
 .ms-parque__grupo ul{ list-style:none; margin:0; padding:0; }
 .ms-parque__grupo li{ font-size:.92rem; line-height:1.5; color:var(--ms-dim); padding:7px 0; border-bottom:1px solid var(--ms-line); }
 .ms-parque__grupo li:last-child{ border-bottom:0; }
-.ms-parque__base{ list-style:none; display:flex; gap:10px; flex-wrap:wrap; margin:30px 0 0; padding:0; }
-.ms-parque__base li{ font-family:var(--mono); font-weight:700; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ms-dim); border:1px solid var(--ms-line); border-radius:20px; padding:8px 14px; }
-@media(max-width:820px){ .ms-parque{ grid-template-columns:1fr; } .ms-reel{ max-width:320px; } }
+.ms-parque__base{ list-style:none; display:grid; grid-template-columns:repeat(5,1fr); margin:30px 0 0; padding:0; border-top:1px solid var(--ms-line); border-bottom:1px solid var(--ms-line); }
+.ms-parque__base li{ display:grid; place-items:center; min-height:52px; padding:10px 14px; border-right:1px solid var(--ms-line); font-family:var(--mono); font-weight:700; font-size:.66rem; letter-spacing:.12em; text-align:center; text-transform:uppercase; color:var(--ms-dim); }
+.ms-parque__base li:last-child{ border-right:0; }
+@media(max-width:820px){
+  .ms-aerial{ display:block; }
+  .ms-aerial__shot{ margin-bottom:12px; }
+  .ms-aerial__shot--hero{ min-height:72dvh; }
+  .ms-aerial__shot--event{ aspect-ratio:4/3; }
+  .ms-aerial__note{ margin-top:22px; padding:8px 0 0 18px; }
+  .ms-parque{ grid-template-columns:1fr; }
+  .ms-reel{ max-width:320px; }
+  .ms-parque__grupo{ padding:22px 0; border-right:0; border-bottom:1px solid var(--ms-line); }
+  .ms-parque__grupo:last-child{ padding-left:0; border-bottom:0; }
+  .ms-parque__base{ grid-template-columns:repeat(2,1fr); }
+  .ms-parque__base li:nth-child(2n){ border-right:0; }
+  .ms-parque__base li:nth-child(n+3){ border-top:1px solid var(--ms-line); }
+  .ms-parque__base li:last-child{ grid-column:1/-1; border-right:0; }
+}
 
 /* Hotéis parceiros */
 .ms-hoteis{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--ms-line); }
@@ -3745,3 +3775,13 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 .ms-parceiros__inst{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin:20px 0 0; padding-top:18px; border-top:1px solid var(--ms-line); }
 .ms-parceiros__inst span{ font-family:var(--mono); font-weight:700; font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ms-mut); }
 .ms-parceiros__inst img{ height:58px; width:auto; background:#fff; border-radius:3px; padding:8px 14px; }
+
+/* Faixa panorâmica de paisagem */
+.ms-faixa{ position:relative; margin:0 0 clamp(28px,4vw,44px); overflow:hidden; border-radius:3px; }
+.ms-faixa img{ width:100%; aspect-ratio:21/9; object-fit:cover; display:block; }
+.ms-faixa figcaption{ position:absolute; left:0; right:0; bottom:0; padding:38px 20px 14px; background:linear-gradient(transparent,rgba(10,10,12,.8)); font-family:var(--mono); font-weight:700; font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:#f4f1eb; }
+@media(max-width:640px){ .ms-faixa img{ aspect-ratio:16/9; } }
+
+/* Contorno do município de Itajubá */
+.ms-eyebrow--mapa{ display:flex; align-items:center; gap:10px; }
+.ms-mapa-itajuba{ width:26px; height:auto; color:var(--accent); flex:0 0 auto; }

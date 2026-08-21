@@ -43,6 +43,15 @@ const ROTAS_CHEGADA = [
   },
 ];
 
+// Contorno do município de Itajubá — herda a cor via currentColor.
+function MapaItajuba({ className = '' }) {
+  return (
+    <svg className={`ms-mapa-itajuba ${className}`.trim()} viewBox="0 0 338.27 251.47" role="img" aria-label="Contorno do município de Itajubá">
+      <path d="M237.96,0c.36,0,.73,0,1.09,0,3.2,2.68,6.46,5.29,9.56,8.07,1.28,1.15,2.65,1.58,4.26,1.72,3.45.3,6.89.65,10.33.98,13.05,1.27,26.09,2.54,39.14,3.81,9.3.91,18.6,1.84,27.9,2.72,1.92.18,2.91,1.1,3.28,3,1.49,7.74,3.07,15.46,4.59,23.2.46,2.35.06,3.15-2.06,4.28-19.45,10.44-38.89,20.87-58.36,31.28-.83.44-1.82.71-2.75.79-8.82.77-17.65,1.51-26.48,2.19-1.67.13-2.92.69-4.06,2-17.47,20.2-34.99,40.36-52.49,60.54-2.1,2.42-1.8,3.95,1.09,5.36,4.9,2.4,9.82,4.76,14.73,7.14,1.27.62,1.99,1.58,1.79,3.05-.19,1.39-1.12,2.08-2.4,2.4-1.41.34-2.81.77-4.25,1-1.55.26-2.6,1.06-3.55,2.28-10.56,13.47-21.13,26.94-31.8,40.33-1.44,1.81-1.63,3.49-.92,5.54,1.76,5.1,3.47,10.22,5.18,15.33.98,2.95.05,4.37-3.01,4.74-8.97,1.08-17.95,2.12-26.91,3.33-1.18.16-2.52.92-3.31,1.81-3.7,4.18-7.22,8.52-10.85,12.77-1.78,2.09-2.57,2.24-5.06,1.16-4.89-2.12-9.78-4.25-14.67-6.4-3.09-1.36-3.41-3.29-1.04-5.72,8.1-8.3,16.18-16.61,24.26-24.92,1.54-1.59,1.54-2.87-.02-4.39-1.92-1.86-3.95-3.6-5.81-5.51-1.33-1.37-2.66-1.54-4.42-.93-8.37,2.87-16.76,5.68-25.17,8.42-1.02.33-2.34.42-3.31.06-6.86-2.6-13.65-5.36-20.48-8.04-1.47-.58-2.13-1.6-2.39-3.12-.91-5.38-1.94-10.74-2.86-16.12-.24-1.39-.92-2.28-2.15-2.92-17.86-9.28-35.71-18.59-53.56-27.89-2.82-1.47-3.19-2.38-2.19-5.39,2.65-8,5.34-15.99,7.91-24.01.34-1.07.36-2.42.05-3.5-4.27-14.98-8.61-29.94-12.96-44.9C2.59,71.36,1.27,67.21,0,63.05c0-.73,0-1.46,0-2.19.5-.52.95-1.09,1.49-1.55,6.58-5.56,13.19-11.1,19.77-16.67,1.06-.9,2.14-1.16,3.52-.87,10.09,2.09,20.2,4.12,30.29,6.19,2.79.57,4.1-.44,4.01-3.24-.21-6.85-.46-13.7-.72-20.55-.11-2.91.8-3.95,3.77-4.07,1.94-.08,3.88-.08,5.82-.14,11.34-.35,22.68-.73,34.02-1.05,2.68-.08,3.68,1.3,3.1,3.97-1.3,5.92-2.61,11.84-3.88,17.77-.42,1.94.42,3.14,2.36,3.53.48.1.95.18,1.43.25,10.09,1.4,20.19,2.76,30.28,4.21,1.57.23,2.66-.16,3.63-1.4,3.03-3.87,6.13-7.69,9.21-11.52,2.37-2.94,3.05-3.08,6.47-1.65,6.04,2.52,12.09,5.01,18.15,7.5,2.31.95,3.16.65,4.5-1.53,3.72-6.04,7.43-12.09,11.15-18.14,1.49-2.42,2.42-2.75,5.11-1.75,2.05.75,4.12,1.45,6.12,2.3,1.5.64,2.74.47,4.08-.42,4.85-3.22,9.74-6.39,14.64-9.54,6.53-4.19,13.08-8.33,19.63-12.49Z" fill="currentColor" fillRule="evenodd" />
+    </svg>
+  );
+}
+
 // Brasão do festival — usado como moldura do logo e como selo numerado das seções.
 function Shield({ className = '', children }) {
   return (
@@ -639,6 +648,11 @@ export default function MotosulPage() {
           <span className="ms-rule" aria-hidden="true" />
           <p className="ms-lead">O Motosul acontece no encontro de três forças que fazem Minas viajar longe: estrada, hospitalidade e comida com identidade.</p>
 
+          <figure className="ms-faixa">
+            <img src="/motosul/mantiqueira.jpg" alt="Vista da Serra da Mantiqueira ao amanhecer" loading="lazy" />
+            <figcaption>Serra da Mantiqueira · o quintal do festival</figcaption>
+          </figure>
+
           <ol className="ms-clipping">
             {IMPRENSA.map((c, i) => (
               <li key={c.titulo}>
@@ -745,10 +759,40 @@ export default function MotosulPage() {
       {/* ── ESTRUTURA DO PARQUE ── */}
       <section className="ms-sec" id="parque">
         <div className="ms-wrap--wide">
-          <p className="ms-eyebrow">O parque</p>
-          <h2 className="ms-display">O parque mais completo<br />do Sul de Minas.</h2>
+          <p className="ms-eyebrow">Parque da Cidade · Itajubá</p>
+          <h2 className="ms-display">Um festival dentro<br />da Mantiqueira.</h2>
           <span className="ms-rule" aria-hidden="true" />
-          <p className="ms-lead">O Motosul não monta uma estrutura provisória num terreno: acontece dentro de um parque que já funciona o ano inteiro, com restaurantes, quadras, kartódromo e área kids.</p>
+          <p className="ms-lead">Aqui, a estrada termina dentro do encontro: lago, kartódromo, restaurantes, praça, palco e estrutura permanente no mesmo endereço.</p>
+
+          <div className="ms-aerial" aria-label="Ensaio aéreo do Parque da Cidade">
+            <figure className="ms-aerial__shot ms-aerial__shot--hero">
+              <picture>
+                <source media="(max-width: 640px)" srcSet="/motosul/parque-mobile.jpg" />
+                <img
+                  src="/motosul/parque-aereo.jpg"
+                  alt="Vista aérea do Parque da Cidade, com lago, kartódromo e Serra da Mantiqueira"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+              <figcaption>01 · O parque entre o lago e a serra</figcaption>
+            </figure>
+
+            <figure className="ms-aerial__shot ms-aerial__shot--event">
+              <img
+                src="/motosul/parque-evento.jpg"
+                alt="Estrutura de evento montada na praça do Parque da Cidade, ao lado do lago"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>02 · O parque em dia de evento</figcaption>
+            </figure>
+
+            <aside className="ms-aerial__note">
+              <span>Um fim de semana inteiro</span>
+              <p>De manhã, rota. À tarde, feira e gastronomia. À noite, palco. Tudo dentro do parque.</p>
+            </aside>
+          </div>
 
           <div className="ms-parque">
             <div className="ms-reel">
@@ -824,7 +868,7 @@ export default function MotosulPage() {
             <img className="ms-selo" src="/motosul/mascote.png" alt="Selo: Itajubá, a cidade do motociclista" loading="lazy" />
           </div>
           <div>
-            <p className="ms-eyebrow">Onde acontece</p>
+            <p className="ms-eyebrow ms-eyebrow--mapa"><MapaItajuba />Onde acontece</p>
             <h2 className="ms-display ms-display--sm">Parque da Cidade<br />Itajubá — MG</h2>
             <span className="ms-rule" aria-hidden="true" />
             <p className="ms-p">No coração da Serra da Mantiqueira, a poucas horas de São Paulo, Belo Horizonte e Rio de Janeiro — com estrada boa para chegar em duas rodas e serra de sobra para rodar depois.</p>
