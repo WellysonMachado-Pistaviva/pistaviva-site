@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Calendar, MapPin, Flame } from 'lucide-react';
 import EmblaCarousel from './EmblaCarousel';
+import Cover from './Cover';
 import { getEventRsvpBase } from '../lib/eventRsvpBases.mjs';
 
 // Rail de eventos na home — card IDÊNTICO ao da aba /eventos (.ig-evcard): capa
@@ -42,7 +43,7 @@ export default function EventsRail({ items = [], going = {} }) {
       <Link key={e.id || i} className="ig-evcard" href={`/eventos/${e.id}`}>
         <div className="ig-evcover">
           {cover
-            ? <img src={cover} alt={e.title} loading="lazy" />
+            ? <Cover src={cover} alt={e.title} sizes="(max-width: 640px) 76vw, 300px" />
             : <span className="ig-evcover-empty"><Calendar size={34} /></span>}
           <span className={`ig-badge ${type}`}>{STATUS_LABEL[type] || STATUS_LABEL.open}</span>
           {e.category && <span className="ig-type">{e.category}</span>}

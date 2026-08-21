@@ -1,10 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { ExternalLink, Eye } from 'lucide-react';
-import EmblaCarousel from './EmblaCarousel';
+import { ExternalLink } from 'lucide-react';
 
-const PRODUCTS = [
+const FEATURED_PRODUCTS = [
   {
     name: 'Capacete LS2 MX701 Explorer Carbon',
     shortName: 'LS2 Explorer Carbon',
@@ -16,24 +15,6 @@ const PRODUCTS = [
     featured: true,
   },
   {
-    name: 'Segunda pele térmica X11',
-    shortName: 'Segunda pele X11',
-    category: 'Conforto na estrada',
-    description: 'Camada base para enfrentar mudança de temperatura sem perder mobilidade.',
-    image: '/affiliates/segunda-pele-x11.webp',
-    href: 'https://meli.la/31WzL1N',
-    itemId: 'MLB6632312326',
-  },
-  {
-    name: 'Kit de lavagem completa Vonixx',
-    shortName: 'Kit lavagem Vonixx',
-    category: 'Cuidado com a moto',
-    description: 'Seleção completa para rotina de limpeza, acabamento e conservação.',
-    image: '/affiliates/kit-lavagem-vonixx.webp',
-    href: 'https://meli.la/22PGGWv',
-    itemId: 'MLB38512823',
-  },
-  {
     name: 'Câmera de ação Insta360 X4 8K',
     shortName: 'Insta360 X4 8K',
     category: 'Registre a viagem',
@@ -41,33 +22,6 @@ const PRODUCTS = [
     image: '/affiliates/camera-insta360-x4.webp',
     href: 'https://meli.la/1AodEJ1',
     itemId: 'MLB4413590409',
-  },
-  {
-    name: 'Suporte de guidão em alumínio para GoPro e Insta360',
-    shortName: 'Suporte de guidão p/ câmera',
-    category: 'Registre a viagem',
-    description: 'Fixação em alumínio para guidão de moto ou bike, compatível com GoPro e Insta360.',
-    image: '/affiliates/suporte-guidao-gopro.webp',
-    href: 'https://meli.la/1LbZAxB',
-    itemId: 'MLB5735106060',
-  },
-  {
-    name: 'Capacete X11 Crossover Desert Offroad Big Trail',
-    shortName: 'Capacete X11 Crossover',
-    category: 'Proteção offroad',
-    description: 'Capacete big trail com viseira e óculos para quem encara asfalto e terra.',
-    image: '/affiliates/capacete-x11-crossover-desert.webp',
-    href: 'https://meli.la/2DnMe4G',
-    itemId: 'MLB1818065035',
-  },
-  {
-    name: 'Capacete Helt Cross Vision Glass Titanium',
-    shortName: 'Capacete Helt Cross Vision',
-    category: 'Proteção offroad',
-    description: 'Capacete cross com pintura Glass Titanium, leve e ventilado para trilhas.',
-    image: '/affiliates/capacete-helt-cross-vision.webp',
-    href: 'https://meli.la/2vnSpKK',
-    itemId: 'MLB6161446758',
   },
   {
     name: 'Baú Bauleto 65 litros universal em alumínio com base',
@@ -87,15 +41,6 @@ const PRODUCTS = [
     href: 'https://meli.la/1LoAD7M',
     itemId: 'MLB5792187288',
   },
-  {
-    name: 'Kit remendo de pneu com 60 reparos e maleta',
-    shortName: 'Kit reparo de pneu',
-    category: 'Emergência na estrada',
-    description: '60 reparos tipo macarrão com maleta para resolver furos de pneu longe de casa.',
-    image: '/affiliates/kit-remendo-pneu.webp',
-    href: 'https://meli.la/1MuXN4T',
-    itemId: 'MLB3789764022',
-  },
 ];
 
 function sendEvent(event, product) {
@@ -109,13 +54,6 @@ function sendEvent(event, product) {
   } catch {
     // Analytics must never block navigation.
   }
-}
-
-// Deterministic per product so the number stays stable between renders,
-// but varies card to card ("interlaçando os números").
-function viewCount(itemId) {
-  const digits = parseInt(itemId.replace(/\D/g, '').slice(-4), 10) || 0;
-  return 9 + (digits % 39); // 9..47
 }
 
 function AffiliateCard({ product, index }) {
@@ -143,10 +81,6 @@ function AffiliateCard({ product, index }) {
         <span className="affiliate-card-category">{product.category}</span>
         <h3>{product.shortName}</h3>
         <p>{product.description}</p>
-        <span className="affiliate-card-views">
-          <Eye aria-hidden="true" />
-          <strong>{viewCount(product.itemId)}</strong> pessoas visualizaram
-        </span>
         <div className="affiliate-card-actions">
           <a
             href={product.href}
@@ -164,10 +98,6 @@ function AffiliateCard({ product, index }) {
 }
 
 export default function AffiliateGear() {
-  const slides = PRODUCTS.map((product, index) => (
-    <AffiliateCard product={product} index={index} key={product.itemId} />
-  ));
-
   return (
     <section className="home-affiliate" aria-labelledby="home-affiliate-title">
       <div className="wrap">
@@ -180,8 +110,10 @@ export default function AffiliateGear() {
           <span className="home-affiliate-label">Links de afiliado</span>
         </div>
 
-        <div className="home-affiliate-carousel" aria-label="Produtos afiliados Pistaviva">
-          <EmblaCarousel slides={slides} basis="var(--aff-slide-basis)" gap={14} dots />
+        <div className="home-affiliate-grid" aria-label="Produtos afiliados Pistaviva">
+          {FEATURED_PRODUCTS.map((product, index) => (
+            <AffiliateCard product={product} index={index} key={product.itemId} />
+          ))}
         </div>
 
         <p className="home-affiliate-disclosure">

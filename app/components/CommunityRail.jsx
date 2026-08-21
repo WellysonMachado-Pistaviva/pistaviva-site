@@ -1,7 +1,9 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { MapPin } from 'lucide-react';
 import EmblaCarousel from './EmblaCarousel';
+import { isOptimizable } from '../lib/img';
 
 // Rail "Da comunidade" na home: posts reais + paradas novas (com foto), nome e local.
 // Item unificado: { kind, title, city, uf, text, image, href, badge }.
@@ -11,11 +13,13 @@ export default function CommunityRail({ items = [] }) {
   const slides = items.map((p) => (
     <Link key={p.id} href={p.href || '/comunidade'} className="crail-card" aria-label={p.title}>
       <div className="crail-pic">
-        <img
+        <Image
           src={p.image}
           alt={`${p.title}${p.city ? ' — ' + p.city : ''}`}
-          loading="lazy"
-          draggable="false"
+          fill
+          sizes="(max-width: 640px) 58vw, 228px"
+          unoptimized={!isOptimizable(p.image)}
+          draggable={false}
         />
         <span className="crail-grad" aria-hidden="true" />
         <span className={`crail-badge${p.kind === 'parada' ? ' crail-badge--parada' : ''}`}>{p.badge || 'Comunidade'}</span>

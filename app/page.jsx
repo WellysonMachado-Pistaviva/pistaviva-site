@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import { Bike, Flag, Smartphone } from 'lucide-react';
 import Cover from './components/Cover';
 import HomeBanner from './components/HomeBanner';
-import DestinosRail from './components/DestinosRail';
+import HomeNextRide from './components/HomeNextRide';
 import EventsRail from './components/EventsRail';
 import CommunityRail from './components/CommunityRail';
 import ProductShowcase from './components/ProductShowcase';
@@ -44,6 +43,7 @@ export default async function Home() {
   const community = await getCommunityRailItems(12);
   const eventos = await getEventsForSeo({ limit: 12 });
   const goingCounts = await getGoingCounts(eventos.map((event) => event.id));
+  const agendaEventos = eventos.slice(1);
   const news = [...(featured || []), ...posts.filter((post) => !featured?.some((item) => item.id === post.id))].slice(0, 3);
 
   return (
@@ -51,72 +51,26 @@ export default async function Home() {
       <HomeBanner banners={banners} />
       <h1 className="sr-only">Pistaviva — estradas, rotas e histórias reais sobre duas rodas</h1>
 
-      <section className="home-tools" aria-label="Ferramentas para pegar a estrada">
-        <div className="wrap">
-          <div className="bora-duo">
-            <Link href="/bora-rodar" className="bora-band" aria-label="Consultar condições para pilotar hoje">
-              <span className="bora-band-ic" aria-hidden="true"><Bike /></span>
-              <span className="bora-band-txt">
-                <strong>Bora rodar hoje?</strong>
-                <span>Clima e melhor janela para pilotar na sua cidade</span>
-              </span>
-              <span className="bora-band-arr" aria-hidden="true">→</span>
-            </Link>
-            <Link href="/estrada-x" className="bora-band bora-band--x" aria-label="Conhecer aplicativo Estrada X">
-              <span className="bora-band-ic" aria-hidden="true"><Smartphone /></span>
-              <span className="bora-band-txt">
-                <strong>Estrada X</strong>
-                <span>Mapa, companhia e recursos para quem está em movimento</span>
-              </span>
-              <span className="bora-band-arr" aria-hidden="true">→</span>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HomeNextRide destination={destinos[0]} event={eventos[0]} challenge={DESAFIOS[0]} />
 
-      <ProductShowcase />
-      <AffiliateGear />
-
-      {destinos.length > 0 && (
-        <section className="ig-cats home-destinations" id="destinos">
+      {agendaEventos.length > 0 && (
+        <section className="ig-cats home-agenda" id="eventos">
           <div className="wrap">
             <div className="ig-sechead">
               <div className="lead">
-                <span className="ig-eyebrow">Próxima saída</span>
-                <h2 className="ig-title">Estradas que pedem viagem</h2>
-                <p>Lugares escolhidos por quem conhece cada curva. Abra um destino e monte próximo roteiro.</p>
+                <span className="ig-eyebrow">Depois da próxima</span>
+                <h2 className="ig-title">Agenda na sequência</h2>
+                <p>Mais datas para escolher caminho, encontrar turma e colocar saída no calendário.</p>
               </div>
-              <Link href="/destinos" className="ig-btn ig-btn--ghost">Explorar destinos</Link>
+              <div className="home-section-actions">
+                <Link href="/eventos" className="ig-btn ig-btn--ghost">Ver agenda</Link>
+                <Link href="/eventos/criar" className="ig-btn ig-btn--primary">Criar evento</Link>
+              </div>
             </div>
-            <DestinosRail items={destinos} />
+            <EventsRail items={agendaEventos} going={goingCounts} />
           </div>
         </section>
       )}
-
-      <section className="ig-cats home-agenda" id="eventos">
-        <div className="wrap">
-          <div className="ig-sechead">
-            <div className="lead">
-              <span className="ig-eyebrow">Ponto de encontro</span>
-              <h2 className="ig-title">Próximos rolês</h2>
-              <p>Data, lugar e companhia definidos. Confirme presença ou coloque seu encontro no mapa.</p>
-            </div>
-            <div className="home-section-actions">
-              <Link href="/motosul" className="ig-btn ig-btn--ghost">Motosul Festival 2027</Link>
-              <Link href="/eventos" className="ig-btn ig-btn--ghost">Ver agenda</Link>
-              <Link href="/eventos/criar" className="ig-btn ig-btn--primary">Criar evento</Link>
-            </div>
-          </div>
-          {eventos.length > 0
-            ? <EventsRail items={eventos} going={goingCounts} />
-            : (
-              <div className="home-empty">
-                <p>Nenhum encontro futuro publicado. Organize próximo rolê com sua turma.</p>
-                <Link href="/eventos/criar" className="ig-btn ig-btn--primary">Criar primeiro evento</Link>
-              </div>
-            )}
-        </div>
-      </section>
 
       <CommunityRail items={community} />
 
@@ -154,33 +108,8 @@ export default async function Home() {
         </section>
       )}
 
-      <section className="ig-cats home-challenges" id="desafios">
-        <div className="wrap">
-          <div className="ig-sechead">
-            <div className="lead">
-              <span className="ig-eyebrow">Complete e carimbe</span>
-              <h2 className="ig-title">Desafios Pistaviva</h2>
-              <p>Roteiros com checkpoints e certificado. Conclusão conta; velocidade não.</p>
-            </div>
-            <Link href="/desafios" className="ig-btn ig-btn--ghost">Ver desafios</Link>
-          </div>
-          <div className="ph-grid">
-            {DESAFIOS.slice(0, 3).map((challenge) => (
-              <Link className="ph-card home-challenge-card" key={challenge.slug} href={`/desafios/${challenge.slug}`}>
-                <div className="body">
-                  <span className="challenge-kicker">
-                    <Flag aria-hidden="true" />
-                    {challenge.nivel} · {challenge.distancia}
-                  </span>
-                  <h3>{challenge.nome}</h3>
-                  <p className="desc">{challenge.resumo}</p>
-                  <div className="foot"><span className="loc">{challenge.regiao}</span></div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ProductShowcase />
+      <AffiliateGear />
 
       <section className="ig-band">
         <div className="wrap">
