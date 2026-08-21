@@ -3485,11 +3485,44 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 }
 
 /* Roadbook turístico: passeio curto em Itajubá e volta regional. */
-.ms-explore{ padding:clamp(72px,9vw,126px) var(--gut); background:#ece8df; color:#16161a; border-top:1px solid rgba(16,16,20,.2); }
+.ms-explore{ scroll-margin-top:118px; padding:clamp(72px,9vw,126px) var(--gut); background:#ece8df; color:#16161a; border-top:1px solid rgba(16,16,20,.2); }
 .ms-explore__head{ display:grid; grid-template-columns:minmax(0,1.15fr) minmax(280px,.65fr); gap:clamp(32px,7vw,100px); align-items:end; }
 .ms-explore__head .ms-eyebrow{ margin-bottom:22px; }
 .ms-explore__intro p{ max-width:44ch; margin:0; color:#48484e; font-size:clamp(17px,1.5vw,20px); line-height:1.58; }
 .ms-explore__intro span{ display:block; margin-top:20px; padding-top:14px; border-top:1px solid rgba(16,16,20,.28); font-family:var(--mono); font-weight:700; font-size:.66rem; line-height:1.5; letter-spacing:.13em; text-transform:uppercase; color:#66625c; }
+.ms-place-carousel{ margin-top:clamp(42px,6vw,72px); }
+.ms-place-carousel__head{ display:flex; align-items:flex-end; justify-content:space-between; gap:30px; padding:20px 0; border-block:2px solid #16161a; }
+.ms-place-carousel__head > div:first-child > span{ display:block; margin-bottom:8px; font-family:var(--mono); font-weight:800; font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); }
+.ms-place-carousel__head h3{ max-width:18ch; margin:0; font-family:var(--display); font-weight:800; font-size:clamp(25px,3vw,42px); line-height:.95; text-transform:uppercase; text-wrap:balance; }
+.ms-place-carousel__controls{ display:grid; grid-template-columns:46px auto 46px; align-items:center; gap:10px; flex:none; }
+.ms-place-carousel__controls button{ width:46px; height:46px; display:grid; place-items:center; padding:0; border:1px solid #16161a; border-radius:3px; background:transparent; color:#16161a; font-size:1.35rem; cursor:pointer; transition:transform .2s cubic-bezier(.2,.7,.2,1), background-color .2s, color .2s; }
+.ms-place-carousel__controls button:hover:not(:disabled){ transform:translateY(-2px); background:#16161a; color:#f2eee7; }
+.ms-place-carousel__controls button:active:not(:disabled){ transform:translateY(1px); }
+.ms-place-carousel__controls button:disabled{ opacity:.28; cursor:not-allowed; }
+.ms-place-carousel__controls output{ min-width:58px; font-family:var(--mono); font-weight:800; font-size:.65rem; letter-spacing:.12em; text-align:center; color:#625f59; }
+.ms-place-carousel__viewport{ margin-top:clamp(24px,3.5vw,40px); overflow:hidden; overscroll-behavior-inline:contain; touch-action:pan-y pinch-zoom; }
+.ms-place-carousel__viewport:focus-visible{ outline:2px solid var(--accent); outline-offset:5px; }
+.ms-place-carousel__track{ display:flex; gap:clamp(16px,2vw,24px); }
+.ms-place-carousel__slide{ min-width:0; flex:0 0 min(44vw,610px); }
+.ms-place-carousel__slide figure{ margin:0; }
+.ms-place-carousel__media{ position:relative; overflow:hidden; aspect-ratio:3/2; border-radius:clamp(13px,1.4vw,20px); background:#17171a; }
+.ms-place-carousel__media img{ display:block; width:100%; height:100%; object-fit:cover; filter:saturate(.9) contrast(1.035); transition:transform .7s cubic-bezier(.2,.7,.2,1); }
+.ms-place-carousel__slide:hover .ms-place-carousel__media img{ transform:scale(1.018); }
+.ms-place-carousel__media strong{ position:absolute; right:14px; bottom:14px; padding:8px 10px 7px; border-radius:2px; background:var(--accent); color:#16161a; font-family:var(--display); font-weight:800; font-size:.82rem; line-height:1; text-transform:uppercase; }
+.ms-place-carousel figcaption{ padding:18px 2px 0; }
+.ms-place-carousel figcaption > span{ display:block; font-family:var(--mono); font-weight:800; font-size:.61rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+.ms-place-carousel h4{ margin:10px 0 0; font-family:var(--display); font-weight:800; font-size:clamp(28px,3vw,44px); line-height:.92; text-transform:uppercase; text-wrap:balance; }
+.ms-place-carousel figcaption > p{ max-width:54ch; margin:16px 0 0; color:#494741; font-size:.96rem; line-height:1.58; text-wrap:pretty; }
+.ms-place-carousel ul{ list-style:none; margin:18px 0 0; padding:16px 0 0; border-top:1px solid rgba(16,16,20,.28); }
+.ms-place-carousel li{ position:relative; margin-top:9px; padding-left:18px; color:#5c5852; font-size:.82rem; line-height:1.5; }
+.ms-place-carousel li:first-child{ margin-top:0; }
+.ms-place-carousel li::before{ content:""; position:absolute; top:.58em; left:1px; width:6px; height:6px; background:var(--accent); }
+.ms-place-carousel__footer{ display:grid; grid-template-columns:auto minmax(0,1fr); gap:18px; align-items:end; margin-top:20px; padding-top:14px; border-top:1px solid rgba(16,16,20,.18); }
+.ms-place-carousel__route{ min-height:44px; display:inline-flex; align-items:center; justify-self:start; border-bottom:2px solid var(--accent); color:#16161a; font-family:var(--mono); font-weight:800; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; }
+.ms-place-carousel__route:hover{ color:var(--accent); }
+.ms-place-carousel__footer small{ max-width:44ch; justify-self:end; font-family:var(--mono); font-size:.51rem; line-height:1.45; text-align:right; color:#77716a; }
+.ms-place-carousel__footer small a{ color:#4e4b46; border-bottom:1px solid rgba(16,16,20,.3); }
+.ms-place-carousel__footer small a:hover{ color:var(--accent); border-color:var(--accent); }
 .ms-explore__times{ display:grid; grid-template-columns:repeat(4,1fr); margin:clamp(40px,6vw,70px) 0 0; border-block:2px solid #16161a; }
 .ms-explore__times a{ min-height:78px; display:flex; flex-direction:column; justify-content:center; gap:5px; padding:14px clamp(15px,2vw,24px); color:#16161a; border-right:1px solid rgba(16,16,20,.34); transition:transform .22s cubic-bezier(.2,.7,.2,1), background .2s; }
 .ms-explore__times a:last-child{ border-right:0; }
@@ -3548,6 +3581,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 .ms-explore__sources a:hover{ color:var(--accent); border-color:var(--accent); }
 @media(max-width:900px){
   .ms-explore__head{ grid-template-columns:1fr; gap:26px; }
+  .ms-place-carousel__slide{ flex-basis:62vw; }
   .ms-explore__layout{ grid-template-columns:1fr; }
   .ms-trip-book{ position:static; }
   .ms-trip-book ol{ display:grid; grid-template-columns:repeat(2,1fr); }
@@ -3557,6 +3591,17 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 }
 @media(max-width:640px){
   .ms-explore{ padding:68px 18px; }
+  .ms-place-carousel__head{ align-items:flex-start; }
+  .ms-place-carousel__head h3{ max-width:11ch; }
+  .ms-place-carousel__controls{ grid-template-columns:44px 44px; gap:8px; }
+  .ms-place-carousel__controls button{ width:44px; height:44px; }
+  .ms-place-carousel__controls output{ grid-column:1/-1; grid-row:2; min-width:0; }
+  .ms-place-carousel__viewport{ margin-inline:-18px; padding-inline:18px; }
+  .ms-place-carousel__slide{ flex-basis:86vw; }
+  .ms-place-carousel__track{ gap:12px; }
+  .ms-place-carousel__media{ border-radius:13px; }
+  .ms-place-carousel__footer{ grid-template-columns:1fr; gap:12px; }
+  .ms-place-carousel__footer small{ justify-self:start; text-align:left; }
   .ms-explore__times{ grid-template-columns:repeat(2,1fr); }
   .ms-explore__times a:nth-child(2){ border-right:0; }
   .ms-explore__times a:nth-child(n+3){ border-top:1px solid rgba(16,16,20,.34); }
@@ -3568,6 +3613,10 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   .ms-trip-chapter__body{ grid-template-columns:1fr; gap:32px; }
   .ms-trip-chapter__photo img{ aspect-ratio:4/3; }
   .ms-trip-chapter__copy h3{ font-size:clamp(34px,11vw,50px); }
+}
+@media(prefers-reduced-motion:reduce){
+  .ms-place-carousel__controls button,
+  .ms-place-carousel__media img{ transition:none; }
 }
 
 /* Dot matrix — piloto x garupa */

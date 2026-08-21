@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import PlacesCarousel from './PlacesCarousel';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 const IG_EVENTO = 'https://instagram.com/motosulfestival';
@@ -607,12 +608,7 @@ export default function MotosulPage() {
             </div>
           </header>
 
-          <nav className="ms-explore__times" aria-label="Escolha roteiro pelo tempo disponível">
-            <a href="#roteiro-30"><b>30 min</b><span>Centro</span></a>
-            <a href="#roteiro-1h"><b>1 hora</b><span>Vista</span></a>
-            <a href="#roteiro-meio-dia"><b>Meio dia</b><span>Natureza</span></a>
-            <a href="#roteiro-1-dia"><b>1 dia</b><span>Azeite e café</span></a>
-          </nav>
+          <PlacesCarousel />
 
           <div className="ms-explore__layout">
             <aside className="ms-trip-book" aria-label="Roadbook dos passeios perto do Motosul">
@@ -659,12 +655,12 @@ export default function MotosulPage() {
                   <div className="ms-trip-chapter__copy">
                     <p className="ms-trip-chapter__index">02 · subida urbana</p>
                     <h3>Santuário da Agonia.</h3>
-                    <p>O santuário fica no alto da colina e fecha o Caminho da Agonia, rota que cruza quatro cidades da região.</p>
+                    <p>O santuário fica no alto da colina. É o segundo do mundo dedicado a Nossa Senhora da Agonia e o primeiro da América Latina, segundo a Arquidiocese de Pouso Alegre.</p>
                     <a className="ms-trip-link" href={ROTA_AGONIA} target="_blank" rel="noopener noreferrer">Traçar rota até o santuário ↗</a>
                   </div>
                   <div className="ms-trip-callout">
                     <b>61 km</b>
-                    <span>Cristina, Maria da Fé, Pedralva e Itajubá formam o Caminho da Agonia.</span>
+                    <span>Cristina, Maria da Fé, Pedralva e Itajubá formam o Caminho da Agonia. A devoção chegou à cidade por ligação com Viana do Castelo, em Portugal.</span>
                     <a href="https://www.minasgerais.com.br/pt/blog/artigo/caminho-da-agonia" target="_blank" rel="noopener noreferrer">Conhecer o caminho ↗</a>
                   </div>
                 </div>
