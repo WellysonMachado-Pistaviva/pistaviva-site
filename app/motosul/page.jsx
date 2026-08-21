@@ -2,8 +2,16 @@ import Link from 'next/link';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 const IG_EVENTO = 'https://instagram.com/motosulfestival';
-const IG_PISTAVIVA = 'https://www.instagram.com/pistavivaoficial';
 const MAPS = 'https://www.google.com/maps/search/-22.4109112,-45.4380434';
+
+const DESTAQUES = [
+  '4.000 motos na última edição',
+  'Dois dias no Parque da Cidade',
+  'Rock ao vivo',
+  'Comida mineira',
+  'Rotas da Mantiqueira',
+  'Itajubá · MG',
+];
 
 const routeOnMaps = (origin, waypoints = []) => {
   const params = new URLSearchParams({
@@ -244,29 +252,29 @@ const PROGRAMACAO = [
 ];
 
 const EXPERIENCIAS = [
-  { t: 'Gastronomia mineira', d: 'Queijo da serra, pastel de milho, costela, doce de leite e cachaça. A praça de alimentação faz parte do roteiro.', src: '/motosul/gastronomia.jpg', alt: 'Prato servido na área gastronômica do Motosul' },
-  { t: 'Motos no parque', d: 'Big trails, customizadas e clássicas ocupam o pátio — a maioria chega rodando, vinda de outro estado.', src: '/motosul/g-fila-motos.jpg', alt: 'Fila de motos estacionadas no Parque da Cidade' },
-  { t: 'Rock ao vivo', d: 'Bandas da região tocam nos dois dias, com palco aberto no coração do parque.', src: '/motosul/g-palco-mic.jpg', alt: 'Show de rock no palco do Motosul Festival' },
-  { t: 'Serra antes e depois', d: 'O festival vira ponto de partida para mirantes, curvas e paradas da Mantiqueira mineira e paulista.', src: '/motosul/g-rua.jpg', alt: 'Motociclista chegando a Itajubá pelas estradas da Mantiqueira' },
+  { t: 'Comida mineira', d: 'Queijo, pastel de milho, costela, doce de leite e cachaça. Dá para provar Minas sem sair do parque.', src: '/motosul/gastronomia.jpg', alt: 'Prato servido na área gastronômica do Motosul', width: 1050, height: 1400 },
+  { t: 'Motos no parque', d: 'Big trails, customizadas e clássicas ocupam o pátio. Muita gente cruza estado para chegar.', src: '/motosul/g-fila-motos.jpg', alt: 'Fila de motos estacionadas no Parque da Cidade', width: 674, height: 1200 },
+  { t: 'Rock ao vivo', d: 'Bandas da região tocam de frente para o lago durante os dois dias.', src: '/motosul/g-palco-mic.jpg', alt: 'Show de rock no palco do Motosul Festival', width: 1200, height: 800 },
+  { t: 'Serra antes e depois', d: 'Itajubá deixa mirantes e curvas da Mantiqueira a poucos quilômetros do portão.', src: '/motosul/g-rua.jpg', alt: 'Motociclista chegando a Itajubá pelas estradas da Mantiqueira', width: 674, height: 1200 },
 ];
 
 const GALERIA = [
-  { src: '/motosul/g-chegada.jpg', alt: 'Motos chegando ao Motosul Festival', span: 'span 2' },
-  { src: '/motosul/g-mulheres.jpg', alt: 'Motociclistas comemorando no pátio do festival', span: 'span 1' },
-  { src: '/motosul/g-bikers.jpg', alt: 'Motociclista de braços abertos no pátio de motos', span: 'span 1' },
-  { src: '/motosul/g-turma.jpg', alt: 'Grupo de amigos na praça de alimentação do festival', span: 'span 1' },
-  { src: '/motosul/g-palco-mic.jpg', alt: 'Apresentação no palco do Motosul', span: 'span 1' },
-  { src: '/motosul/g-publico-palco.jpg', alt: 'Público em frente ao palco do Motosul Festival', span: 'span 2' },
-  { src: '/motosul/g-fila-motos.jpg', alt: 'Fila de motos estacionadas no parque', span: 'span 2' },
-  { src: '/motosul/g-patio2.jpg', alt: 'Motociclistas conversando entre as motos', span: 'span 1' },
-  { src: '/motosul/g-retrato.jpg', alt: 'Visitantes do Motosul Festival', span: 'span 1' },
-  { src: '/motosul/g-premiacao.jpg', alt: 'Premiação no palco do Motosul Festival', span: 'span 1' },
-  { src: '/motosul/g-caminhada.jpg', alt: 'Motociclista caminhando pela área de food trucks', span: 'span 1' },
-  { src: '/motosul/g-rua.jpg', alt: 'Motociclista chegando a Itajubá', span: 'span 2' },
+  { src: '/motosul/g-chegada.jpg', alt: 'Motos chegando ao Motosul Festival', span: 'span 2', width: 800, height: 1200 },
+  { src: '/motosul/g-mulheres.jpg', alt: 'Motociclistas comemorando no pátio do festival', span: 'span 1', width: 1200, height: 674 },
+  { src: '/motosul/g-bikers.jpg', alt: 'Motociclista de braços abertos no pátio de motos', span: 'span 1', width: 1200, height: 800 },
+  { src: '/motosul/g-turma.jpg', alt: 'Grupo de amigos na praça de alimentação do festival', span: 'span 1', width: 1200, height: 800 },
+  { src: '/motosul/g-palco-mic.jpg', alt: 'Apresentação no palco do Motosul', span: 'span 1', width: 1200, height: 800 },
+  { src: '/motosul/g-publico-palco.jpg', alt: 'Público em frente ao palco do Motosul Festival', span: 'span 2', width: 1200, height: 800 },
+  { src: '/motosul/g-fila-motos.jpg', alt: 'Fila de motos estacionadas no parque', span: 'span 2', width: 674, height: 1200 },
+  { src: '/motosul/g-patio2.jpg', alt: 'Motociclistas conversando entre as motos', span: 'span 1', width: 1200, height: 800 },
+  { src: '/motosul/g-retrato.jpg', alt: 'Visitantes do Motosul Festival', span: 'span 1', width: 1200, height: 800 },
+  { src: '/motosul/g-premiacao.jpg', alt: 'Premiação no palco do Motosul Festival', span: 'span 1', width: 1200, height: 800 },
+  { src: '/motosul/g-caminhada.jpg', alt: 'Motociclista caminhando pela área de food trucks', span: 'span 1', width: 800, height: 1200 },
+  { src: '/motosul/g-rua.jpg', alt: 'Motociclista chegando a Itajubá', span: 'span 2', width: 674, height: 1200 },
 ];
 
 const FICHA = [
-  { k: 'Cidade', v: 'Itajubá — MG' },
+  { k: 'Cidade', v: 'Itajubá · MG' },
   { k: 'Local', v: 'Parque da Cidade' },
   { k: 'Região', v: 'Serra da Mantiqueira' },
   { k: 'Formato', v: 'Aberto ao público' },
@@ -352,7 +360,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Motosul Festival 2027 · Itajubá — MG',
+    title: 'Motosul Festival 2027 · Itajubá · MG',
     description: 'Evento de moto, mototurismo, gastronomia mineira e rock no Parque da Cidade de Itajubá.',
     images: [`${BASE}/motosul/hero-publico.jpg`],
   },
@@ -448,42 +456,47 @@ export default function MotosulPage() {
               <h1 className="ms-hero__h1">
                 <span className="ms-hero__pre">Evento de moto no Parque da Cidade · Itajubá</span>
                 <span className="ms-hero__big">Motosul Festival</span>
-                <span className="ms-hero__big ms-hero__big--sub">Mototurismo, gastronomia e rock</span>
+                <span className="ms-hero__big ms-hero__big--sub">Moto, comida mineira e rock</span>
               </h1>
-              <p className="ms-hero__dek">O maior encontro de mototurismo gastronômico do Sul de Minas: dois dias para chegar rodando, estacionar no parque e viver Itajubá.</p>
+              <p className="ms-hero__dek">Você chega pela serra e estaciona no parque. Lago, palco, restaurantes e gente de todo o Brasil no mesmo lugar.</p>
               <div className="ms-actions ms-actions--left ms-hero__actions">
-                <a className="ms-btn" href="#proxima">Acompanhar 3ª edição</a>
-                <a className="ms-btn ms-btn--ghost" href={MAPS} target="_blank" rel="noopener noreferrer">Como chegar</a>
+                <a className="ms-btn" href={IG_EVENTO} target="_blank" rel="noopener noreferrer">Acompanhar 3ª edição</a>
+                <a className="ms-btn ms-btn--ghost" href="#planeje">Planejar minha viagem</a>
               </div>
             </div>
 
             <aside className="ms-hero__ticket" aria-label="Próxima edição em abril de 2027">
-              <span>Próxima saída</span>
+              <span>3ª edição</span>
               <strong>ABR<br />2027</strong>
-              <small>Parque da Cidade<br />Itajubá · MG</small>
+              <small>Data completa em breve<br />Itajubá · MG</small>
             </aside>
           </div>
 
           <div className="ms-hero__foot">
-            <span>Na última edição: 4.000 motos · 6.736 pessoas</span>
-            <a href="#experiencia">Ver como foi ↓</a>
+            <span>2ª edição: 4.000 motos · 6.736 pessoas · hotéis lotados</span>
+            <a href="#experiencia">Conhecer o Motosul ↓</a>
           </div>
         </div>
       </section>
 
-      <div className="ms-roadbook" aria-label="Essência do Motosul Festival">
-        <span>01 · Estrada</span>
-        <span>02 · Mesa mineira</span>
-        <span>03 · Rock no parque</span>
-        <span>04 · Gente de todo Brasil</span>
+      <div className="ms-marquee" aria-label={DESTAQUES.join('. ')}>
+        <div className="ms-marquee__track" aria-hidden="true">
+          {[0, 1].map((copy) => (
+            <div className="ms-marquee__copy" key={copy}>
+              {DESTAQUES.map((destaque) => <span key={`${copy}-${destaque}`}>{destaque}</span>)}
+            </div>
+          ))}
+        </div>
       </div>
 
       <nav className="ms-anchors" aria-label="Seções do Motosul Festival">
         <div className="ms-anchors__in">
-          {ANCORAS.map((a) => (
-            <a key={a.href} href={a.href}>{a.label}</a>
-          ))}
-          <a className="ms-anchors__cta" href={IG_EVENTO} target="_blank" rel="noopener noreferrer">Acompanhar evento ↗</a>
+          <div className="ms-anchors__links">
+            {ANCORAS.map((a) => (
+              <a key={a.href} href={a.href}>{a.label}</a>
+            ))}
+          </div>
+          <a className="ms-anchors__cta" href={IG_EVENTO} target="_blank" rel="noopener noreferrer">3ª edição ↗</a>
         </div>
       </nav>
 
@@ -492,24 +505,22 @@ export default function MotosulPage() {
         <div className="ms-wrap--wide">
           <header className="ms-pulse__head">
             <div>
-              <p className="ms-eyebrow">O Motosul em cena</p>
-              <h2 className="ms-display ms-display--sm" id="ms-pulse-title">Chega de moto.<br />Fica pela história.</h2>
+              <p className="ms-eyebrow">O que tem no Motosul</p>
+              <h2 className="ms-display ms-display--sm" id="ms-pulse-title">Você chega de moto.<br />Tudo acontece no parque.</h2>
             </div>
-            <p>Gente chegando de estrada, comida saindo quente do fogão e rock de frente para o lago. O Motosul é turismo de experiência: um fim de semana que se vive, não um encontro para olhar moto parada.</p>
+            <p>De manhã tem estrada. Depois vêm comida, conversa e show de frente para o lago. Tudo fica dentro do Parque da Cidade.</p>
           </header>
-          <div className="ms-pulse__photos">
-            <figure className="ms-pulse__photo ms-pulse__photo--arrival">
-              <img src="/motosul/g-chegada.jpg" alt="Motociclistas chegando juntos ao Motosul Festival" loading="eager" />
-              <figcaption>Chegada pela serra · Parque da Cidade</figcaption>
-            </figure>
-            <figure className="ms-pulse__photo ms-pulse__photo--people">
-              <img src="/motosul/g-publico-palco.jpg" alt="Público reunido diante do palco do festival" loading="eager" />
-              <figcaption>Rock, conversa e reencontro</figcaption>
-            </figure>
-            <figure className="ms-pulse__photo ms-pulse__photo--table">
-              <img src="/motosul/gastronomia.jpg" alt="Comida servida durante o Motosul Festival" loading="lazy" />
-              <figcaption>Sabores da Mantiqueira</figcaption>
-            </figure>
+          <div className="ms-exps ms-exps--opening">
+            {EXPERIENCIAS.map((e, i) => (
+              <article className="ms-exp" key={e.t}>
+                <img src={e.src} alt={e.alt} loading="lazy" width={e.width} height={e.height} sizes="(max-width: 760px) 100vw, 55vw" />
+                <div className="ms-exp__body">
+                  <span className="ms-exp__n">{String(i + 1).padStart(2, '0')}</span>
+                  <h3>{e.t}</h3>
+                  <p>{e.d}</p>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -518,21 +529,27 @@ export default function MotosulPage() {
       <section className="ms-plan" id="planeje" aria-labelledby="ms-plan-title">
         <div className="ms-wrap--wide ms-plan__grid">
           <header className="ms-plan__head">
-            <p className="ms-eyebrow">Planeje sua subida</p>
-            <h2 className="ms-display ms-display--sm" id="ms-plan-title">Sua viagem começa antes do portão.</h2>
-            <p>Próxima edição em abril de 2027. Itajubá fica no encontro das estradas da Mantiqueira, com chegada fácil para quem vem de Minas, São Paulo e Rio.</p>
+            <p className="ms-eyebrow">Chegada e estadia</p>
+            <h2 className="ms-display ms-display--sm" id="ms-plan-title">Escolha o caminho. A serra faz parte da viagem.</h2>
+            <p>Veja rota que passa pela sua região, abra trajeto no celular e deixe hotel encaminhado antes de sair.</p>
             <dl className="ms-plan__meta">
               <div><dt>Quando</dt><dd>Abril de 2027</dd></div>
               <div><dt>Destino</dt><dd>Parque da Cidade · Itajubá</dd></div>
-              <div><dt>Formato</dt><dd>Dois dias · motos, rock e gastronomia</dd></div>
+              <div><dt>Formato</dt><dd>Dois dias no parque</dd></div>
             </dl>
             <div className="ms-actions ms-actions--left">
-              <a className="ms-btn" href={MAPS} target="_blank" rel="noopener noreferrer">Traçar rota ↗</a>
-              <a className="ms-plan__link" href="#hoteis">Ver hospedagem ↓</a>
+              <a className="ms-btn" href={MAPS} target="_blank" rel="noopener noreferrer">Abrir parque no Maps ↗</a>
+              <a className="ms-plan__link" href="#hoteis">Ver hotéis ↓</a>
             </div>
           </header>
           <ArrivalMap />
         </div>
+        <nav className="ms-wrap--wide ms-trip-strip" aria-label="Atalhos para planejar viagem ao Motosul">
+          <a href={MAPS} target="_blank" rel="noopener noreferrer"><span>01</span><strong>Traçar rota</strong><small>Parque da Cidade no Maps</small></a>
+          <a href="#hoteis"><span>02</span><strong>Onde dormir</strong><small>Hotéis usados na 2ª edição</small></a>
+          <a href="#parque"><span>03</span><strong>Ver estrutura</strong><small>Lago, restaurantes e lazer</small></a>
+          <a href={IG_EVENTO} target="_blank" rel="noopener noreferrer"><span>04</span><strong>Receber novidades</strong><small>Data oficial e programação</small></a>
+        </nav>
       </section>
 
       {/* ── O PÚBLICO ── */}
@@ -650,7 +667,7 @@ export default function MotosulPage() {
           <p className="ms-eyebrow">Onde dormir</p>
           <h2 className="ms-display">Hotéis<br />parceiros.</h2>
           <span className="ms-rule" aria-hidden="true" />
-          <p className="ms-lead">Itajubá tem rede hoteleira preparada para receber motociclista — e ela lota. Reserve com antecedência.</p>
+          <p className="ms-lead">Itajubá recebe muito motociclista no fim de semana do Motosul, e os hotéis lotam. Reserve cedo.</p>
 
           <ul className="ms-hoteis">
             {HOTEIS.map((h) => (
@@ -763,7 +780,7 @@ export default function MotosulPage() {
             <h2 className="ms-display ms-display--sm">O mototurista<br />não é plateia.</h2>
             <span className="ms-rule" aria-hidden="true" />
             <p className="ms-lead">Quem sobe a serra não vem assistir. Vem rodar, comer, conversar e voltar contando.</p>
-            <p className="ms-p">É essa comunidade que apresenta Itajubá ao país — moto por moto, história por história.</p>
+            <p className="ms-p">Essa turma apresenta Itajubá ao país, uma viagem de cada vez.</p>
           </div>
           <figure className="ms-community__photo">
             <img src="/motosul/g-bikers.jpg" alt="Motociclista de braços abertos entre big trails no pátio do Motosul" loading="lazy" width="1200" height="800" />
@@ -775,23 +792,10 @@ export default function MotosulPage() {
       {/* ── O FESTIVAL ── */}
       <section className="ms-sec" id="festival">
         <div className="ms-wrap">
-          <p className="ms-eyebrow">O festival</p>
-          <h2 className="ms-display">Dois dias<br />no parque.</h2>
+          <p className="ms-eyebrow">Como foi em 2026</p>
+          <h2 className="ms-display">Palco aberto.<br />Parque cheio.</h2>
           <span className="ms-rule" aria-hidden="true" />
-          <p className="ms-lead">Encontro de motociclistas, festival de comida mineira e palco de rock — dentro de um parque público à beira do lago.</p>
-
-          <div className="ms-exps">
-            {EXPERIENCIAS.map((e, i) => (
-              <article className="ms-exp" key={e.t}>
-                <img src={e.src} alt={e.alt} loading="lazy" />
-                <div className="ms-exp__body">
-                  <span className="ms-exp__n">{String(i + 1).padStart(2, '0')}</span>
-                  <h3>{e.t}</h3>
-                  <p>{e.d}</p>
-                </div>
-              </article>
-            ))}
-          </div>
+          <p className="ms-lead">Esta grade mostra 2ª edição. Programação de 2027 será publicada quando estiver fechada.</p>
 
           <h3 className="ms-sub">Line-up da 2ª edição</h3>
           <div className="ms-grade">
@@ -908,7 +912,7 @@ export default function MotosulPage() {
           <div className="ms-galeria">
             {GALERIA.map((g) => (
               <figure className="ms-galeria__item" key={g.src} style={{ gridColumn: g.span }}>
-                <img src={g.src} alt={g.alt} loading="lazy" />
+                <img src={g.src} alt={g.alt} loading="lazy" width={g.width} height={g.height} sizes="(max-width: 820px) 50vw, 33vw" />
               </figure>
             ))}
           </div>
@@ -929,15 +933,15 @@ export default function MotosulPage() {
               loop
               playsInline
               preload="none"
-              aria-label="Sobrevoo do Parque da Cidade, em Itajubá — MG"
+              aria-label="Sobrevoo do Parque da Cidade, em Itajubá, MG"
             />
             <img className="ms-selo" src="/motosul/mascote.png" alt="Selo: Itajubá, a cidade do motociclista" loading="lazy" />
           </div>
           <div>
             <p className="ms-eyebrow ms-eyebrow--mapa"><MapaItajuba />Onde acontece</p>
-            <h2 className="ms-display ms-display--sm">Parque da Cidade<br />Itajubá — MG</h2>
+            <h2 className="ms-display ms-display--sm">Parque da Cidade<br />Itajubá · MG</h2>
             <span className="ms-rule" aria-hidden="true" />
-            <p className="ms-p">No coração da Serra da Mantiqueira, a poucas horas de São Paulo, Belo Horizonte e Rio de Janeiro — com estrada boa para chegar em duas rodas e serra de sobra para rodar depois.</p>
+            <p className="ms-p">Itajubá fica na Serra da Mantiqueira, a poucas horas de São Paulo, Belo Horizonte e Rio de Janeiro. Há boas estradas para chegar e muita serra para rodar depois.</p>
             <dl className="ms-ficha">
               {FICHA.map((f) => (
                 <div key={f.k}>
@@ -981,7 +985,7 @@ export default function MotosulPage() {
           <p className="ms-eyebrow">Para marcas</p>
           <h2 className="ms-display">Sua marca<br />no pátio.</h2>
           <span className="ms-rule" aria-hidden="true" />
-          <p className="ms-lead">6.736 pessoas no parque, 9 em cada 10 vindas de fora, dois terços em big trail — e 4,7 milhões de visualizações na comunicação do evento.</p>
+          <p className="ms-lead">6.736 pessoas no parque, 9 em cada 10 vindas de fora, dois terços em big trail e 4,7 milhões de visualizações na comunicação do evento.</p>
 
           <div className="ms-parceiros">
             <p className="ms-parceiros__label">Marcas que apoiaram as edições</p>
@@ -1022,7 +1026,7 @@ export default function MotosulPage() {
             <p className="ms-eyebrow">Quem faz acontecer</p>
             <h2 className="ms-display ms-display--sm">Organização</h2>
             <span className="ms-rule" aria-hidden="true" />
-            <p className="ms-p">O Motosul Festival é realizado pela equipe do <b>Pistaviva</b> em parceria com a cidade de Itajubá — do desenho do evento à articulação com comércio, hotelaria e a rede de turismo da região.</p>
+            <p className="ms-p">A equipe do <b>Pistaviva</b> realiza o Motosul Festival em parceria com a cidade de Itajubá. O trabalho envolve comércio, hotéis e turismo da região.</p>
             <p className="ms-p">O festival dura dois dias. O Pistaviva é o ano inteiro: rotas, encontros, conteúdo e a comunidade que sustenta o movimento na serra.</p>
             <div className="ms-actions ms-actions--left">
               <Link className="ms-btn" href="/comunidade">Entrar na comunidade</Link>
@@ -1047,25 +1051,30 @@ export default function MotosulPage() {
           </Shield>
           <p className="ms-display ms-cta__date">Abril de 2027</p>
           <p className="ms-mono">Parque da Cidade · Itajubá · MG</p>
-          <p className="ms-cta__lead">Dia, line-up e inscrições saem primeiro para quem acompanha o Pistaviva.</p>
+          <p className="ms-cta__lead">Data completa e programação serão publicadas nos canais oficiais.</p>
           <div className="ms-actions">
-            <a className="ms-btn" href={IG_PISTAVIVA} target="_blank" rel="noopener noreferrer">Seguir @pistavivaoficial</a>
-            <a className="ms-btn ms-btn--ghost" href={IG_EVENTO} target="_blank" rel="noopener noreferrer">@motosulfestival</a>
+            <a className="ms-btn" href={IG_EVENTO} target="_blank" rel="noopener noreferrer">Acompanhar 3ª edição</a>
+            <a className="ms-btn ms-btn--ghost" href="#planeje">Planejar minha viagem</a>
           </div>
         </div>
       </section>
+
+      <aside className="ms-mobile-cta" aria-label="Acompanhar próxima edição do Motosul">
+        <span><b>Abril 2027</b><small>Itajubá · MG</small></span>
+        <a href={IG_EVENTO} target="_blank" rel="noopener noreferrer">Acompanhar 3ª edição ↗</a>
+      </aside>
 
       {/* ── CONTATO ── */}
       <section className="ms-contato" id="contato">
         <div className="ms-wrap ms-contato__grid">
           <div>
             <img className="ms-contato__logo" src="/motosul/logo.png" alt="Motosul Festival" width="1316" height="775" loading="lazy" />
-            <p>O maior encontro de mototurismo gastronômico do Sul de Minas, em Itajubá — Serra da Mantiqueira.</p>
+            <p>Festival de moto, comida mineira e rock no Parque da Cidade de Itajubá.</p>
           </div>
           <div>
             <div className="ms-kicker">Evento</div>
             <p>Parque da Cidade</p>
-            <p>Itajubá — Minas Gerais</p>
+            <p>Itajubá · Minas Gerais</p>
             <p>3ª edição · abril de 2027</p>
           </div>
           <div>
@@ -1077,7 +1086,7 @@ export default function MotosulPage() {
         </div>
         <div className="ms-wrap ms-contato__fine">
           <span>Página do Motosul Festival publicada pela Pistaviva.</span>
-          <span>Dados da 2ª edição · abril de 2026 · Itajubá — MG.</span>
+          <span>Dados da 2ª edição · abril de 2026 · Itajubá · MG.</span>
         </div>
       </section>
     </div>
