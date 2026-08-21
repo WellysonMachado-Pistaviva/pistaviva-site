@@ -3,6 +3,7 @@ import Link from 'next/link';
 const BASE = 'https://www.pistavivamototurismo.com.br';
 const IG_EVENTO = 'https://instagram.com/motosulfestival';
 const MAPS = 'https://www.google.com/maps/search/-22.4109112,-45.4380434';
+const PARQUE_MAPS_ORIGIN = 'Parque da Cidade, Itajubá, MG';
 
 const DESTAQUES = [
   '4.000 motos na última edição',
@@ -23,6 +24,26 @@ const routeOnMaps = (origin, waypoints = []) => {
   if (waypoints.length) params.set('waypoints', waypoints.join('|'));
   return `https://www.google.com/maps/dir/?${params.toString()}`;
 };
+
+const tripOnMaps = (destination, waypoints = []) => {
+  const params = new URLSearchParams({
+    api: '1',
+    origin: PARQUE_MAPS_ORIGIN,
+    destination,
+    travelmode: 'driving',
+  });
+  if (waypoints.length) params.set('waypoints', waypoints.join('|'));
+  return `https://www.google.com/maps/dir/?${params.toString()}`;
+};
+
+const ROTA_URBANA = tripOnMaps('Santuário Nossa Senhora da Agonia, Itajubá, MG', [
+  'Menor Posto do Mundo, Itajubá, MG',
+  'Praça Theodomiro Santiago, Itajubá, MG',
+  'Mercado Municipal de Itajubá, MG',
+]);
+const ROTA_AGONIA = tripOnMaps('Santuário Nossa Senhora da Agonia, Itajubá, MG');
+const ROTA_ESTANCIA = tripOnMaps('Cachoeira da Estância, Itajubá, MG');
+const ROTA_MANTIQUEIRA = tripOnMaps(PARQUE_MAPS_ORIGIN, ['Maria da Fé, MG', 'Cristina, MG']);
 
 const ROTAS_CHEGADA = [
   {
@@ -319,6 +340,7 @@ const COTAS = [
 const ANCORAS = [
   { href: '#experiencia', label: 'Experiência' },
   { href: '#planeje', label: 'Planeje sua ida' },
+  { href: '#roteiros', label: 'Rode a região' },
   { href: '#festival', label: 'Programação' },
   { href: '#parque', label: 'O parque' },
   { href: '#galeria', label: 'Fotos' },
@@ -330,7 +352,7 @@ const ANCORAS = [
 export const metadata = {
   title: { absolute: 'Motosul Festival 2027 em Itajubá | Evento de Moto' },
   description:
-    'Motosul Festival 2027 no Parque da Cidade, em Itajubá (MG): evento de moto com mototurismo, gastronomia mineira, rock, rotas, turismo e estrutura completa.',
+    'Motosul Festival 2027 em Itajubá (MG): evento de moto, gastronomia, rock e roteiros por Itajubá, Maria da Fé e Cristina.',
   keywords: [
     'Motosul Festival',
     'Motosul Itajubá',
@@ -339,6 +361,11 @@ export const metadata = {
     'encontro de motociclistas Sul de Minas',
     'mototurismo Serra da Mantiqueira',
     'festival de motos Minas Gerais',
+    'o que fazer em Itajubá',
+    'Maria da Fé azeite',
+    'Cristina café especial',
+    'Cachoeira da Estância Itajubá',
+    'Santuário Nossa Senhora da Agonia Itajubá',
   ],
   alternates: { canonical: '/motosul' },
   robots: {
@@ -379,7 +406,7 @@ export default function MotosulPage() {
         name: 'Motosul Festival 2027 em Itajubá',
         description: 'Página oficial do Motosul Festival: evento de moto, mototurismo, gastronomia e rock no Parque da Cidade de Itajubá.',
         inLanguage: 'pt-BR',
-        dateModified: '2026-08-20',
+        dateModified: '2026-08-21',
         mainEntity: { '@id': `${BASE}/motosul#festival` },
         primaryImageOfPage: { '@type': 'ImageObject', url: `${BASE}/motosul/hero-publico.jpg`, width: 2000, height: 1333 },
         isPartOf: { '@id': `${BASE}/#site` },
@@ -419,6 +446,18 @@ export default function MotosulPage() {
         },
         geo: { '@type': 'GeoCoordinates', latitude: -22.4109112, longitude: -45.4380434 },
         hasMap: MAPS,
+      },
+      {
+        '@type': 'ItemList',
+        '@id': `${BASE}/motosul#roteiros-da-mantiqueira`,
+        name: 'Roteiros turísticos saindo do Motosul Festival',
+        description: 'Passeios por Itajubá e roteiro de moto por Maria da Fé e Cristina, na Serra da Mantiqueira.',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Circuito urbano de Itajubá', url: `${BASE}/motosul#roteiro-30` },
+          { '@type': 'ListItem', position: 2, name: 'Santuário Nossa Senhora da Agonia', url: `${BASE}/motosul#roteiro-1h` },
+          { '@type': 'ListItem', position: 3, name: 'Cachoeira da Estância', url: `${BASE}/motosul#roteiro-meio-dia` },
+          { '@type': 'ListItem', position: 4, name: 'Rota Itajubá, Maria da Fé e Cristina', url: `${BASE}/motosul#roteiro-1-dia` },
+        ],
       },
     ],
   };
@@ -552,6 +591,133 @@ export default function MotosulPage() {
           <a href="#parque"><span>03</span><strong>Ver estrutura</strong><small>Lago, restaurantes e lazer</small></a>
           <a href={IG_EVENTO} target="_blank" rel="noopener noreferrer"><span>04</span><strong>Receber novidades</strong><small>Data oficial e programação</small></a>
         </nav>
+      </section>
+
+      {/* ROTEIROS A PARTIR DO PARQUE */}
+      <section className="ms-explore" id="roteiros" aria-labelledby="ms-explore-title">
+        <div className="ms-wrap--wide">
+          <header className="ms-explore__head">
+            <div>
+              <p className="ms-eyebrow">Depois do evento</p>
+              <h2 className="ms-display ms-display--sm" id="ms-explore-title">Quanto tempo<br />você tem?</h2>
+            </div>
+            <div className="ms-explore__intro">
+              <p>Escolha pelo relógio. Tem passeio rápido no centro, vista da cidade, cachoeira e uma volta de moto por azeites e cafés da Mantiqueira.</p>
+              <span>Todos os roteiros saem do Parque da Cidade.</span>
+            </div>
+          </header>
+
+          <nav className="ms-explore__times" aria-label="Escolha roteiro pelo tempo disponível">
+            <a href="#roteiro-30"><b>30 min</b><span>Centro</span></a>
+            <a href="#roteiro-1h"><b>1 hora</b><span>Vista</span></a>
+            <a href="#roteiro-meio-dia"><b>Meio dia</b><span>Natureza</span></a>
+            <a href="#roteiro-1-dia"><b>1 dia</b><span>Azeite e café</span></a>
+          </nav>
+
+          <div className="ms-explore__layout">
+            <aside className="ms-trip-book" aria-label="Roadbook dos passeios perto do Motosul">
+              <div className="ms-trip-book__head">
+                <span>Roadbook</span>
+                <b>Parque da Cidade<br />km 0</b>
+              </div>
+              <ol>
+                <li><a href="#roteiro-30"><b>01</b><span>Centro de Itajubá<small>30 min</small></span></a></li>
+                <li><a href="#roteiro-1h"><b>02</b><span>Agonia<small>1 hora</small></span></a></li>
+                <li><a href="#roteiro-meio-dia"><b>03</b><span>Estância<small>Meio dia</small></span></a></li>
+                <li><a href="#roteiro-1-dia"><b>04</b><span>Volta da Mantiqueira<small>1 dia</small></span></a></li>
+              </ol>
+              <p>Tempos sugeridos para passeio. Confira rota e funcionamento antes de sair.</p>
+            </aside>
+
+            <div className="ms-trip-chapters">
+              <article className="ms-trip-chapter" id="roteiro-30">
+                <header className="ms-trip-chapter__head">
+                  <span>30 min</span>
+                  <small>Circuito urbano</small>
+                </header>
+                <div className="ms-trip-chapter__body">
+                  <div className="ms-trip-chapter__copy">
+                    <p className="ms-trip-chapter__index">01 · sem pressa</p>
+                    <h3>Postinho, praça e mercado.</h3>
+                    <p>Uma volta curta pelo centro. Dá para fazer a foto da moto, caminhar um pouco e provar Itajubá antes de voltar ao parque.</p>
+                    <a className="ms-trip-link" href={ROTA_URBANA} target="_blank" rel="noopener noreferrer">Abrir circuito no Maps ↗</a>
+                  </div>
+                  <ol className="ms-trip-stops">
+                    <li><b>01</b><span><strong>Menor Posto</strong><small>Antigo posto Esso, conhecido na cidade pelo tamanho e preservado como memória de estrada.</small></span></li>
+                    <li><b>02</b><span><strong>Praça Theodomiro Santiago</strong><small>Centro para descer da moto e caminhar.</small></span></li>
+                    <li><b>03</b><span><strong>Mercado Municipal</strong><small>Balcões, quitandas e conversa de Itajubá.</small></span></li>
+                  </ol>
+                </div>
+              </article>
+
+              <article className="ms-trip-chapter" id="roteiro-1h">
+                <header className="ms-trip-chapter__head">
+                  <span>1 hora</span>
+                  <small>Vista e história</small>
+                </header>
+                <div className="ms-trip-chapter__body">
+                  <div className="ms-trip-chapter__copy">
+                    <p className="ms-trip-chapter__index">02 · subida urbana</p>
+                    <h3>Santuário da Agonia.</h3>
+                    <p>O santuário fica no alto da colina e fecha o Caminho da Agonia, rota que cruza quatro cidades da região.</p>
+                    <a className="ms-trip-link" href={ROTA_AGONIA} target="_blank" rel="noopener noreferrer">Traçar rota até o santuário ↗</a>
+                  </div>
+                  <div className="ms-trip-callout">
+                    <b>61 km</b>
+                    <span>Cristina, Maria da Fé, Pedralva e Itajubá formam o Caminho da Agonia.</span>
+                    <a href="https://www.minasgerais.com.br/pt/blog/artigo/caminho-da-agonia" target="_blank" rel="noopener noreferrer">Conhecer o caminho ↗</a>
+                  </div>
+                </div>
+              </article>
+
+              <article className="ms-trip-chapter" id="roteiro-meio-dia">
+                <header className="ms-trip-chapter__head">
+                  <span>Meio dia</span>
+                  <small>Natureza</small>
+                </header>
+                <div className="ms-trip-chapter__body">
+                  <div className="ms-trip-chapter__copy">
+                    <p className="ms-trip-chapter__index">03 · esticada de moto</p>
+                    <h3>Cachoeira da Estância.</h3>
+                    <p>Saída pela rodovia Itajubá a Lorena, no km 6. Separe mais tempo e trate a cachoeira como passeio, não como parada corrida.</p>
+                    <a className="ms-trip-link" href={ROTA_ESTANCIA} target="_blank" rel="noopener noreferrer">Abrir rota até a Estância ↗</a>
+                  </div>
+                  <div className="ms-trip-alert">
+                    <span>Antes de sair</span>
+                    <p>Confirme funcionamento, cobrança, acesso e condição da estrada. Não publicamos informação de banho sem confirmação local.</p>
+                  </div>
+                </div>
+              </article>
+
+              <article className="ms-trip-chapter ms-trip-chapter--regional" id="roteiro-1-dia">
+                <figure className="ms-trip-chapter__photo">
+                  <img src="/motosul/mantiqueira.jpg" alt="Estrada entre montanhas da Serra da Mantiqueira" loading="lazy" width="2200" height="1466" sizes="(max-width: 850px) 100vw, 66vw" />
+                  <figcaption>Um dia de estrada pela Mantiqueira</figcaption>
+                </figure>
+                <header className="ms-trip-chapter__head">
+                  <span>1 dia</span>
+                  <small>Volta da Mantiqueira</small>
+                </header>
+                <div className="ms-trip-chapter__body">
+                  <div className="ms-trip-chapter__copy">
+                    <p className="ms-trip-chapter__index">04 · frio, azeite e café</p>
+                    <h3>Itajubá, Maria da Fé e Cristina.</h3>
+                    <p>Saia do parque, passe pelos olivais de Maria da Fé, tome café em Cristina e feche a volta em Itajubá.</p>
+                    <a className="ms-btn" href={ROTA_MANTIQUEIRA} target="_blank" rel="noopener noreferrer">Abrir volta completa ↗</a>
+                  </div>
+                  <ol className="ms-trip-stops ms-trip-stops--regional">
+                    <li><b>KM 0</b><span><strong>Itajubá</strong><small>Saída do Parque da Cidade.</small></span></li>
+                    <li><b>01</b><span><strong>Maria da Fé</strong><small>Cidade mais fria de Minas, olivais e pioneirismo no azeite brasileiro. Algumas visitas pedem agendamento.</small></span></li>
+                    <li><b>02</b><span><strong>Cristina</strong><small>Cafés especiais, casario e memória da antiga ferrovia.</small></span></li>
+                    <li><b>FIM</b><span><strong>Itajubá</strong><small>Retorno ao parque.</small></span></li>
+                  </ol>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <p className="ms-explore__sources">Referências: <a href="https://www.turismo.mariadafe.mg.gov.br/cidade/" target="_blank" rel="noopener noreferrer">Turismo de Maria da Fé</a> · <a href="https://minasgerais.com.br/pt/destinos/cristina" target="_blank" rel="noopener noreferrer">Turismo de Minas</a> · <a href="https://caminhosdamantiqueira.tur.br/cidade-categoria/itajuba/" target="_blank" rel="noopener noreferrer">Caminhos da Mantiqueira</a></p>
+        </div>
       </section>
 
       {/* ── O PÚBLICO ── */}

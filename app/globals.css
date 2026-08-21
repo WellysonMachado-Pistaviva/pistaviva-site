@@ -3484,6 +3484,92 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   .ms-route__open{ grid-column:3; grid-row:1; }
 }
 
+/* Roadbook turístico: passeio curto em Itajubá e volta regional. */
+.ms-explore{ padding:clamp(72px,9vw,126px) var(--gut); background:#ece8df; color:#16161a; border-top:1px solid rgba(16,16,20,.2); }
+.ms-explore__head{ display:grid; grid-template-columns:minmax(0,1.15fr) minmax(280px,.65fr); gap:clamp(32px,7vw,100px); align-items:end; }
+.ms-explore__head .ms-eyebrow{ margin-bottom:22px; }
+.ms-explore__intro p{ max-width:44ch; margin:0; color:#48484e; font-size:clamp(17px,1.5vw,20px); line-height:1.58; }
+.ms-explore__intro span{ display:block; margin-top:20px; padding-top:14px; border-top:1px solid rgba(16,16,20,.28); font-family:var(--mono); font-weight:700; font-size:.66rem; line-height:1.5; letter-spacing:.13em; text-transform:uppercase; color:#66625c; }
+.ms-explore__times{ display:grid; grid-template-columns:repeat(4,1fr); margin:clamp(40px,6vw,70px) 0 0; border-block:2px solid #16161a; }
+.ms-explore__times a{ min-height:78px; display:flex; flex-direction:column; justify-content:center; gap:5px; padding:14px clamp(15px,2vw,24px); color:#16161a; border-right:1px solid rgba(16,16,20,.34); transition:transform .22s cubic-bezier(.2,.7,.2,1), background .2s; }
+.ms-explore__times a:last-child{ border-right:0; }
+.ms-explore__times a:hover{ background:#fff; transform:translateY(-3px); }
+.ms-explore__times b{ font-family:var(--display); font-weight:800; font-size:clamp(21px,2.2vw,30px); line-height:1; text-transform:uppercase; }
+.ms-explore__times span{ font-family:var(--mono); font-weight:700; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:#77716a; }
+.ms-explore__layout{ display:grid; grid-template-columns:minmax(230px,.32fr) minmax(0,1fr); gap:clamp(34px,6vw,88px); margin-top:clamp(44px,6vw,74px); align-items:start; }
+.ms-trip-book{ position:sticky; top:142px; background:#111216; color:#f2eee7; border-top:5px solid var(--accent); }
+.ms-trip-book__head{ display:flex; align-items:flex-end; justify-content:space-between; gap:18px; padding:22px 20px 18px; border-bottom:1px solid rgba(255,255,255,.14); }
+.ms-trip-book__head span{ font-family:var(--mono); font-weight:800; font-size:.61rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); }
+.ms-trip-book__head b{ font-family:var(--display); font-weight:800; font-size:1rem; line-height:1.05; text-align:right; text-transform:uppercase; }
+.ms-trip-book ol{ position:relative; list-style:none; margin:0; padding:8px 0; }
+.ms-trip-book ol::before{ content:""; position:absolute; top:30px; bottom:30px; left:39px; width:2px; background:rgba(255,255,255,.18); }
+.ms-trip-book li{ position:relative; }
+.ms-trip-book a{ position:relative; z-index:1; min-height:72px; display:grid; grid-template-columns:42px 1fr; align-items:center; gap:10px; padding:10px 18px; color:#f2eee7; transition:transform .2s cubic-bezier(.2,.7,.2,1), background .2s; }
+.ms-trip-book a:hover{ background:rgba(255,90,0,.12); transform:translateX(3px); }
+.ms-trip-book li b{ width:30px; height:30px; display:grid; place-items:center; border-radius:50%; background:#111216; border:2px solid var(--accent); font-family:var(--mono); font-size:.62rem; color:var(--accent); }
+.ms-trip-book li span{ font-family:var(--display); font-weight:800; font-size:.96rem; line-height:1.05; text-transform:uppercase; }
+.ms-trip-book li small{ display:block; margin-top:6px; font-family:var(--mono); font-weight:700; font-size:.56rem; letter-spacing:.14em; text-transform:uppercase; color:#8f8a83; }
+.ms-trip-book > p{ margin:0; padding:17px 20px 20px; border-top:1px solid rgba(255,255,255,.14); font-family:var(--mono); font-size:.57rem; line-height:1.55; letter-spacing:.08em; text-transform:uppercase; color:#817d77; }
+.ms-trip-chapters{ min-width:0; }
+.ms-trip-chapter{ scroll-margin-top:138px; padding:0 0 clamp(58px,7vw,86px); margin:0 0 clamp(58px,7vw,86px); border-top:3px solid #16161a; border-bottom:1px solid rgba(16,16,20,.26); }
+.ms-trip-chapter:last-child{ margin-bottom:0; }
+.ms-trip-chapter__head{ min-height:62px; display:flex; align-items:center; justify-content:space-between; gap:18px; border-bottom:1px solid rgba(16,16,20,.28); }
+.ms-trip-chapter__head > span{ font-family:var(--display); font-weight:800; font-size:clamp(25px,3vw,40px); line-height:1; text-transform:uppercase; color:var(--accent); }
+.ms-trip-chapter__head small{ font-family:var(--mono); font-weight:800; font-size:.64rem; letter-spacing:.16em; text-align:right; text-transform:uppercase; color:#625f59; }
+.ms-trip-chapter__body{ display:grid; grid-template-columns:minmax(240px,.82fr) minmax(300px,1.18fr); gap:clamp(30px,6vw,82px); padding-top:clamp(30px,5vw,52px); align-items:start; }
+.ms-trip-chapter__index{ margin:0 0 18px !important; font-family:var(--mono); font-weight:800; font-size:.63rem !important; letter-spacing:.16em; text-transform:uppercase; color:var(--accent) !important; }
+.ms-trip-chapter__copy h3{ max-width:12ch; margin:0; font-family:var(--display); font-weight:800; font-size:clamp(35px,4.8vw,66px); line-height:.88; text-transform:uppercase; text-wrap:balance; }
+.ms-trip-chapter__copy > p:not(.ms-trip-chapter__index){ max-width:42ch; margin:24px 0 0; color:#504d48; font-size:1rem; line-height:1.6; }
+.ms-trip-link{ min-height:44px; display:inline-flex; align-items:center; margin-top:25px; padding-bottom:3px; border-bottom:2px solid var(--accent); font-family:var(--mono); font-weight:800; font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:#16161a; }
+.ms-trip-link:hover{ color:var(--accent); }
+.ms-trip-stops{ list-style:none; margin:0; padding:0; border-top:1px solid #16161a; }
+.ms-trip-stops li{ display:grid; grid-template-columns:58px 1fr; gap:18px; padding:20px 0; border-bottom:1px solid rgba(16,16,20,.24); }
+.ms-trip-stops li > b{ font-family:var(--mono); font-weight:800; font-size:.68rem; letter-spacing:.12em; color:var(--accent); }
+.ms-trip-stops strong{ display:block; font-family:var(--display); font-weight:800; font-size:clamp(19px,2vw,26px); line-height:1; text-transform:uppercase; }
+.ms-trip-stops small{ display:block; max-width:52ch; margin-top:8px; color:#5d5953; font-size:.84rem; line-height:1.5; }
+.ms-trip-callout{ padding:clamp(26px,4vw,44px); background:#111216; color:#f2eee7; }
+.ms-trip-callout b{ display:block; font-family:var(--display); font-weight:800; font-size:clamp(52px,7vw,92px); line-height:.8; color:var(--accent); }
+.ms-trip-callout span{ display:block; max-width:32ch; margin-top:24px; font-size:.94rem; line-height:1.55; color:#d0cbc2; }
+.ms-trip-callout a{ min-height:44px; display:inline-flex; align-items:center; margin-top:20px; font-family:var(--mono); font-weight:800; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:#fff; border-bottom:1px solid var(--accent); }
+.ms-trip-alert{ padding:clamp(24px,4vw,38px); border:2px solid #16161a; background:var(--accent); color:#16161a; }
+.ms-trip-alert span{ font-family:var(--mono); font-weight:800; font-size:.64rem; letter-spacing:.16em; text-transform:uppercase; }
+.ms-trip-alert p{ max-width:38ch; margin:18px 0 0; font-weight:600; font-size:.94rem; line-height:1.55; }
+.ms-trip-chapter--regional{ position:relative; }
+.ms-trip-chapter__photo{ position:relative; margin:0; overflow:hidden; background:#111216; }
+.ms-trip-chapter__photo::after{ content:""; position:absolute; inset:55% 0 0; background:linear-gradient(transparent,rgba(10,10,12,.82)); pointer-events:none; }
+.ms-trip-chapter__photo img{ display:block; width:100%; height:auto; aspect-ratio:21/9; object-fit:cover; filter:saturate(.86) contrast(1.04); transition:transform .7s cubic-bezier(.2,.7,.2,1); }
+.ms-trip-chapter__photo:hover img{ transform:scale(1.018); }
+.ms-trip-chapter__photo figcaption{ position:absolute; z-index:1; left:18px; bottom:15px; font-family:var(--mono); font-weight:700; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:#f2eee7; }
+.ms-trip-chapter--regional .ms-trip-chapter__head{ border-top:3px solid #16161a; }
+.ms-trip-chapter--regional .ms-btn{ margin-top:28px; }
+.ms-trip-stops--regional li:last-child{ border-bottom:0; }
+.ms-explore__sources{ margin:34px 0 0; padding-top:18px; border-top:1px solid rgba(16,16,20,.24); font-family:var(--mono); font-size:.59rem; line-height:1.65; letter-spacing:.08em; text-transform:uppercase; color:#706c66; }
+.ms-explore__sources a{ color:#16161a; border-bottom:1px solid rgba(16,16,20,.36); }
+.ms-explore__sources a:hover{ color:var(--accent); border-color:var(--accent); }
+@media(max-width:900px){
+  .ms-explore__head{ grid-template-columns:1fr; gap:26px; }
+  .ms-explore__layout{ grid-template-columns:1fr; }
+  .ms-trip-book{ position:static; }
+  .ms-trip-book ol{ display:grid; grid-template-columns:repeat(2,1fr); }
+  .ms-trip-book ol::before{ display:none; }
+  .ms-trip-book li:nth-child(odd){ border-right:1px solid rgba(255,255,255,.12); }
+  .ms-trip-book li:nth-child(n+3){ border-top:1px solid rgba(255,255,255,.12); }
+}
+@media(max-width:640px){
+  .ms-explore{ padding:68px 18px; }
+  .ms-explore__times{ grid-template-columns:repeat(2,1fr); }
+  .ms-explore__times a:nth-child(2){ border-right:0; }
+  .ms-explore__times a:nth-child(n+3){ border-top:1px solid rgba(16,16,20,.34); }
+  .ms-explore__layout{ margin-top:38px; }
+  .ms-trip-book__head{ align-items:flex-start; }
+  .ms-trip-book ol{ grid-template-columns:1fr; }
+  .ms-trip-book li:nth-child(odd){ border-right:0; }
+  .ms-trip-book li:nth-child(n+2){ border-top:1px solid rgba(255,255,255,.12); }
+  .ms-trip-chapter__body{ grid-template-columns:1fr; gap:32px; }
+  .ms-trip-chapter__photo img{ aspect-ratio:4/3; }
+  .ms-trip-chapter__copy h3{ font-size:clamp(34px,11vw,50px); }
+}
+
 /* Dot matrix — piloto x garupa */
 .ms-dots{ display:grid; grid-template-columns:repeat(25,1fr); gap:clamp(5px,.7vw,9px); margin:0 0 24px; }
 .ms-dots span{ aspect-ratio:1; border-radius:50%; background:var(--ms-fg); }
