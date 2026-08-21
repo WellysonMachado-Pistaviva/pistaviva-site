@@ -51,6 +51,8 @@ export default async function Home() {
       <HomeBanner banners={banners} />
       <h1 className="sr-only">Pistaviva — estradas, rotas e histórias reais sobre duas rodas</h1>
 
+      <ProductShowcase />
+
       <HomeNextRide destination={destinos[0]} event={eventos[0]} challenge={DESAFIOS[0]} />
 
       {agendaEventos.length > 0 && (
@@ -108,7 +110,6 @@ export default async function Home() {
         </section>
       )}
 
-      <ProductShowcase />
       <AffiliateGear />
 
       <section className="ig-band">

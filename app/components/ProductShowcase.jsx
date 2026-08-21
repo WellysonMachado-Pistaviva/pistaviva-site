@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { CreditCard, ExternalLink, RefreshCw, Truck } from 'lucide-react';
+import { CreditCard, ExternalLink, RefreshCw, ShoppingBag, Truck } from 'lucide-react';
+import EmblaCarousel from './EmblaCarousel';
 
 const STORE_URL = 'https://www.pistaviva.com.br/pistaviva';
 
@@ -23,6 +24,29 @@ const BEST_SELLERS = [
     name: 'O melhor caminho se faz de moto',
     image: '/products/melhor-caminho.webp',
     href: `${STORE_URL}/product/o-melhor-caminho-se-faz-de-moto-9fb7eb3d-d5dc-423e-9f72-70c67fbd394e`,
+  },
+];
+
+const MORE_PRODUCTS = [
+  {
+    name: 'Domingo',
+    image: '/products/domingo.webp',
+    href: `${STORE_URL}/product/domingo-26a12a8f-1f24-46d0-a028-9df7ebe4601b`,
+  },
+  {
+    name: 'Piloto Físico',
+    image: '/products/piloto-fisico.webp',
+    href: `${STORE_URL}/product/piloto-fisico-3d7acc26-8962-4d15-bdfb-7c0cb3bed76b`,
+  },
+  {
+    name: 'Tricampeão',
+    image: '/products/tricampeao.webp',
+    href: `${STORE_URL}/product/tricampeao`,
+  },
+  {
+    name: 'Cumprimento Biker',
+    image: '/products/cumprimento-biker.webp',
+    href: `${STORE_URL}/product/cumprimento-biker`,
   },
 ];
 
@@ -67,7 +91,46 @@ function PriorityProductCard({ product }) {
   );
 }
 
+function ProductCard({ product }) {
+  return (
+    <article className="product-card">
+      <a
+        className="product-card-media"
+        href={product.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Ver camiseta ${product.name}`}
+      >
+        <Image
+          src={product.image}
+          alt={`Camiseta ${product.name} da Pistaviva`}
+          fill
+          sizes="(max-width: 768px) 78vw, (max-width: 1050px) 32vw, 25vw"
+          className="product-card-image"
+        />
+        <span className="product-card-off">15% OFF</span>
+        <span className="product-card-view">Ver detalhes <span aria-hidden="true">↗</span></span>
+      </a>
+
+      <div className="product-card-body">
+        <span className="product-card-category">Camiseta Pistaviva</span>
+        <h3>{product.name}</h3>
+        <div className="product-card-price">
+          <del>R$ 105,90</del>
+          <strong>R$ 89,90</strong>
+        </div>
+        <p><b>+3% OFF</b> no Pix · 6x de R$ 14,98</p>
+        <a className="product-card-buy" href={product.href} target="_blank" rel="noopener noreferrer">
+          <ShoppingBag aria-hidden="true" /> Comprar <ExternalLink aria-hidden="true" />
+        </a>
+      </div>
+    </article>
+  );
+}
+
 export default function ProductShowcase() {
+  const slides = MORE_PRODUCTS.map((product) => <ProductCard product={product} key={product.name} />);
+
   return (
     <section className="home-shop" aria-labelledby="home-shop-title">
       <div className="wrap">
@@ -111,6 +174,18 @@ export default function ProductShowcase() {
               ))}
             </div>
           </div>
+        </div>
+
+        <div className="home-shop-rail-head">
+          <div>
+            <span className="ig-eyebrow">Mais modelos</span>
+            <h3>Escolha a sua.</h3>
+          </div>
+          <p>Quatro estampas diferentes dos favoritos acima.</p>
+        </div>
+
+        <div className="home-shop-carousel" aria-label="Mais camisetas da coleção Pistaviva">
+          <EmblaCarousel slides={slides} basis="var(--product-slide-basis)" gap={18} dots />
         </div>
 
         <div className="home-shop-benefits" aria-label="Benefícios da loja Pistaviva">

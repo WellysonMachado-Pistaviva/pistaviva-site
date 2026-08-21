@@ -498,10 +498,10 @@ export default function MotosulPage() {
           <div className="ms-hero__poster">
             <div>
               <h1 className="ms-hero__h1">
-                <span className="ms-hero__pre">Evento de moto no Parque da Cidade · Itajubá</span>
+                <span className="ms-hero__pre">O maior do Sul de Minas</span>
                 <span className="ms-hero__big">Motosul Festival</span>
-                <span className="ms-hero__big ms-hero__big--sub">Moto, comida mineira e rock</span>
               </h1>
+              <p className="ms-hero__tagline">O maior encontro de mototurismo gastronômico do Sul de Minas</p>
               <p className="ms-hero__dek">Você chega pela serra e estaciona no parque. Lago, palco, restaurantes e gente de todo o Brasil no mesmo lugar.</p>
               <div className="ms-actions ms-actions--left ms-hero__actions">
                 <a className="ms-btn" href={IG_EVENTO} target="_blank" rel="noopener noreferrer">Acompanhar 3ª edição</a>
