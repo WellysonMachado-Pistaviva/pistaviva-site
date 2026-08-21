@@ -36,7 +36,7 @@ Dados da organização mostram também que **68,4% das motos chegaram com garupa
 
 Imprensa local acompanha crescimento do Motosul desde primeira edição. Em 16 de abril de 2025, **Itajubá Notícias** registrou estreia do festival e entrada no calendário de grandes eventos da cidade. Após segunda edição, nova cobertura impressa apresentou Motosul como case de desenvolvimento regional e mototurismo em Itajubá.
 
-[gallery:/motosul/midia/itajuba-noticias-motosul-2025.jpg|Página do Itajubá Notícias com matéria sobre estreia do Motosul Festival|Itajubá Notícias · 16 de abril de 2025 · cobertura da primeira edição.|720x1280;;/motosul/midia/motosul-case-desenvolvimento-regional-2026.jpg|Recorte de jornal com matéria sobre segunda edição do Motosul|Cobertura impressa destaca desenvolvimento regional e mototurismo em Itajubá.|1650x2200]
+[gallery:/motosul/midia/itajuba-noticias-motosul-2025.jpg|Página do Itajubá Notícias com matéria sobre estreia do Motosul Festival|Itajubá Notícias · 16 de abril de 2025 · cobertura da primeira edição.|1086x1448;;/motosul/midia/motosul-case-desenvolvimento-regional-2026.jpg|Recorte de jornal com matéria sobre segunda edição do Motosul|Cobertura impressa destaca desenvolvimento regional e mototurismo em Itajubá.|1650x2200]
 
 ## Pistaviva transforma comunidade em movimento
 
