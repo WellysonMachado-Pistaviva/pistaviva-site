@@ -121,7 +121,7 @@ export default async function BlogPost({ params }) {
     '@context': 'https://schema.org', '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://www.pistavivamototurismo.com.br/' },
-      { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://www.pistavivamototurismo.com.br/blog' },
+      { '@type': 'ListItem', position: 2, name: 'Matérias', item: 'https://www.pistavivamototurismo.com.br/blog' },
       { '@type': 'ListItem', position: 3, name: post.title, item: `https://www.pistavivamototurismo.com.br/blog/${slug}` },
     ],
   };
@@ -151,7 +151,7 @@ export default async function BlogPost({ params }) {
       <nav className="art-crumb" aria-label="Trilha">
         <div className="wrap">
           <Link href="/">Início</Link><span className="sep">/</span>
-          <Link href="/blog">Blog</Link><span className="sep">/</span>
+          <Link href="/blog">Matérias</Link><span className="sep">/</span>
           <span className="here">{post.tags?.[0] || 'Matéria'}</span>
         </div>
       </nav>
@@ -183,7 +183,22 @@ export default async function BlogPost({ params }) {
         <div className="wrap">
           <div className="art-col">
             {bodyBlocks.map((b, i) => {
-              if (b.t === 'img') return <figure key={i} className="art-inline"><img src={b.v} alt="" /></figure>;
+              if (b.t === 'gallery') return (
+                <div key={i} className="art-media-grid" aria-label="Galeria de recortes da imprensa">
+                  {b.items.map((item, itemIndex) => (
+                    <figure key={`${item.v}-${itemIndex}`}>
+                      <img src={item.v} alt={item.alt || ''} loading="lazy" width={item.width} height={item.height} />
+                      {item.caption && <figcaption>{item.caption}</figcaption>}
+                    </figure>
+                  ))}
+                </div>
+              );
+              if (b.t === 'img') return (
+                <figure key={i} className={`art-inline${b.width && b.height ? ' art-inline--natural' : ''}`}>
+                  <img src={b.v} alt={b.alt || ''} loading="lazy" width={b.width} height={b.height} />
+                  {b.caption && <figcaption>{b.caption}</figcaption>}
+                </figure>
+              );
               if (b.t === 'video') return (
                 <figure key={i} className="art-video">
                   <video controls playsInline preload="metadata" poster={b.poster || undefined}>

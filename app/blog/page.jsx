@@ -5,10 +5,10 @@ import { getPublishedPosts } from '../lib/blog';
 export const revalidate = 300;
 
 export const metadata = {
-  title: 'Blog de Mototurismo',
-  description: 'Guias de rotas, preparação de viagem, garagem e cultura do mototurismo brasileiro. Conteúdo Pistaviva.',
+  title: 'Matérias de Mototurismo',
+  description: 'Reportagens, guias de rotas, preparação de viagem, eventos e cultura do mototurismo brasileiro. Conteúdo Pistaviva.',
   alternates: { canonical: '/blog' },
-  openGraph: { title: 'Blog Pistaviva — Mototurismo', description: 'Guias, rotas e cultura sobre duas rodas.' },
+  openGraph: { title: 'Matérias Pistaviva — Mototurismo', description: 'Reportagens, guias, rotas e cultura sobre duas rodas.' },
 };
 
 export default async function BlogList() {
@@ -21,10 +21,10 @@ export default async function BlogList() {
           <div className="head">
             <div>
               <span className="ig-eyebrow" style={{ color: 'var(--ink-soft)' }}>Caderno de bordo</span>
-              <h1>Notícias</h1>
+              <h1>Matérias</h1>
             </div>
           </div>
-          <p className="lede">Guias de rotas, preparação de viagem, garagem e a cultura do mototurismo brasileiro — conteúdo de quem pega estrada.</p>
+          <p className="lede">Reportagens, guias de rotas, eventos e cultura do mototurismo brasileiro — conteúdo de quem pega estrada.</p>
         </div>
       </section>
 

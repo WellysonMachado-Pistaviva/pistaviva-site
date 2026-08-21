@@ -78,7 +78,7 @@ export default async function Comunidade() {
             Sem cadastro pra ler, sem algoritmo escondendo post — quem manda aqui é quem tá na estrada.
           </p>
         </div>
-        <Link className="link" href="/blog">Ver o blog →</Link>
+        <Link className="link" href="/blog">Ver matérias →</Link>
       </div>
 
       {/* O que dá pra fazer aqui — ações diretas, mobile-first */}

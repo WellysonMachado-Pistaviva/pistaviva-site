@@ -5,6 +5,7 @@ const BASE = 'https://www.pistavivamototurismo.com.br';
 const IG_EVENTO = 'https://instagram.com/motosulfestival';
 const MAPS = 'https://www.google.com/maps/search/-22.4109112,-45.4380434';
 const PARQUE_MAPS_ORIGIN = 'Parque da Cidade, Itajubá, MG';
+const MATERIA_HREF = '/blog/motosul-itajuba-mototurismo-gastronomia-minas-gerais';
 
 const DESTAQUES = [
   '4.000 motos na última edição',
@@ -340,6 +341,7 @@ const COTAS = [
 
 const ANCORAS = [
   { href: '#experiencia', label: 'Experiência' },
+  { href: '#materia', label: 'Matéria' },
   { href: '#planeje', label: 'Planeje sua ida' },
   { href: '#roteiros', label: 'Rode a região' },
   { href: '#festival', label: 'Programação' },
@@ -563,6 +565,29 @@ export default function MotosulPage() {
                 </div>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── MATÉRIA ESPECIAL ── */}
+      <section className="ms-editorial" id="materia" aria-labelledby="ms-editorial-title">
+        <div className="ms-wrap--wide ms-editorial__grid">
+          <figure className="ms-editorial__photo">
+            <img
+              src="/motosul/hero-motos.jpg"
+              alt="Big trail chegando ao Motosul Festival no Parque da Cidade"
+              loading="lazy"
+              width="2000"
+              height="1333"
+            />
+            <figcaption>Itajubá · 2ª edição · abril de 2026</figcaption>
+          </figure>
+          <div className="ms-editorial__copy">
+            <p className="ms-eyebrow">Matéria especial · Pistaviva</p>
+            <h2 className="ms-display ms-display--sm" id="ms-editorial-title">Motosul coloca Itajubá no mapa do mototurismo gastronômico.</h2>
+            <span className="ms-rule" aria-hidden="true" />
+            <p className="ms-lead">Estrada, mesa mineira e gente de vários estados transformaram o festival em destino. Veja números, imagens e história da 2ª edição.</p>
+            <Link className="ms-btn" href={MATERIA_HREF}>Ler matéria completa →</Link>
           </div>
         </div>
       </section>

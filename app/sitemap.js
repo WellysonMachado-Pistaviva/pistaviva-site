@@ -38,8 +38,9 @@ export default async function sitemap() {
     { path: '/eventos' },
     {
       path: '/motosul',
-      lastModified: '2026-08-20',
+      lastModified: '2026-08-21',
       images: [
+        `${BASE}/motosul/hero-motos.jpg`,
         `${BASE}/motosul/hero-publico.jpg`,
         `${BASE}/motosul/parque-aereo.jpg`,
         `${BASE}/motosul/parque-evento.jpg`,

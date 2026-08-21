@@ -15,10 +15,37 @@ export function parseArticleBody(body) {
       continue;
     }
 
-    const image = line.match(/^\[img:(.+)\]$/);
+    const gallery = line.match(/^\[gallery:(.+)\]$/);
+    if (gallery) {
+      flushParagraph();
+      const items = gallery[1]
+        .split(';;')
+        .map((rawItem) => {
+          const [src, alt = '', caption = '', size = ''] = rawItem.split('|');
+          const dimensions = size.trim().match(/^(\d+)x(\d+)$/);
+          return {
+            v: src.trim(),
+            alt: alt.trim(),
+            caption: caption.trim(),
+            ...(dimensions ? { width: Number(dimensions[1]), height: Number(dimensions[2]) } : {}),
+          };
+        })
+        .filter((item) => item.v);
+
+      if (items.length) blocks.push({ t: 'gallery', items });
+      continue;
+    }
+
+    const image = line.match(/^\[img:([^|\]]+)(?:\|([^|\]]*))?(?:\|([^|\]]*))?(?:\|(\d+)x(\d+))?\]$/);
     if (image) {
       flushParagraph();
-      blocks.push({ t: 'img', v: image[1].trim() });
+      blocks.push({
+        t: 'img',
+        v: image[1].trim(),
+        alt: image[2]?.trim() || '',
+        caption: image[3]?.trim() || '',
+        ...(image[4] && image[5] ? { width: Number(image[4]), height: Number(image[5]) } : {}),
+      });
       continue;
     }
     const video = line.match(/^\[video:([^|\]]+)(?:\|([^\]]+))?\]$/);

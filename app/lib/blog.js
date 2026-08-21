@@ -1,4 +1,5 @@
 import { supabaseServer } from './supabaseServer';
+import { LOCAL_MATERIAS, getLocalMateria } from '../content/materias';
 
 // Tabela pv_blog_posts: id, slug, title, excerpt, body, cover_url, tags(text[]),
 // author, published(bool), published_at(timestamptz), created_at.
@@ -12,10 +13,15 @@ export async function getPublishedPosts(limit = 50) {
       .eq('published', true)
       .order('published_at', { ascending: false })
       .limit(limit);
-    if (error) return [];
-    return data || [];
+    if (error) return LOCAL_MATERIAS.slice(0, limit);
+    const databaseSlugs = new Set((data || []).map((post) => post.slug));
+    const merged = [
+      ...(data || []),
+      ...LOCAL_MATERIAS.filter((post) => !databaseSlugs.has(post.slug)),
+    ].sort((a, b) => new Date(b.published_at || 0) - new Date(a.published_at || 0));
+    return merged.slice(0, limit);
   } catch {
-    return [];
+    return LOCAL_MATERIAS.slice(0, limit);
   }
 }
 
@@ -28,10 +34,10 @@ export async function getPostBySlug(slug) {
       .eq('slug', slug)
       .eq('published', true)
       .maybeSingle();
-    if (error) return null;
-    return data;
+    if (error) return getLocalMateria(slug);
+    return data || getLocalMateria(slug);
   } catch {
-    return null;
+    return getLocalMateria(slug);
   }
 }
 
@@ -40,14 +46,21 @@ export async function getFeaturedPosts(limit = 3) {
     const sb = supabaseServer();
     const { data, error } = await sb
       .from('pv_blog_posts')
-      .select('id, slug, title, excerpt, cover_url, tags, author')
+      .select('id, slug, title, excerpt, cover_url, tags, author, published_at')
       .eq('published', true).eq('featured', true)
       .order('published_at', { ascending: false })
       .limit(limit);
-    if (error) return [];
-    return data || [];
+    const localFeatured = LOCAL_MATERIAS.filter((post) => post.featured);
+    if (error) return localFeatured.slice(0, limit);
+    const databaseSlugs = new Set((data || []).map((post) => post.slug));
+    return [
+      ...(data || []),
+      ...localFeatured.filter((post) => !databaseSlugs.has(post.slug)),
+    ]
+      .sort((a, b) => new Date(b.published_at || 0) - new Date(a.published_at || 0))
+      .slice(0, limit);
   } catch {
-    return [];
+    return LOCAL_MATERIAS.filter((post) => post.featured).slice(0, limit);
   }
 }
 
@@ -89,9 +102,15 @@ export async function getAllSlugs() {
       .from('pv_blog_posts')
       .select('slug, published_at, cover_url')
       .eq('published', true);
-    if (error) return [];
-    return data || [];
+    if (error) return LOCAL_MATERIAS.map(({ slug, published_at, cover_url }) => ({ slug, published_at, cover_url }));
+    const databaseSlugs = new Set((data || []).map((post) => post.slug));
+    return [
+      ...(data || []),
+      ...LOCAL_MATERIAS
+        .filter((post) => !databaseSlugs.has(post.slug))
+        .map(({ slug, published_at, cover_url }) => ({ slug, published_at, cover_url })),
+    ];
   } catch {
-    return [];
+    return LOCAL_MATERIAS.map(({ slug, published_at, cover_url }) => ({ slug, published_at, cover_url }));
   }
 }

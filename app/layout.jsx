@@ -46,7 +46,7 @@ export const metadata = {
     locale: 'pt_BR',
     url: SITE_URL,
     title: 'Pistaviva — Mototurismo no Brasil',
-    description: 'Comunidade aberta de mototurismo: rotas, eventos, blog e cultura sobre duas rodas.',
+    description: 'Comunidade aberta de mototurismo: rotas, eventos, matérias e cultura sobre duas rodas.',
     // images: gerada automaticamente por app/opengraph-image.js (1200×630)
   },
   twitter: { card: 'summary_large_image', title: 'Pistaviva — Mototurismo no Brasil' },

@@ -7,6 +7,7 @@ const PRIMARY_LINKS = [
   { href: '/destinos', label: 'Destinos' },
   { href: '/rotas', label: 'Planejar' },
   { href: '/eventos', label: 'Eventos' },
+  { href: '/blog', label: 'Matérias' },
   { href: '/comunidade', label: 'Comunidade' },
 ];
 
@@ -14,7 +15,6 @@ const MORE_LINKS = [
   { href: '/estradas', label: 'Estradas' },
   { href: '/desafios', label: 'Desafios' },
   { href: '/guias', label: 'Guias' },
-  { href: '/blog', label: 'Notícias' },
   { href: '/fipe', label: 'Tabela FIPE' },
   { href: '/loja', label: 'Loja' },
   { href: '/sobre', label: 'Sobre' },

@@ -126,10 +126,10 @@ export default async function Home() {
             <div className="ig-sechead">
               <div className="lead">
                 <span className="ig-eyebrow">Caderno de bordo</span>
-                <h2 className="ig-title">Notícias</h2>
-                <p>Relatos, guias e aprendizados escritos por quem foi, voltou e conhece caminho.</p>
+                <h2 className="ig-title">Matérias</h2>
+                <p>Reportagens, relatos e guias escritos por quem foi, voltou e conhece caminho.</p>
               </div>
-              <Link href="/blog" className="ig-btn ig-btn--ghost">Ler todas</Link>
+              <Link href="/blog" className="ig-btn ig-btn--ghost">Ver todas</Link>
             </div>
             <div className="ig-news-grid">
               {news.map((post, index) => (
