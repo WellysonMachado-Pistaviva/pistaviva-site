@@ -2985,9 +2985,12 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 }
 .home-preflight{
   display:grid;
-  grid-template-columns:.75fr repeat(4,1fr);
+  grid-template-columns:.75fr repeat(6,1fr);
   margin-top:14px;
   border:1px solid rgba(255,255,255,.14);
+}
+@media(max-width:1180px){
+  .home-preflight{ grid-template-columns:.75fr repeat(3,1fr); }
 }
 .home-preflight-label,
 .home-preflight a{

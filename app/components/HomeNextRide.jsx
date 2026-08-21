@@ -82,6 +82,8 @@ export default function HomeNextRide({ destination, event, challenge }) {
           <Link href="/rotas"><Navigation aria-hidden="true" /><span><b>Planejar</b><small>Rota e custo</small></span></Link>
           <Link href="/eventos"><CalendarDays aria-hidden="true" /><span><b>Agenda</b><small>Quem vai rodar</small></span></Link>
           <Link href="/estrada-x"><Route aria-hidden="true" /><span><b>Estrada X</b><small>Mapa e companhia</small></span></Link>
+          <Link href="/destinos"><MapPinned aria-hidden="true" /><span><b>Destinos</b><small>Onde vale ir</small></span></Link>
+          <Link href="/desafios"><Flag aria-hidden="true" /><span><b>Desafios</b><small>Com certificado</small></span></Link>
         </nav>
       </div>
     </section>

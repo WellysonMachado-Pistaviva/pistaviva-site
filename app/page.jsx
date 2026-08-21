@@ -51,9 +51,8 @@ export default async function Home() {
       <HomeBanner banners={banners} />
       <h1 className="sr-only">Pistaviva — estradas, rotas e histórias reais sobre duas rodas</h1>
 
-      <ProductShowcase />
-
       <HomeNextRide destination={destinos[0]} event={eventos[0]} challenge={DESAFIOS[0]} />
+      <ProductShowcase />
 
       {agendaEventos.length > 0 && (
         <section className="ig-cats home-agenda" id="eventos">
@@ -65,6 +64,7 @@ export default async function Home() {
                 <p>Mais datas para escolher caminho, encontrar turma e colocar saída no calendário.</p>
               </div>
               <div className="home-section-actions">
+                <Link href="/motosul" className="ig-btn ig-btn--ghost">Motosul Festival</Link>
                 <Link href="/eventos" className="ig-btn ig-btn--ghost">Ver agenda</Link>
                 <Link href="/eventos/criar" className="ig-btn ig-btn--primary">Criar evento</Link>
               </div>
