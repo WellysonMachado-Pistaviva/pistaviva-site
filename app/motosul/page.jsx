@@ -219,7 +219,7 @@ const PARQUE = [
   },
   {
     t: 'Lazer & entretenimento',
-    itens: ['Kartódromo', 'Arena Park Futebol Society', 'Real Tennis Club', 'Praia Di Minas', 'Bowl Fun & Food', 'Deck Only Brasil', 'Área kids', 'Expo Center Parque Itajubá'],
+    itens: ['Kartódromo · track day', 'Arena Park Futebol Society', 'Real Tennis Club', 'Praia Di Minas', 'Bowl Fun & Food', 'Deck Only Brasil', 'Área kids', 'Expo Center Parque Itajubá'],
   },
   {
     t: 'Comércio & serviços',
@@ -255,6 +255,7 @@ const EXPERIENCIAS = [
   { t: 'Comida mineira', d: 'Queijo, pastel de milho, costela, doce de leite e cachaça. Dá para provar Minas sem sair do parque.', src: '/motosul/gastronomia.jpg', alt: 'Prato servido na área gastronômica do Motosul', width: 1050, height: 1400 },
   { t: 'Motos no parque', d: 'Big trails, customizadas e clássicas ocupam o pátio. Muita gente cruza estado para chegar.', src: '/motosul/g-fila-motos.jpg', alt: 'Fila de motos estacionadas no Parque da Cidade', width: 674, height: 1200 },
   { t: 'Rock ao vivo', d: 'Bandas da região tocam de frente para o lago durante os dois dias.', src: '/motosul/g-palco-mic.jpg', alt: 'Show de rock no palco do Motosul Festival', width: 1200, height: 800 },
+  { t: 'Track day no kartódromo', d: 'No mesmo fim de semana, o kartódromo de Itajubá abre para quem quer girar em pista fechada, longe do trânsito.', src: '/motosul/trackday.jpg', alt: 'Pilotos em pista no track day realizado durante o Motosul Festival', width: 1400, height: 933 },
   { t: 'Serra antes e depois', d: 'Itajubá deixa mirantes e curvas da Mantiqueira a poucos quilômetros do portão.', src: '/motosul/g-rua.jpg', alt: 'Motociclista chegando a Itajubá pelas estradas da Mantiqueira', width: 674, height: 1200 },
 ];
 
@@ -262,6 +263,7 @@ const GALERIA = [
   { src: '/motosul/g-chegada.jpg', alt: 'Motos chegando ao Motosul Festival', span: 'span 2', width: 800, height: 1200 },
   { src: '/motosul/g-mulheres.jpg', alt: 'Motociclistas comemorando no pátio do festival', span: 'span 1', width: 1200, height: 674 },
   { src: '/motosul/g-bikers.jpg', alt: 'Motociclista de braços abertos no pátio de motos', span: 'span 1', width: 1200, height: 800 },
+  { src: '/motosul/g-trackday.jpg', alt: 'Pilotos inclinados na curva durante o track day do Motosul', span: 'span 1', width: 1200, height: 800 },
   { src: '/motosul/g-turma.jpg', alt: 'Grupo de amigos na praça de alimentação do festival', span: 'span 1', width: 1200, height: 800 },
   { src: '/motosul/g-palco-mic.jpg', alt: 'Apresentação no palco do Motosul', span: 'span 1', width: 1200, height: 800 },
   { src: '/motosul/g-publico-palco.jpg', alt: 'Público em frente ao palco do Motosul Festival', span: 'span 2', width: 1200, height: 800 },
