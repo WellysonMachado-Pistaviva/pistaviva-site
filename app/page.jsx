@@ -102,6 +102,7 @@ export default async function Home() {
               <p>Data, lugar e companhia definidos. Confirme presença ou coloque seu encontro no mapa.</p>
             </div>
             <div className="home-section-actions">
+              <Link href="/motosul" className="ig-btn ig-btn--ghost">Motosul Festival 2027</Link>
               <Link href="/eventos" className="ig-btn ig-btn--ghost">Ver agenda</Link>
               <Link href="/eventos/criar" className="ig-btn ig-btn--primary">Criar evento</Link>
             </div>

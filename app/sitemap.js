@@ -8,9 +8,6 @@ import { getEventsForSeo } from './lib/events';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 
-// Data do último deploy / atualização geral do site
-const LAST_BUILD = new Date().toISOString();
-
 // Next 15 não escapa & em <image:loc> → quebra o parse do Google. Escapa XML na mão.
 const xmlEscape = (u) =>
   String(u || '')
@@ -22,46 +19,45 @@ const xmlEscape = (u) =>
 const safeImages = (url) => (url ? { images: [xmlEscape(url)] } : {});
 
 export default async function sitemap() {
-  // ── Páginas estáticas com prioridades e frequências específicas ──
+  // Só informa lastModified quando existe atualização editorial verificável.
+  // Google ignora priority/changefreq e pode desconsiderar lastmod impreciso.
   const staticPages = [
-    // Homepage — máxima prioridade
-    { path: '', priority: 1.0, changeFrequency: 'daily' },
-
-    // Hubs de conteúdo — alta prioridade (páginas de listagem)
-    { path: '/blog', priority: 0.9, changeFrequency: 'daily' },
-    { path: '/diretorio-duas-rodas', priority: 0.8, changeFrequency: 'weekly' },
-    { path: '/rotas', priority: 0.9, changeFrequency: 'weekly' },
-    { path: '/comunidade', priority: 0.9, changeFrequency: 'daily' },
-    { path: '/estradas', priority: 0.9, changeFrequency: 'weekly' },
-    { path: '/desafios', priority: 0.9, changeFrequency: 'weekly' },
-    { path: '/guias', priority: 0.9, changeFrequency: 'weekly' },
-    { path: '/destinos', priority: 0.85, changeFrequency: 'weekly' },
-    { path: '/bora-rodar', priority: 0.85, changeFrequency: 'daily' },
-    { path: '/fotografos', priority: 0.9, changeFrequency: 'weekly' },
-
-    // Funcionalidades interativas — prioridade alta
-    { path: '/fipe', priority: 0.8, changeFrequency: 'weekly' },
-    { path: '/comboio', priority: 0.8, changeFrequency: 'weekly' },
-    { path: '/eventos', priority: 0.8, changeFrequency: 'weekly' },
-    { path: '/motosul', priority: 0.8, changeFrequency: 'weekly' },
-
-    // Páginas institucionais — prioridade média
-    { path: '/sobre', priority: 0.7, changeFrequency: 'monthly' },
-    { path: '/apoie', priority: 0.7, changeFrequency: 'monthly' },
+    { path: '' },
+    { path: '/blog' },
+    { path: '/diretorio-duas-rodas' },
+    { path: '/rotas' },
+    { path: '/comunidade' },
+    { path: '/estradas' },
+    { path: '/desafios' },
+    { path: '/guias' },
+    { path: '/destinos' },
+    { path: '/bora-rodar' },
+    { path: '/fotografos' },
+    { path: '/fipe' },
+    { path: '/comboio' },
+    { path: '/eventos' },
+    {
+      path: '/motosul',
+      lastModified: '2026-08-20',
+      images: [
+        `${BASE}/motosul/hero-publico.jpg`,
+        `${BASE}/motosul/parque-aereo.jpg`,
+        `${BASE}/motosul/parque-evento.jpg`,
+      ],
+    },
+    { path: '/sobre' },
+    { path: '/apoie' },
     // /loja é doorway pra loja externa (noindex) — fora do sitemap.
-    { path: '/estrada-x', priority: 0.7, changeFrequency: 'monthly' },
-    { path: '/contato', priority: 0.6, changeFrequency: 'monthly' },
-
-    // Legal — baixa prioridade
-    { path: '/privacidade', priority: 0.3, changeFrequency: 'yearly' },
-    { path: '/termos', priority: 0.3, changeFrequency: 'yearly' },
+    { path: '/estrada-x' },
+    { path: '/contato' },
+    { path: '/privacidade' },
+    { path: '/termos' },
   ];
 
-  const staticEntries = staticPages.map(({ path, priority, changeFrequency }) => ({
+  const staticEntries = staticPages.map(({ path, lastModified, images }) => ({
     url: `${BASE}${path}`,
-    lastModified: LAST_BUILD,
-    changeFrequency,
-    priority,
+    ...(lastModified ? { lastModified } : {}),
+    ...(images?.length ? { images } : {}),
   }));
 
   // ── Posts do blog ──
@@ -70,9 +66,7 @@ export default async function sitemap() {
     const slugs = await getAllSlugs();
     posts = slugs.map(s => ({
       url: `${BASE}/blog/${s.slug}`,
-      lastModified: s.published_at ? new Date(s.published_at).toISOString() : LAST_BUILD,
-      changeFrequency: 'monthly',
-      priority: 0.7,
+      ...(s.published_at ? { lastModified: new Date(s.published_at).toISOString() } : {}),
       ...safeImages(s.cover_url),
     }));
   } catch { /* DB indisponível no build */ }
@@ -83,42 +77,28 @@ export default async function sitemap() {
     const slugs = await getAllPhotographerSlugs();
     fotos = slugs.map(s => ({
       url: `${BASE}/fotografo/${s.slug}`,
-      lastModified: s.created_at ? new Date(s.created_at).toISOString() : LAST_BUILD,
-      changeFrequency: 'monthly',
-      priority: 0.6,
+      ...(s.created_at ? { lastModified: new Date(s.created_at).toISOString() } : {}),
     }));
   } catch { /* DB indisponível no build */ }
 
   // ── Estradas icônicas (conteúdo editorial fixo) ──
   const estradas = ESTRADAS.map((e) => ({
     url: `${BASE}/estradas/${e.slug}`,
-    lastModified: LAST_BUILD,
-    changeFrequency: 'monthly',
-    priority: 0.85,
   }));
 
   // ── Guias práticos (conteúdo editorial fixo) ──
   const guias = GUIAS.map((g) => ({
     url: `${BASE}/guias/${g.slug}`,
-    lastModified: LAST_BUILD,
-    changeFrequency: 'monthly',
-    priority: 0.8,
   }));
 
   // ── Destinos-sonho (matéria editorial) ──
   const destinos = DESTINOS.map((d) => ({
     url: `${BASE}/destinos/${d.slug}`,
-    lastModified: LAST_BUILD,
-    changeFrequency: 'monthly',
-    priority: 0.8,
   }));
 
   // ── Desafios (roteiros com certificado) ──
   const desafios = DESAFIOS.map((d) => ({
     url: `${BASE}/desafios/${d.slug}`,
-    lastModified: LAST_BUILD,
-    changeFrequency: 'monthly',
-    priority: 0.85,
   }));
 
   // ── Eventos da comunidade (páginas de detalhe) ──
@@ -127,9 +107,6 @@ export default async function sitemap() {
     const list = await getEventsForSeo({ limit: 200 });
     eventos = list.map((e) => ({
       url: `${BASE}/eventos/${e.id}`,
-      lastModified: LAST_BUILD,
-      changeFrequency: 'weekly',
-      priority: 0.6,
       ...safeImages(e.image_url),
     }));
   } catch { /* DB indisponível no build */ }

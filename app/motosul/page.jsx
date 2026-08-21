@@ -318,37 +318,99 @@ const ANCORAS = [
 ];
 
 export const metadata = {
-  // absolute: sem o sufixo '· Pistaviva' do template do layout — a aba mostra só o nome do evento.
-  title: { absolute: 'Motosul Festival' },
+  title: { absolute: 'Motosul Festival 2027 em Itajubá | Evento de Moto' },
   description:
-    'O maior encontro de mototurismo gastronômico do Sul de Minas, no Parque da Cidade em Itajubá — Serra da Mantiqueira. 4.000 motos e 6.736 pessoas na 2ª edição. 3ª edição em abril de 2027.',
+    'Motosul Festival 2027 no Parque da Cidade, em Itajubá (MG): evento de moto com mototurismo, gastronomia mineira, rock, rotas, turismo e estrutura completa.',
+  keywords: [
+    'Motosul Festival',
+    'Motosul Itajubá',
+    'evento de moto em Itajubá',
+    'Parque da Cidade Itajubá',
+    'encontro de motociclistas Sul de Minas',
+    'mototurismo Serra da Mantiqueira',
+    'festival de motos Minas Gerais',
+  ],
   alternates: { canonical: '/motosul' },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, maxImagePreview: 'large', maxSnippet: -1, maxVideoPreview: -1 },
+  },
   openGraph: {
-    title: 'Motosul Festival · Itajubá — MG',
-    description: 'Mototurismo, rock e comida de Minas no Parque da Cidade, na Serra da Mantiqueira. 3ª edição em abril de 2027.',
+    title: 'Motosul Festival 2027 · Evento de Moto em Itajubá',
+    description: 'Mototurismo, gastronomia mineira e rock no Parque da Cidade de Itajubá, no coração da Serra da Mantiqueira.',
     url: `${BASE}/motosul`,
     type: 'website',
+    locale: 'pt_BR',
+    siteName: 'Pistaviva',
+    images: [{
+      url: `${BASE}/motosul/hero-publico.jpg`,
+      width: 2000,
+      height: 1333,
+      alt: 'Motosul Festival no Parque da Cidade de Itajubá, Minas Gerais',
+    }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Motosul Festival 2027 · Itajubá — MG',
+    description: 'Evento de moto, mototurismo, gastronomia mineira e rock no Parque da Cidade de Itajubá.',
     images: [`${BASE}/motosul/hero-publico.jpg`],
   },
 };
 
 export default function MotosulPage() {
-  const eventLd = {
+  const motosulLd = {
     '@context': 'https://schema.org',
-    '@type': 'Festival',
-    name: 'Motosul Festival',
-    description: 'O maior encontro de mototurismo gastronômico do Sul de Minas, em Itajubá — Serra da Mantiqueira.',
-    image: [`${BASE}/motosul/hero-publico.jpg`],
-    url: `${BASE}/motosul`,
-    eventStatus: 'https://schema.org/EventScheduled',
-    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-    location: {
-      '@type': 'Place',
-      name: 'Parque da Cidade',
-      address: { '@type': 'PostalAddress', addressLocality: 'Itajubá', addressRegion: 'MG', addressCountry: 'BR' },
-      geo: { '@type': 'GeoCoordinates', latitude: -22.4109112, longitude: -45.4380434 },
-    },
-    organizer: { '@type': 'Organization', name: 'Motosul Festival', url: IG_EVENTO },
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': `${BASE}/motosul#pagina`,
+        url: `${BASE}/motosul`,
+        name: 'Motosul Festival 2027 em Itajubá',
+        description: 'Página oficial do Motosul Festival: evento de moto, mototurismo, gastronomia e rock no Parque da Cidade de Itajubá.',
+        inLanguage: 'pt-BR',
+        dateModified: '2026-08-20',
+        mainEntity: { '@id': `${BASE}/motosul#festival` },
+        primaryImageOfPage: { '@type': 'ImageObject', url: `${BASE}/motosul/hero-publico.jpg`, width: 2000, height: 1333 },
+        isPartOf: { '@id': `${BASE}/#site` },
+      },
+      {
+        '@type': 'Festival',
+        '@id': `${BASE}/motosul#festival`,
+        name: 'Motosul Festival',
+        alternateName: ['Motosul Itajubá', 'Motosul Festival de Mototurismo e Gastronomia'],
+        description: 'Festival de motos em Itajubá que reúne mototurismo, gastronomia mineira, rock, turismo e cultura motociclista na Serra da Mantiqueira.',
+        image: [
+          `${BASE}/motosul/hero-publico.jpg`,
+          `${BASE}/motosul/parque-aereo.jpg`,
+          `${BASE}/motosul/parque-evento.jpg`,
+        ],
+        url: `${BASE}/motosul`,
+        location: { '@id': `${BASE}/motosul#parque-da-cidade` },
+        organizer: { '@id': `${BASE}/#org` },
+        audience: { '@type': 'Audience', audienceType: 'Motociclistas, mototuristas, famílias e visitantes da Serra da Mantiqueira' },
+        inLanguage: 'pt-BR',
+      },
+      {
+        '@type': 'Place',
+        '@id': `${BASE}/motosul#parque-da-cidade`,
+        name: 'Parque da Cidade de Itajubá',
+        alternateName: 'Parque da Cidade',
+        description: 'Parque público em Itajubá com lago, kartódromo, restaurantes, centro de eventos, área verde, estacionamento e espaços de lazer.',
+        url: `${BASE}/motosul#parque`,
+        image: `${BASE}/motosul/parque-aereo.jpg`,
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Av. Dr. Jerson Dias, 500 - Estiva',
+          addressLocality: 'Itajubá',
+          addressRegion: 'MG',
+          postalCode: '37500-295',
+          addressCountry: 'BR',
+        },
+        geo: { '@type': 'GeoCoordinates', latitude: -22.4109112, longitude: -45.4380434 },
+        hasMap: MAPS,
+      },
+    ],
   };
 
   const breadcrumbLd = {
@@ -366,7 +428,7 @@ export default function MotosulPage() {
 
   return (
     <div className="ms">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(eventLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(motosulLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
       {/* ── HERO ── */}
@@ -384,11 +446,11 @@ export default function MotosulPage() {
           <div className="ms-hero__poster">
             <div>
               <h1 className="ms-hero__h1">
-                <span className="ms-hero__pre">O maior encontro de</span>
-                <span className="ms-hero__big">Mototurismo gastronômico</span>
-                <span className="ms-hero__big ms-hero__big--sub">do Sul de Minas</span>
+                <span className="ms-hero__pre">Evento de moto no Parque da Cidade · Itajubá</span>
+                <span className="ms-hero__big">Motosul Festival</span>
+                <span className="ms-hero__big ms-hero__big--sub">Mototurismo, gastronomia e rock</span>
               </h1>
-              <p className="ms-hero__dek">Dois dias para chegar rodando, estacionar no parque e viver Itajubá com quem gosta da mesma estrada.</p>
+              <p className="ms-hero__dek">O maior encontro de mototurismo gastronômico do Sul de Minas: dois dias para chegar rodando, estacionar no parque e viver Itajubá.</p>
               <div className="ms-actions ms-actions--left ms-hero__actions">
                 <a className="ms-btn" href="#proxima">Acompanhar 3ª edição</a>
                 <a className="ms-btn ms-btn--ghost" href={MAPS} target="_blank" rel="noopener noreferrer">Como chegar</a>
@@ -649,7 +711,7 @@ export default function MotosulPage() {
           <p className="ms-lead">O Motosul acontece no encontro de três forças que fazem Minas viajar longe: estrada, hospitalidade e comida com identidade.</p>
 
           <figure className="ms-faixa">
-            <img src="/motosul/mantiqueira.jpg" alt="Vista da Serra da Mantiqueira ao amanhecer" loading="lazy" />
+            <img src="/motosul/mantiqueira.jpg" alt="Vista da Serra da Mantiqueira ao amanhecer" loading="lazy" width="2200" height="1466" />
             <figcaption>Serra da Mantiqueira · o quintal do festival</figcaption>
           </figure>
 
@@ -767,12 +829,14 @@ export default function MotosulPage() {
           <div className="ms-aerial" aria-label="Ensaio aéreo do Parque da Cidade">
             <figure className="ms-aerial__shot ms-aerial__shot--hero">
               <picture>
-                <source media="(max-width: 640px)" srcSet="/motosul/parque-mobile.jpg" />
+                <source media="(max-width: 640px)" srcSet="/motosul/parque-mobile.jpg" width="900" height="1600" />
                 <img
                   src="/motosul/parque-aereo.jpg"
                   alt="Vista aérea do Parque da Cidade, com lago, kartódromo e Serra da Mantiqueira"
                   loading="lazy"
                   decoding="async"
+                  width="1800"
+                  height="1012"
                 />
               </picture>
               <figcaption>01 · O parque entre o lago e a serra</figcaption>
@@ -784,6 +848,8 @@ export default function MotosulPage() {
                 alt="Estrutura de evento montada na praça do Parque da Cidade, ao lado do lago"
                 loading="lazy"
                 decoding="async"
+                width="1600"
+                height="900"
               />
               <figcaption>02 · O parque em dia de evento</figcaption>
             </figure>
