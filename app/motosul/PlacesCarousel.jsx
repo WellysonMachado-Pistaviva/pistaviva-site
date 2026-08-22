@@ -10,20 +10,16 @@ const PLACES = [
     kind: 'fé, arquitetura e vista',
     name: 'Santuário da Agonia',
     image: '/motosul/roteiros/santuario-agonia.jpg',
-    alt: 'Santuário Nossa Senhora da Agonia no alto de uma colina em Itajubá',
-    width: 1200,
-    height: 675,
-    intro: 'No alto da colina, o santuário recebe missas, peregrinos e quem sobe para ver Itajubá cercada pelas montanhas.',
+    alt: 'Interior do Santuário Nossa Senhora da Agonia, com a cúpula de vidros azuis sobre os bancos e o altar',
+    width: 960,
+    height: 530,
+    intro: 'No alto da colina, o santuário recebe missas, peregrinos e quem sobe para ver Itajubá cercada pelas montanhas. Por dentro, a cúpula de vidros azuis é o que fica na memória.',
     facts: [
       'A devoção veio de Viana do Castelo, em Portugal.',
       'É o segundo santuário do mundo dedicado a Nossa Senhora da Agonia e o primeiro da América Latina.',
       'A cúpula e os painéis azuis formam uma arquitetura fácil de reconhecer de vários pontos da cidade.',
     ],
     chapter: '#roteiro-1h',
-    credit: 'Carlo Brescia',
-    source: 'https://commons.wikimedia.org/wiki/File:Caminando_al_Santuario_de_Nossa_Senhora_da_Agonia_01.jpg',
-    license: 'https://creativecommons.org/licenses/by-sa/4.0/',
-    licenseLabel: 'CC BY-SA 4.0',
   },
   {
     marker: 'km 6',
@@ -152,9 +148,11 @@ export default function PlacesCarousel() {
                   </ul>
                   <div className="ms-place-carousel__footer">
                     <a className="ms-place-carousel__route" href={place.chapter}>Ver roteiro ↓</a>
-                    <small>
-                      Foto: <a href={place.source} target="_blank" rel="noopener noreferrer">{place.credit}</a>, <a href={place.license} target="_blank" rel="noopener noreferrer">{place.licenseLabel}</a>. Exibição recortada.
-                    </small>
+                    {place.credit ? (
+                      <small>
+                        Foto: <a href={place.source} target="_blank" rel="noopener noreferrer">{place.credit}</a>, <a href={place.license} target="_blank" rel="noopener noreferrer">{place.licenseLabel}</a>. Exibição recortada.
+                      </small>
+                    ) : null}
                   </div>
                 </figcaption>
               </figure>
