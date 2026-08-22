@@ -103,47 +103,86 @@ function ArrivalMap() {
         <strong>Quatro caminhos.<br />Mesmo destino.</strong>
       </figcaption>
 
-      <svg className="ms-arrival-map__svg" viewBox="0 0 960 580" role="img" aria-labelledby="ms-map-title ms-map-desc">
-        <title id="ms-map-title">Rotas de chegada ao Motosul Festival em Itajubá</title>
-        <desc id="ms-map-desc">São José dos Campos via São Bento do Sapucaí; Piquete via Wenceslau Braz; São Lourenço via Cristina e Pedralva; Pouso Alegre via Santa Rita do Sapucaí. Todas chegam a Itajubá.</desc>
+      <div className="ms-arrival-map__canvas">
+        <svg className="ms-arrival-map__svg" viewBox="70 30 880 552" role="img" aria-labelledby="ms-map-title ms-map-desc">
+          <title id="ms-map-title">Rotas de chegada ao Motosul Festival em Itajubá</title>
+          <desc id="ms-map-desc">Diagrama esquemático. A: São José dos Campos por São Bento do Sapucaí e Paraisópolis, chegando pelo sudoeste. B: Piquete por Wenceslau Braz, chegando pelo sudeste. C: São Lourenço por Cristina e Pedralva, chegando pelo nordeste. D: Pouso Alegre por Santa Rita do Sapucaí, chegando pelo noroeste. A, C e D dividem o trecho de Piranguinho até Itajubá; do centro seguem ao Parque da Cidade.</desc>
 
-        <g className="ms-map__terrain" aria-hidden="true">
-          <path d="M20 70C170 5 255 92 380 60S620 15 748 72s145 30 192-12" />
-          <path d="M8 525c138-72 238 22 350-20s239-67 342-24 164 52 252 3" />
-          <path d="M70 260c115-72 205-26 282 2s138 24 210-13 142-46 244 13" />
-        </g>
+          <defs>
+            <pattern id="ms-map-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <circle cx="1" cy="1" r="1" />
+            </pattern>
+          </defs>
 
-        <g className="ms-map__routes" aria-hidden="true">
-          <path className="ms-map__route ms-map__route--a" d="M82 478C178 478 220 438 298 418S470 372 520 352s82-30 132-35 67-17 98-17" />
-          <path className="ms-map__route ms-map__route--b" d="M86 112c128 0 170 55 274 73s245 72 390 115" />
-          <path className="ms-map__route ms-map__route--c" d="M558 62c0 86 56 106 63 160s50 69 129 78" />
-          <path className="ms-map__route ms-map__route--d" d="M590 525c43-59 58-104 84-140s38-66 76-85" />
-          <path className="ms-map__finish" d="M750 300H902" />
-        </g>
+          <rect className="ms-map__grid" x="70" y="30" width="880" height="552" fill="url(#ms-map-grid)" aria-hidden="true" />
 
-        <g className="ms-map__labels" aria-hidden="true">
-          <g className="ms-map__label"><circle cx="82" cy="478" r="8" /><text x="82" y="510">SÃO JOSÉ DOS CAMPOS</text><text className="ms-map__uf" x="82" y="529">SP</text></g>
-          <g className="ms-map__label"><circle cx="298" cy="418" r="6" /><text x="298" y="452">SÃO BENTO DO SAPUCAÍ</text></g>
-          <g className="ms-map__label"><circle cx="520" cy="352" r="5" /><text x="520" y="384">PARAISÓPOLIS</text></g>
-          <g className="ms-map__label"><circle cx="86" cy="112" r="7" /><text x="86" y="92">PIQUETE</text><text className="ms-map__uf" x="86" y="72">SP</text></g>
-          <g className="ms-map__label"><circle cx="360" cy="185" r="5" /><text x="360" y="164">WENCESLAU BRAZ</text></g>
-          <g className="ms-map__label"><circle cx="558" cy="62" r="7" /><text x="558" y="38">SÃO LOURENÇO</text></g>
-          <g className="ms-map__label"><circle cx="621" cy="222" r="5" /><text x="621" y="201">CRISTINA · PEDRALVA</text></g>
-          <g className="ms-map__label"><circle cx="590" cy="525" r="7" /><text x="590" y="557">POUSO ALEGRE</text></g>
-          <g className="ms-map__label"><circle cx="674" cy="385" r="5" /><text x="674" y="416">SANTA RITA DO SAPUCAÍ</text></g>
-          <g className="ms-map__label ms-map__label--junction"><circle cx="652" cy="317" r="5" /><text x="652" y="295">PIRANGUINHO</text></g>
-          <g className="ms-map__destination"><circle cx="750" cy="300" r="13" /><text x="750" y="273">ITAJUBÁ</text><text className="ms-map__uf" x="750" y="335">MG</text></g>
-          <g className="ms-map__park"><circle cx="902" cy="300" r="10" /><text x="902" y="273">PARQUE DA CIDADE</text><text className="ms-map__uf" x="902" y="335">MOTOSUL</text></g>
-        </g>
+          <g className="ms-map__compass" aria-hidden="true">
+            <path d="M108 108V70" />
+            <path d="M102 78l6-8 6 8" />
+            <text x="108" y="128">N</text>
+          </g>
 
-        <g className="ms-map__keys" aria-hidden="true">
-          <text x="112" y="466">A</text><text x="112" y="126">B</text><text x="576" y="83">C</text><text x="610" y="514">D</text>
-        </g>
-      </svg>
+          <g className="ms-map__routes" aria-hidden="true">
+            <path className="ms-map__route ms-map__route--a" d="M140 500H300l80-80 120-120" />
+            <path className="ms-map__route ms-map__route--b" d="M860 480H720l-120-120V300" />
+            <path className="ms-map__route ms-map__route--c" d="M820 100H700l-80 80-120 120" />
+            <path className="ms-map__route ms-map__route--d" d="M180 140h160l160 160" />
+            <path className="ms-map__trunk" d="M500 300H600" />
+            <path className="ms-map__finish" d="M600 300H760" />
+          </g>
+
+          <g className="ms-map__stops" aria-hidden="true">
+            <g className="ms-map__stop"><circle cx="300" cy="500" r="6" /><text x="300" y="532">SÃO BENTO DO SAPUCAÍ</text></g>
+            <g className="ms-map__stop"><circle cx="380" cy="420" r="6" /><text className="ms-map__t--end" x="362" y="425">PARAISÓPOLIS</text></g>
+            <g className="ms-map__stop"><circle cx="720" cy="480" r="6" /><text x="720" y="512">WENCESLAU BRAZ</text></g>
+            <g className="ms-map__stop"><circle cx="700" cy="100" r="6" /><text className="ms-map__t--end" x="686" y="76">CRISTINA</text></g>
+            <g className="ms-map__stop"><circle cx="620" cy="180" r="6" /><text className="ms-map__t--end" x="602" y="185">PEDRALVA</text></g>
+            <g className="ms-map__stop"><circle cx="340" cy="140" r="6" /><text x="340" y="116">SANTA RITA DO SAPUCAÍ</text></g>
+            <g className="ms-map__stop ms-map__stop--junction"><circle cx="500" cy="300" r="8" /><text x="500" y="266">PIRANGUINHO</text></g>
+          </g>
+
+          <g className="ms-map__origins" aria-hidden="true">
+            <g className="ms-map__origin ms-map__origin--a">
+              <rect x="125" y="485" width="30" height="30" rx="7" />
+              <text className="ms-map__key" x="140" y="510">A</text>
+              <text className="ms-map__t--start" x="125" y="546">SÃO JOSÉ DOS CAMPOS</text>
+              <text className="ms-map__t--start ms-map__uf" x="125" y="562">SP</text>
+            </g>
+            <g className="ms-map__origin ms-map__origin--b">
+              <rect x="845" y="465" width="30" height="30" rx="7" />
+              <text className="ms-map__key" x="860" y="490">B</text>
+              <text className="ms-map__t--end" x="875" y="526">PIQUETE</text>
+              <text className="ms-map__t--end ms-map__uf" x="875" y="542">SP</text>
+            </g>
+            <g className="ms-map__origin ms-map__origin--c">
+              <rect x="805" y="85" width="30" height="30" rx="7" />
+              <text className="ms-map__key" x="820" y="110">C</text>
+              <text className="ms-map__t--end" x="835" y="74">SÃO LOURENÇO</text>
+            </g>
+            <g className="ms-map__origin ms-map__origin--d">
+              <rect x="165" y="125" width="30" height="30" rx="7" />
+              <text className="ms-map__key" x="180" y="150">D</text>
+              <text className="ms-map__t--start" x="165" y="114">POUSO ALEGRE</text>
+            </g>
+          </g>
+
+          <g className="ms-map__destination" aria-hidden="true">
+            <circle className="ms-map__halo" cx="600" cy="300" r="21" />
+            <circle cx="600" cy="300" r="13" />
+            <text x="600" y="256">ITAJUBÁ · MG</text>
+          </g>
+
+          <g className="ms-map__park" aria-hidden="true">
+            <circle cx="760" cy="300" r="10" />
+            <text className="ms-map__t--start" x="780" y="295">PARQUE DA CIDADE</text>
+            <text className="ms-map__t--start ms-map__uf" x="780" y="313">MOTOSUL · CHEGADA</text>
+          </g>
+        </svg>
+      </div>
 
       <ol className="ms-arrival-map__routes">
         {ROTAS_CHEGADA.map((rota) => (
-          <li key={rota.id}>
+          <li key={rota.id} data-route={rota.id}>
             <a href={rota.href} target="_blank" rel="noopener noreferrer">
               <span className="ms-route__id">{rota.id}</span>
               <span className="ms-route__origin">{rota.origem}</span>
@@ -153,7 +192,13 @@ function ArrivalMap() {
           </li>
         ))}
       </ol>
-      <p className="ms-arrival-map__note">Diagrama esquemático · confira trajeto e condições da via antes de sair.</p>
+      <p className="ms-arrival-map__note">
+        <span><i className="ms-key ms-key--line" aria-hidden="true" />Trajeto</span>
+        <span><i className="ms-key ms-key--trunk" aria-hidden="true" />Trecho comum A · C · D</span>
+        <span><i className="ms-key ms-key--stop" aria-hidden="true" />Cidade no caminho</span>
+        <span><i className="ms-key ms-key--dest" aria-hidden="true" />Itajubá e Parque da Cidade</span>
+        <small>Diagrama esquemático, fora de escala · confira trajeto e condições da via antes de sair.</small>
+      </p>
     </figure>
   );
 }

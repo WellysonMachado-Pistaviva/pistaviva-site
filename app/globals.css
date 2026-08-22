@@ -3602,32 +3602,75 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 .ms-arrival-map__head{ display:flex; align-items:flex-end; justify-content:space-between; gap:22px; padding:24px clamp(20px,2.4vw,30px) 20px; border-bottom:1px solid rgba(255,255,255,.14); }
 .ms-arrival-map__head > span{ font-family:var(--mono); font-weight:800; font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); }
 .ms-arrival-map__head strong{ font-family:var(--display); font-weight:800; font-size:clamp(25px,2.7vw,38px); line-height:.9; text-transform:uppercase; text-align:right; }
-.ms-arrival-map__svg{ display:block; width:100%; height:auto; border-bottom:1px solid rgba(255,255,255,.14); }
-.ms-map__terrain path{ fill:none; stroke:rgba(255,255,255,.08); stroke-width:1.5; stroke-dasharray:3 9; }
-.ms-map__route,.ms-map__finish{ fill:none; stroke:#d7d2c9; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
-.ms-map__route--a{ stroke:var(--accent); stroke-width:6; }
-.ms-map__route--b{ stroke-dasharray:11 7; }
-.ms-map__route--c{ stroke-dasharray:2 7; stroke-width:4; }
-.ms-map__route--d{ stroke-dasharray:18 6 3 6; }
-.ms-map__finish{ stroke:var(--accent); stroke-width:5; }
-.ms-map__label circle{ fill:#101014; stroke:#f1ede5; stroke-width:2; vector-effect:non-scaling-stroke; }
-.ms-map__label text,.ms-map__destination text,.ms-map__park text{ fill:#f1ede5; font-family:var(--mono); font-weight:800; font-size:12px; letter-spacing:1.1px; text-anchor:middle; }
-.ms-map__label .ms-map__uf,.ms-map__destination .ms-map__uf,.ms-map__park .ms-map__uf{ fill:#8f8a83; font-size:10px; letter-spacing:2px; }
-.ms-map__destination circle{ fill:var(--accent); stroke:#f1ede5; stroke-width:3; }
-.ms-map__destination text{ fill:var(--accent); font-size:17px; }
-.ms-map__destination .ms-map__uf{ fill:#f1ede5; }
-.ms-map__park circle{ fill:#f1ede5; stroke:var(--accent); stroke-width:3; }
-.ms-map__park text{ font-size:12px; }
-.ms-map__keys text{ fill:var(--accent); font-family:var(--display); font-weight:800; font-size:22px; }
+.ms-arrival-map__canvas{ border-bottom:1px solid rgba(255,255,255,.14); overflow-x:auto; overscroll-behavior-x:contain; }
+.ms-arrival-map__svg{ display:block; width:100%; height:auto; }
+
+/* Diagrama octolinear: só 90° e 45°, quadrantes na direção real de cada cidade. */
+.ms-map__grid circle{ fill:rgba(255,255,255,.07); }
+.ms-map__compass path{ fill:none; stroke:rgba(255,255,255,.3); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.ms-map__compass text{ fill:rgba(255,255,255,.42); font-family:var(--mono); font-weight:800; font-size:12px; letter-spacing:2px; text-anchor:middle; }
+
+.ms-map__route,.ms-map__trunk,.ms-map__finish{ fill:none; stroke:#d7d2c9; stroke-width:4; stroke-linecap:round; stroke-linejoin:round; transition:stroke .2s, opacity .2s; }
+.ms-map__trunk,.ms-map__finish{ stroke:var(--accent); stroke-width:7; }
+.ms-map__finish{ stroke-linecap:butt; }
+
+.ms-map__stop circle{ fill:#101014; stroke:#d7d2c9; stroke-width:3; }
+.ms-map__stop--junction circle{ stroke:var(--accent); }
+.ms-map__stops text,.ms-map__origins text,.ms-map__destination text,.ms-map__park text{ fill:#f1ede5; font-family:var(--mono); font-weight:800; font-size:12px; letter-spacing:1.2px; text-anchor:middle; }
+.ms-arrival-map__svg text{ paint-order:stroke; stroke:#101014; stroke-width:6px; stroke-linejoin:round; }
+.ms-arrival-map__svg text.ms-map__t--start{ text-anchor:start; }
+.ms-arrival-map__svg text.ms-map__t--end{ text-anchor:end; }
+.ms-map__uf{ fill:#8f8a83; font-size:10px; letter-spacing:2.4px; }
+.ms-map__stop--junction .ms-map__uf{ fill:#6f6b65; letter-spacing:2px; }
+
+.ms-map__origin rect{ fill:var(--accent); transition:fill .2s, opacity .2s; }
+.ms-map__key{ fill:#101014; font-family:var(--display); font-weight:800; font-size:21px; letter-spacing:0; text-anchor:middle; }
+
+.ms-map__destination .ms-map__halo{ fill:none; stroke:rgba(255,90,0,.32); stroke-width:2; }
+.ms-map__destination circle:not(.ms-map__halo){ fill:var(--accent); stroke:#101014; stroke-width:4; }
+.ms-map__destination text{ fill:var(--accent); font-family:var(--display); font-size:22px; letter-spacing:1px; }
+.ms-map__park circle{ fill:#f1ede5; stroke:#101014; stroke-width:4; }
+
+/* Passar o mouse na lista acende a rota correspondente no diagrama. */
+.ms-arrival-map:has(.ms-arrival-map__routes a:hover) .ms-map__route,
+.ms-arrival-map:has(.ms-arrival-map__routes a:focus-visible) .ms-map__route{ opacity:.18; }
+.ms-arrival-map:has(.ms-arrival-map__routes a:hover) .ms-map__origin rect,
+.ms-arrival-map:has(.ms-arrival-map__routes a:focus-visible) .ms-map__origin rect{ opacity:.28; }
+.ms-arrival-map:has(li[data-route="A"] a:hover) .ms-map__route--a,
+.ms-arrival-map:has(li[data-route="A"] a:focus-visible) .ms-map__route--a,
+.ms-arrival-map:has(li[data-route="B"] a:hover) .ms-map__route--b,
+.ms-arrival-map:has(li[data-route="B"] a:focus-visible) .ms-map__route--b,
+.ms-arrival-map:has(li[data-route="C"] a:hover) .ms-map__route--c,
+.ms-arrival-map:has(li[data-route="C"] a:focus-visible) .ms-map__route--c,
+.ms-arrival-map:has(li[data-route="D"] a:hover) .ms-map__route--d,
+.ms-arrival-map:has(li[data-route="D"] a:focus-visible) .ms-map__route--d{ opacity:1; stroke:var(--accent); }
+.ms-arrival-map:has(li[data-route="A"] a:hover) .ms-map__origin--a rect,
+.ms-arrival-map:has(li[data-route="A"] a:focus-visible) .ms-map__origin--a rect,
+.ms-arrival-map:has(li[data-route="B"] a:hover) .ms-map__origin--b rect,
+.ms-arrival-map:has(li[data-route="B"] a:focus-visible) .ms-map__origin--b rect,
+.ms-arrival-map:has(li[data-route="C"] a:hover) .ms-map__origin--c rect,
+.ms-arrival-map:has(li[data-route="C"] a:focus-visible) .ms-map__origin--c rect,
+.ms-arrival-map:has(li[data-route="D"] a:hover) .ms-map__origin--d rect,
+.ms-arrival-map:has(li[data-route="D"] a:focus-visible) .ms-map__origin--d rect{ opacity:1; }
+
 .ms-arrival-map__routes{ list-style:none; margin:0; padding:0; }
 .ms-arrival-map__routes li{ border-bottom:1px solid rgba(255,255,255,.12); }
 .ms-arrival-map__routes a{ min-height:58px; display:grid; grid-template-columns:34px minmax(145px,.85fr) minmax(220px,1.6fr) auto; align-items:center; gap:14px; padding:9px clamp(18px,2.4vw,28px); color:#f1ede5; transition:background .2s; }
 .ms-arrival-map__routes a:hover{ background:rgba(255,90,0,.12); }
-.ms-route__id{ font-family:var(--display); font-weight:800; font-size:1.25rem; color:var(--accent); }
+.ms-route__id{ font-family:var(--display); font-weight:800; font-size:1rem; line-height:1; color:#101014; background:var(--accent); border-radius:6px; width:26px; height:26px; display:grid; place-items:center; }
 .ms-route__origin{ font-family:var(--display); font-weight:800; font-size:1rem; line-height:1; text-transform:uppercase; }
 .ms-route__via{ font-size:.76rem; line-height:1.35; color:#aaa59d; }
 .ms-route__open{ font-family:var(--mono); font-weight:800; font-size:.61rem; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); white-space:nowrap; }
-.ms-arrival-map__note{ margin:0; padding:13px clamp(18px,2.4vw,28px) 16px; font-family:var(--mono); font-size:.57rem; line-height:1.5; letter-spacing:.1em; text-transform:uppercase; color:#77736d; }
+
+.ms-arrival-map__note{ display:flex; flex-wrap:wrap; align-items:center; gap:8px 20px; margin:0; padding:14px clamp(18px,2.4vw,28px) 16px; font-family:var(--mono); font-size:.57rem; line-height:1.5; letter-spacing:.1em; text-transform:uppercase; color:#8f8a83; }
+.ms-arrival-map__note span{ display:inline-flex; align-items:center; gap:8px; }
+.ms-arrival-map__note small{ flex:1 1 100%; font-size:.57rem; letter-spacing:.1em; color:#6f6b65; }
+.ms-key{ display:inline-block; }
+.ms-key--line{ width:18px; height:3px; background:#d7d2c9; border-radius:2px; }
+.ms-key--stop{ width:9px; height:9px; border-radius:50%; border:2.5px solid #d7d2c9; }
+.ms-key--trunk{ width:18px; height:5px; background:var(--accent); border-radius:3px; }
+.ms-key--dest{ width:10px; height:10px; border-radius:50%; background:var(--accent); }
+
 .ms-trip-strip{ display:grid; grid-template-columns:repeat(4,1fr); margin:28px auto 0; border-block:2px solid #101014; }
 .ms-trip-strip a{ min-width:0; display:flex; flex-direction:column; gap:5px; padding:18px clamp(14px,2vw,24px); color:#101014; border-right:1px solid rgba(16,16,20,.34); transition:transform .2s cubic-bezier(.2,.7,.2,1), background .2s; }
 .ms-trip-strip a:last-child{ border-right:0; }
@@ -3646,7 +3689,8 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   .ms-plan__meta > div{ grid-template-columns:68px 1fr; }
   .ms-arrival-map__head{ align-items:flex-start; }
   .ms-arrival-map__head strong{ font-size:25px; }
-  .ms-arrival-map__svg{ display:none; }
+  .ms-arrival-map__svg{ min-width:640px; }
+  .ms-arrival-map__canvas{ padding-bottom:4px; }
   .ms-arrival-map__routes a{ grid-template-columns:28px 1fr auto; gap:10px; min-height:92px; }
   .ms-route__via{ grid-column:2/-1; }
   .ms-route__open{ grid-column:3; grid-row:1; }
