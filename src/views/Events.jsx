@@ -18,6 +18,23 @@ const parseEventDate = (str) => {
   return new Date(year, month, day);
 };
 
+const MONTH_LABELS = ['JANEIRO', 'FEVEREIRO', 'MARÇO', 'ABRIL', 'MAIO', 'JUNHO', 'JULHO', 'AGOSTO', 'SETEMBRO', 'OUTUBRO', 'NOVEMBRO', 'DEZEMBRO'];
+
+// Data de início real — `date` pode vir como intervalo ("12–14 ago 2026"),
+// e parseEventDate sozinho não dá conta desse formato.
+const eventStart = (e) => {
+  const raw = String(e?.date || '');
+  const range = raw.match(/(\d{1,2})\s*[–-]\s*\d{1,2}\s+(\S+)\s+(\d{4})/);
+  return range ? parseEventDate(`${range[1]} ${range[2]} ${range[3]}`) : parseEventDate(raw);
+};
+
+// Dia + mês curtos pro selo de ingresso na capa.
+const dateStub = (str) => {
+  const m = String(str || '').match(/^\s*(\d{1,2})\s*(?:[–-]\s*(\d{1,2}))?\s+(\S+)/);
+  if (!m) return null;
+  return { d: m[2] ? `${m[1]}–${m[2]}` : m[1], m: m[3].slice(0, 3).toUpperCase() };
+};
+
 const STATUS_CONFIG = {
   open: { label: 'INSCRIÇÕES ABERTAS', bg: 'rgba(34,197,94,0.1)', color: 'var(--success)' },
   soon: { label: 'EM BREVE', bg: 'rgba(249,115,22,0.1)', color: 'var(--accent)' },
@@ -41,7 +58,7 @@ const priceLabel = (p) => {
 };
 // Dias até o evento, pra badge "faltam Xd" na capa
 const daysUntil = (dateStr) => {
-  const d = parseEventDate(dateStr);
+  const d = eventStart({ date: dateStr });
   if (!d) return null;
   const diff = Math.ceil((d - Date.now()) / 86400000);
   return diff < 0 || diff > 45 ? null : diff;
@@ -90,6 +107,45 @@ const Events = ({ user, openAuthModal }) => {
     setRsvpLoading(false);
   };
 
+  // Card compartilhado entre o destaque (headliner) e a grade.
+  const renderCard = (event, featured = false) => {
+    const status = STATUS_CONFIG[event.type] || STATUS_CONFIG.open;
+    const mine = myStatus(event.id);
+    const go = goingCount(event.id);
+    const cover = (event.images && event.images[0]) || event.imageUrl;
+    const dleft = daysUntil(event.date);
+    const stub = dateStub(event.date);
+    return (
+      <article key={event.id} className={`ig-evcard${featured ? ' ig-evcard--feat' : ''}`} onClick={() => setSelectedEvent(event)}>
+        <div className="ig-evcover">
+          {cover
+            ? <img src={cover} alt={event.title} loading={featured ? 'eager' : 'lazy'} />
+            : <span className="ig-evcover-empty"><Calendar size={34} /></span>}
+          {stub && <span className="ig-evstub"><b>{stub.d}</b><i>{stub.m}</i></span>}
+          <span className={`ig-badge ${event.type || 'open'}`}>{status.label}</span>
+          <span className="ig-type">{event.category}</span>
+          {dleft !== null && (
+            <span className="ig-count"><Flame size={12} />{dleft === 0 ? 'é hoje' : `faltam ${dleft}d`}</span>
+          )}
+        </div>
+        <div className="ig-evbody">
+          <div className="ig-datechip"><Calendar size={13} />{[event.date, event.time].filter(Boolean).join(' · ')}</div>
+          <h3 className="ig-evtitle">{event.title}</h3>
+          {event.local && <div className="ig-loc"><MapPin size={14} />{event.local}</div>}
+          {featured && event.description && <p className="ig-evlede">{event.description}</p>}
+          <div className="ig-foot">
+            <span className="ig-price">{priceLabel(event.price)}</span>
+            <span className="ig-going">
+              {mine === 'going'
+                ? <><CheckCircle size={13} className="mine" /><b>Você vai</b></>
+                : <><span className="dot" /><b>{go}</b> confirmados</>}
+            </span>
+          </div>
+        </div>
+      </article>
+    );
+  };
+
   return (
     <div className="events-page">
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 12 }}>
@@ -102,10 +158,12 @@ const Events = ({ user, openAuthModal }) => {
         </button>
       </div>
 
-      <div className="filter-bar" style={{ marginBottom: '8px' }}>
-        {CATEGORIES.map(cat => (
-          <button key={cat} className={`filter-chip ${activeCategory === cat ? 'active' : ''}`} onClick={() => setActiveCategory(cat)}>{cat}</button>
-        ))}
+      <div className="ig-evfilters">
+        <div className="filter-bar">
+          {CATEGORIES.map(cat => (
+            <button key={cat} className={`filter-chip ${activeCategory === cat ? 'active' : ''}`} onClick={() => setActiveCategory(cat)}>{cat}</button>
+          ))}
+        </div>
       </div>
 
       {(() => {
@@ -118,7 +176,7 @@ const Events = ({ user, openAuthModal }) => {
             : parseEventDate(e.date);
           return d ? d.getTime() + 86400000 : null; // válido até o fim do dia
         };
-        const startOf = (e) => { const d = parseEventDate(e.date); return d ? d.getTime() : Infinity; };
+        const startOf = (e) => { const d = eventStart(e); return d ? d.getTime() : Infinity; };
         const filtered = events
           .filter(e => activeCategory === 'Todos' || e.category === activeCategory)
           .filter(e => { const end = endOf(e); return !end || end >= now; })
@@ -128,42 +186,26 @@ const Events = ({ user, openAuthModal }) => {
             {events.length === 0 ? 'Nenhum evento ainda. Crie o primeiro!' : 'Nenhum evento nessa categoria por enquanto.'}
           </p>;
         }
+        // Headliner + programação agrupada por mês, no estilo de site de festival.
+        const [head, ...rest] = filtered;
+        const groups = [];
+        rest.forEach((e) => {
+          const d = eventStart(e);
+          const key = d ? `${d.getFullYear()}-${d.getMonth()}` : 'sem-data';
+          const label = d ? `${MONTH_LABELS[d.getMonth()]} ${d.getFullYear()}` : '';
+          const last = groups[groups.length - 1];
+          if (last && last.key === key) last.items.push(e);
+          else groups.push({ key, label, items: [e] });
+        });
         return (
-          <div className="ig-events">
-            {filtered.map(event => {
-              const status = STATUS_CONFIG[event.type] || STATUS_CONFIG.open;
-              const mine = myStatus(event.id);
-              const go = goingCount(event.id);
-              const cover = (event.images && event.images[0]) || event.imageUrl;
-              const dleft = daysUntil(event.date);
-              return (
-                <article key={event.id} className="ig-evcard" onClick={() => setSelectedEvent(event)}>
-                  <div className="ig-evcover">
-                    {cover
-                      ? <img src={cover} alt={event.title} loading="lazy" />
-                      : <span className="ig-evcover-empty"><Calendar size={34} /></span>}
-                    <span className={`ig-badge ${event.type || 'open'}`}>{status.label}</span>
-                    <span className="ig-type">{event.category}</span>
-                    {dleft !== null && (
-                      <span className="ig-count"><Flame size={12} />{dleft === 0 ? 'é hoje' : `faltam ${dleft}d`}</span>
-                    )}
-                  </div>
-                  <div className="ig-evbody">
-                    <div className="ig-datechip"><Calendar size={13} />{[event.date, event.time].filter(Boolean).join(' · ')}</div>
-                    <h3 className="ig-evtitle">{event.title}</h3>
-                    {event.local && <div className="ig-loc"><MapPin size={14} />{event.local}</div>}
-                    <div className="ig-foot">
-                      <span className="ig-price">{priceLabel(event.price)}</span>
-                      <span className="ig-going">
-                        {mine === 'going'
-                          ? <><CheckCircle size={13} className="mine" /><b>Você vai</b></>
-                          : <><span className="dot" /><b>{go}</b> confirmados</>}
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
+          <div className="ig-evprog">
+            {head && renderCard(head, true)}
+            {groups.map(g => (
+              <section key={g.key} className="ig-evmonth">
+                {g.label && <h3 className="ig-evmonth-h"><span>{g.label}</span></h3>}
+                <div className="ig-events">{g.items.map(e => renderCard(e))}</div>
+              </section>
+            ))}
           </div>
         );
       })()}
@@ -177,14 +219,12 @@ const Events = ({ user, openAuthModal }) => {
         const tags = parseTags(ev.tags);
         return (
           <div className="modal-overlay" onClick={() => setSelectedEvent(null)} style={{ alignItems: 'flex-end', padding: '0' }}>
-            <div onClick={e => e.stopPropagation()} style={{ background: 'var(--bg2)', borderRadius: 'var(--radius) var(--radius) 0 0', border: '1px solid var(--border)', borderBottom: 'none', width: '100%', maxWidth: '640px', margin: '0 auto', maxHeight: '90vh', overflowY: 'auto', animation: 'slideUp .32s cubic-bezier(.34,1.36,.64,1)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+            <div className="ig-evsheet" onClick={e => e.stopPropagation()} style={{ background: 'var(--bg2)', borderRadius: 'var(--radius) var(--radius) 0 0', border: '1px solid var(--border)', borderBottom: 'none', width: '100%', maxWidth: '640px', margin: '0 auto', maxHeight: '90vh', overflowY: 'auto', animation: 'slideUp .32s cubic-bezier(.34,1.36,.64,1)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
               {ev.images && ev.images.length > 1
                 ? <PhotoCarousel images={ev.images} height={220} alt={ev.title} radius={0} fit="contain" />
                 : ev.imageUrl && <img src={ev.imageUrl} alt={ev.title} style={{ width: '100%', height: 220, objectFit: 'contain', objectPosition: 'center', background: '#0d0d0f' }} />}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '12px 20px 4px' }}>
-                <button onClick={() => setSelectedEvent(null)} style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--muted)' }}><X size={16} /></button>
-              </div>
-              <div style={{ padding: '0 24px 28px' }}>
+              <button className="ig-evsheet-x" onClick={() => setSelectedEvent(null)}><X size={16} /></button>
+              <div className="ig-evsheet-body">
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '14px', flexWrap: 'wrap' }}>
                   <span style={{ padding: '5px 12px', borderRadius: 2, fontSize: '10px', fontWeight: 700, letterSpacing: '.1em', fontFamily: 'var(--mono)', textTransform: 'uppercase', background: status.color, color: '#fff' }}>{status.label}</span>
                   <span style={{ padding: '5px 12px', borderRadius: 2, fontSize: '10px', fontWeight: 700, letterSpacing: '.1em', fontFamily: 'var(--mono)', textTransform: 'uppercase', background: 'transparent', color: 'var(--accent-2)', border: '1px solid var(--border)' }}>{ev.category?.toUpperCase()}</span>
@@ -224,6 +264,7 @@ const Events = ({ user, openAuthModal }) => {
                 </div>
 
                 {/* Botões sim/não */}
+                <div className="ig-evsheet-cta">
                 <div style={{ display: 'flex', gap: 10 }}>
                   <button className={mine === 'going' ? 'btn-primary' : 'btn-outline'} onClick={() => handleRsvp(ev, 'going')} disabled={rsvpLoading} style={{ flex: 1 }}>
                     <CheckCircle size={16} /> Vou nessa
@@ -235,6 +276,7 @@ const Events = ({ user, openAuthModal }) => {
                 {!user && <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--muted)', marginTop: '10px' }}>Identifique-se para confirmar presença</p>}
                 {ev.ticketUrl && <a href={ev.ticketUrl} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: 12, display: 'flex' }}><Ticket size={16} />Comprar ingresso<ExternalLink size={14} /></a>}
                 <a href={`/eventos/${ev.id}`} className="btn-outline" style={{ width: '100%', justifyContent: 'center', marginTop: 12, display: 'flex' }}>Ver página completa do evento →</a>
+                </div>
               </div>
             </div>
           </div>

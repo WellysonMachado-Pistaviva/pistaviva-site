@@ -202,6 +202,40 @@ const FROTA = [
 
 const SABORES = ['Queijo', 'Pastel de milho', 'Costela', 'Doce de leite', 'Cachaça'];
 
+// Espaço Mantiqueira — curadoria de produtores da serra dentro do parque.
+const MANTIQUEIRA = [
+  {
+    n: 'Queijos',
+    img: '/motosul/mantiqueira-queijos.jpg',
+    alt: 'Queijos artesanais da Serra da Mantiqueira',
+    t: 'Queijo Minas artesanal maturado nas altitudes da serra, direto de quem faz.',
+  },
+  {
+    n: 'Vinhos',
+    img: '/motosul/mantiqueira-vinhos.jpg',
+    alt: 'Taça e garrafa de vinho em varanda na Serra da Mantiqueira',
+    t: 'Rótulos de vinícolas de altitude do Sul de Minas, com degustação no parque.',
+  },
+  {
+    n: 'Doces',
+    img: '/motosul/mantiqueira-doces.jpg',
+    alt: 'Doce de leite artesanal em colher de madeira',
+    t: 'Doce de leite, compotas e goiabada cascão feitos em tacho, receita de fazenda.',
+  },
+  {
+    n: 'Azeites',
+    img: '/motosul/mantiqueira-azeites.jpg',
+    alt: 'Azeitonas verdes curadas com alecrim e raspas de laranja',
+    t: 'Azeites extravirgem e azeitonas curadas de olivais plantados na Mantiqueira.',
+  },
+  {
+    n: 'Café',
+    img: '/motosul/mantiqueira-cafe.jpg',
+    alt: 'Grãos de café torrados do Sul de Minas',
+    t: 'Café especial do Sul de Minas, torrado e coado na hora pra encarar a estrada.',
+  },
+];
+
 // Reconhecimentos recentes de Minas na imprensa de turismo.
 const IMPRENSA = [
   {
@@ -344,6 +378,7 @@ const ANCORAS = [
   { href: '#materia', label: 'Matéria' },
   { href: '#planeje', label: 'Planeje sua ida' },
   { href: '#roteiros', label: 'Rode a região' },
+  { href: '#mantiqueira', label: 'Espaço Mantiqueira' },
   { href: '#festival', label: 'Programação' },
   { href: '#parque', label: 'O parque' },
   { href: '#galeria', label: 'Fotos' },
@@ -970,6 +1005,36 @@ export default function MotosulPage() {
             ))}
           </ul>
 
+        </div>
+      </section>
+
+      {/* ── ESPAÇO MANTIQUEIRA ── */}
+      <section className="ms-sec ms-mant" id="mantiqueira" aria-labelledby="ms-mant-title">
+        <img className="ms-mant__bg" src="/motosul/mantiqueira.jpg" alt="" aria-hidden="true" loading="lazy" />
+        <div className="ms-wrap--wide ms-mant__in">
+          <header className="ms-mant__head">
+            <p className="ms-eyebrow">Espaço Mantiqueira · Parque da Cidade</p>
+            <h2 className="ms-display" id="ms-mant-title">O melhor da serra,<br />na mesa de quem<br /><span className="is-accent">chega rodando.</span></h2>
+            <span className="ms-rule" aria-hidden="true" />
+            <p className="ms-lead">Um espaço dentro do Motosul onde produtores da Serra da Mantiqueira trazem o que a região faz de melhor. Você desce da moto e prova tudo ali mesmo, no parque, no dia do festival.</p>
+          </header>
+
+          <ul className="ms-mant__grid">
+            {MANTIQUEIRA.map((m, i) => (
+              <li className="ms-mant__card" key={m.n}>
+                <figure className="ms-mant__ph">
+                  <img src={m.img} alt={m.alt} loading="lazy" />
+                </figure>
+                <div className="ms-mant__body">
+                  <span className="ms-mant__n">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 className="ms-mant__t">{m.n}</h3>
+                  <p className="ms-mant__d">{m.t}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <p className="ms-mant__note">Curadoria de produtores da Serra da Mantiqueira. Lista de expositores da 3ª edição sai junto com a programação.</p>
         </div>
       </section>
 

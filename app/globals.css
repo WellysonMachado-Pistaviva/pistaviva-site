@@ -4126,3 +4126,163 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 /* Contorno do município de Itajubá */
 .ms-eyebrow--mapa{ display:flex; align-items:center; gap:10px; }
 .ms-mapa-itajuba{ width:26px; height:auto; color:var(--accent); flex:0 0 auto; }
+
+/* ===== Agenda de eventos — camada de acabamento (festival look) =====
+   Reorganiza a capa (selo de data, status, contagem), cria o headliner e a
+   programação por mês, e transforma o modal em bottom sheet com CTA fixo.
+   Só visual: nenhuma string de conteúdo depende daqui. */
+
+.ig-evprog{ display:flex; flex-direction:column; gap:clamp(26px,4vw,44px); }
+
+/* Barra de filtros grudada no topo, no estilo "programação" de festival. */
+.ig-evfilters{
+  position:sticky; top:68px; z-index:20;
+  margin:0 0 clamp(18px,3vw,28px);
+  padding:10px 0;
+  background:linear-gradient(180deg,var(--ink,#0c0c0d) 62%,rgba(12,12,13,0));
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+}
+.ig-evfilters .filter-bar{ margin:0; display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; }
+.ig-evfilters .filter-bar::-webkit-scrollbar{ display:none; }
+.ig-evfilters .filter-chip{ border-radius:2px; white-space:nowrap; }
+
+/* Separador de mês: rótulo mono + fio até a borda. */
+.ig-evmonth + .ig-evmonth{ margin-top:0; }
+.ig-evmonth-h{
+  display:flex; align-items:center; gap:16px;
+  margin:0 0 16px; font-family:var(--mono); font-size:11px; font-weight:700;
+  letter-spacing:.22em; text-transform:uppercase; color:var(--paper-mut,#8a8a90);
+}
+.ig-evmonth-h span{ flex-shrink:0; }
+.ig-evmonth-h::after{ content:""; flex:1; height:1px; background:var(--border,rgba(255,255,255,.12)); }
+
+/* ---- Card ---- */
+.ig-evcard{ border-radius:4px; }
+.ig-evcard:hover{ transform:translateY(-3px); }
+.ig-evcover img{ transition:transform .5s cubic-bezier(.2,.7,.3,1); }
+.ig-evcard:hover .ig-evcover img{ transform:scale(1.05); }
+.ig-evcover::after{ background:linear-gradient(0deg,rgba(8,8,9,.82) 4%,rgba(8,8,9,.28) 38%,transparent 66%); }
+
+/* Selo de data tipo canhoto de ingresso. */
+.ig-evstub{
+  position:absolute; top:0; left:0; z-index:3;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  min-width:56px; padding:9px 10px 8px;
+  background:rgba(8,8,9,.82); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  border-right:1px solid var(--border,rgba(255,255,255,.12));
+  border-bottom:1px solid var(--border,rgba(255,255,255,.12));
+  box-shadow:inset 3px 0 0 var(--accent,#ff5a00);
+}
+.ig-evstub b{ font-family:var(--display); font-size:24px; font-weight:800; line-height:.9; color:#fff; letter-spacing:-.02em; }
+.ig-evstub i{ font-family:var(--mono); font-style:normal; font-size:9.5px; font-weight:700; letter-spacing:.16em; color:var(--accent-2,#ff7a1a); margin-top:4px; }
+
+/* Status desce pro rodapé da capa; contagem vai pra direita. */
+.ig-evcover .ig-badge{ top:auto; bottom:11px; left:11px; border-radius:2px; }
+.ig-evcover .ig-type{ border-radius:2px; }
+.ig-evcover .ig-count{ left:auto; right:11px; border-radius:2px; }
+
+.ig-evbody{ padding:16px 16px 15px; }
+.ig-evtitle{ letter-spacing:-.005em; }
+.ig-evlede{
+  margin:12px 0 0; color:var(--paper-dim,#9a9a93); font-size:14.5px; line-height:1.6;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+}
+.ig-foot{ border-top:1px solid var(--border,rgba(255,255,255,.12)); margin-top:16px; }
+
+/* ---- Headliner: primeiro evento da fila em formato largo ---- */
+.ig-evcard--feat{ display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); }
+.ig-evcard--feat .ig-evcover{ aspect-ratio:16/11; height:100%; }
+.ig-evcard--feat .ig-evbody{ padding:clamp(20px,2.6vw,34px); justify-content:center; }
+.ig-evcard--feat .ig-evtitle{ font-size:clamp(30px,3.6vw,46px); margin-top:14px; }
+.ig-evcard--feat .ig-evstub{ min-width:74px; padding:14px 14px 12px; }
+.ig-evcard--feat .ig-evstub b{ font-size:34px; }
+.ig-evcard--feat .ig-price{ font-size:24px; }
+@media(max-width:760px){
+  .ig-evcard--feat{ grid-template-columns:1fr; }
+  .ig-evcard--feat .ig-evcover{ aspect-ratio:4/3; }
+}
+
+/* ---- Bottom sheet do evento ---- */
+.ig-evsheet{ position:relative; }
+.ig-evsheet-x{
+  position:absolute; top:14px; right:14px; z-index:5;
+  width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+  border-radius:50%; cursor:pointer; color:#fff;
+  background:rgba(8,8,9,.68); border:1px solid var(--border,rgba(255,255,255,.14));
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  transition:background var(--pv-motion,180ms ease);
+}
+.ig-evsheet-x:hover{ background:var(--accent,#ff5a00); border-color:var(--accent,#ff5a00); }
+.ig-evsheet-body{ padding:22px 24px 0; }
+.ig-evsheet-cta{
+  position:sticky; bottom:0; z-index:4;
+  margin:20px -24px 0; padding:16px 24px calc(18px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,rgba(22,22,26,0),var(--bg2,#16161a) 26%);
+  border-top:1px solid var(--border,rgba(255,255,255,.12));
+}
+@media(max-width:768px){
+  .ig-evfilters{ top:62px; }
+}
+@media(max-width:560px){
+  .ig-evsheet-body{ padding:18px 18px 0; }
+  .ig-evsheet-cta{ margin-left:-18px; margin-right:-18px; padding-left:18px; padding-right:18px; }
+}
+
+/* ===== Motosul · Espaço Mantiqueira =====
+   Vitrine dos produtores da serra dentro do parque: serra ao fundo,
+   cartelas de produto em fotos altas e numeração tipo catálogo. */
+.ms-mant{ position:relative; overflow:hidden; }
+.ms-mant__bg{
+  position:absolute; top:0; left:0; width:100%; height:min(62%,560px);
+  object-fit:cover; object-position:center 42%;
+  filter:saturate(.72) contrast(1.05) brightness(.34);
+  z-index:0; pointer-events:none;
+}
+.ms-mant::before{
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(180deg,rgba(12,12,13,.62) 0%,rgba(12,12,13,.9) 38%,var(--ink,#0c0c0d) 66%);
+}
+.ms-mant__in{ position:relative; z-index:2; }
+.ms-mant__head{ max-width:64ch; margin-bottom:clamp(30px,4.5vw,52px); }
+
+.ms-mant__grid{
+  list-style:none; margin:0; padding:0;
+  display:grid; grid-template-columns:repeat(5,1fr); gap:clamp(12px,1.6vw,20px);
+}
+@media(max-width:1100px){ .ms-mant__grid{ grid-template-columns:repeat(3,1fr); } }
+@media(max-width:680px){ .ms-mant__grid{ grid-template-columns:repeat(2,1fr); gap:12px; } }
+
+.ms-mant__card{
+  display:flex; flex-direction:column;
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--ms-line,rgba(255,255,255,.13));
+  transition:border-color 220ms ease, transform 220ms ease, background 220ms ease;
+}
+.ms-mant__card:hover{ border-color:var(--accent,#ff5a00); background:rgba(255,255,255,.05); transform:translateY(-4px); }
+
+.ms-mant__ph{ position:relative; margin:0; aspect-ratio:4/5; overflow:hidden; background:#131316; }
+.ms-mant__ph img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s cubic-bezier(.2,.7,.3,1); }
+.ms-mant__card:hover .ms-mant__ph img{ transform:scale(1.06); }
+.ms-mant__ph::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(0deg,rgba(12,12,13,.62),transparent 46%);
+}
+
+.ms-mant__body{ padding:clamp(14px,1.5vw,20px); display:flex; flex-direction:column; flex:1; }
+.ms-mant__n{
+  font-family:var(--mono); font-size:.64rem; font-weight:700; letter-spacing:.2em;
+  color:var(--accent,#ff5a00);
+}
+.ms-mant__t{
+  font-family:var(--display); font-weight:800; text-transform:uppercase;
+  font-size:clamp(19px,1.7vw,25px); line-height:1; letter-spacing:-.01em;
+  margin:9px 0 0; color:#fff;
+}
+.ms-mant__d{ margin:11px 0 0; font-size:13.5px; line-height:1.55; color:var(--ms-dim,#a9a49c); }
+
+.ms-mant__note{
+  margin:clamp(24px,3vw,34px) 0 0; padding-top:18px;
+  border-top:1px solid var(--ms-line,rgba(255,255,255,.13));
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ms-dim,#a9a49c);
+}
