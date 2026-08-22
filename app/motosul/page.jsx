@@ -651,7 +651,11 @@ export default function MotosulPage() {
             </aside>
 
             <div className="ms-trip-chapters">
-              <article className="ms-trip-chapter" id="roteiro-30">
+              <article className="ms-trip-chapter ms-trip-chapter--photo ms-trip-chapter--hero" id="roteiro-30">
+                <figure className="ms-trip-chapter__photo">
+                  <img src="/motosul/roteiros/menor-posto.jpg" alt="Postinho da Rua Nova, o menor posto de gasolina do mundo, no centro de Itajubá" loading="lazy" width="1170" height="1460" sizes="(max-width: 850px) 100vw, 66vw" style={{ objectPosition: 'center 38%' }} />
+                  <figcaption>Postinho da Rua Nova, no centro</figcaption>
+                </figure>
                 <header className="ms-trip-chapter__head">
                   <span>30 min</span>
                   <small>Circuito urbano</small>
@@ -671,7 +675,11 @@ export default function MotosulPage() {
                 </div>
               </article>
 
-              <article className="ms-trip-chapter" id="roteiro-1h">
+              <article className="ms-trip-chapter ms-trip-chapter--photo ms-trip-chapter--hero" id="roteiro-1h">
+                <figure className="ms-trip-chapter__photo">
+                  <img src="/motosul/roteiros/santuario-agonia.jpg" alt="Interior do Santuário Nossa Senhora da Agonia, com a cúpula de vidros azuis sobre os bancos e o altar" loading="lazy" width="960" height="530" sizes="(max-width: 850px) 100vw, 66vw" />
+                  <figcaption>A cúpula azul do santuário, no alto da colina</figcaption>
+                </figure>
                 <header className="ms-trip-chapter__head">
                   <span>1 hora</span>
                   <small>Vista e história</small>
@@ -691,7 +699,11 @@ export default function MotosulPage() {
                 </div>
               </article>
 
-              <article className="ms-trip-chapter" id="roteiro-meio-dia">
+              <article className="ms-trip-chapter ms-trip-chapter--photo ms-trip-chapter--hero" id="roteiro-meio-dia">
+                <figure className="ms-trip-chapter__photo">
+                  <img src="/motosul/roteiros/cachoeira-estancia.jpg" alt="Cachoeira da Estância em Itajubá com um cavalo bebendo água diante da queda" loading="lazy" width="1200" height="675" sizes="(max-width: 850px) 100vw, 66vw" />
+                  <figcaption>Cachoeira da Estância · foto <a href="https://commons.wikimedia.org/wiki/File:Horse_waterfall_estancia_brazil.jpg" target="_blank" rel="noopener noreferrer">Py4nf</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a></figcaption>
+                </figure>
                 <header className="ms-trip-chapter__head">
                   <span>Meio dia</span>
                   <small>Natureza</small>
@@ -710,7 +722,7 @@ export default function MotosulPage() {
                 </div>
               </article>
 
-              <article className="ms-trip-chapter ms-trip-chapter--regional" id="roteiro-1-dia">
+              <article className="ms-trip-chapter ms-trip-chapter--regional ms-trip-chapter--hero" id="roteiro-1-dia">
                 <figure className="ms-trip-chapter__photo">
                   <img src="/motosul/mantiqueira.jpg" alt="Estrada entre montanhas da Serra da Mantiqueira" loading="lazy" width="2200" height="1466" sizes="(max-width: 850px) 100vw, 66vw" />
                   <figcaption>Um dia de estrada pela Mantiqueira</figcaption>
@@ -728,8 +740,8 @@ export default function MotosulPage() {
                   </div>
                   <ol className="ms-trip-stops ms-trip-stops--regional">
                     <li><b>KM 0</b><span><strong>Itajubá</strong><small>Saída do Parque da Cidade.</small></span></li>
-                    <li><b>01</b><span><strong>Maria da Fé</strong><small>Cidade mais fria de Minas, olivais e pioneirismo no azeite brasileiro. Algumas visitas pedem agendamento.</small></span></li>
-                    <li><b>02</b><span><strong>Cristina</strong><small>Cafés especiais, casario e memória da antiga ferrovia.</small></span></li>
+                    <li className="has-thumb"><b>01</b><span><strong>Maria da Fé</strong><small>Cidade mais fria de Minas, olivais e pioneirismo no azeite brasileiro. Algumas visitas pedem agendamento.</small></span><img src="/motosul/roteiros/maria-da-fe-estacao.jpg" alt="Locomotiva histórica preservada no centro de Maria da Fé" loading="lazy" width="1200" height="675" sizes="130px" /></li>
+                    <li className="has-thumb"><b>02</b><span><strong>Cristina</strong><small>Cafés especiais, casario e memória da antiga ferrovia.</small></span><img src="/motosul/roteiros/cristina.jpg" alt="Casario histórico de Cristina, na Serra da Mantiqueira" loading="lazy" width="1200" height="675" sizes="130px" /></li>
                     <li><b>FIM</b><span><strong>Itajubá</strong><small>Retorno ao parque.</small></span></li>
                   </ol>
                 </div>
