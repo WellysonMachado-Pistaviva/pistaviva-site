@@ -5,6 +5,7 @@ import { GUIAS } from './lib/guias';
 import { DESTINOS } from './lib/destinos';
 import { DESAFIOS } from './lib/desafios';
 import { getEventsForSeo } from './lib/events';
+import { FOTOS as FOTOS_PARQUE } from './parque-da-cidade/dados';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 
@@ -49,12 +50,12 @@ export default async function sitemap() {
     {
       path: '/parque-da-cidade',
       lastModified: '2026-08-26',
-      images: [
-        `${BASE}/motosul/parque-aereo.jpg`,
+      // Sai da própria galeria: foto nova na página entra no sitemap sozinha.
+      // A do destaque não está na galeria, então entra à parte — daí o Set.
+      images: [...new Set([
         `${BASE}/parque/pedalinho-cisne-serra.jpg`,
-        `${BASE}/parque/natal-brilha-itajuba.jpg`,
-        `${BASE}/parque/corrida-lago.jpg`,
-      ],
+        ...FOTOS_PARQUE.map((f) => `${BASE}${f.src}`),
+      ])],
     },
     { path: '/sobre' },
     { path: '/apoie' },
