@@ -42,6 +42,7 @@ import {
   GASTRONOMIA,
   HOSPEDAGEM,
   KOMOOT_ESTRADA,
+  MATERIA_EPTV,
   KOMOOT_MTB,
   ROTAS_BIKE,
   TRILHAS_PE,
@@ -591,6 +592,12 @@ export default async function ParqueDaCidadePage() {
                 </li>
               ))}
             </ol>
+
+            <p className="pq-historia__fonte">
+              O parque na TV: o <a href={MATERIA_EPTV} target="_blank" rel="noopener noreferrer">Espia
+              Só, da EPTV</a>, percorreu as atrações em outubro de 2024 — quadras de vôlei, basquete
+              e areia, pista de corrida, paredão de escalada, pedalinho, patinete e kart.
+            </p>
           </div>
         </section>
       )}

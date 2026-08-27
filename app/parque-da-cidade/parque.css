@@ -2268,3 +2268,13 @@
 @media (max-width:640px){
   .pq-hero__claim{ max-width:none; }
 }
+.pq-historia__fonte{
+  margin:22px 0 0;
+  padding:18px 20px;
+  border-radius:var(--pq-r-sm);
+  background:#fff;
+  box-shadow:var(--pq-shadow);
+  font-size:14px !important;
+  line-height:1.6;
+}
+.pq-historia__fonte a{ color:var(--pq-orange-dark); font-weight:800; }

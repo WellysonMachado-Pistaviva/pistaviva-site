@@ -199,6 +199,15 @@ const SETORES = [
     detalhe: 'Fica na área de convivência do parque e vira o ponto mais concorrido nos dias quentes.',
   },
   {
+    id: 'quadras',
+    nome: 'Quadras poliesportivas',
+    cat: 'esporte',
+    tag: 'Vôlei, basquete e areia',
+    x: 214, y: 528,
+    resumo: 'Quadras abertas de vôlei, basquete e areia, além de bocha e mesas de pingue-pongue.',
+    detalhe: 'Uso livre, sem reserva. Junto com a pista e a área de calistenia, formam a parte do parque que funciona todo dia, sem custo nenhum.',
+  },
+  {
     id: 'skate',
     nome: 'Pista de skate',
     cat: 'esporte',
@@ -384,7 +393,7 @@ export const SERVICOS = [
   { icone: 'utensils', t: 'Gastronomia', d: 'Vinte operações de comida e bebida listadas neste guia.' },
   { icone: 'droplet', t: 'Bebedouros e chuveiro', d: 'Pontos de água potável e chuveiros externos na área do parque.' },
   { icone: 'plug', t: 'Tomadas e Wi-Fi', d: 'Tomadas distribuídas pelo parque e Wi-Fi público gratuito.' },
-  { icone: 'bike', t: 'Aluguel de bicicleta', d: 'Bike, patins e pedalinho para dar a volta no lago.' },
+  { icone: 'bike', t: 'Aluguel de bike e patinete', d: 'Bicicleta, patinete e patins para dar a volta no lago.' },
 ];
 
 // Eventos por categoria (modelo Capivari: "Nossos eventos" com categorias).
@@ -550,7 +559,7 @@ export const ZONAS = [
     nome: 'Zona Esportiva',
     cor: 'var(--pq-green)',
     resumo: 'Pista, quadras e campos — a parte do parque que funciona a semana toda.',
-    setores: ['pista', 'escalada', 'kartodromo', 'arena', 'tennis', 'praia', 'skate'],
+    setores: ['pista', 'escalada', 'kartodromo', 'arena', 'tennis', 'praia', 'quadras', 'skate'],
   },
   {
     id: 'sabor',
@@ -905,6 +914,10 @@ export const HOSPEDAGEM = [
 // AllTrails. Os nomes originais do komoot são em inglês — aqui vão em
 // português, com o original guardado em `orig` para achar a rota na fonte.
 // O circuito regional é dos Caminhos da Mantiqueira (reportagem do O Tempo).
+// Reportagem da EPTV/Globo sobre os passeios de Itajubá, com visita ao parque.
+export const MATERIA_EPTV =
+  'https://redeglobo.globo.com/sp/eptv/espiaso/noticia/espia-so-descubra-os-melhores-passeios-para-se-fazer-em-itajuba.ghtml';
+
 export const WIKILOC = {
   caminhada: 'https://pt.wikiloc.com/trilhas/caminhada/brasil/minas-gerais/itajuba',
   mtb: 'https://pt.wikiloc.com/trilhas/mountain-bike/brasil/minas-gerais/itajuba',
@@ -1073,6 +1086,10 @@ export const HISTORIA = [
   {
     t: '2024',
     d: 'Pelos 205 anos de Itajubá, a escadaria que liga o Teatro Municipal Christiane Riera ao parque ganha um mosaico do artista brazopolense André Visoto, com a Igreja Matriz, a Estação Ferroviária e a Casa Wenceslau Braz retratadas nos degraus.',
+  },
+  {
+    t: '2024',
+    d: 'O programa Espia Só, da EPTV, visita o parque e resume o efeito dele na cidade: Itajubá, uma das mais universitárias do Sul de Minas, convivia com a reclamação de que faltava o que fazer — e o parque resolveu isso.',
   },
   {
     t: 'Hoje',
