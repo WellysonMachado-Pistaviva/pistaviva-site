@@ -2144,57 +2144,70 @@
 .pq-pedal__fontes p + p{ margin-top:12px; }
 .pq-pedal__fontes a{ color:var(--pq-orange-dark); font-weight:800; }
 
-/* ---------- carrossel de hospedagens parceiras ---------- */
-.pq-stayreel{ margin-bottom:26px; }
-.pq-stay{
-  flex:0 0 clamp(260px,78vw,340px);
-  scroll-snap-align:start;
-  display:flex;
-  flex-direction:column;
+/* ---------- trilhas e cicloturismo ---------- */
+.pq-pedal{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;
+  margin:30px 0 0;
+  padding:0;
+  list-style:none;
+}
+.pq-pedal li{
+  display:grid;
+  gap:10px;
+  align-content:start;
+  padding:24px 22px;
   border-radius:var(--pq-r);
-  overflow:hidden;
   background:#fff;
   box-shadow:var(--pq-shadow);
+  border-left:6px solid var(--tint,var(--pq-orange));
 }
-.pq-stay figure{ position:relative; margin:0; }
-.pq-stay img{
-  display:block;
-  width:100%;
-  aspect-ratio:4/3;
-  object-fit:cover;
-}
-.pq-stay figcaption{
-  position:absolute;
-  right:10px;
-  bottom:10px;
-  padding:4px 10px;
-  border-radius:999px;
-  background:rgba(255,255,255,.92);
-  font-size:10px;
-  font-weight:700;
-  color:var(--pq-ink-2);
-}
-.pq-stay__corpo{ display:grid; gap:8px; padding:20px; }
-.pq-stay__tipo{
+.pq-pedal__tipo{
   font-size:11px;
   font-weight:800;
   letter-spacing:.1em;
   text-transform:uppercase;
-  color:var(--pq-blue);
+  color:var(--tint,var(--pq-orange));
 }
-.pq-stay h3{ margin:0; font-size:20px; font-weight:800; line-height:1.16; }
-.pq-stay p{ margin:0; font-size:14px; line-height:1.5; color:var(--pq-ink-2); }
-.pq-stay a{
+.pq-pedal h4{ margin:0; font-size:19px; font-weight:800; line-height:1.16; }
+.pq-pedal__nums{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:4px 0;
+  padding:12px 0;
+  border-top:1px solid var(--pq-line);
+  border-bottom:1px solid var(--pq-line);
+}
+.pq-pedal__nums dt{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--pq-muted);
+}
+.pq-pedal__nums dd{ margin:2px 0 0; font-size:15px; font-weight:800; }
+.pq-pedal li p{ margin:0; font-size:14px; line-height:1.5; color:var(--pq-ink-2); }
+.pq-pedal li a{
   justify-self:start;
-  margin-top:4px;
-  padding:9px 16px;
-  border-radius:999px;
-  background:var(--pq-blue);
   font-size:13px;
   font-weight:800;
-  color:#fff;
+  color:var(--pq-ink);
   text-decoration:none;
+  border-bottom:2px solid var(--tint,var(--pq-orange));
+  padding-bottom:2px;
 }
+.pq-pedal__fontes{
+  margin-top:24px;
+  padding:22px 24px;
+  border-radius:var(--pq-r);
+  background:#fff;
+  box-shadow:var(--pq-shadow);
+}
+.pq-pedal__fontes p{ margin:0; font-size:14px !important; line-height:1.6; }
+.pq-pedal__fontes p + p{ margin-top:12px; }
+.pq-pedal__fontes a{ color:var(--pq-orange-dark); font-weight:800; }
 
 /* ---------- abertura e subtítulos da seção de trilhas ---------- */
 .pq-pedal__abre{

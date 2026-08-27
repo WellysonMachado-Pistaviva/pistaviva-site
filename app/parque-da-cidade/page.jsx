@@ -20,7 +20,6 @@ import Experiencias from './Experiencias';
 import Agenda from './Agenda';
 import PlanejeVisita from './PlanejeVisita';
 import CineProgramacao, { CineProgramacaoLoading } from './CineProgramacao';
-import HospedagemCarrossel from './HospedagemCarrossel';
 import InstagramEmbeds from '../components/InstagramEmbeds';
 import { getRelatedPosts } from '../lib/blog';
 import {
@@ -974,11 +973,9 @@ export default async function ParqueDaCidadePage() {
           <span className="pq-rule" aria-hidden="true" />
           <p className="pq-lead">
             Além dos hotéis, Itajubá tem casa e apartamento inteiros para alugar — no centro, perto
-            do parque e na parte alta da serra. As fotos abaixo são do próprio Itajubá; cada card
-            leva para a busca do Airbnb já filtrada.
+            do parque e na parte alta da serra. Cada botão abre a busca do Airbnb na cidade já
+            filtrada pelo tamanho do seu grupo.
           </p>
-
-          <HospedagemCarrossel />
 
           <ul className="pq-dormir__cards">
             {HOSPEDAGEM.map((h) => (

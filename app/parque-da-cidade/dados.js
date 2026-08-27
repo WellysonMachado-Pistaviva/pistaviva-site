@@ -874,52 +874,6 @@ export const HOSPEDAGEM = [
   },
 ];
 
-// Carrossel de onde ficar. As fotos são nossas, do próprio Itajubá — cada card
-// mostra a região da cidade e leva para a busca do Airbnb filtrada por ela.
-// Foto de anúncio (Airbnb, Booking ou qualquer plataforma) não entra aqui: a
-// imagem é do anfitrião, republicar sem licença é violação de direito autoral,
-// e o preço muda todo dia. Quem quiser ver as casas, vê na fonte.
-// Para exibir uma hospedagem específica, peça a foto ao dono e credite:
-// { nome, tipo, resumo, foto, alt, credito, href }
-export const HOSPEDAGENS_DESTAQUE = [
-  {
-    nome: 'Perto do parque',
-    tipo: 'A pé até o lago',
-    resumo: 'Ficar no entorno do Parque da Cidade resolve o fim de semana sem carro: pedalinho, praça de alimentação e pista de caminhada na esquina.',
-    foto: '/parque/pedalinho-cisne-amarelo.jpg',
-    alt: 'Pedalinhos no lago do Parque da Cidade de Itajubá, vistos da margem',
-    credito: 'Foto: Parque da Cidade',
-    href: 'https://www.airbnb.com.br/s/Itajuba--MG--Brasil/homes?refinement_paths=%2Fhomes&adults=2&room_types%5B%5D=Entire+home%2Fapt',
-  },
-  {
-    nome: 'No alto da serra',
-    tipo: 'Vista e silêncio',
-    resumo: 'Casas na parte alta e na zona rural, com a Mantiqueira na janela. Boa base para quem veio pedalar ou rodar de moto na região.',
-    foto: '/parque/pedalinho-cisne-serra.jpg',
-    alt: 'Serra verde ao redor do lago do Parque da Cidade de Itajubá',
-    credito: 'Foto: Parque da Cidade',
-    href: 'https://www.airbnb.com.br/s/Itajuba--MG--Brasil/homes?refinement_paths=%2Fhomes&adults=4&room_types%5B%5D=Entire+home%2Fapt',
-  },
-  {
-    nome: 'Centro da cidade',
-    tipo: 'Perto de tudo',
-    resumo: 'Apartamento inteiro no centro deixa restaurante, mercado e o Cine A a poucos minutos — e o parque a uma corrida curta.',
-    foto: '/parque/corrida-lago.jpg',
-    alt: 'Corredores na pista à margem do lago, com os bairros de Itajubá ao fundo',
-    credito: 'Foto: Parque da Cidade',
-    href: 'https://www.airbnb.com.br/s/Itajuba--MG--Brasil/homes?refinement_paths=%2Fhomes&adults=2&price_max=250',
-  },
-  {
-    nome: 'Casa para a turma',
-    tipo: 'Fim de semana de evento',
-    resumo: 'Em fim de semana de festival, Rodeio ou Brilha Itajubá a cidade lota. Casa grande divide a conta e mantém o grupo junto.',
-    foto: '/parque/natal-brilha-itajuba.jpg',
-    alt: 'Queima de fogos do Natal Brilha Itajubá refletindo no lago do parque',
-    credito: 'Foto: Parque da Cidade',
-    href: 'https://www.airbnb.com.br/s/Itajuba--MG--Brasil/homes?refinement_paths=%2Fhomes&adults=8&room_types%5B%5D=Entire+home%2Fapt',
-  },
-];
-
 // Trilhas e cicloturismo. Distâncias e desníveis dos circuitos de bike vêm dos
 // guias do komoot para Itajubá; as trilhas a pé, das fichas do Wikiloc e do
 // AllTrails. Os nomes originais do komoot são em inglês — aqui vão em
