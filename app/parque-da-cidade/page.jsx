@@ -338,6 +338,8 @@ export default async function ParqueDaCidadePage() {
             <span className="pq-hero__cidade">Itajubá · MG</span>
           </h1>
 
+          <p className="pq-hero__claim">Mais que um parque: um destino de experiências.</p>
+
           <p className="pq-hero__dek">
             Um lago no meio, a Mantiqueira em volta e um cisne de fibra passando devagar. No fim de
             semana o pedalinho é de graça, a pista enche de tênis batendo no asfalto e a praça

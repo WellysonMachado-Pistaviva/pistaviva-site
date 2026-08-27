@@ -256,12 +256,6 @@ export const ARCO_DO_DIA = [
   },
 ];
 
-export const NUMEROS = [
-  { v: '18', l: 'setores no mapa' },
-  { v: '20', l: 'operações listadas' },
-  { v: 'Grátis', l: 'pedalinho no fim de semana' },
-  { v: '24h', l: 'de segurança' },
-];
 
 // ---------------------------------------------------------------------------
 // Blocos no modelo dos parques de referência.
@@ -598,6 +592,13 @@ export const GASTRONOMIA = [
   { n: 'Sorveteria Point Mix', t: 'Sorveteria' },
   { n: 'Brejas To Go', t: 'Bebidas' },
   { n: 'In Box', t: 'Lanches' },
+];
+
+export const NUMEROS = [
+  { v: String(SETORES.length), l: 'setores no mapa' },
+  { v: String(GASTRONOMIA.length), l: 'operações listadas' },
+  { v: 'Grátis', l: 'pedalinho no fim de semana' },
+  { v: '24h', l: 'de segurança' },
 ];
 
 // Horários divulgados pelas próprias operações nos stories do Instagram oficial

@@ -2253,3 +2253,18 @@
 @media (max-width:1024px){
   .pq-pedal__abre{ grid-template-columns:1fr; }
 }
+
+/* Assinatura do hero: a frase que resume a página inteira. */
+.pq-hero__claim{
+  margin:22px auto 0;
+  max-width:20ch;
+  font-size:clamp(19px,2.4vw,26px);
+  font-weight:800;
+  line-height:1.2;
+  letter-spacing:-.01em;
+  color:var(--pq-yellow);
+  text-shadow:0 2px 18px rgba(0,0,0,.45);
+}
+@media (max-width:640px){
+  .pq-hero__claim{ max-width:none; }
+}
