@@ -229,10 +229,10 @@ const ALCANCE = [
 
 // Hotéis parceiros da edição 2026, com telefone para reserva direta.
 const HOTEIS = [
-  { nome: 'Hotel Coronados', tel: '(35) 3622-1977', href: 'tel:+553536221977' },
+  { nome: 'Hotel Coroados', tel: '(35) 3622-1977', href: 'tel:+553536221977' },
   { nome: 'Gontijo Inn Hotel', tel: '(35) 3622-4646', href: 'tel:+553536224646' },
   { nome: 'Hotel Oriente', tel: '(35) 9 9865-8860', href: 'tel:+5535998658860' },
-  { nome: 'Hotel Bramig', tel: '(35) 9 8862-6749', href: 'tel:+5535988626749' },
+  { nome: 'Hotel Bramig', tel: '(35) 9 8862-6748', href: 'tel:+5535988626748' },
   { nome: 'Novo Hotel', tel: '(35) 9 9937-9276', href: 'tel:+5535999379276' },
   { nome: 'Hotel Amantykir', tel: '(35) 3622-5252', href: 'tel:+553536225252' },
 ];
@@ -522,7 +522,7 @@ export default function MotosulPage() {
         image: `${BASE}/motosul/parque-aereo.jpg`,
         address: {
           '@type': 'PostalAddress',
-          streetAddress: 'Av. Dr. Jerson Dias, 500 - Estiva',
+          streetAddress: 'Av. Gerson Dias, 500 - Estiva',
           addressLocality: 'Itajubá',
           addressRegion: 'MG',
           postalCode: '37500-295',
@@ -752,6 +752,10 @@ export default function MotosulPage() {
               ))}
             </div>
           </div>
+
+          <p className="ms-parque__link">
+            <Link href="/parque-da-cidade">Conheça o Parque da Cidade de Itajubá →</Link>
+          </p>
 
           <ul className="ms-parque__base">
             {PARQUE_BASE.map((b) => <li key={b}>{b}</li>)}

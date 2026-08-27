@@ -46,6 +46,16 @@ export default async function sitemap() {
         `${BASE}/motosul/parque-evento.jpg`,
       ],
     },
+    {
+      path: '/parque-da-cidade',
+      lastModified: '2026-08-26',
+      images: [
+        `${BASE}/motosul/parque-aereo.jpg`,
+        `${BASE}/parque/pedalinho-cisne-serra.jpg`,
+        `${BASE}/parque/natal-brilha-itajuba.jpg`,
+        `${BASE}/parque/corrida-lago.jpg`,
+      ],
+    },
     { path: '/sobre' },
     { path: '/apoie' },
     // /loja é doorway pra loja externa (noindex) — fora do sitemap.

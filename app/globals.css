@@ -4330,3 +4330,12 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
   font-family:var(--mono); font-size:.68rem; letter-spacing:.12em;
   text-transform:uppercase; color:var(--ms-dim,#a9a49c);
 }
+
+/* Link da seção do parque (motosul) para a página dedicada do Parque da Cidade. */
+.ms-parque__link{ margin:22px 0 0; }
+.ms-parque__link a{
+  font-size:14px; font-weight:700; letter-spacing:.02em;
+  color:var(--accent); text-decoration:none;
+  border-bottom:1px solid rgba(255,90,0,.4); padding-bottom:2px;
+}
+.ms-parque__link a:hover{ border-bottom-color:var(--accent); }
