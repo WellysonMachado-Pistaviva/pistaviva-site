@@ -4,11 +4,14 @@ import {
   Baby,
   Bath,
   BedDouble,
+  Bike,
   Car,
+  Droplet,
   ExternalLink,
   MapPin,
   MessageCircle,
   Phone,
+  Plug,
   ShieldCheck,
   Star,
   TreePine,
@@ -53,6 +56,7 @@ import {
   NUMEROS,
   PARQUE_COORD,
   PARQUE_ENDERECO,
+  PARQUE_POSICIONAMENTO,
   PERFIS,
   PARQUE_MAPS,
   PARQUE_OFICIAL,
@@ -82,13 +86,15 @@ export const metadata = {
     'mountain bike Serra da Mantiqueira',
     'parede de escalada Sul de Minas',
     'lago do parque Itajubá',
-    'Praia Di Minas Itajubá',
+    'beach tennis Itajubá',
+    'Real Tennis Club Itajubá',
+    'Arena Praia di Itajubá',
+    'Teatro Municipal Christiane Riêra',
     'Cine A Itajubá',
     'cinema sustentável Itajubá',
     'Brilha Itajubá',
     'escadaria mosaico Itajubá',
     'André Visoto mosaico',
-    'Teatro Municipal Christiane Riera',
     'parque no Sul de Minas',
     'passeio com criança em Itajubá',
     'o que fazer no Sul de Minas',
@@ -148,6 +154,9 @@ const ICONES = {
   tree: TreePine,
   baby: Baby,
   utensils: Utensils,
+  droplet: Droplet,
+  plug: Plug,
+  bike: Bike,
 };
 
 export default async function ParqueDaCidadePage() {
@@ -175,8 +184,7 @@ export default async function ParqueDaCidadePage() {
         name: 'Parque da Cidade de Itajubá',
         alternateName: 'Parque da Cidade',
         url: `${BASE}/parque-da-cidade`,
-        description:
-          'Parque em Itajubá, Minas Gerais, com lago central, área verde, kartódromo, quadras de tênis e futebol society, praia de areia, boliche, área kids, pavilhão de eventos e praça de alimentação.',
+        description: `${PARQUE_POSICIONAMENTO} Parque em Itajubá, Minas Gerais, com lago central, área verde, kartódromo, quadras de saibro e de areia para tênis e beach tennis, futebol society, parede de escalada, boliche, pista de skate, área kids, teatro, biblioteca, cinema autossustentável, pavilhão de eventos e praça de alimentação.`,
         image: [`${BASE}/motosul/parque-aereo.jpg`, `${BASE}/motosul/parque-evento.jpg`],
         address: {
           '@type': 'PostalAddress',
@@ -331,9 +339,10 @@ export default async function ParqueDaCidadePage() {
           </h1>
 
           <p className="pq-hero__dek">
-            Pedalinho grátis no fim de semana, pista de corrida na margem, praia de areia e a
-            serra em volta. É o quintal de Itajubá — e o endereço onde a cidade recebe o Brasil
-            inteiro.
+            Um lago no meio, a Mantiqueira em volta e um cisne de fibra passando devagar. No fim de
+            semana o pedalinho é de graça, a pista enche de tênis batendo no asfalto e a praça
+            acende ao anoitecer. É o quintal de Itajubá — e o endereço onde a cidade recebe o
+            Brasil inteiro.
           </p>
 
           <div className="pq-hero__acoes">
@@ -366,7 +375,7 @@ export default async function ParqueDaCidadePage() {
           <h2 id="pq-resposta-titulo">O que fazer em Itajubá?</h2>
           <p>
             Comece pelo Parque da Cidade: dê a volta no lago, use o pedalinho gratuito no fim de
-            semana, conheça a Praia Di Minas, o kartódromo e o Cine A, depois escolha uma das
+            semana, conheça o kartódromo, a parede de escalada e o Cine A, depois escolha uma das
             operações de comida. Para transformar o passeio em viagem pelo Sul de Minas, durma em
             Itajubá e siga por Maria da Fé, Cristina ou Delfim Moreira.
           </p>
@@ -388,9 +397,10 @@ export default async function ParqueDaCidadePage() {
               <p className="pq-eyebrow">Sábado e domingo</p>
               <h2 className="pq-display">Pedalinho no lago,<br />de graça.</h2>
               <p className="pq-lead">
-                Cisne branco, amarelo ou azul: nos fins de semana o passeio de pedalinho no lago do
-                parque não custa nada. Colete no píer, meia hora na água e a melhor vista do parque
-                de dentro dele. É o programa que faz criança pedir para voltar.
+                Cisne branco, amarelo ou azul — a criança escolhe, e a escolha é séria. Colete no
+                píer, meia hora pedalando e a única vista do parque que só existe de dentro da
+                água: a serra de um lado, o deck do outro, o resto do mundo esperando em terra firme.
+                Nos sábados e domingos, sem cobrar nada.
               </p>
               <div className="pq-hero__acoes pq-hero__acoes--esq">
                 <a className="pq-btn pq-btn--gold" href="#mapa">Saber mais</a>
@@ -433,9 +443,12 @@ export default async function ParqueDaCidadePage() {
           <div className="pq-duo">
             <div className="pq-duo__texto">
               <p className="pq-lead">
-                Parque público costuma ser grama, banco e um quiosque. O Parque da Cidade seguiu
+                O Parque da Cidade é hoje um dos complexos de lazer e eventos mais bem equipados
+                e dinâmicos do Sul de Minas Gerais — e a lista explica por quê. Parque público
+                costuma ser grama, banco e um quiosque. Este seguiu
                 outro caminho: dentro dos mesmos portões cabem uma pista de kart, quadras de tênis,
-                campos de society, uma praia de areia, um boliche, um pavilhão de eventos e
+                campos de society, quadras de areia para beach tennis, uma parede de escalada, um
+                boliche, um pavilhão de eventos e
                 vinte operações de comida e bebida listadas — todas no entorno do mesmo lago.
               </p>
               <p>
@@ -445,7 +458,7 @@ export default async function ParqueDaCidadePage() {
                 fora descobre que dá para passar o dia inteiro sem sair de lá.
               </p>
               <p>
-                E é o parque que a cidade usa para se juntar: prova de rua com percurso na margem,
+                E é o parque que a cidade usa para se juntar: prova de rua dando a volta no lago,
                 festa da espuma e touro mecânico em data comemorativa, festival de comida com show
                 no palco de frente para a água e, em dezembro, o Natal <b>Brilha Itajubá</b> com a
                 queima de fogos refletindo no lago inteiro.
@@ -489,7 +502,7 @@ export default async function ParqueDaCidadePage() {
             <figure className="pq-pedal__foto">
               <img
                 src="/parque/corrida-lago.jpg"
-                alt="Corredores na pista de caminhada à margem do lago do Parque da Cidade, com os morros de Itajubá ao fundo"
+                alt="Corredores na pista de caminhada em volta do lago do Parque da Cidade, com os morros de Itajubá ao fundo"
                 loading="lazy"
                 decoding="async"
                 width="1600"
@@ -673,10 +686,10 @@ export default async function ParqueDaCidadePage() {
           <span className="pq-rule" aria-hidden="true" />
           <p className="pq-lead">
             O Cine A Itajubá tem quatro salas com Dolby Atmos, projeção 3D e 4K — e uma usina
-            fotovoltaica própria que as alimenta. O guia de turismo da cidade o descreve como o
-            primeiro cinema sustentável do Brasil; a própria rede fala em um dos dois cinemas
-            autossustentáveis da América Latina, ao lado da unidade Continental, em São Paulo. Os
-            números da obra, esses, são os mesmos nas duas fontes.
+            fotovoltaica própria que as alimenta. Dois guias de turismo o apontam como o primeiro
+            cinema autossustentável do Brasil; a própria rede fala em um dos dois da América
+            Latina, ao lado da unidade Continental, em São Paulo. Os números da obra são os mesmos
+            em todas as fontes.
           </p>
 
           <Suspense fallback={<CineProgramacaoLoading />}>
@@ -1140,8 +1153,13 @@ export default async function ParqueDaCidadePage() {
           <div className="pq-guia">
             <h3>O que fazer no Parque da Cidade de Itajubá</h3>
             <p>
+              Com 21 setores mapeados no mesmo endereço — do kartódromo ao teatro de 706 lugares,
+              do cinema autossustentável às quadras de areia —, o Parque da Cidade é um dos
+              complexos de lazer e eventos mais bem equipados e dinâmicos do Sul de Minas Gerais.
+            </p>
+            <p>
               O parque concentra num só endereço o que costuma estar espalhado por uma cidade
-              inteira: pedalinho no lago, pista de caminhada e corrida na margem, praia de areia com
+              inteira: pedalinho no lago, pista de caminhada e corrida em volta da água, fonte interativa e
               beach tennis, parede de escalada, kartódromo, quadras de tênis e campos de society,
               boliche coberto, playground, cinema, pavilhão de eventos e vinte operações de
               comida e bebida listadas neste guia. É um dos passeios mais completos do Sul de Minas para quem tem um dia livre em
@@ -1158,13 +1176,13 @@ export default async function ParqueDaCidadePage() {
             <h3>Vale a pena com criança?</h3>
             <p>
               Vale. Além do pedalinho grátis, há área kids, playground à vista das mesas da praça,
-              boliche coberto para dia de chuva e a areia da Praia Di Minas. Em datas comemorativas o
+              boliche coberto para dia de chuva e a fonte interativa. Em datas comemorativas o
               pátio recebe festa da espuma, brinquedos infláveis, touro mecânico e palco infantil.
             </p>
 
             <h3>Quais eventos acontecem no parque</h3>
             <p>
-              O calendário vai de prova de rua com percurso na margem do lago a festival de comida
+              O calendário vai de prova de rua dando a volta no lago a festival de comida
               com show ao vivo, passando pelo Motosul Festival, que ocupa o parque com milhares de
               motos, e pelo Natal <b>Brilha Itajubá</b>, quando a iluminação e a queima de fogos
               refletem na água.

@@ -56,7 +56,7 @@ export default function ParqueMapa() {
               Desenho fora de escala. Um lago ocupa o centro, cercado por um caminho circular.
               Ao norte ficam o deck sobre a água, a área kids e a praça de alimentação; a oeste,
               o kartódromo e as quadras de tênis; ao sul, a arena de futebol society, o comércio e
-              o estacionamento; a leste, a Praia Di Minas, o boliche e o pavilhão de eventos.
+              o estacionamento; a leste, o boliche, o Cine A e o pavilhão de eventos.
               A lista ao lado traz cada setor com o mesmo número do mapa.
             </desc>
 

@@ -4,6 +4,9 @@
 // entrada, regras para pet e detalhes de acessibilidade. Nada disso é afirmado aqui.
 
 export const PARQUE_MAPS = 'https://www.google.com/maps/search/?api=1&query=Parque%20da%20Cidade%2C%20Av.%20Gerson%20Dias%2C%20500%2C%20Itajub%C3%A1%2C%20MG';
+export const PARQUE_POSICIONAMENTO =
+  'Um dos complexos de lazer e eventos mais bem equipados e dinâmicos do Sul de Minas Gerais.';
+
 export const PARQUE_ENDERECO = 'Av. Gerson Dias, 500 — Estiva, Itajubá, MG';
 export const PARQUE_COORD = { lat: -22.4109112, lng: -45.4380434 };
 export const PARQUE_OFICIAL = 'https://www.itajuba.mg.gov.br/detalhe-da-unidade/nome/secretaria-municipal-de-cultura-e-turismo---secut/29';
@@ -31,7 +34,7 @@ const SETORES = [
     tag: 'Coração do parque',
     x: 500, y: 330,
     resumo: 'Espelho dágua no centro de tudo. A volta a pé é o passeio que todo mundo faz sem combinar.',
-    detalhe: 'Todo o desenho do parque gira em torno dele: as varandas dos restaurantes olham para a água, o palco dos eventos monta de frente para ela e o fim de tarde acontece na margem.',
+    detalhe: 'Todo o desenho do parque gira em torno dele: as varandas dos restaurantes olham para a água, o palco dos eventos monta de frente para ela e, no fim de tarde, a volta completa fica cheia de gente.',
   },
   {
     id: 'praca',
@@ -66,17 +69,17 @@ const SETORES = [
     cat: 'esporte',
     tag: 'Tênis & beach',
     x: 196, y: 372,
-    resumo: 'Quadras de tênis e beach tennis com escolinha e torneios.',
-    detalhe: 'Um dos pontos que mantêm o parque em uso durante a semana inteira, fora do fluxo de fim de semana.',
+    resumo: 'Quadras de saibro e de beach tennis, com escolinha e torneios por categoria.',
+    detalhe: 'Recebe eliminatórias e torneios nas classes 1ª, 3ª e Especial, inclusive na programação de aniversário da cidade. Inscrições e horários pelo telefone (35) 99925-1069. É um dos pontos que mantêm o parque em uso durante a semana inteira.',
   },
   {
     id: 'praia',
-    nome: 'Praia Di Minas',
-    cat: 'agua',
-    tag: 'Areia no Sul de Minas',
+    nome: 'Arena Praia di Itajubá',
+    cat: 'esporte',
+    tag: 'Beach tennis na areia',
     x: 654, y: 462,
-    resumo: 'Areia, rede e sol a 800 km do mar. O apelido do parque saiu daqui.',
-    detalhe: 'Beach tennis, futevôlei e espreguiçadeira. No verão é o setor mais cheio do parque.',
+    resumo: 'Quadras de areia dentro do parque, onde o beach tennis da cidade acontece.',
+    detalhe: 'Funciona no mesmo endereço do parque, na Av. Dr. Jerson Dias, e recebe etapas da Liga Sul Mineira, com torneios de duplas mistas por categoria. Aluguel de quadra e aulas são tratados direto com a arena.',
   },
   {
     id: 'bowl',
@@ -124,6 +127,24 @@ const SETORES = [
     detalhe: 'Parque com comércio ativo é parque que não esvazia: gente circula durante o dia útil, não só no domingo.',
   },
   {
+    id: 'teatro',
+    nome: 'Teatro Municipal Christiane Riêra',
+    cat: 'cultura',
+    tag: '706 lugares',
+    x: 300, y: 96,
+    resumo: 'O teatro da cidade fica no mesmo complexo do parque, no alto da escadaria em mosaico.',
+    detalhe: 'Inaugurado em março de 2016, tem 706 poltronas e mais 6 espaços para cadeirantes. É dele que desce a escadaria decorada por André Visoto até o parque.',
+  },
+  {
+    id: 'biblioteca',
+    nome: 'Biblioteca',
+    cat: 'cultura',
+    tag: 'Consulta e empréstimo',
+    x: 190, y: 120,
+    resumo: 'Acervo de livros e revistas para consulta no local ou empréstimo.',
+    detalhe: 'Mais uma peça do complexo do Parque da Cidade, que reúne ainda a sede da prefeitura, o fórum e uma escola no mesmo perímetro.',
+  },
+  {
     id: 'escadaria',
     nome: 'Escadaria do Mosaico',
     cat: 'cultura',
@@ -147,8 +168,8 @@ const SETORES = [
     cat: 'esporte',
     tag: 'A volta no lago',
     x: 300, y: 130,
-    resumo: 'O anel asfaltado em volta da água — cheio de manhã e no fim da tarde.',
-    detalhe: 'Serve tanto para a caminhada de domingo quanto para prova de rua: o parque recebe corridas com percurso montado na própria margem do lago.',
+    resumo: 'Um quilômetro de anel em volta do lago — cheio de manhã e no fim da tarde.',
+    detalhe: 'São cerca de 1 km em volta do lago artificial, divididos entre quem caminha, corre e pedala. Serve tanto para o domingo em família quanto para prova de rua com percurso montado na volta completa.',
   },
   {
     id: 'cinea',
@@ -212,19 +233,19 @@ export const ARCO_DO_DIA = [
   {
     hora: 'Manhã',
     titulo: 'O parque acorda devagar',
-    texto: 'Volta ao lago, treino na pista, café. A serra ainda está com neblina e o estacionamento, vazio.',
+    texto: 'A neblina ainda não subiu da serra e a pista já tem gente. Uma volta no lago, café na praça e o parque inteiro parecendo seu.',
     setores: ['Pista de caminhada', 'O lago'],
   },
   {
     hora: 'Tarde',
     titulo: 'Areia, quadra e pista',
-    texto: 'Pedalinho no lago com a criançada, beach tennis na Praia Di Minas, society na arena e track day no kartódromo.',
-    setores: ['Pedalinho', 'Praia Di Minas', 'Kartódromo'],
+    texto: 'Pedalinho saindo do píer, bolinha caindo na areia do beach tennis, kart acelerando ao longe. É a hora mais barulhenta do parque — no melhor sentido.',
+    setores: ['Pedalinho', 'Beach tennis', 'Kartódromo'],
   },
   {
     hora: 'Fim de tarde',
     titulo: 'A hora do deck',
-    texto: 'O sol cai atrás da Mantiqueira e a luz bate na água. Mesa no deck é disputada.',
+    texto: 'O sol some atrás da Mantiqueira e a água vira espelho alaranjado. Nessa hora, mesa no deck se conquista chegando cedo.',
     setores: ['Deck Only Brasil'],
   },
   {
@@ -265,6 +286,14 @@ export const EXPERIENCIAS = [
     cor: 'var(--pq-purple)',
   },
   {
+    kicker: 'Na areia',
+    t: 'Beach tennis',
+    d: 'Quadras de areia da Arena Praia di Itajubá, sede de etapas da Liga Sul Mineira.',
+    acao: 'Ver no mapa',
+    href: '#mapa',
+    cor: 'var(--pq-cyan)',
+  },
+  {
     kicker: 'Arte',
     t: 'Escadaria do Mosaico',
     d: 'A história de Itajubá contada degrau a degrau, em mosaico — obra de André Visoto.',
@@ -287,14 +316,6 @@ export const EXPERIENCIAS = [
     acao: 'Conhecer o cinema',
     href: '#cinea',
     cor: 'var(--pq-green)',
-  },
-  {
-    kicker: 'Areia',
-    t: 'Praia Di Minas',
-    d: 'Beach tennis, futevôlei e espreguiçadeira a mais de 400 km do mar.',
-    acao: 'Ver no mapa',
-    href: '#mapa',
-    cor: 'var(--pq-teal)',
   },
   {
     kicker: 'Motor',
@@ -363,10 +384,13 @@ export const CINEA = {
 export const SERVICOS = [
   { icone: 'car', t: 'Estacionamento gratuito', d: 'Pátio amplo na entrada, com espaço organizado para moto.' },
   { icone: 'shield', t: 'Segurança 24h', d: 'Vigilância permanente em toda a área do parque.' },
-  { icone: 'toilet', t: 'Banheiros', d: 'Estruturados e distribuídos pelos setores de maior circulação.' },
+  { icone: 'toilet', t: 'Banheiros até 23h', d: 'Estruturados, distribuídos pelos setores de maior circulação e abertos até tarde.' },
   { icone: 'tree', t: 'Área verde', d: 'Sombra, grama e caminho de volta ao lago.' },
   { icone: 'baby', t: 'Área kids', d: 'Playground à vista das mesas da praça de alimentação.' },
   { icone: 'utensils', t: 'Gastronomia', d: 'Vinte operações de comida e bebida listadas neste guia.' },
+  { icone: 'droplet', t: 'Bebedouros e chuveiro', d: 'Pontos de água potável e chuveiros externos na área do parque.' },
+  { icone: 'plug', t: 'Tomadas e Wi-Fi', d: 'Tomadas distribuídas pelo parque e Wi-Fi público gratuito.' },
+  { icone: 'bike', t: 'Aluguel de bicicleta', d: 'Bike, patins e pedalinho para dar a volta no lago.' },
 ];
 
 // Eventos por categoria (modelo Capivari: "Nossos eventos" com categorias).
@@ -374,14 +398,14 @@ export const EVENTOS = [
   {
     cat: 'Natal',
     t: 'Brilha Itajubá',
-    d: 'O Natal da cidade acontece no parque: iluminação na margem, decoração e queima de fogos refletindo na água do lago.',
+    d: 'O Natal da cidade acontece no parque: a luz contorna o lago inteiro, a decoração toma a área verde e os fogos caem sobre a água — o reflexo dobra o espetáculo.',
     quando: 'Dezembro',
     href: '#mapa',
     interno: false,
   },
   {
     cat: 'Corrida de rua',
-    t: 'Provas na margem do lago',
+    t: 'Provas em volta do lago',
     d: 'O anel do parque vira percurso de prova, com largada, cones e público na grade. Corre gente grande e criança junto.',
     quando: 'Agenda variável',
     href: '#mapa',
@@ -450,7 +474,7 @@ export const PLANOS = [
     titulo: 'O dia cheio',
     passos: [
       { h: 'Manhã', t: 'Chegue cedo: o estacionamento enche primeiro.' },
-      { h: 'Tarde', t: 'Praia Di Minas na areia, escalada na parede coberta ou boliche no Bowl para escapar do sol.' },
+      { h: 'Tarde', t: 'Beach tennis na areia da Praia di Itajubá, escalada na parede coberta ou boliche no Bowl para escapar do sol.' },
       { h: '18h', t: 'Mesa no Deck Only Brasil — é a hora e o lugar da foto.' },
       { h: 'Noite', t: 'Praça de alimentação; confirme quais operações abrem no dia.' },
     ],
@@ -464,7 +488,7 @@ export const PLANOS = [
     passos: [
       { h: 'Manhã', t: 'Caminhada na área verde e área kids vazia.' },
       { h: 'Almoço', t: 'Praça de alimentação com mesa à vista do playground.' },
-      { h: 'Tarde', t: 'Pedal, areia ou uma volta completa no lago antes de pegar a estrada.' },
+      { h: 'Tarde', t: 'Pedalinho ou uma volta completa no lago antes de pegar a estrada.' },
     ],
     aviso: 'Quem volta para São Paulo no domingo evita sair depois das 17h — a serra escurece cedo.',
   },
@@ -497,7 +521,7 @@ export const DUVIDAS = [
   },
   {
     p: 'Vale a pena com criança?',
-    r: 'Vale, e é um dos programas mais fortes da cidade: pedalinho grátis no fim de semana, área kids, playground à vista das mesas, boliche coberto e a areia da Praia Di Minas. Em datas comemorativas ainda tem festa da espuma, infláveis e touro mecânico.',
+    r: 'Vale, e é um dos programas mais fortes da cidade: pedalinho grátis no fim de semana, área kids, playground à vista das mesas, boliche coberto, a fonte interativa nos dias quentes e as quadras de areia para quem já joga beach tennis. Em datas comemorativas ainda tem festa da espuma, infláveis e touro mecânico.',
   },
   {
     p: 'Quanto tempo fico lá?',
@@ -525,14 +549,14 @@ export const ZONAS = [
     nome: 'Zona do Lago',
     cor: 'var(--pq-blue)',
     resumo: 'O centro do parque: água, deck e a volta a pé que todo mundo faz.',
-    setores: ['lago', 'pedalinho', 'escadaria', 'deck'],
+    setores: ['lago', 'pedalinho', 'escadaria', 'teatro', 'biblioteca', 'deck'],
   },
   {
     id: 'esporte',
     nome: 'Zona Esportiva',
     cor: 'var(--pq-green)',
     resumo: 'Pista, quadras e campos — a parte do parque que funciona a semana toda.',
-    setores: ['pista', 'escalada', 'kartodromo', 'arena', 'tennis', 'praia'],
+    setores: ['pista', 'escalada', 'kartodromo', 'arena', 'tennis', 'praia', 'skate'],
   },
   {
     id: 'sabor',
@@ -558,6 +582,7 @@ export const GASTRONOMIA = [
   { n: 'Boteco Seo Sumido', t: 'Boteco' },
   { n: 'Vicenza Massas Especiais', t: 'Italiana' },
   { n: 'A Mexicana', t: 'Mexicana' },
+  { n: 'Praia Di Itajubá', t: 'Bar e restaurante' },
   { n: 'Meio da Roça', t: 'Mineira' },
   { n: 'El Terrazzo', t: 'Restaurante' },
   { n: "Joanita's Candy House", t: 'Doces' },
@@ -1007,11 +1032,11 @@ export const INSTAGRAM_POSTS = [];
 export const FOTOS = [
   { src: '/parque/pedalinho-cisne-amarelo.jpg', alt: 'Pedalinhos em formato de cisne e amarelo no lago do Parque da Cidade de Itajubá', legenda: 'Pedalinho grátis no fim de semana', span: 2 },
   { src: '/parque/pier-coletes.jpg', alt: 'Família de colete salva-vidas tirando selfie no píer do pedalinho', legenda: 'Colete no píer' },
-  { src: '/parque/corrida-lago.jpg', alt: 'Corredor com duas crianças de mãos dadas em prova de rua na margem do lago do parque', legenda: 'Corrida na margem', span: 2 },
+  { src: '/parque/corrida-lago.jpg', alt: 'Corredor com duas crianças de mãos dadas em prova de rua dando a volta no lago do parque', legenda: 'Corrida em volta do lago', span: 2 },
   { src: '/parque/festa-espuma.jpg', alt: 'Crianças brincando na festa da espuma no pátio do Parque da Cidade', legenda: 'Festa da espuma' },
   { src: '/parque/touro-mecanico.jpg', alt: 'Criança montada no touro mecânico ao lado dos brinquedos infláveis', legenda: 'Touro mecânico' },
   { src: '/parque/natal-brilha-itajuba.jpg', alt: 'Queima de fogos do Natal Brilha Itajubá refletindo no lago do parque', legenda: 'Brilha Itajubá', span: 2 },
-  { src: '/parque/natal-cascata-fogos.jpg', alt: 'Cascata de fogos iluminando a margem do lago no Natal de Itajubá', legenda: 'Cascata de fogos' },
+  { src: '/parque/natal-cascata-fogos.jpg', alt: 'Cascata de fogos iluminando toda a volta do lago no Natal de Itajubá', legenda: 'Cascata de fogos' },
   { src: '/parque/show-ao-vivo.jpg', alt: 'Músico tocando violão no palco montado no Parque da Cidade', legenda: 'Show ao vivo' },
   { src: '/parque/palco-infantil.jpg', alt: 'Crianças com pintura no rosto em frente ao palco infantil do parque', legenda: 'Palco infantil' },
   { src: '/parque/escalada.jpg', alt: 'Parede de escalada iluminada do Parque da Cidade de Itajubá ao entardecer, com escaladores no muro amarelo', legenda: 'Parede de escalada', span: 2 },
@@ -1033,6 +1058,10 @@ export const HISTORIA = [
     d: 'O Parque da Cidade é inaugurado em 32 mil metros quadrados, com a proposta de preservar a área verde e dar à cidade um lugar de convivência.',
   },
   {
+    t: '2016',
+    d: 'O Teatro Municipal Christiane Riêra é inaugurado no complexo do parque, com 706 poltronas e seis espaços para cadeirantes.',
+  },
+  {
     t: '2018',
     d: 'Chega o Cine A Itajubá: quatro salas com Dolby Atmos movidas por usina fotovoltaica própria, num complexo de 4.058 m² com mais de R$ 10 milhões investidos.',
   },
@@ -1046,7 +1075,7 @@ export const HISTORIA = [
   },
   {
     t: 'Hoje',
-    d: 'O parque virou o endereço onde a cidade se junta: pedalinho grátis no fim de semana, prova de rua na margem do lago, festival de comida, Natal Brilha Itajubá e o Motosul Festival com milhares de motos no pátio.',
+    d: 'O parque virou o endereço onde a cidade se junta: pedalinho grátis no fim de semana, prova de rua dando a volta no lago, festival de comida, Natal Brilha Itajubá e o Motosul Festival com milhares de motos no pátio.',
   },
 ];
 
