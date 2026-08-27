@@ -17,6 +17,7 @@ export const CATEGORIAS = [
   { id: 'agua', label: 'Água & lago', cor: 'var(--pq-teal)' },
   { id: 'sabor', label: 'Sabor', cor: 'var(--pq-ember)' },
   { id: 'familia', label: 'Família', cor: 'var(--pq-violet)' },
+  { id: 'cultura', label: 'Cultura', cor: 'var(--pq-yellow)' },
   { id: 'eventos', label: 'Eventos', cor: 'var(--pq-gold)' },
 ];
 
@@ -121,6 +122,15 @@ const SETORES = [
     x: 452, y: 574,
     resumo: 'KD Presentes, Toy Mobi e CoperCar dividem o mesmo endereço.',
     detalhe: 'Parque com comércio ativo é parque que não esvazia: gente circula durante o dia útil, não só no domingo.',
+  },
+  {
+    id: 'escadaria',
+    nome: 'Escadaria do Mosaico',
+    cat: 'cultura',
+    tag: 'A história em degraus',
+    x: 356, y: 176,
+    resumo: 'Mosaico de André Visoto que conta a história de Itajubá degrau a degrau, ligando o teatro ao parque.',
+    detalhe: 'Inaugurada em julho de 2024 pelos 205 anos da cidade, a obra do artista brazopolense André Visoto cobre a escadaria que liga o Teatro Municipal Christiane Riera ao Parque da Cidade. Nos painéis aparecem a Igreja Matriz Nossa Senhora da Soledade ao centro, a Estação Ferroviária, a Casa Wenceslau Braz — a Casa Rosada — e até o antigo posto ESSO. Cada lance é um pedaço da memória de Itajubá.',
   },
   {
     id: 'pedalinho',
@@ -253,6 +263,14 @@ export const EXPERIENCIAS = [
     acao: 'Ver a agenda',
     href: '#eventos',
     cor: 'var(--pq-purple)',
+  },
+  {
+    kicker: 'Arte',
+    t: 'Escadaria do Mosaico',
+    d: 'A história de Itajubá contada degrau a degrau, em mosaico — obra de André Visoto.',
+    acao: 'Ver no mapa',
+    href: '#mapa',
+    cor: 'var(--pq-yellow)',
   },
   {
     kicker: 'Vertical',
@@ -507,7 +525,7 @@ export const ZONAS = [
     nome: 'Zona do Lago',
     cor: 'var(--pq-blue)',
     resumo: 'O centro do parque: água, deck e a volta a pé que todo mundo faz.',
-    setores: ['lago', 'pedalinho', 'deck'],
+    setores: ['lago', 'pedalinho', 'escadaria', 'deck'],
   },
   {
     id: 'esporte',
@@ -1027,6 +1045,11 @@ export const INSTAGRAM_PERFIL = 'https://www.instagram.com/parqueitajubaoficial/
 export const INSTAGRAM_POSTS = [];
 
 // Galeria do parque — fotos reais do Parque da Cidade de Itajubá.
+// TODO(foto): a escadaria do mosaico ainda não tem imagem própria aqui. A que
+// circula é do AD-UNIFEI e está em 596x335 — baixa demais para a página, além
+// de precisar de autorização. Assim que houver uma foto nossa (ou cedida com
+// crédito), acrescentar:
+// { src: '/parque/escadaria-mosaico.jpg', alt: 'Escadaria em mosaico...', legenda: 'Escadaria do Mosaico', span: 2 }
 export const FOTOS = [
   { src: '/parque/pedalinho-cisne-amarelo.jpg', alt: 'Pedalinhos em formato de cisne e amarelo no lago do Parque da Cidade de Itajubá', legenda: 'Pedalinho grátis no fim de semana', span: 2 },
   { src: '/parque/pier-coletes.jpg', alt: 'Família de colete salva-vidas tirando selfie no píer do pedalinho', legenda: 'Colete no píer' },
@@ -1062,6 +1085,10 @@ export const HISTORIA = [
   {
     t: '2023',
     d: 'A fonte interativa é inaugurada em 23 de dezembro, somando-se ao lago, à pista de caminhada e ao conjunto de quadras que já ocupavam o parque.',
+  },
+  {
+    t: '2024',
+    d: 'Pelos 205 anos de Itajubá, a escadaria que liga o Teatro Municipal Christiane Riera ao parque ganha um mosaico do artista brazopolense André Visoto, com a Igreja Matriz, a Estação Ferroviária e a Casa Wenceslau Braz retratadas nos degraus.',
   },
   {
     t: 'Hoje',

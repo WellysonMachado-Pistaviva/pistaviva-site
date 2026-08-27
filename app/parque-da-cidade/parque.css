@@ -713,6 +713,7 @@
 .pq-pino--agua{ --pin:var(--pq-blue); }
 .pq-pino--sabor{ --pin:var(--pq-orange); }
 .pq-pino--familia{ --pin:var(--pq-purple); }
+.pq-pino--cultura{ --pin:#c99700; }
 .pq-pino--eventos{ --pin:#e0091b; }
 
 .pq-pino__halo{

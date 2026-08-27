@@ -35,6 +35,7 @@ import {
   DUVIDAS,
   ESTRUTURA,
   EVENTOS,
+  EXPERIENCIAS,
   AIRBNB_BASE,
   GASTRONOMIA,
   HOSPEDAGEM,
@@ -86,6 +87,9 @@ export const metadata = {
     'Cine A Itajubá',
     'cinema sustentável Itajubá',
     'Brilha Itajubá',
+    'escadaria mosaico Itajubá',
+    'André Visoto mosaico',
+    'Teatro Municipal Christiane Riera',
     'parque no Sul de Minas',
     'passeio com criança em Itajubá',
     'o que fazer no Sul de Minas',
@@ -414,7 +418,7 @@ export default async function ParqueDaCidadePage() {
       <section className="pq-sec pq-sec--escura" id="experiencias">
         <div className="pq-wrap pq-wrap--larga">
           <p className="pq-cap"><span>Experiências</span></p>
-          <h2 className="pq-display">Seis motivos<br />para subir a serra.</h2>
+          <h2 className="pq-display">{EXPERIENCIAS.length} motivos<br />para subir a serra.</h2>
           <span className="pq-rule" aria-hidden="true" />
           <Experiencias />
         </div>
@@ -581,7 +585,7 @@ export default async function ParqueDaCidadePage() {
       <section className="pq-sec pq-sec--escura" id="mapa">
         <div className="pq-wrap pq-wrap--larga">
           <p className="pq-cap"><span>Nossas atrações</span></p>
-          <h2 className="pq-display">Planta viva.<br />Doze setores.</h2>
+          <h2 className="pq-display">Planta viva.<br />{ATRACOES.length} setores.</h2>
           <span className="pq-rule" aria-hidden="true" />
           <p className="pq-lead">
             Toque um número no mapa — ou um card na lista — para abrir a ficha do setor. Os filtros
@@ -1167,6 +1171,16 @@ export default async function ParqueDaCidadePage() {
               com show ao vivo, passando pelo Motosul Festival, que ocupa o parque com milhares de
               motos, e pelo Natal <b>Brilha Itajubá</b>, quando a iluminação e a queima de fogos
               refletem na água.
+            </p>
+
+            <h3>O que a escadaria do parque tem de especial</h3>
+            <p>
+              A escadaria que liga o Teatro Municipal Christiane Riera ao Parque da Cidade é
+              revestida por um mosaico do artista brazopolense <b>André Visoto</b>, entregue em
+              julho de 2024 pelos 205 anos de Itajubá. Os painéis retratam a Igreja Matriz Nossa
+              Senhora da Soledade, a Estação Ferroviária, a Casa Wenceslau Braz — a Casa Rosada — e
+              o antigo posto ESSO: a história da cidade contada degrau a degrau, algo que não
+              existe igual na região.
             </p>
 
             <h3>Onde fica e como chegar</h3>
