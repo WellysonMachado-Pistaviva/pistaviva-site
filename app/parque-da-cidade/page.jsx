@@ -20,6 +20,7 @@ import Experiencias from './Experiencias';
 import Agenda from './Agenda';
 import PlanejeVisita from './PlanejeVisita';
 import CineProgramacao, { CineProgramacaoLoading } from './CineProgramacao';
+import HospedagemCarrossel from './HospedagemCarrossel';
 import InstagramEmbeds from '../components/InstagramEmbeds';
 import { getRelatedPosts } from '../lib/blog';
 import {
@@ -40,7 +41,8 @@ import {
   KOMOOT_ESTRADA,
   KOMOOT_MTB,
   ROTAS_BIKE,
-  WIKILOC_ITAJUBA,
+  TRILHAS_PE,
+  WIKILOC,
   HOTEIS_ITAJUBA,
   HORARIOS,
   HISTORIA,
@@ -474,40 +476,81 @@ export default async function ParqueDaCidadePage() {
           <p className="pq-cap"><span>Trilhas &amp; bike</span></p>
           <h2 className="pq-display">A pista do parque<br />é só o aquecimento.</h2>
           <span className="pq-rule" aria-hidden="true" />
-          <p className="pq-lead">
-            A volta no lago serve para aquecer; a serra em volta é que faz de Itajubá endereço de
-            cicloturismo. A cidade integra os <b>Caminhos da Mantiqueira</b>, circuito que desde
-            2017 mapeia trilhas em treze municípios da região, com três níveis em cada um. Estas
-            saem do próprio centro:
-          </p>
 
+          <div className="pq-pedal__abre">
+            <p className="pq-lead">
+              A volta no lago serve para aquecer; a serra em volta é que faz de Itajubá endereço de
+              trilha e cicloturismo. A cidade integra os <b>Caminhos da Mantiqueira</b>, circuito
+              que desde 2017 mapeia percursos em treze municípios, com três níveis em cada um.
+            </p>
+            <figure className="pq-pedal__foto">
+              <img
+                src="/parque/corrida-lago.jpg"
+                alt="Corredores na pista de caminhada à margem do lago do Parque da Cidade, com os morros de Itajubá ao fundo"
+                loading="lazy"
+                decoding="async"
+                width="1600"
+                height="1067"
+              />
+              <figcaption>A pista do parque, onde tudo começa</figcaption>
+            </figure>
+          </div>
+
+          <h3 className="pq-pedal__titulo">A pé</h3>
+          <ul className="pq-pedal">
+            {TRILHAS_PE.map((t) => (
+              <li key={t.nome} style={{ '--tint': t.cor }}>
+                <span className="pq-pedal__tipo">{t.tipo}</span>
+                <h4>{t.nome}</h4>
+                <dl className="pq-pedal__nums">
+                  <div><dt>Distância</dt><dd>{t.km}</dd></div>
+                  <div><dt>Subida</dt><dd>{t.subida}</dd></div>
+                  <div><dt>Nível</dt><dd>{t.nivel}</dd></div>
+                </dl>
+                <p>{t.d}</p>
+                <a href={t.href} target="_blank" rel="noopener noreferrer">Ver a ficha da trilha</a>
+              </li>
+            ))}
+          </ul>
+
+          <h3 className="pq-pedal__titulo">De bicicleta, saindo do centro</h3>
           <ul className="pq-pedal">
             {ROTAS_BIKE.map((r) => (
               <li key={r.nome} style={{ '--tint': r.cor }}>
                 <span className="pq-pedal__tipo">{r.tipo}</span>
-                <h3>{r.nome}</h3>
+                <h4>{r.nome}</h4>
                 <dl className="pq-pedal__nums">
                   <div><dt>Distância</dt><dd>{r.km}</dd></div>
                   <div><dt>Subida</dt><dd>{r.subida}</dd></div>
                   <div><dt>Nível</dt><dd>{r.nivel}</dd></div>
                 </dl>
                 <p>{r.d}</p>
-                <a href={r.href} target="_blank" rel="noopener noreferrer">Ver o traçado</a>
+                <a href={r.href} target="_blank" rel="noopener noreferrer" title={`No komoot: ${r.orig}`}>
+                  Ver o traçado
+                </a>
               </li>
             ))}
           </ul>
 
           <div className="pq-pedal__fontes">
             <p>
-              Distâncias e desníveis conferidos nos guias do komoot para Itajubá —{' '}
-              <a href={KOMOOT_MTB} target="_blank" rel="noopener noreferrer">mountain bike</a> e{' '}
-              <a href={KOMOOT_ESTRADA} target="_blank" rel="noopener noreferrer">cicloturismo</a>.
-              Para trilhas de caminhada e traçados enviados por quem pedalou, o{' '}
-              <a href={WIKILOC_ITAJUBA} target="_blank" rel="noopener noreferrer">Wikiloc de Itajubá</a>{' '}
-              reúne rotas da comunidade.
+              <strong>Onde achar o traçado.</strong> O Wikiloc reúne trilhas enviadas por quem já
+              percorreu Itajubá, separadas por atividade:{' '}
+              <a href={WIKILOC.caminhada} target="_blank" rel="noopener noreferrer">caminhada</a>,{' '}
+              <a href={WIKILOC.mtb} target="_blank" rel="noopener noreferrer">mountain bike</a>,{' '}
+              <a href={WIKILOC.cicloturismo} target="_blank" rel="noopener noreferrer">cicloturismo</a>,{' '}
+              <a href={WIKILOC.moto} target="_blank" rel="noopener noreferrer">moto de estrada</a> e{' '}
+              <a href={WIKILOC.offroad} target="_blank" rel="noopener noreferrer">off-road</a>.
             </p>
             <p>
-              Vai subir a serra de moto em vez de bike? Veja a{' '}
+              Distâncias e desníveis das rotas de bike vêm dos guias do komoot (
+              <a href={KOMOOT_MTB} target="_blank" rel="noopener noreferrer">mountain bike</a> e{' '}
+              <a href={KOMOOT_ESTRADA} target="_blank" rel="noopener noreferrer">cicloturismo</a>);
+              os das trilhas a pé, das fichas do Wikiloc e do AllTrails. Confira o traçado na fonte
+              antes de sair — trilha de serra muda com a chuva.
+            </p>
+            <p>
+              Vai subir de moto em vez de bike? Veja a{' '}
               <Link href="/estradas/serra-da-mantiqueira">Serra da Mantiqueira</Link> e monte o
               trajeto no <Link href="/rotas">planejador de rotas</Link>.
             </p>
@@ -926,9 +969,12 @@ export default async function ParqueDaCidadePage() {
           <h2 className="pq-display">Prefere cozinha<br />e casa só sua?</h2>
           <span className="pq-rule" aria-hidden="true" />
           <p className="pq-lead">
-            Além dos hotéis, Itajubá tem casa e apartamento inteiros para alugar. Cada botão abre a
-            busca do Airbnb na cidade já filtrada pelo tamanho do seu grupo.
+            Além dos hotéis, Itajubá tem casa e apartamento inteiros para alugar — no centro, perto
+            do parque e na parte alta da serra. As fotos abaixo são do próprio Itajubá; cada card
+            leva para a busca do Airbnb já filtrada.
           </p>
+
+          <HospedagemCarrossel />
 
           <ul className="pq-dormir__cards">
             {HOSPEDAGEM.map((h) => (

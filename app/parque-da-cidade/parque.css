@@ -2104,7 +2104,7 @@
   text-transform:uppercase;
   color:var(--tint,var(--pq-orange));
 }
-.pq-pedal h3{ margin:0; font-size:20px; font-weight:800; line-height:1.16; }
+.pq-pedal h4{ margin:0; font-size:19px; font-weight:800; line-height:1.16; }
 .pq-pedal__nums{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -2142,3 +2142,100 @@
 .pq-pedal__fontes p{ margin:0; font-size:14px !important; line-height:1.6; }
 .pq-pedal__fontes p + p{ margin-top:12px; }
 .pq-pedal__fontes a{ color:var(--pq-orange-dark); font-weight:800; }
+
+/* ---------- carrossel de hospedagens parceiras ---------- */
+.pq-stayreel{ margin-bottom:26px; }
+.pq-stay{
+  flex:0 0 clamp(260px,78vw,340px);
+  scroll-snap-align:start;
+  display:flex;
+  flex-direction:column;
+  border-radius:var(--pq-r);
+  overflow:hidden;
+  background:#fff;
+  box-shadow:var(--pq-shadow);
+}
+.pq-stay figure{ position:relative; margin:0; }
+.pq-stay img{
+  display:block;
+  width:100%;
+  aspect-ratio:4/3;
+  object-fit:cover;
+}
+.pq-stay figcaption{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.92);
+  font-size:10px;
+  font-weight:700;
+  color:var(--pq-ink-2);
+}
+.pq-stay__corpo{ display:grid; gap:8px; padding:20px; }
+.pq-stay__tipo{
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--pq-blue);
+}
+.pq-stay h3{ margin:0; font-size:20px; font-weight:800; line-height:1.16; }
+.pq-stay p{ margin:0; font-size:14px; line-height:1.5; color:var(--pq-ink-2); }
+.pq-stay a{
+  justify-self:start;
+  margin-top:4px;
+  padding:9px 16px;
+  border-radius:999px;
+  background:var(--pq-blue);
+  font-size:13px;
+  font-weight:800;
+  color:#fff;
+  text-decoration:none;
+}
+
+/* ---------- abertura e subtítulos da seção de trilhas ---------- */
+.pq-pedal__abre{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:clamp(20px,3vw,40px);
+  /* A foto é mais alta que o texto: centralizar abria um vão no topo. */
+  align-items:start;
+  margin-top:8px;
+}
+.pq-pedal__foto{
+  position:relative;
+  margin:0;
+  border-radius:var(--pq-r);
+  overflow:hidden;
+  box-shadow:var(--pq-shadow-lg);
+}
+.pq-pedal__foto img{ display:block; width:100%; height:auto; }
+.pq-pedal__foto figcaption{
+  position:absolute;
+  left:14px;
+  bottom:14px;
+  padding:7px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.94);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--pq-ink);
+}
+.pq-pedal__titulo{
+  margin:36px 0 0;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--pq-muted);
+}
+.pq-pedal__titulo + .pq-pedal{ margin-top:14px; }
+.pq-pedal__fontes strong{ color:var(--pq-ink); }
+
+@media (max-width:1024px){
+  .pq-pedal__abre{ grid-template-columns:1fr; }
+}

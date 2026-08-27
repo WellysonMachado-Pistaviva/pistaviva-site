@@ -856,36 +856,127 @@ export const HOSPEDAGEM = [
   },
 ];
 
-// Trilhas e cicloturismo. Distâncias e desníveis vêm dos guias do komoot para
-// Itajubá; o circuito regional, da reportagem do O Tempo sobre os Caminhos da
-// Mantiqueira. Nomes ficam como estão lá, para o ciclista achar a rota na fonte.
-export const WIKILOC_ITAJUBA = 'https://pt.wikiloc.com/trilhas/outdoor/brasil/minas-gerais/itajuba';
+// Carrossel de onde ficar. As fotos são nossas, do próprio Itajubá — cada card
+// mostra a região da cidade e leva para a busca do Airbnb filtrada por ela.
+// Foto de anúncio (Airbnb, Booking ou qualquer plataforma) não entra aqui: a
+// imagem é do anfitrião, republicar sem licença é violação de direito autoral,
+// e o preço muda todo dia. Quem quiser ver as casas, vê na fonte.
+// Para exibir uma hospedagem específica, peça a foto ao dono e credite:
+// { nome, tipo, resumo, foto, alt, credito, href }
+export const HOSPEDAGENS_DESTAQUE = [
+  {
+    nome: 'Perto do parque',
+    tipo: 'A pé até o lago',
+    resumo: 'Ficar no entorno do Parque da Cidade resolve o fim de semana sem carro: pedalinho, praça de alimentação e pista de caminhada na esquina.',
+    foto: '/parque/pedalinho-cisne-amarelo.jpg',
+    alt: 'Pedalinhos no lago do Parque da Cidade de Itajubá, vistos da margem',
+    credito: 'Foto: Parque da Cidade',
+    href: 'https://www.airbnb.com.br/s/Itajuba--MG--Brasil/homes?refinement_paths=%2Fhomes&adults=2&room_types%5B%5D=Entire+home%2Fapt',
+  },
+  {
+    nome: 'No alto da serra',
+    tipo: 'Vista e silêncio',
+    resumo: 'Casas na parte alta e na zona rural, com a Mantiqueira na janela. Boa base para quem veio pedalar ou rodar de moto na região.',
+    foto: '/parque/pedalinho-cisne-serra.jpg',
+    alt: 'Serra verde ao redor do lago do Parque da Cidade de Itajubá',
+    credito: 'Foto: Parque da Cidade',
+    href: 'https://www.airbnb.com.br/s/Itajuba--MG--Brasil/homes?refinement_paths=%2Fhomes&adults=4&room_types%5B%5D=Entire+home%2Fapt',
+  },
+  {
+    nome: 'Centro da cidade',
+    tipo: 'Perto de tudo',
+    resumo: 'Apartamento inteiro no centro deixa restaurante, mercado e o Cine A a poucos minutos — e o parque a uma corrida curta.',
+    foto: '/parque/corrida-lago.jpg',
+    alt: 'Corredores na pista à margem do lago, com os bairros de Itajubá ao fundo',
+    credito: 'Foto: Parque da Cidade',
+    href: 'https://www.airbnb.com.br/s/Itajuba--MG--Brasil/homes?refinement_paths=%2Fhomes&adults=2&price_max=250',
+  },
+  {
+    nome: 'Casa para a turma',
+    tipo: 'Fim de semana de evento',
+    resumo: 'Em fim de semana de festival, Rodeio ou Brilha Itajubá a cidade lota. Casa grande divide a conta e mantém o grupo junto.',
+    foto: '/parque/natal-brilha-itajuba.jpg',
+    alt: 'Queima de fogos do Natal Brilha Itajubá refletindo no lago do parque',
+    credito: 'Foto: Parque da Cidade',
+    href: 'https://www.airbnb.com.br/s/Itajuba--MG--Brasil/homes?refinement_paths=%2Fhomes&adults=8&room_types%5B%5D=Entire+home%2Fapt',
+  },
+];
+
+// Trilhas e cicloturismo. Distâncias e desníveis dos circuitos de bike vêm dos
+// guias do komoot para Itajubá; as trilhas a pé, das fichas do Wikiloc e do
+// AllTrails. Os nomes originais do komoot são em inglês — aqui vão em
+// português, com o original guardado em `orig` para achar a rota na fonte.
+// O circuito regional é dos Caminhos da Mantiqueira (reportagem do O Tempo).
+export const WIKILOC = {
+  caminhada: 'https://pt.wikiloc.com/trilhas/caminhada/brasil/minas-gerais/itajuba',
+  mtb: 'https://pt.wikiloc.com/trilhas/mountain-bike/brasil/minas-gerais/itajuba',
+  cicloturismo: 'https://pt.wikiloc.com/trilhas/cicloturismo/brasil/minas-gerais/itajuba',
+  moto: 'https://pt.wikiloc.com/trilhas/motociclismo/brasil/minas-gerais/itajuba',
+  offroad: 'https://pt.wikiloc.com/trilhas/off-road/brasil/minas-gerais/itajuba',
+};
 export const KOMOOT_MTB = 'https://www.komoot.com/guide/3676925/mtb-routes-in-itajuba';
 export const KOMOOT_ESTRADA = 'https://www.komoot.com/guide/3714919/cycling-in-itajuba';
 
+// Trilhas a pé, com o que dá para conferir em fonte pública.
+export const TRILHAS_PE = [
+  {
+    nome: 'Pedra Aguda',
+    tipo: 'Caminhada',
+    km: '6,8 km',
+    subida: '631 m',
+    nivel: 'Difícil',
+    d: 'A trilha mais procurada da cidade. Sobe pela Gruta do Quilombo, passa pelo Mirante do Portal e termina no cume, a 1.570 m, com a região inteira à vista. De 3h30 a 4h ida e volta.',
+    href: 'https://www.wikiloc.com/hiking-trails/pedra-aguda-itajuba-mg-213929671',
+    cor: 'var(--pq-green)',
+  },
+  {
+    nome: 'Circuito Itajubá – Piranguçu – Antunes de Baixo',
+    tipo: 'Circuito longo',
+    km: 'Circuito',
+    subida: '~1.110 m',
+    nivel: 'Difícil',
+    d: 'O maior ganho de altitude entre as trilhas mapeadas na região, cruzando de Itajubá a Piranguçu. Dia inteiro de caminhada.',
+    href: 'https://www.alltrails.com/brazil/minas-gerais/itajuba',
+    cor: 'var(--pq-blue)',
+  },
+  {
+    nome: 'Trilha da Banana',
+    tipo: 'Caminhada',
+    km: 'Subida contínua',
+    subida: '~760 m',
+    nivel: 'Difícil',
+    d: 'Boa parte do percurso é feita no campo aberto; só no trecho final a mata atlântica remanescente fecha e complica a subida.',
+    href: 'https://www.alltrails.com/brazil/minas-gerais/itajuba',
+    cor: 'var(--pq-purple)',
+  },
+];
+
 export const ROTAS_BIKE = [
   {
-    nome: 'Passaranho Stream loop',
+    nome: 'Volta do Córrego Passaranho',
+    orig: 'Passaranho Stream loop',
     tipo: 'Cicloturismo',
     km: '25,8 km',
     subida: '440 m',
     nivel: 'Moderada',
-    d: 'A volta mais curta da lista — boa para quem quer sentir a serra sem comprometer o dia inteiro.',
+    d: 'A volta mais curta da lista — boa para sentir a serra sem comprometer o dia inteiro.',
     href: 'https://www.komoot.com/guide/3714919/cycling-in-itajuba',
     cor: 'var(--pq-green)',
   },
   {
-    nome: 'Túnel Waterfall loop',
+    nome: 'Volta do Túnel e da Cachoeira',
+    orig: 'Túnel Waterfall loop',
     tipo: 'Cicloturismo',
     km: '45,2 km',
     subida: '420 m',
     nivel: 'Moderada',
-    d: 'Passa pela região do túnel e das quedas dágua, com desnível bem distribuído.',
+    d: 'Passa pela região do túnel e das quedas d\u2019água, com desnível bem distribuído.',
     href: 'https://www.komoot.com/guide/3714919/cycling-in-itajuba',
     cor: 'var(--pq-cyan)',
   },
   {
-    nome: 'Delfim Moreira – Túnel da Mantiqueira',
+    nome: 'Delfim Moreira e Túnel da Mantiqueira',
+    orig: 'Delfim Moreira – Serra da Mantiqueira Tunnel loop',
     tipo: 'Mountain bike',
     km: '63,5 km',
     subida: '720 m',
@@ -895,7 +986,8 @@ export const ROTAS_BIKE = [
     cor: 'var(--pq-blue)',
   },
   {
-    nome: 'Passaranho – Riacho Calanguinho',
+    nome: 'Córrego Passaranho e Riacho Calanguinho',
+    orig: 'Passaranho Stream – Riacho Calanguinho loop',
     tipo: 'Cicloturismo',
     km: '63,6 km',
     subida: '830 m',
@@ -905,17 +997,19 @@ export const ROTAS_BIKE = [
     cor: 'var(--pq-purple)',
   },
   {
-    nome: 'Túnel da Serra da Mantiqueira',
+    nome: 'Volta do Túnel da Serra da Mantiqueira',
+    orig: 'Serra da Mantiqueira Tunnel loop',
     tipo: 'Mountain bike',
     km: '65,1 km',
     subida: '1.180 m',
     nivel: 'Difícil',
-    d: 'O maior ganho de altitude entre as rotas mapeadas a partir da cidade.',
+    d: 'O maior ganho de altitude entre as rotas de bike que saem da cidade.',
     href: 'https://www.komoot.com/guide/3676925/mtb-routes-in-itajuba',
     cor: 'var(--pq-orange)',
   },
   {
-    nome: 'Ponte da Imbel loop',
+    nome: 'Volta da Ponte da Imbel',
+    orig: 'Ponte da Imbel loop',
     tipo: 'Mountain bike',
     km: '69,8 km',
     subida: '960 m',
