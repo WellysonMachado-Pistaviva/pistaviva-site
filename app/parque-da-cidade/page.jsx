@@ -34,7 +34,13 @@ import {
   DUVIDAS,
   ESTRUTURA,
   EVENTOS,
+  AIRBNB_BASE,
   GASTRONOMIA,
+  HOSPEDAGEM,
+  KOMOOT_ESTRADA,
+  KOMOOT_MTB,
+  ROTAS_BIKE,
+  WIKILOC_ITAJUBA,
   HOTEIS_ITAJUBA,
   HORARIOS,
   HISTORIA,
@@ -69,6 +75,9 @@ export const metadata = {
     'pedalinho Itajubá',
     'pontos turísticos de Itajubá',
     'escalada em Itajubá',
+    'trilhas em Itajubá',
+    'cicloturismo Itajubá',
+    'mountain bike Serra da Mantiqueira',
     'parede de escalada Sul de Minas',
     'lago do parque Itajubá',
     'Praia Di Minas Itajubá',
@@ -121,6 +130,8 @@ const CAPITULOS = [
   { href: '#servicos', label: 'Serviços' },
   { href: '#visita', label: 'Planeje a visita' },
   { href: '#hoteis', label: 'Hotéis' },
+  { href: '#dormir', label: 'Casa inteira' },
+  { href: '#pedal', label: 'Trilhas & bike' },
   { href: '#historia', label: 'História' },
   { href: '#duvidas', label: 'Dúvidas' },
 ];
@@ -453,6 +464,53 @@ export default async function ParqueDaCidadePage() {
               />
               <figcaption>O parque em movimento</figcaption>
             </figure>
+          </div>
+        </div>
+      </section>
+
+      {/* ── TRILHAS E CICLOTURISMO ── */}
+      <section className="pq-sec pq-sec--escura" id="pedal">
+        <div className="pq-wrap pq-wrap--larga">
+          <p className="pq-cap"><span>Trilhas &amp; bike</span></p>
+          <h2 className="pq-display">A pista do parque<br />é só o aquecimento.</h2>
+          <span className="pq-rule" aria-hidden="true" />
+          <p className="pq-lead">
+            A volta no lago serve para aquecer; a serra em volta é que faz de Itajubá endereço de
+            cicloturismo. A cidade integra os <b>Caminhos da Mantiqueira</b>, circuito que desde
+            2017 mapeia trilhas em treze municípios da região, com três níveis em cada um. Estas
+            saem do próprio centro:
+          </p>
+
+          <ul className="pq-pedal">
+            {ROTAS_BIKE.map((r) => (
+              <li key={r.nome} style={{ '--tint': r.cor }}>
+                <span className="pq-pedal__tipo">{r.tipo}</span>
+                <h3>{r.nome}</h3>
+                <dl className="pq-pedal__nums">
+                  <div><dt>Distância</dt><dd>{r.km}</dd></div>
+                  <div><dt>Subida</dt><dd>{r.subida}</dd></div>
+                  <div><dt>Nível</dt><dd>{r.nivel}</dd></div>
+                </dl>
+                <p>{r.d}</p>
+                <a href={r.href} target="_blank" rel="noopener noreferrer">Ver o traçado</a>
+              </li>
+            ))}
+          </ul>
+
+          <div className="pq-pedal__fontes">
+            <p>
+              Distâncias e desníveis conferidos nos guias do komoot para Itajubá —{' '}
+              <a href={KOMOOT_MTB} target="_blank" rel="noopener noreferrer">mountain bike</a> e{' '}
+              <a href={KOMOOT_ESTRADA} target="_blank" rel="noopener noreferrer">cicloturismo</a>.
+              Para trilhas de caminhada e traçados enviados por quem pedalou, o{' '}
+              <a href={WIKILOC_ITAJUBA} target="_blank" rel="noopener noreferrer">Wikiloc de Itajubá</a>{' '}
+              reúne rotas da comunidade.
+            </p>
+            <p>
+              Vai subir a serra de moto em vez de bike? Veja a{' '}
+              <Link href="/estradas/serra-da-mantiqueira">Serra da Mantiqueira</Link> e monte o
+              trajeto no <Link href="/rotas">planejador de rotas</Link>.
+            </p>
           </div>
         </div>
       </section>
@@ -860,6 +918,39 @@ export default async function ParqueDaCidadePage() {
           </div>
         </div>
       </section>
+
+      {/* ── CASA INTEIRA (complementa a lista de hotéis em #hoteis) ── */}
+      <section className="pq-sec" id="dormir">
+        <div className="pq-wrap pq-wrap--larga">
+          <p className="pq-cap"><span>Casa inteira</span></p>
+          <h2 className="pq-display">Prefere cozinha<br />e casa só sua?</h2>
+          <span className="pq-rule" aria-hidden="true" />
+          <p className="pq-lead">
+            Além dos hotéis, Itajubá tem casa e apartamento inteiros para alugar. Cada botão abre a
+            busca do Airbnb na cidade já filtrada pelo tamanho do seu grupo.
+          </p>
+
+          <ul className="pq-dormir__cards">
+            {HOSPEDAGEM.map((h) => (
+              <li key={h.t} style={{ '--tint': h.cor }}>
+                <strong>{h.t}</strong>
+                <p>{h.d}</p>
+                <a href={h.href} target="_blank" rel="noopener noreferrer nofollow">{h.acao}</a>
+              </li>
+            ))}
+          </ul>
+
+          <p className="pq-dormir__nota">
+            Preço, disponibilidade e fotos ficam no Airbnb — esta página não republica anúncio de
+            ninguém, nem ganha comissão.{' '}
+            <a href={AIRBNB_BASE} target="_blank" rel="noopener noreferrer nofollow">
+              Ver todas as estadias em Itajubá
+            </a>{' '}
+            ou <a href="#hoteis">voltar aos hotéis com contato direto</a>.
+          </p>
+        </div>
+      </section>
+
 
       {/* ── GALERIA — renderiza só quando houver fotos em /public/parque/ ── */}
       {FOTOS.length > 0 && (

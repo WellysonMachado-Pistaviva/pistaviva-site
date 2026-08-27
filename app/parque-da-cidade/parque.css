@@ -1989,3 +1989,156 @@
   .pq-agenda__card a:hover{ transform:none; }
   .pq-agenda__card a:hover img{ transform:none; }
 }
+
+/* ---------- onde dormir ---------- */
+.pq-dormir{
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:clamp(20px,3vw,40px);
+  margin-top:30px;
+  align-items:start;
+}
+.pq-dormir__titulo{
+  margin:0 0 16px;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--pq-muted);
+}
+.pq-dormir__cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:14px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.pq-dormir__cards li{
+  display:grid;
+  gap:8px;
+  align-content:start;
+  padding:22px 20px;
+  border-radius:var(--pq-r);
+  background:#fff;
+  box-shadow:var(--pq-shadow);
+  border-top:5px solid var(--tint,var(--pq-orange));
+}
+.pq-dormir__cards strong{ font-size:19px; font-weight:800; }
+.pq-dormir__cards p{ margin:0; font-size:14px; line-height:1.5; color:var(--pq-ink-2); }
+.pq-dormir__cards a{
+  justify-self:start;
+  margin-top:4px;
+  padding:9px 16px;
+  border-radius:999px;
+  background:var(--tint,var(--pq-orange));
+  font-size:13px;
+  font-weight:800;
+  color:#fff;
+  text-decoration:none;
+}
+.pq-dormir__cards a:hover{ filter:brightness(.93); }
+.pq-dormir__nota{
+  margin:18px 0 0;
+  font-size:13px !important;
+  color:var(--pq-muted) !important;
+}
+.pq-dormir__nota a{ color:var(--pq-orange-dark); font-weight:800; }
+
+.pq-hoteis{
+  display:grid;
+  gap:1px;
+  margin:0;
+  padding:0;
+  list-style:none;
+  border-radius:var(--pq-r);
+  overflow:hidden;
+  background:var(--pq-line);
+  box-shadow:var(--pq-shadow);
+}
+.pq-hoteis li{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:16px 20px;
+  background:#fff;
+}
+.pq-hoteis span{ font-size:15px; font-weight:700; }
+.pq-hoteis a{
+  font-size:14px;
+  font-weight:800;
+  color:var(--pq-blue);
+  text-decoration:none;
+  white-space:nowrap;
+}
+.pq-hoteis a:hover{ text-decoration:underline; }
+
+@media (max-width:1024px){
+  .pq-dormir{ grid-template-columns:1fr; }
+}
+
+/* ---------- trilhas e cicloturismo ---------- */
+.pq-pedal{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;
+  margin:30px 0 0;
+  padding:0;
+  list-style:none;
+}
+.pq-pedal li{
+  display:grid;
+  gap:10px;
+  align-content:start;
+  padding:24px 22px;
+  border-radius:var(--pq-r);
+  background:#fff;
+  box-shadow:var(--pq-shadow);
+  border-left:6px solid var(--tint,var(--pq-orange));
+}
+.pq-pedal__tipo{
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--tint,var(--pq-orange));
+}
+.pq-pedal h3{ margin:0; font-size:20px; font-weight:800; line-height:1.16; }
+.pq-pedal__nums{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:4px 0;
+  padding:12px 0;
+  border-top:1px solid var(--pq-line);
+  border-bottom:1px solid var(--pq-line);
+}
+.pq-pedal__nums dt{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--pq-muted);
+}
+.pq-pedal__nums dd{ margin:2px 0 0; font-size:15px; font-weight:800; }
+.pq-pedal li p{ margin:0; font-size:14px; line-height:1.5; color:var(--pq-ink-2); }
+.pq-pedal li a{
+  justify-self:start;
+  font-size:13px;
+  font-weight:800;
+  color:var(--pq-ink);
+  text-decoration:none;
+  border-bottom:2px solid var(--tint,var(--pq-orange));
+  padding-bottom:2px;
+}
+.pq-pedal__fontes{
+  margin-top:24px;
+  padding:22px 24px;
+  border-radius:var(--pq-r);
+  background:#fff;
+  box-shadow:var(--pq-shadow);
+}
+.pq-pedal__fontes p{ margin:0; font-size:14px !important; line-height:1.6; }
+.pq-pedal__fontes p + p{ margin-top:12px; }
+.pq-pedal__fontes a{ color:var(--pq-orange-dark); font-weight:800; }

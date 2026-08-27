@@ -815,6 +815,117 @@ export const PERFIS = {
   'Box Gym': 'https://www.instagram.com/boxgym_itajuba/',
 };
 
+// Hospedagem. Não dá para trazer anúncio, preço ou foto do Airbnb para dentro
+// da página — o conteúdo é deles e muda o tempo todo. O que dá é mandar o
+// visitante para a busca certa já filtrada, e ser honesto sobre isso.
+export const AIRBNB_BASE = 'https://www.airbnb.com.br/itajuba-brazil/stays';
+
+const buscaAirbnb = (params = {}) => {
+  const qs = new URLSearchParams({ refinement_paths: '/homes', ...params });
+  return `https://www.airbnb.com.br/s/Itajuba--MG--Brasil/homes?${qs.toString()}`;
+};
+
+export const HOSPEDAGEM = [
+  {
+    t: 'Casal',
+    d: 'Casa ou apartamento inteiro para dois, sem dividir espaço com ninguém.',
+    acao: 'Ver para 2 pessoas',
+    href: buscaAirbnb({ adults: '2', 'room_types[]': 'Entire home/apt' }),
+    cor: 'var(--pq-purple)',
+  },
+  {
+    t: 'Família',
+    d: 'Espaço para quatro, com cozinha — útil quando tem criança junto.',
+    acao: 'Ver para 4 pessoas',
+    href: buscaAirbnb({ adults: '4', 'room_types[]': 'Entire home/apt' }),
+    cor: 'var(--pq-blue)',
+  },
+  {
+    t: 'Turma',
+    d: 'Casa grande para o grupo que sobe a serra junto — comum em fim de semana de evento.',
+    acao: 'Ver para 8 pessoas',
+    href: buscaAirbnb({ adults: '8', 'room_types[]': 'Entire home/apt' }),
+    cor: 'var(--pq-green)',
+  },
+  {
+    t: 'Econômico',
+    d: 'Quarto ou espaço mais simples, para quem vai passar o dia todo no parque mesmo.',
+    acao: 'Ver até R$ 250',
+    href: buscaAirbnb({ adults: '2', price_max: '250' }),
+    cor: 'var(--pq-orange)',
+  },
+];
+
+// Trilhas e cicloturismo. Distâncias e desníveis vêm dos guias do komoot para
+// Itajubá; o circuito regional, da reportagem do O Tempo sobre os Caminhos da
+// Mantiqueira. Nomes ficam como estão lá, para o ciclista achar a rota na fonte.
+export const WIKILOC_ITAJUBA = 'https://pt.wikiloc.com/trilhas/outdoor/brasil/minas-gerais/itajuba';
+export const KOMOOT_MTB = 'https://www.komoot.com/guide/3676925/mtb-routes-in-itajuba';
+export const KOMOOT_ESTRADA = 'https://www.komoot.com/guide/3714919/cycling-in-itajuba';
+
+export const ROTAS_BIKE = [
+  {
+    nome: 'Passaranho Stream loop',
+    tipo: 'Cicloturismo',
+    km: '25,8 km',
+    subida: '440 m',
+    nivel: 'Moderada',
+    d: 'A volta mais curta da lista — boa para quem quer sentir a serra sem comprometer o dia inteiro.',
+    href: 'https://www.komoot.com/guide/3714919/cycling-in-itajuba',
+    cor: 'var(--pq-green)',
+  },
+  {
+    nome: 'Túnel Waterfall loop',
+    tipo: 'Cicloturismo',
+    km: '45,2 km',
+    subida: '420 m',
+    nivel: 'Moderada',
+    d: 'Passa pela região do túnel e das quedas dágua, com desnível bem distribuído.',
+    href: 'https://www.komoot.com/guide/3714919/cycling-in-itajuba',
+    cor: 'var(--pq-cyan)',
+  },
+  {
+    nome: 'Delfim Moreira – Túnel da Mantiqueira',
+    tipo: 'Mountain bike',
+    km: '63,5 km',
+    subida: '720 m',
+    nivel: 'Moderada',
+    d: 'Sobe na direção de Delfim Moreira e volta pelo túnel — clássico da região.',
+    href: 'https://www.komoot.com/guide/3676925/mtb-routes-in-itajuba',
+    cor: 'var(--pq-blue)',
+  },
+  {
+    nome: 'Passaranho – Riacho Calanguinho',
+    tipo: 'Cicloturismo',
+    km: '63,6 km',
+    subida: '830 m',
+    nivel: 'Difícil',
+    d: 'Mesma partida do circuito curto, com o dobro de subida e dois vales no caminho.',
+    href: 'https://www.komoot.com/guide/3714919/cycling-in-itajuba',
+    cor: 'var(--pq-purple)',
+  },
+  {
+    nome: 'Túnel da Serra da Mantiqueira',
+    tipo: 'Mountain bike',
+    km: '65,1 km',
+    subida: '1.180 m',
+    nivel: 'Difícil',
+    d: 'O maior ganho de altitude entre as rotas mapeadas a partir da cidade.',
+    href: 'https://www.komoot.com/guide/3676925/mtb-routes-in-itajuba',
+    cor: 'var(--pq-orange)',
+  },
+  {
+    nome: 'Ponte da Imbel loop',
+    tipo: 'Mountain bike',
+    km: '69,8 km',
+    subida: '960 m',
+    nivel: 'Difícil',
+    d: 'A mais longa que sai do centro de Itajubá, com trechos de mata fechada.',
+    href: 'https://www.komoot.com/guide/3676925/mtb-routes-in-itajuba',
+    cor: 'var(--pq-yellow)',
+  },
+];
+
 // Instagram oficial do parque.
 export const INSTAGRAM_PERFIL = 'https://www.instagram.com/parqueitajubaoficial/';
 
