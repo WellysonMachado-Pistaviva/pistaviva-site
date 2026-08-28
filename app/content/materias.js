@@ -46,7 +46,7 @@ Cobertura publicada pelo [Conexão Itajubá](https://www.conexaoitajuba.com.br/n
 
 ## Próxima edição já começa na estrada
 
-Terceira edição está prevista para **abril de 2027**, novamente no Parque da Cidade. Até lá, página oficial reúne fotos, números, rotas de chegada e lugares para visitar perto do evento.
+Terceira edição já tem data: **10 e 11 de abril de 2027**, novamente no Parque da Cidade. Até lá, página oficial reúne fotos, números, rotas de chegada e lugares para visitar perto do evento.
 
 Conheça [página completa do Motosul Festival](/motosul), trace sua [rota para Itajubá](/rotas) e acompanhe **@motosulfestival** para receber data, programação e inscrições.
 
@@ -62,7 +62,7 @@ Segundo a organização, é o primeiro festival de Minas Gerais criado com motot
 No Parque da Cidade, em Itajubá, no Sul de Minas e coração da Serra da Mantiqueira.
 
 ### Quando será próxima edição?
-Terceira edição está prevista para abril de 2027. Data completa e programação serão publicadas nos canais oficiais do Motosul.`,
+Terceira edição já tem data: 10 e 11 de abril de 2027. Programação completa será publicada nos canais oficiais do Motosul.`,
     cover_url: '/motosul/hero-motos.jpg',
     tags: ['Motosul', 'Mototurismo', 'Gastronomia', 'Itajubá'],
     author: 'Wellyson Machado',

@@ -321,7 +321,11 @@ const PARQUE = [
   },
   {
     t: 'Lazer & entretenimento',
-    itens: ['Kartódromo · track day', 'Arena Park Futebol Society', 'Real Tennis Club', 'Praia Di Minas', 'Bowl Fun & Food', 'Deck Only Brasil', 'Área kids', 'Expo Center Parque Itajubá'],
+    itens: ['Kartódromo · sáb e dom, 9h às 20h', 'Arena Park Futebol Society', 'Real Tennis Club', 'Praia Di Minas', 'Bowl Fun & Food', 'Deck Only Brasil', 'Área kids', 'Expo Center Parque Itajubá'],
+  },
+  {
+    t: 'Cultura & lazer aberto',
+    itens: ['Cine A · 4 salas Dolby Atmos', 'Teatro Municipal · 706 lugares', 'Escadaria do Mosaico', 'Pedalinho grátis · sáb e dom', 'Pista de 1 km no lago', 'Fonte interativa', 'Parede de escalada', 'Quadras e pista de skate'],
   },
   {
     t: 'Comércio & serviços',
@@ -329,7 +333,46 @@ const PARQUE = [
   },
 ];
 
-const PARQUE_BASE = ['Ampla área verde', 'Lago central', 'Estacionamento organizado', 'Banheiros estruturados', 'Segurança 24h'];
+// Serviços confirmados no levantamento do parque — nada aqui é suposição.
+const PARQUE_SERVICOS = [
+  { t: 'Estacionamento gratuito', d: 'Pátio amplo na portaria, com espaço organizado para moto.' },
+  { t: 'Segurança 24h', d: 'Vigilância permanente em toda a área do parque.' },
+  { t: 'Banheiros até 23h', d: 'Estruturados, nos setores de maior circulação.' },
+  { t: 'Wi-Fi e tomadas', d: 'Wi-Fi público gratuito e tomadas distribuídas pelo parque.' },
+  { t: 'Bebedouros e chuveiro', d: 'Pontos de água potável e chuveiros externos na área do parque.' },
+  { t: 'Área verde e lago', d: 'Sombra, grama e 1 km de anel em volta da água.' },
+  { t: 'Área kids', d: 'Playground à vista das mesas da praça de alimentação.' },
+  { t: 'Aluguel de patinete', d: 'Para dar a volta no lago sem tirar a moto do pátio.' },
+];
+
+// Só entram respostas que a página sustenta: data, chegada, estrutura e entorno.
+// Nada sobre ingresso ou preço enquanto a organização não divulgar.
+const DUVIDAS = [
+  {
+    p: 'Quando é o Motosul Festival 2027?',
+    r: 'Nos dias 10 e 11 de abril de 2027, sábado e domingo, no Parque da Cidade de Itajubá, em Minas Gerais. A programação completa será publicada nos canais oficiais do festival.',
+  },
+  {
+    p: 'Onde estaciono a moto?',
+    r: 'No pátio da portaria do parque, gratuito e com espaço organizado para moto. Em dia de evento o estacionamento vira exposição, com big trail, custom e clássicas lado a lado.',
+  },
+  {
+    p: 'Como chego a Itajubá?',
+    r: 'Itajubá fica na Serra da Mantiqueira, a poucas horas de São Paulo, Belo Horizonte e Rio de Janeiro. Nesta página há rotas de chegada por região, com o trajeto pronto para abrir no celular.',
+  },
+  {
+    p: 'Dá para levar criança?',
+    r: 'Dá. O parque tem área kids com playground à vista das mesas da praça, pedalinho gratuito aos sábados e domingos, fonte interativa, boliche coberto e o Cine A dentro do mesmo complexo.',
+  },
+  {
+    p: 'Onde dormir durante o festival?',
+    r: 'Esta página reúne os hotéis usados na 2ª edição, com telefone para reserva direta. Em 2026 a rede hoteleira de Itajubá ficou com lotação máxima no fim de semana do evento — reservar cedo é o caminho.',
+  },
+  {
+    p: 'O que fazer em Itajubá além do festival?',
+    r: 'Rodar a Mantiqueira por Maria da Fé e Cristina, conhecer a Cachoeira da Estância e o Santuário Nossa Senhora da Agonia. No próprio complexo do parque ainda ficam o Teatro Municipal, a Escadaria do Mosaico e o kartódromo.',
+  },
+];
 
 const PROGRAMACAO = [
   {
@@ -430,13 +473,13 @@ const ANCORAS = [
   { href: '#publico', label: 'Última edição' },
   { href: '#materia', label: 'Matéria' },
   { href: '#patrocinio', label: 'Para marcas' },
-  { href: '#proxima', label: 'Abril 2027' },
+  { href: '#proxima', label: '10 e 11 abr' },
 ];
 
 export const metadata = {
   title: { absolute: 'Motosul Festival 2027 em Itajubá | Evento de Moto' },
   description:
-    'Motosul Festival 2027 em Itajubá (MG): evento de moto, gastronomia, rock e roteiros por Itajubá, Maria da Fé e Cristina.',
+    'Motosul Festival 2027 em Itajubá (MG), 10 e 11 de abril: evento de moto, gastronomia, rock e roteiros por Itajubá, Maria da Fé e Cristina.',
   keywords: [
     'Motosul Festival',
     'Motosul Itajubá',
@@ -458,7 +501,7 @@ export const metadata = {
     googleBot: { index: true, follow: true, maxImagePreview: 'large', maxSnippet: -1, maxVideoPreview: -1 },
   },
   openGraph: {
-    title: 'Motosul Festival 2027 · Evento de Moto em Itajubá',
+    title: 'Motosul Festival 2027 · 10 e 11 de abril em Itajubá',
     description: 'Mototurismo, gastronomia mineira e rock no Parque da Cidade de Itajubá, no coração da Serra da Mantiqueira.',
     url: `${BASE}/motosul`,
     type: 'website',
@@ -473,7 +516,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Motosul Festival 2027 · Itajubá · MG',
+    title: 'Motosul Festival 2027 · 10 e 11 de abril · Itajubá · MG',
     description: 'Evento de moto, mototurismo, gastronomia mineira e rock no Parque da Cidade de Itajubá.',
     images: [`${BASE}/motosul/hero-publico.jpg`],
   },
@@ -490,7 +533,7 @@ export default function MotosulPage() {
         name: 'Motosul Festival 2027 em Itajubá',
         description: 'Página oficial do Motosul Festival: evento de moto, mototurismo, gastronomia e rock no Parque da Cidade de Itajubá.',
         inLanguage: 'pt-BR',
-        dateModified: '2026-08-21',
+        dateModified: '2026-08-28',
         mainEntity: { '@id': `${BASE}/motosul#festival` },
         primaryImageOfPage: { '@type': 'ImageObject', url: `${BASE}/motosul/hero-publico.jpg`, width: 2000, height: 1333 },
         isPartOf: { '@id': `${BASE}/#site` },
@@ -507,10 +550,24 @@ export default function MotosulPage() {
           `${BASE}/motosul/parque-evento.jpg`,
         ],
         url: `${BASE}/motosul`,
+        startDate: '2027-04-10',
+        endDate: '2027-04-11',
+        eventStatus: 'https://schema.org/EventScheduled',
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
         location: { '@id': `${BASE}/motosul#parque-da-cidade` },
         organizer: { '@id': `${BASE}/#org` },
         audience: { '@type': 'Audience', audienceType: 'Motociclistas, mototuristas, famílias e visitantes da Serra da Mantiqueira' },
         inLanguage: 'pt-BR',
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `${BASE}/motosul#duvidas`,
+        isPartOf: { '@id': `${BASE}/motosul#pagina` },
+        mainEntity: DUVIDAS.map((d) => ({
+          '@type': 'Question',
+          name: d.p,
+          acceptedAnswer: { '@type': 'Answer', text: d.r },
+        })),
       },
       {
         '@type': 'Place',
@@ -590,10 +647,10 @@ export default function MotosulPage() {
               </div>
             </div>
 
-            <aside className="ms-hero__ticket" aria-label="Próxima edição em abril de 2027">
+            <aside className="ms-hero__ticket" aria-label="Próxima edição em 10 e 11 de abril de 2027">
               <span>3ª edição</span>
-              <strong>ABR<br />2027</strong>
-              <small>Data completa em breve<br />Itajubá · MG</small>
+              <strong>10·11<br />ABR 2027</strong>
+              <small>Sábado e domingo<br />Itajubá · MG</small>
             </aside>
           </div>
 
@@ -757,9 +814,14 @@ export default function MotosulPage() {
             <Link href="/parque-da-cidade">Conheça o Parque da Cidade de Itajubá →</Link>
           </p>
 
-          <ul className="ms-parque__base">
-            {PARQUE_BASE.map((b) => <li key={b}>{b}</li>)}
-          </ul>
+          <dl className="ms-serv">
+            {PARQUE_SERVICOS.map((s) => (
+              <div key={s.t}>
+                <dt>{s.t}</dt>
+                <dd>{s.d}</dd>
+              </div>
+            ))}
+          </dl>
 
         </div>
       </section>
@@ -861,7 +923,7 @@ export default function MotosulPage() {
             <h2 className="ms-display ms-display--sm" id="ms-plan-title">Escolha o caminho. A serra faz parte da viagem.</h2>
             <p>Veja rota que passa pela sua região, abra trajeto no celular e deixe hotel encaminhado antes de sair.</p>
             <dl className="ms-plan__meta">
-              <div><dt>Quando</dt><dd>Abril de 2027</dd></div>
+              <div><dt>Quando</dt><dd>10 e 11 de abril de 2027</dd></div>
               <div><dt>Destino</dt><dd>Parque da Cidade · Itajubá</dd></div>
               <div><dt>Formato</dt><dd>Dois dias no parque</dd></div>
             </dl>
@@ -876,7 +938,7 @@ export default function MotosulPage() {
           <a href={MAPS} target="_blank" rel="noopener noreferrer"><span>01</span><strong>Traçar rota</strong><small>Parque da Cidade no Maps</small></a>
           <a href="#hoteis"><span>02</span><strong>Onde dormir</strong><small>Hotéis usados na 2ª edição</small></a>
           <a href="#roteiros"><span>03</span><strong>Rode a região</strong><small>Passeios saindo do parque</small></a>
-          <a href={IG_EVENTO} target="_blank" rel="noopener noreferrer"><span>04</span><strong>Receber novidades</strong><small>Data oficial e programação</small></a>
+          <a href={IG_EVENTO} target="_blank" rel="noopener noreferrer"><span>04</span><strong>Receber novidades</strong><small>Programação da 3ª edição</small></a>
         </nav>
       </section>
 
@@ -1357,6 +1419,23 @@ export default function MotosulPage() {
       </section>
 
       {/* ── 3ª EDIÇÃO ── */}
+      {/* ── DÚVIDAS ── */}
+      <section className="ms-sec ms-sec--light" id="duvidas" aria-labelledby="ms-faq-title">
+        <div className="ms-wrap--wide">
+          <p className="ms-eyebrow">Antes de subir a serra</p>
+          <h2 className="ms-display ms-display--sm" id="ms-faq-title">Dúvidas de quem vai.</h2>
+          <span className="ms-rule" aria-hidden="true" />
+          <div className="ms-faq">
+            {DUVIDAS.map((d) => (
+              <article className="ms-faq__item" key={d.p}>
+                <h3>{d.p}</h3>
+                <p>{d.r}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="ms-cta" id="proxima">
         <img className="ms-cta__bg" src="/motosul/g-publico-palco.jpg" alt="" aria-hidden="true" loading="lazy" />
         <div className="ms-cta__veil" aria-hidden="true" />
@@ -1365,9 +1444,9 @@ export default function MotosulPage() {
             <img src="/motosul/logo.png" alt="" aria-hidden="true" width="1316" height="775" />
             <span className="ms-shield__cap">3ª edição</span>
           </Shield>
-          <p className="ms-display ms-cta__date">Abril de 2027</p>
+          <p className="ms-display ms-cta__date">10 e 11 de abril de 2027</p>
           <p className="ms-mono">Parque da Cidade · Itajubá · MG</p>
-          <p className="ms-cta__lead">Data completa e programação serão publicadas nos canais oficiais.</p>
+          <p className="ms-cta__lead">Data confirmada. Programação completa será publicada nos canais oficiais.</p>
           <div className="ms-actions">
             <a className="ms-btn" href={IG_EVENTO} target="_blank" rel="noopener noreferrer">Acompanhar 3ª edição</a>
             <a className="ms-btn ms-btn--ghost" href="#planeje">Planejar minha viagem</a>
@@ -1376,7 +1455,7 @@ export default function MotosulPage() {
       </section>
 
       <aside className="ms-mobile-cta" aria-label="Acompanhar próxima edição do Motosul">
-        <span><b>Abril 2027</b><small>Itajubá · MG</small></span>
+        <span><b>10 e 11 abr 2027</b><small>Itajubá · MG</small></span>
         <a href={IG_EVENTO} target="_blank" rel="noopener noreferrer">Acompanhar 3ª edição ↗</a>
       </aside>
 
@@ -1391,7 +1470,7 @@ export default function MotosulPage() {
             <div className="ms-kicker">Evento</div>
             <p>Parque da Cidade</p>
             <p>Itajubá · Minas Gerais</p>
-            <p>3ª edição · abril de 2027</p>
+            <p>3ª edição · 10 e 11 de abril de 2027</p>
           </div>
           <div>
             <div className="ms-kicker">Contato</div>

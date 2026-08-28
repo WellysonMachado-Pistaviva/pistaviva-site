@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from 'react';
 
-// Contador no modelo Tomorrowland. A data exata da próxima edição do Motosul
-// ainda não foi divulgada — contamos para o início de abril de 2027 e dizemos
-// isso na tela, em vez de fingir precisão que não temos.
-const ALVO = Date.UTC(2027, 3, 1, 15, 0, 0); // 1º de abril de 2027, 12h (UTC-3)
+// Contador no modelo Tomorrowland. A 3ª edição do Motosul já tem data:
+// 10 e 11 de abril de 2027. Contamos para a abertura dos portões no sábado.
+const ALVO = Date.UTC(2027, 3, 10, 15, 0, 0); // 10 de abril de 2027, 12h (UTC-3)
 
 const partes = (ms) => {
   const s = Math.max(0, Math.floor(ms / 1000));
@@ -40,7 +39,7 @@ export default function Contagem() {
         ))}
       </ol>
       <p className="pq-contagem__nota">
-        Motosul Festival · abril de 2027 — contagem aproximada, a data exata ainda será divulgada.
+        Motosul Festival · 10 e 11 de abril de 2027 — programação completa ainda será divulgada.
       </p>
     </div>
   );

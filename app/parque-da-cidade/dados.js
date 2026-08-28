@@ -393,7 +393,7 @@ export const SERVICOS = [
   { icone: 'utensils', t: 'Gastronomia', d: 'Vinte operações de comida e bebida listadas neste guia.' },
   { icone: 'droplet', t: 'Bebedouros e chuveiro', d: 'Pontos de água potável e chuveiros externos na área do parque.' },
   { icone: 'plug', t: 'Tomadas e Wi-Fi', d: 'Tomadas distribuídas pelo parque e Wi-Fi público gratuito.' },
-  { icone: 'bike', t: 'Aluguel de bike e patinete', d: 'Bicicleta, patinete e patins para dar a volta no lago.' },
+  { icone: 'bike', t: 'Aluguel de patinete', d: 'Patinete para dar a volta no lago.' },
 ];
 
 // Eventos por categoria (modelo Capivari: "Nossos eventos" com categorias).
@@ -434,7 +434,7 @@ export const EVENTOS = [
     cat: 'Festival',
     t: 'Motosul Festival',
     d: 'Dois dias de mototurismo, rock e comida mineira. A última edição levou 4.000 motos ao pátio.',
-    quando: 'Abril de 2027 · 3ª edição',
+    quando: '10 e 11 de abril de 2027 · 3ª edição',
     href: '/motosul',
     interno: true,
   },
@@ -1140,7 +1140,7 @@ export const AGENDA = [
   },
   {
     t: 'Motosul Festival',
-    quando: 'Abril de 2027 · 3ª edição',
+    quando: '10 e 11 de abril de 2027 · 3ª edição',
     tipo: 'Duas rodas',
     reel: null,
     href: '/motosul',
