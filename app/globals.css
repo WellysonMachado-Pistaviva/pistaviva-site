@@ -4051,6 +4051,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 .ms-aerial__shot::after{ content:""; position:absolute; inset:auto 0 0; height:34%; z-index:1; background:linear-gradient(transparent,rgba(10,10,12,.82)); pointer-events:none; }
 .ms-aerial__shot:hover img{ transform:scale(1.018); }
 .ms-aerial__shot figcaption{ position:absolute; left:18px; bottom:16px; z-index:2; margin:0; font-family:var(--mono); font-weight:700; font-size:.64rem; line-height:1.4; letter-spacing:.13em; text-transform:uppercase; color:#f4f1eb; }
+.ms-aerial__shot--pair{ grid-column:span 6; aspect-ratio:3/2; }
 .ms-aerial__note{ grid-column:span 4; align-self:end; padding:clamp(24px,4vw,48px) clamp(8px,2vw,24px) 8px clamp(18px,3vw,42px); border-left:2px solid var(--accent); }
 .ms-aerial__note span{ display:block; font-family:var(--mono); font-weight:700; font-size:.64rem; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); }
 .ms-aerial__note p{ max-width:17ch; margin:18px 0 0; font-family:var(--display); font-weight:800; font-size:clamp(24px,3vw,42px); line-height:.96; text-transform:uppercase; text-wrap:balance; }

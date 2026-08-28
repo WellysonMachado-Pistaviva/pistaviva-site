@@ -780,6 +780,30 @@ export default function MotosulPage() {
               <span>Um fim de semana inteiro</span>
               <p>De manhã, rota. À tarde, feira e gastronomia. À noite, palco. Tudo dentro do parque.</p>
             </aside>
+
+            <figure className="ms-aerial__shot ms-aerial__shot--pair">
+              <img
+                src="/motosul/g-patio-lotado.jpg"
+                alt="Pátio do Parque da Cidade lotado de motos durante o Motosul Festival, com a serra ao fundo"
+                loading="lazy"
+                decoding="async"
+                width="2000"
+                height="1333"
+              />
+              <figcaption>03 · O pátio em dia de encontro</figcaption>
+            </figure>
+
+            <figure className="ms-aerial__shot ms-aerial__shot--pair">
+              <img
+                src="/motosul/g-corredor-tendas.jpg"
+                alt="Corredor de motos estacionadas entre as tendas do Motosul Festival, no Parque da Cidade"
+                loading="lazy"
+                decoding="async"
+                width="2000"
+                height="1333"
+              />
+              <figcaption>04 · Entre as tendas e o palco</figcaption>
+            </figure>
           </div>
 
           <div className="ms-parque">
