@@ -345,6 +345,44 @@ const PARQUE_SERVICOS = [
   { t: 'Aluguel de patinete', d: 'Para dar a volta no lago sem tirar a moto do pátio.' },
 ];
 
+// O que já foi anunciado da 3ª edição e o que ainda falta. Cada item vira um
+// card: o que está `aberto` é fato divulgado; o resto é travado, sem promessa
+// de conteúdo. Ao anunciar algo, troque estado para 'aberto' e escreva o fato.
+const REVELACOES = [
+  {
+    t: 'Data e local',
+    d: '10 e 11 de abril de 2027, sábado e domingo, no Parque da Cidade de Itajubá.',
+    estado: 'aberto',
+  },
+  {
+    t: 'Line-up de bandas',
+    d: 'Os shows dos dois dias no palco montado de frente para o lago. Na 2ª edição passaram Instituto Gonfer, Garibaldos e Mary Jane.',
+    estado: 'travado',
+  },
+  {
+    t: 'Experiências',
+    d: 'O que rola entre um show e outro, dentro e fora do pátio.',
+    estado: 'travado',
+  },
+  {
+    t: 'Expositores e marcas',
+    d: 'Quem monta estande no pátio do parque durante o festival.',
+    estado: 'travado',
+  },
+  {
+    t: 'Espaço Mantiqueira',
+    d: 'Os produtores da serra que levam queijo, café, azeite, doce e cerveja para o festival.',
+    estado: 'travado',
+  },
+  {
+    t: 'Programação hora a hora',
+    d: 'Abertura dos portões, horário de cada palco e encerramento nos dois dias.',
+    estado: 'travado',
+  },
+];
+
+const REVELADOS = REVELACOES.filter((r) => r.estado === 'aberto').length;
+
 // Só entram respostas que a página sustenta: data, chegada, estrutura e entorno.
 // Nada sobre ingresso ou preço enquanto a organização não divulgar.
 const DUVIDAS = [
@@ -473,6 +511,7 @@ const ANCORAS = [
   { href: '#publico', label: 'Última edição' },
   { href: '#materia', label: 'Matéria' },
   { href: '#patrocinio', label: 'Para marcas' },
+  { href: '#lineup', label: 'O que vem' },
   { href: '#proxima', label: '10 e 11 abr' },
 ];
 
@@ -1443,6 +1482,37 @@ export default function MotosulPage() {
       </section>
 
       {/* ── 3ª EDIÇÃO ── */}
+      {/* ── O QUE VEM POR AÍ ── */}
+      <section className="ms-sec" id="lineup" aria-labelledby="ms-drop-title">
+        <div className="ms-wrap--wide">
+          <p className="ms-eyebrow">3ª edição · em construção</p>
+          <h2 className="ms-display" id="ms-drop-title">O que já saiu<br />e o que ainda vem.</h2>
+          <span className="ms-rule" aria-hidden="true" />
+          <p className="ms-lead">A data está de pé. Bandas, experiências e expositores são anunciados aos poucos nos canais oficiais — cada anúncio abre um card aqui.</p>
+
+          <div className="ms-drop__meter">
+            <span className="ms-mono">{REVELADOS} de {REVELACOES.length} anunciados</span>
+            <span className="ms-drop__bar" aria-hidden="true">
+              <i style={{ width: `${Math.round((REVELADOS / REVELACOES.length) * 100)}%` }} />
+            </span>
+          </div>
+
+          <ul className="ms-drop">
+            {REVELACOES.map((r) => (
+              <li className={`ms-drop__card${r.estado === 'aberto' ? ' is-aberto' : ''}`} key={r.t}>
+                <span className="ms-drop__tag">{r.estado === 'aberto' ? 'Anunciado' : 'A anunciar'}</span>
+                <h3>{r.t}</h3>
+                <p>{r.d}</p>
+              </li>
+            ))}
+          </ul>
+
+          <div className="ms-actions ms-actions--left">
+            <a className="ms-btn" href={IG_EVENTO} target="_blank" rel="noopener noreferrer">Seguir os anúncios</a>
+          </div>
+        </div>
+      </section>
+
       {/* ── DÚVIDAS ── */}
       <section className="ms-sec ms-sec--light" id="duvidas" aria-labelledby="ms-faq-title">
         <div className="ms-wrap--wide">
