@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import ExperienciasCarousel from './ExperienciasCarousel';
 import PlacesCarousel from './PlacesCarousel';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
@@ -322,10 +323,6 @@ const PARQUE = [
   {
     t: 'Lazer & entretenimento',
     itens: ['Kartódromo · sáb e dom, 9h às 20h', 'Arena Park Futebol Society', 'Real Tennis Club', 'Praia Di Minas', 'Bowl Fun & Food', 'Deck Only Brasil', 'Área kids', 'Expo Center Parque Itajubá'],
-  },
-  {
-    t: 'Cultura & lazer aberto',
-    itens: ['Cine A · 4 salas Dolby Atmos', 'Teatro Municipal · 706 lugares', 'Escadaria do Mosaico', 'Pedalinho grátis · sáb e dom', 'Pista de 1 km no lago', 'Fonte interativa', 'Parede de escalada', 'Quadras e pista de skate'],
   },
   {
     t: 'Comércio & serviços',
@@ -820,6 +817,8 @@ export default function MotosulPage() {
               <figcaption>04 · Entre as tendas e o palco</figcaption>
             </figure>
           </div>
+
+          <ExperienciasCarousel />
 
           <div className="ms-parque">
             <div className="ms-reel">

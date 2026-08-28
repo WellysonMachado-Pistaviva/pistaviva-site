@@ -4042,6 +4042,28 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 .ms-aerial__note span{ display:block; font-family:var(--mono); font-weight:700; font-size:.64rem; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); }
 .ms-aerial__note p{ max-width:17ch; margin:18px 0 0; font-family:var(--display); font-weight:800; font-size:clamp(24px,3vw,42px); line-height:.96; text-transform:uppercase; text-wrap:balance; }
 
+/* Experiências do parque — carrossel */
+.ms-xp{ margin:clamp(30px,4vw,54px) 0 clamp(34px,4.5vw,60px); }
+.ms-xp__head{ display:flex; align-items:flex-end; justify-content:space-between; gap:30px; padding:20px 0; border-block:1px solid var(--ms-line); }
+.ms-xp__head > div:first-child > span{ display:block; margin-bottom:8px; font-family:var(--mono); font-weight:800; font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); }
+.ms-xp__head h3{ max-width:20ch; margin:0; font-family:var(--display); font-weight:800; font-size:clamp(24px,2.6vw,38px); line-height:.95; text-transform:uppercase; text-wrap:balance; }
+.ms-xp__controls{ display:grid; grid-template-columns:44px auto 44px; align-items:center; gap:10px; flex:none; }
+.ms-xp__controls button{ width:44px; height:44px; display:grid; place-items:center; padding:0; border:1px solid var(--ms-line); border-radius:3px; background:transparent; color:var(--ms-fg); font-size:1.3rem; cursor:pointer; transition:transform .2s cubic-bezier(.2,.7,.2,1), background-color .2s, color .2s; }
+.ms-xp__controls button:hover:not(:disabled){ transform:translateY(-2px); background:var(--accent); border-color:var(--accent); color:#fff; }
+.ms-xp__controls button:disabled{ opacity:.3; cursor:not-allowed; }
+.ms-xp__controls output{ min-width:56px; font-family:var(--mono); font-weight:800; font-size:.64rem; letter-spacing:.12em; text-align:center; color:var(--ms-mut); }
+.ms-xp__viewport{ margin-top:clamp(20px,3vw,32px); overflow:hidden; overscroll-behavior-inline:contain; touch-action:pan-y pinch-zoom; }
+.ms-xp__viewport:focus-visible{ outline:2px solid var(--accent); outline-offset:5px; }
+.ms-xp__track{ display:flex; gap:clamp(14px,1.6vw,20px); }
+.ms-xp__card{ position:relative; min-width:0; flex:0 0 min(78vw,320px); background:var(--ms-card); border:1px solid var(--ms-line); padding:24px 22px 28px; }
+.ms-xp__card::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--accent); transform:scaleX(0); transform-origin:left; transition:transform .3s cubic-bezier(.2,.7,.2,1); }
+.ms-xp__card:hover::after{ transform:scaleX(1); }
+.ms-xp__n{ font-family:var(--mono); font-weight:800; font-size:.62rem; letter-spacing:.16em; color:var(--ms-mut); }
+.ms-xp__tag{ display:block; margin-top:16px; font-family:var(--mono); font-weight:800; font-size:.6rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); }
+.ms-xp__card h4{ margin:10px 0 0; font-family:var(--display); font-weight:800; font-size:1.45rem; line-height:1; text-transform:uppercase; text-wrap:balance; }
+.ms-xp__card p{ margin:14px 0 0; font-size:.9rem; line-height:1.55; color:var(--ms-dim); text-wrap:pretty; }
+@media(max-width:640px){ .ms-xp__head{ flex-wrap:wrap; } }
+
 /* Estrutura do parque + reel vertical */
 .ms-parque{ display:grid; grid-template-columns:minmax(230px,300px) 1fr; gap:clamp(24px,4vw,56px); align-items:start; }
 .ms-reel{ position:relative; border:1px solid var(--ms-line); overflow:hidden; background:var(--ink); }
