@@ -412,27 +412,6 @@ const DUVIDAS = [
   },
 ];
 
-const PROGRAMACAO = [
-  {
-    nome: 'Sábado',
-    data: '11 de abril',
-    itens: [
-      { hora: '12h', nome: 'Abertura dos portões', tipo: 'Portões' },
-      { hora: '16h', nome: 'Instituto Gonfer', tipo: 'Show' },
-      { hora: '19h', nome: 'Garibaldos', tipo: 'Show' },
-      { hora: '21h', nome: 'Mary Jane', tipo: 'Encerramento' },
-    ],
-  },
-  {
-    nome: 'Domingo',
-    data: '12 de abril',
-    itens: [
-      { hora: '10h', nome: 'Abertura dos portões', tipo: 'Portões' },
-      { hora: '11h', nome: 'Hygnus', tipo: 'Show' },
-      { hora: '13h', nome: 'Luiserra Rock Band', tipo: 'Show' },
-    ],
-  },
-];
 
 const EXPERIENCIAS = [
   { t: 'Comida mineira', d: 'Queijo, pastel de milho, costela, doce de leite e cachaça. Dá para provar Minas sem sair do parque.', src: '/motosul/gastronomia.jpg', alt: 'Prato servido na área gastronômica do Motosul', width: 1050, height: 1400 },
@@ -511,7 +490,6 @@ const ANCORAS = [
   { href: '#publico', label: 'Última edição' },
   { href: '#materia', label: 'Matéria' },
   { href: '#patrocinio', label: 'Para marcas' },
-  { href: '#lineup', label: 'O que vem' },
   { href: '#proxima', label: '10 e 11 abr' },
 ];
 
@@ -746,36 +724,34 @@ export default function MotosulPage() {
         </div>
       </section>
 
-      {/* ── O FESTIVAL ── */}
-      <section className="ms-sec" id="festival">
-        <div className="ms-wrap">
-          <p className="ms-eyebrow">Como foi em 2026</p>
-          <h2 className="ms-display">Palco aberto.<br />Parque cheio.</h2>
+      {/* ── PROGRAMAÇÃO DA 3ª EDIÇÃO ── */}
+      <section className="ms-sec" id="festival" aria-labelledby="ms-drop-title">
+        <div className="ms-wrap--wide">
+          <p className="ms-eyebrow">3ª edição · em construção</p>
+          <h2 className="ms-display" id="ms-drop-title">O que já saiu<br />e o que ainda vem.</h2>
           <span className="ms-rule" aria-hidden="true" />
-          <p className="ms-lead">Esta grade mostra 2ª edição. Programação de 2027 será publicada quando estiver fechada.</p>
+          <p className="ms-lead">A data está de pé. Bandas, experiências e expositores saem aos poucos nos canais oficiais — cada anúncio abre um card aqui.</p>
 
-          <h3 className="ms-sub">Line-up da 2ª edição</h3>
-          <div className="ms-grade">
-            {PROGRAMACAO.map((dia) => (
-              <article className="ms-dia" key={dia.nome}>
-                <header className="ms-dia__head">
-                  <h4>{dia.nome}</h4>
-                  <span className="ms-tag">{dia.data}</span>
-                </header>
-                <ol className="ms-timing">
-                  {dia.itens.map((ev) => (
-                    <li key={ev.hora + ev.nome}>
-                      <span className="ms-timing__h">{ev.hora}</span>
-                      <span className="ms-timing__n">{ev.nome}</span>
-                      <span className="ms-timing__t">{ev.tipo}</span>
-                    </li>
-                  ))}
-                </ol>
-              </article>
-            ))}
+          <div className="ms-drop__meter">
+            <span className="ms-mono">{REVELADOS} de {REVELACOES.length} anunciados</span>
+            <span className="ms-drop__bar" aria-hidden="true">
+              <i style={{ width: `${Math.round((REVELADOS / REVELACOES.length) * 100)}%` }} />
+            </span>
           </div>
-          <p className="ms-note">A grade da 3ª edição ainda está sendo montada.</p>
 
+          <ul className="ms-drop">
+            {REVELACOES.map((r) => (
+              <li className={`ms-drop__card${r.estado === 'aberto' ? ' is-aberto' : ''}`} key={r.t}>
+                <span className="ms-drop__tag">{r.estado === 'aberto' ? 'Anunciado' : 'A anunciar'}</span>
+                <h3>{r.t}</h3>
+                <p>{r.d}</p>
+              </li>
+            ))}
+          </ul>
+
+          <div className="ms-actions ms-actions--left">
+            <a className="ms-btn" href={IG_EVENTO} target="_blank" rel="noopener noreferrer">Seguir os anúncios</a>
+          </div>
         </div>
       </section>
 
@@ -1482,37 +1458,6 @@ export default function MotosulPage() {
       </section>
 
       {/* ── 3ª EDIÇÃO ── */}
-      {/* ── O QUE VEM POR AÍ ── */}
-      <section className="ms-sec" id="lineup" aria-labelledby="ms-drop-title">
-        <div className="ms-wrap--wide">
-          <p className="ms-eyebrow">3ª edição · em construção</p>
-          <h2 className="ms-display" id="ms-drop-title">O que já saiu<br />e o que ainda vem.</h2>
-          <span className="ms-rule" aria-hidden="true" />
-          <p className="ms-lead">A data está de pé. Bandas, experiências e expositores são anunciados aos poucos nos canais oficiais — cada anúncio abre um card aqui.</p>
-
-          <div className="ms-drop__meter">
-            <span className="ms-mono">{REVELADOS} de {REVELACOES.length} anunciados</span>
-            <span className="ms-drop__bar" aria-hidden="true">
-              <i style={{ width: `${Math.round((REVELADOS / REVELACOES.length) * 100)}%` }} />
-            </span>
-          </div>
-
-          <ul className="ms-drop">
-            {REVELACOES.map((r) => (
-              <li className={`ms-drop__card${r.estado === 'aberto' ? ' is-aberto' : ''}`} key={r.t}>
-                <span className="ms-drop__tag">{r.estado === 'aberto' ? 'Anunciado' : 'A anunciar'}</span>
-                <h3>{r.t}</h3>
-                <p>{r.d}</p>
-              </li>
-            ))}
-          </ul>
-
-          <div className="ms-actions ms-actions--left">
-            <a className="ms-btn" href={IG_EVENTO} target="_blank" rel="noopener noreferrer">Seguir os anúncios</a>
-          </div>
-        </div>
-      </section>
-
       {/* ── DÚVIDAS ── */}
       <section className="ms-sec ms-sec--light" id="duvidas" aria-labelledby="ms-faq-title">
         <div className="ms-wrap--wide">

@@ -3939,20 +3939,6 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 .ms-exp h3{ font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:clamp(26px,3vw,42px); line-height:.9; margin:12px 0; }
 .ms-exp p{ max-width:48ch; font-size:1rem; line-height:1.55; color:#d0cbc2; margin:0; }
 
-/* Line-up */
-.ms-grade{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; }
-.ms-dia{ border:1px solid var(--ms-line); background:var(--ms-card); }
-.ms-dia__head{ display:flex; align-items:center; justify-content:space-between; gap:14px; padding:18px 22px; border-bottom:1px solid var(--ms-line); }
-.ms-dia__head h4{ font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:1.6rem; margin:0; }
-.ms-tag{ font-family:var(--mono); font-weight:700; font-size:.64rem; letter-spacing:.14em; text-transform:uppercase; background:var(--accent); color:#fff; padding:5px 10px; border-radius:2px; }
-.ms-timing{ list-style:none; margin:0; padding:0; }
-.ms-timing li{ display:grid; grid-template-columns:64px 1fr auto; align-items:center; gap:14px; padding:15px 22px; border-bottom:1px solid var(--ms-line); border-left:2px solid transparent; transition:border-color .16s, background .16s; }
-.ms-timing li:last-child{ border-bottom:0; }
-.ms-timing li:hover{ border-left-color:var(--accent); background:rgba(255,90,0,.05); }
-.ms-timing__h{ font-family:var(--display); font-weight:800; font-size:1.15rem; color:var(--accent); font-variant-numeric:tabular-nums; }
-.ms-timing__n{ font-weight:600; }
-.ms-timing__t{ font-family:var(--mono); font-size:.64rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ms-mut); }
-
 /* Galeria */
 .ms-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; margin-bottom:38px; }
 .ms-galeria{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
@@ -4122,7 +4108,7 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 @media(max-width:760px){
   .ms-sec{ padding-top:68px; padding-bottom:68px; }
   .ms-eyebrow{ font-size:.76rem; letter-spacing:.2em; margin-bottom:20px; }
-  .ms-kicker,.ms-timing__t,.ms-clipping__fonte{ font-size:.7rem; }
+  .ms-kicker,.ms-clipping__fonte{ font-size:.7rem; }
   .ms-display{ line-height:.9; }
 
   .ms-hero{ min-height:790px; }
