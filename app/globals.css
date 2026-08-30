@@ -4111,6 +4111,13 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 @media(max-width:900px){ .ms-drop{ grid-template-columns:repeat(2,1fr); } }
 @media(max-width:620px){ .ms-drop{ grid-template-columns:1fr; } }
 
+.ms-drop__arte{ display:grid; grid-template-columns:minmax(0,260px) 1fr; gap:clamp(20px,3vw,44px); align-items:center; margin:0 0 clamp(28px,4vw,46px); padding-bottom:clamp(28px,4vw,46px); border-bottom:1px solid var(--ms-line); }
+.ms-drop__arte figure{ margin:0; }
+.ms-drop__arte img{ display:block; width:100%; height:auto; border:1px solid var(--ms-line); }
+.ms-drop__arte figcaption{ margin-top:10px; font-family:var(--mono); font-weight:700; font-size:.6rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ms-mut); }
+.ms-drop__arte p{ max-width:34ch; margin:0; font-family:var(--display); font-weight:800; font-size:clamp(20px,2.2vw,32px); line-height:1.05; text-transform:uppercase; text-wrap:balance; color:var(--ms-fg); }
+@media(max-width:720px){ .ms-drop__arte{ grid-template-columns:1fr; } .ms-drop__arte figure{ max-width:280px; } }
+
 /* Dúvidas frequentes */
 .ms-faq{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; margin:clamp(30px,4vw,52px) 0 0; background:var(--ms-line); border-top:1px solid var(--ms-line); border-bottom:1px solid var(--ms-line); }
 .ms-faq__item{ background:var(--ms-bg); padding:26px 24px 28px; }

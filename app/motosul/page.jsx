@@ -729,6 +729,21 @@ export default function MotosulPage() {
           <span className="ms-rule" aria-hidden="true" />
           <p className="ms-lead">A data está de pé. Bandas, experiências e expositores saem aos poucos nos canais oficiais — cada anúncio abre um card aqui.</p>
 
+          <div className="ms-drop__arte">
+            <figure>
+              <img
+                src="/motosul/arte-3a-edicao.jpg"
+                alt="Arte oficial do Motosul Festival: 3ª edição, 10 a 11 de abril de 2027, no Parque da Cidade de Itajubá, MG"
+                width="960"
+                height="1200"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Arte oficial da 3ª edição</figcaption>
+            </figure>
+            <p>O anúncio que saiu nos canais do festival. A data está de pé; o resto do quadro abre a cada novidade.</p>
+          </div>
+
           <div className="ms-drop__meter">
             <span className="ms-mono">{REVELADOS} de {REVELACOES.length} anunciados</span>
             <span className="ms-drop__bar" aria-hidden="true">
