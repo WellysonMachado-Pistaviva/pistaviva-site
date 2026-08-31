@@ -48,6 +48,15 @@ export function parseArticleBody(body) {
       });
       continue;
     }
+    // [instagram:permalink] — embed oficial do post/reel dentro do corpo da matéria.
+    const instagram = line.match(/^\[instagram:([^\]]+)\]$/);
+    if (instagram) {
+      flushParagraph();
+      const urls = instagram[1].split(';;').map((url) => url.trim()).filter(Boolean);
+      if (urls.length) blocks.push({ t: 'instagram', urls });
+      continue;
+    }
+
     const video = line.match(/^\[video:([^|\]]+)(?:\|([^\]]+))?\]$/);
     if (video) {
       flushParagraph();

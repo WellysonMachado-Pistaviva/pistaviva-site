@@ -5,6 +5,7 @@ import { getPostBySlug, getAllSlugs, getRelatedPosts } from '../../lib/blog';
 import ViewPing from '../../components/ViewPing';
 import ReadingProgress from '../../components/ReadingProgress';
 import ArticleChecklist from '../../components/ArticleChecklist';
+import InstagramEmbeds from '../../components/InstagramEmbeds';
 import { parseArticleBody } from '../../lib/articleBody.mjs';
 
 export const revalidate = 300;
@@ -198,6 +199,11 @@ export default async function BlogPost({ params }) {
                   <img src={b.v} alt={b.alt || ''} loading="lazy" width={b.width} height={b.height} />
                   {b.caption && <figcaption>{b.caption}</figcaption>}
                 </figure>
+              );
+              if (b.t === 'instagram') return (
+                <div key={i} className="art-embed">
+                  <InstagramEmbeds urls={b.urls} />
+                </div>
               );
               if (b.t === 'video') return (
                 <figure key={i} className="art-video">

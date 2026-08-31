@@ -3,10 +3,12 @@ export const LOCAL_MATERIAS = [
     id: '86b693b2-4ad4-4776-914f-9a55fde66447',
     slug: 'bmw-motorrad-fest-2026-campos-do-jordao-103-anos',
     title: 'BMW Motorrad Fest 2026: 103 anos celebrados em Campos do Jordão',
-    excerpt: 'Nos dias 26 e 27 de setembro, o Parque Capivari recebe o 3º encontro de motos do BMW Motorrad Fest — dois dias de shows, gastronomia e as estradas da Mantiqueira como caminho até lá.',
+    excerpt: 'Nos dias 26 e 27 de setembro, o Parque Capivari recebe o 3º encontro de motos do BMW Motorrad Fest — dois dias de shows, gastronomia e a comunidade Pistaviva subindo a serra em comboio.',
     body: `A BMW Motorrad completa **103 anos** em 2026 e a festa sobe a serra. Nos dias **26 e 27 de setembro**, o **Parque Capivari**, em **Campos do Jordão (SP)**, recebe o **3º encontro de motos do BMW Motorrad Fest 2026** — a terceira edição do encontro dentro do festival que marca a linha do tempo da marca, de **1923 a 2026**.
 
 Para quem viaja de moto, o detalhe que importa é onde a festa acontece. Campos do Jordão está no coração da Serra da Mantiqueira: chegar até lá já é metade do programa.
+
+[img:/materias/bmw-motorrad-fest-2026/logo-bmw-motorrad-fest-2026.png|Selo oficial do 3º BMW Motorrad Fest 2026, 103 anos, 1923-2026|Selo oficial da edição: 3º encontro, 103 anos, 1923–2026.|1080x1080]
 
 ## Datas, horários e local
 
@@ -22,6 +24,8 @@ Local: **Parque Capivari, Campos do Jordão/SP**. O sábado concentra a programa
 A organização anuncia **mais de 7 horas de shows** e **mais de 10 horas de DJs** somando os dois dias, além de **lançamento de produto, gastronomia e ativações** das marcas presentes.
 
 O formato repete o que funcionou nas edições anteriores no mesmo parque: palco principal montado na estrutura coberta do Capivari, corredor de tendas com expositores e concessionárias, área gastronômica e roda-gigante como ponto de encontro no meio do pátio.
+
+[img:/materias/bmw-motorrad-fest-2026/palco-capivari.jpg|Palco e tendas do BMW Motorrad Fest no Parque Capivari|O palco coberto do Capivari e o corredor de tendas na edição de 102 anos.|1920x1080]
 
 ## De 101 a 103 anos: como o Fest chegou até aqui
 
@@ -51,6 +55,20 @@ A equipe de fotógrafos do **@doncruzoficial** fica posicionada **próxima à en
 
 Se você fotografa eventos de moto, o [diretório de fotógrafos da Pistaviva](/fotografos) reúne quem cobre esse tipo de encontro pelo Brasil.
 
+## A Pistaviva sobe a serra na 3ª edição
+
+A Pistaviva vai à terceira edição levando gente de três frentes que já rodam juntas o ano inteiro: **Sul de Minas**, **interior do Rio de Janeiro** e **Vale do Paraíba / Serra da Mantiqueira**. São as mesmas regiões que abastecem o [Motosul Festival](/motosul), em Itajubá — e que ficam, todas elas, a poucas horas do Capivari.
+
+A ideia é simples: em vez de cada um subir sozinho, a comunidade combina saída, ponto de encontro e horário de chegada. Comboio rende foto melhor na entrada, vaga junta no pátio e estrada mais segura na descida.
+
+[img:/materias/bmw-motorrad-fest-2026/comboio-serra.jpg|Comboio de motos BMW subindo a serra rumo a Campos do Jordão|Comboio chegando a Campos do Jordão: subir junto é metade da viagem.|1920x1080]
+
+Quer entrar num dos grupos? A chamada oficial está no perfil da Pistaviva:
+
+[instagram:https://www.instagram.com/p/DcrhKVUgWMd/]
+
+Entre também na [comunidade Pistaviva](/comunidade) para acompanhar ponto de encontro, horário de saída e quem já confirmou de cada região.
+
 ## A viagem até Campos do Jordão
 
 Campos do Jordão é um dos polos clássicos do mototurismo no Sudeste, ligado por estradas de serra a São Bento do Sapucaí, Gonçalves e Monte Verde. Quem sai do eixo Rio–São Paulo–BH chega em algumas horas e ainda encadeia mirante, curva e frio de montanha no mesmo dia.
@@ -65,6 +83,8 @@ Dá para transformar o fim de semana do festival na primeira metade da travessia
 ## Onde dormir
 
 Setembro é alta temporada em Campos do Jordão e o festival lota a cidade. Hospedagem no centro do Capivari e no Jaguaribe some primeiro. Alternativas a menos de uma hora de moto: **São Bento do Sapucaí**, **Santo Antônio do Pinhal** e **Pindamonhangaba**, no vale — mais barato e com a serra inteira no caminho de volta.
+
+[img:/materias/bmw-motorrad-fest-2026/roda-gigante.jpg|Roda-gigante do BMW Motorrad Fest no Parque Capivari|A roda-gigante virou o ponto de referência no meio do pátio do Capivari.|1920x1080]
 
 ## Antes de subir a serra
 
@@ -95,7 +115,7 @@ Não. Todas as marcas são bem-vindas. A diferença está no estacionamento: gra
 
 ### Como chegar de moto a Campos do Jordão?
 A cidade fica na Serra da Mantiqueira, ligada por estradas de serra a São Bento do Sapucaí, Gonçalves e Monte Verde. Veja o [guia da Serra da Mantiqueira](/estradas/serra-da-mantiqueira) e monte o trajeto em [rotas](/rotas).`,
-    cover_url: null,
+    cover_url: '/materias/bmw-motorrad-fest-2026/capa.jpg',
     tags: ['BMW Motorrad', 'Campos do Jordão', 'Mototurismo', 'Eventos', 'Mantiqueira'],
     author: 'Wellyson Machado',
     published: true,

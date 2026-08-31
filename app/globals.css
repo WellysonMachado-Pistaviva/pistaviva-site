@@ -833,6 +833,9 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
 .art-inline{ margin:38px 0; }
 .art-inline img{ width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:3px; }
 .art-inline--natural img{ height:auto; aspect-ratio:auto; }
+/* embed do Instagram dentro do corpo da matéria */
+.art-embed{ margin:38px 0; }
+.art-embed .instagram-media{ margin:0 auto !important; }
 .art-inline figcaption{ margin-top:9px; color:var(--paper-mut); font-family:var(--mono); font-size:11px; line-height:1.5; letter-spacing:.03em; }
 .art-media-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:16px; margin:38px 0; }
 .art-media-grid figure{ margin:0; }
