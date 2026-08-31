@@ -51,7 +51,7 @@ export default async function sitemap() {
     },
     {
       path: '/parque-da-cidade',
-      lastModified: '2026-08-26',
+      lastModified: '2026-08-31',
       // Sai da própria galeria: foto nova na página entra no sitemap sozinha.
       // A do destaque não está na galeria, então entra à parte — daí o Set.
       images: [...new Set([

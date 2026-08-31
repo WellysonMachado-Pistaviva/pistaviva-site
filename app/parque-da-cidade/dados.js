@@ -509,6 +509,41 @@ export const PLANOS = [
 ];
 
 // Dúvidas frequentes — só o que dá para responder com segurança.
+// Clima de Itajubá. Fonte: normais e registros históricos compilados na
+// Wikipédia (Cwb de altitude, 856 m, médias anuais e recordes do INMET).
+export const CLIMA = {
+  altitude: '856 m',
+  koppen: 'Cwb — tropical de altitude',
+  mediaAnual: '19,5 °C',
+  maximaMedia: '26 °C',
+  minimaMedia: '13 °C',
+  recordeQuente: '36,7 °C (7 de outubro de 1946)',
+  recordeFrio: '−1,2 °C (22 de junho de 1933)',
+  chuvaAnual: '1.420 mm',
+  estacoes: [
+    {
+      nome: 'Junho a agosto · seca e fria',
+      resumo:
+        'A melhor janela para o parque. Céu limpo quase todo dia, tarde agradável no deck e noite que pede casaco de verdade — junho e julho são os meses mais secos do ano, e a mínima histórica da cidade caiu justamente num 22 de junho.',
+    },
+    {
+      nome: 'Setembro a novembro · transição',
+      resumo:
+        'Dias mais longos, calor voltando e chuva ainda espaçada. É quando a área verde reage e o fim de tarde no lago rende mais. Outubro já registrou o dia mais quente da história da cidade.',
+    },
+    {
+      nome: 'Dezembro a março · quente e chuvosa',
+      resumo:
+        'Meses mais úmidos, com pancadas concentradas no fim da tarde. Manhã costuma abrir firme: vale inverter o roteiro e deixar quadra e pedalinho para antes do almoço.',
+    },
+    {
+      nome: 'Abril e maio · a mais estável',
+      resumo:
+        'A chuva vai embora, o calor cede e a serra ainda está verde do verão. Pouca gente sabe, mas é o par de meses com a melhor relação entre temperatura e céu aberto.',
+    },
+  ],
+};
+
 export const DUVIDAS = [
   {
     p: 'O parque tem horário fixo?',
@@ -533,6 +568,26 @@ export const DUVIDAS = [
   {
     p: 'Onde ficar perto do Parque da Cidade de Itajubá?',
     r: 'Itajubá Flat, Gontijo Inn, Hotel Amantykir e Hotel Bramig ficam na área urbana de Itajubá e têm contato direto, endereço, mapa e avaliações reunidos na seção de hotéis deste guia.',
+  },
+  {
+    p: 'Qual a melhor época para visitar o Parque da Cidade?',
+    r: 'De junho a agosto, quando a estação seca deixa o céu limpo quase todo dia — só leve casaco, porque a noite em Itajubá cai forte. Abril e maio vêm logo atrás, com chuva já rara e a serra ainda verde. No verão, entre dezembro e março, prefira a manhã: a pancada costuma chegar no fim da tarde.',
+  },
+  {
+    p: 'Faz frio em Itajubá?',
+    r: 'Faz. A cidade está a 856 metros de altitude, na Serra da Mantiqueira, com clima tropical de altitude (Cwb). A média anual é de 19,5 °C, com máxima média de 26 °C e mínima média de 13 °C — e o recorde histórico de frio chegou a −1,2 °C. No inverno a diferença entre o meio-dia e a noite é grande: vá de camada.',
+  },
+  {
+    p: 'A entrada do parque é gratuita?',
+    r: 'Sim. O acesso ao Parque da Cidade é livre e gratuito, assim como a área verde, o lago e o playground. O que é pago são as operações internas — kartódromo, boliche, quadras alugadas, restaurantes e cinema. O pedalinho é gratuito aos sábados e domingos.',
+  },
+  {
+    p: 'Como chegar ao Parque da Cidade de Itajubá?',
+    r: 'O parque fica na Av. Gerson Dias, 500, bairro Estiva, com acesso direto pela malha urbana de Itajubá. Quem vem de São Paulo chega pela BR-459 via Pouso Alegre ou pela Mantiqueira, por São Bento do Sapucaí e Piranguinho; quem vem do Rio e do Vale do Paraíba entra por Piquete e Delfim Moreira. Há estacionamento no local, com pátio organizado para moto.',
+  },
+  {
+    p: 'Pode levar cachorro e fazer piquenique?',
+    r: 'A área verde é aberta e usada todo fim de semana para piquenique, caminhada e pet na guia. Dentro das operações fechadas — restaurantes, boliche, cinema, kartódromo — vale a regra de cada uma; confirme antes com o setor que você quer usar.',
   },
   {
     p: 'O que fazer em Itajubá além do parque?',

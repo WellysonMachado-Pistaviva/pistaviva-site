@@ -127,6 +127,18 @@ export default async function EstradaPage({ params }) {
             </div>
           )}
 
+          {/* Paradas da Pistaviva no traçado — linkagem interna pro conteúdo do destino */}
+          {e.paradas?.length > 0 && (
+            <div style={{ marginTop: 28 }}>
+              <h2 style={{ fontFamily: 'var(--display)', marginBottom: 12 }}>Paradas da Pistaviva na {e.nome}</h2>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                {e.paradas.map((parada) => (
+                  <Link className="ig-btn ig-btn--ghost" key={parada.href} href={parada.href}>{parada.label}</Link>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Guias de preparação — linkagem interna pro cluster /guias */}
           <div style={{ marginTop: 28 }}>
             <h2 style={{ fontFamily: 'var(--display)', marginBottom: 12 }}>Prepare-se pra rodar a {e.nome}</h2>

@@ -31,6 +31,7 @@ import {
   ATRACOES,
   AVALIACAO_RESUMO,
   CINEA,
+  CLIMA,
   CIRCUITO_MANTIQUEIRA_ITAJUBA,
   DEPOIMENTOS,
   DIRECOES,
@@ -140,6 +141,7 @@ const CAPITULOS = [
   { href: '#eventos', label: 'Eventos' },
   { href: '#incluso', label: 'O que é pago' },
   { href: '#servicos', label: 'Serviços' },
+  { href: '#clima', label: 'Clima & época' },
   { href: '#visita', label: 'Planeje a visita' },
   { href: '#hoteis', label: 'Hotéis' },
   { href: '#dormir', label: 'Casa inteira' },
@@ -174,13 +176,14 @@ export default async function ParqueDaCidadePage() {
         description:
           'Guia editorial do Parque da Cidade de Itajubá com atrações, mapa, gastronomia, roteiros e hotéis.',
         inLanguage: 'pt-BR',
-        dateModified: '2026-08-26',
+        dateModified: '2026-08-31',
         isPartOf: { '@id': `${BASE}/#site` },
         about: { '@id': `${BASE}/parque-da-cidade#parque` },
         breadcrumb: { '@id': `${BASE}/parque-da-cidade#breadcrumb` },
       },
       {
-        '@type': 'Park',
+        // Park + TouristAttraction: o parque é equipamento urbano e destino de viagem.
+        '@type': ['Park', 'TouristAttraction'],
         '@id': `${BASE}/parque-da-cidade#parque`,
         name: 'Parque da Cidade de Itajubá',
         alternateName: 'Parque da Cidade',
@@ -198,6 +201,15 @@ export default async function ParqueDaCidadePage() {
         foundingDate: '2010',
         geo: { '@type': 'GeoCoordinates', latitude: PARQUE_COORD.lat, longitude: PARQUE_COORD.lng },
         hasMap: PARQUE_MAPS,
+        // Amarra o parque à entidade cidade — ajuda o Google a ligar a página
+        // às buscas por Itajubá e pela Serra da Mantiqueira.
+        containedInPlace: {
+          '@type': 'City',
+          name: 'Itajubá',
+          address: { '@type': 'PostalAddress', addressLocality: 'Itajubá', addressRegion: 'MG', addressCountry: 'BR' },
+          containedInPlace: { '@type': 'AdministrativeArea', name: 'Sul de Minas, Serra da Mantiqueira' },
+          sameAs: ['https://pt.wikipedia.org/wiki/Itajubá'],
+        },
         telephone: '+55 35 99717-5606',
         isAccessibleForFree: true,
         publicAccess: true,
@@ -846,6 +858,39 @@ export default async function ParqueDaCidadePage() {
       </section>
 
       {/* ── PLANEJE A VISITA (modelo Hopi Hari: escolha o dia antes de tudo) ── */}
+      {/* ── CLIMA & MELHOR ÉPOCA (intenção de busca: "clima em Itajubá", "faz frio") ── */}
+      <section className="pq-sec" id="clima">
+        <div className="pq-wrap">
+          <p className="pq-cap"><span>Clima &amp; melhor época</span></p>
+          <h2 className="pq-display">Serra a 856 m.<br />Cada estação<br />muda o parque.</h2>
+          <span className="pq-rule" aria-hidden="true" />
+          <p className="pq-lead">
+            Itajubá fica a {CLIMA.altitude} de altitude, na Serra da Mantiqueira, com clima {CLIMA.koppen}.
+            A média anual é de {CLIMA.mediaAnual} — máxima média de {CLIMA.maximaMedia} e mínima média
+            de {CLIMA.minimaMedia} —, com {CLIMA.chuvaAnual} de chuva por ano concentrados no verão.
+            Na prática: dia de sol e noite de casaco no mesmo passeio.
+          </p>
+
+          <dl className="pq-clima">
+            <div><dt>Altitude</dt><dd>{CLIMA.altitude}</dd></div>
+            <div><dt>Média anual</dt><dd>{CLIMA.mediaAnual}</dd></div>
+            <div><dt>Máxima média</dt><dd>{CLIMA.maximaMedia}</dd></div>
+            <div><dt>Mínima média</dt><dd>{CLIMA.minimaMedia}</dd></div>
+            <div><dt>Recorde de calor</dt><dd>{CLIMA.recordeQuente}</dd></div>
+            <div><dt>Recorde de frio</dt><dd>{CLIMA.recordeFrio}</dd></div>
+          </dl>
+
+          <ol className="pq-historia pq-clima__estacoes">
+            {CLIMA.estacoes.map((e) => (
+              <li key={e.nome}>
+                <span className="pq-historia__marco">{e.nome}</span>
+                <p>{e.resumo}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
       <section className="pq-sec" id="visita">
         <div className="pq-wrap pq-wrap--larga">
           <p className="pq-cap"><span>Planeje a visita</span></p>

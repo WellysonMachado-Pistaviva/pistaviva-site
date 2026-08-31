@@ -107,6 +107,12 @@ export const ESTRADAS = [
       'É um dos polos onde a comunidade Pistaviva mais tem parada cadastrada: pousadas, restaurantes e mirantes amigos do motociclista. Bom destino pra fim de semana ou bate-volta saindo das capitais.',
     ],
     destaques: ['Campos do Jordão e Monte Verde', 'Gonçalves e estradas de terra', 'Clima de montanha', 'Curvas e mirantes'],
+    // Paradas editoriais da própria Pistaviva no traçado — linkagem interna.
+    paradas: [
+      { href: '/parque-da-cidade', label: 'Parque da Cidade de Itajubá' },
+      { href: '/motosul', label: 'Motosul Festival · Itajubá' },
+      { href: '/desafios/desafio-travessia-mantiqueira', label: 'Travessia da Mantiqueira' },
+    ],
     faqs: [
       { q: 'Onde fica a Serra da Mantiqueira?', a: 'É uma cadeia de montanhas entre Minas Gerais, São Paulo e Rio de Janeiro. Os polos mais rodados de moto são Campos do Jordão (SP), Gonçalves (MG) e Monte Verde (MG).' },
       { q: 'Precisa de moto trail na Mantiqueira?', a: 'Pro asfalto, qualquer moto vai. Mas pra explorar Gonçalves e as vilas por estradas de terra, uma trail ou big trail abre muito mais caminho.' },
