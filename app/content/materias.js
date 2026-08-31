@@ -59,7 +59,9 @@ Se você fotografa eventos de moto, o [diretório de fotógrafos da Pistaviva](/
 
 A Pistaviva vai à terceira edição levando gente de três frentes que já rodam juntas o ano inteiro: **Sul de Minas**, **interior do Rio de Janeiro** e **Vale do Paraíba / Serra da Mantiqueira**. São as mesmas regiões que abastecem o [Motosul Festival](/motosul), em Itajubá — e que ficam, todas elas, a poucas horas do Capivari.
 
-A ideia é simples: em vez de cada um subir sozinho, a comunidade combina saída, ponto de encontro e horário de chegada. Comboio rende foto melhor na entrada, vaga junta no pátio e estrada mais segura na descida.
+Não é convocação de horário único — cada frente sai da sua base. O Sul de Minas desce pela Mantiqueira, o interior do Rio pega a Dutra, o Vale do Paraíba escolhe entre a Floriano Rodrigues Pinheiro e a subida por São Bento do Sapucaí. O que se combina antes é o essencial: onde sair, a que horas e em que posto parar pro café. Quem não conseguir emendar comboio encontra o grupo lá dentro, no pátio do Capivari.
+
+Subir junto não é enfeite. Comboio chega inteiro na portaria e estaciona na mesma fileira, em vez de espalhar a turma por três cantos do pátio. Rende a foto de chegada que ninguém tira sozinho. E resolve o trecho que mais preocupa: a descida no fim do domingo, com serra fria, gente cansada e neblina entrando — hora em que ter alguém no retrovisor vale mais que qualquer programação.
 
 [img:/materias/bmw-motorrad-fest-2026/comboio-serra.jpg|Comboio de motos BMW subindo a serra rumo a Campos do Jordão|Comboio chegando a Campos do Jordão: subir junto é metade da viagem.|1920x1080]
 
