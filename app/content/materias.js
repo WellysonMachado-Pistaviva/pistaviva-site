@@ -3,7 +3,7 @@ export const LOCAL_MATERIAS = [
     id: '86b693b2-4ad4-4776-914f-9a55fde66447',
     slug: 'bmw-motorrad-fest-2026-campos-do-jordao-103-anos',
     title: 'BMW Motorrad Fest 2026: 103 anos celebrados em Campos do Jordão',
-    excerpt: 'Nos dias 26 e 27 de setembro, o Parque Capivari recebe o 3º encontro de motos do BMW Motorrad Fest — dois dias de shows, gastronomia e a comunidade Pistaviva subindo a serra em comboio.',
+    excerpt: 'Nos dias 26 e 27 de setembro o Parque Capivari recebe o 3º encontro de motos do BMW Motorrad Fest: shows, gastronomia e a comunidade subindo a serra em comboio.',
     body: `A BMW Motorrad completa **103 anos** em 2026 e a festa sobe a serra. Nos dias **26 e 27 de setembro**, o **Parque Capivari**, em **Campos do Jordão (SP)**, recebe o **3º encontro de motos do BMW Motorrad Fest 2026** — a terceira edição do encontro dentro do festival que marca a linha do tempo da marca, de **1923 a 2026**.
 
 Para quem viaja de moto, o detalhe que importa é onde a festa acontece. Campos do Jordão está no coração da Serra da Mantiqueira: chegar até lá já é metade do programa.
@@ -119,6 +119,26 @@ Não. Todas as marcas são bem-vindas. A diferença está no estacionamento: gra
 A cidade fica na Serra da Mantiqueira, ligada por estradas de serra a São Bento do Sapucaí, Gonçalves e Monte Verde. Veja o [guia da Serra da Mantiqueira](/estradas/serra-da-mantiqueira) e monte o trajeto em [rotas](/rotas).`,
     cover_url: '/materias/bmw-motorrad-fest-2026/capa.jpg',
     tags: ['BMW Motorrad', 'Campos do Jordão', 'Mototurismo', 'Eventos', 'Mantiqueira'],
+    event_ld: {
+      name: 'BMW Motorrad Fest 2026 · 103 anos',
+      description: '3º encontro de motos do BMW Motorrad Fest, celebrando os 103 anos da BMW Motorrad no Parque Capivari, em Campos do Jordão.',
+      startDate: '2026-09-26T10:00:00-03:00',
+      endDate: '2026-09-27T15:00:00-03:00',
+      eventStatus: 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      location: {
+        '@type': 'Place',
+        name: 'Parque Capivari',
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'R. Eng. Diogo José de Carvalho, 1291 — Capivari',
+          addressLocality: 'Campos do Jordão',
+          addressRegion: 'SP',
+          addressCountry: 'BR',
+        },
+      },
+      organizer: { '@type': 'Organization', name: 'BMW Motorrad Brasil' },
+    },
     author: 'Wellyson Machado',
     published: true,
     featured: true,

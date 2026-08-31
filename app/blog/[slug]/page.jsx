@@ -100,12 +100,16 @@ export default async function BlogPost({ params }) {
     mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
   } : null;
 
+  // Schema.org exige URL absoluta na imagem; capa local vem como '/materias/...'.
+  const absUrl = (u) => (u && u.startsWith('/') ? `${SITE_URL}${u}` : u);
+  const coverAbs = absUrl(post.cover_url) || DEFAULT_OG;
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt || post.title,
-    image: [post.cover_url || DEFAULT_OG],
+    image: [coverAbs],
     datePublished: post.published_at || undefined,
     dateModified: post.updated_at || post.published_at || undefined,
     author: post.author ? { '@type': 'Person', name: post.author } : { '@type': 'Organization', name: 'Pistaviva' },
@@ -117,6 +121,11 @@ export default async function BlogPost({ params }) {
     inLanguage: 'pt-BR',
     mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${slug}` },
   };
+
+  // Matéria de evento pode declarar event_ld e ganhar rich result de Event.
+  const eventLd = post.event_ld
+    ? { '@context': 'https://schema.org', '@type': 'Event', image: [coverAbs], ...post.event_ld }
+    : null;
 
   const breadcrumbLd = {
     '@context': 'https://schema.org', '@type': 'BreadcrumbList',
@@ -145,6 +154,7 @@ export default async function BlogPost({ params }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
+      {eventLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(eventLd) }} />}
       <ViewPing kind="blog" id={post.id} />
       <ReadingProgress />
 

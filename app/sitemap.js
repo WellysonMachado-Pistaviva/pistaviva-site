@@ -17,7 +17,9 @@ const xmlEscape = (u) =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
-const safeImages = (url) => (url ? { images: [xmlEscape(url)] } : {});
+// image:loc precisa ser absoluta — capa local ('/materias/x.jpg') vira URL cheia.
+const absolute = (u) => (u && u.startsWith('/') ? `${BASE}${u}` : u);
+const safeImages = (url) => (url ? { images: [xmlEscape(absolute(url))] } : {});
 
 export default async function sitemap() {
   // Só informa lastModified quando existe atualização editorial verificável.
