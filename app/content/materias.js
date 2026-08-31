@@ -1,5 +1,109 @@
 export const LOCAL_MATERIAS = [
   {
+    id: '86b693b2-4ad4-4776-914f-9a55fde66447',
+    slug: 'bmw-motorrad-fest-2026-campos-do-jordao-103-anos',
+    title: 'BMW Motorrad Fest 2026: 103 anos celebrados em Campos do Jordão',
+    excerpt: 'Nos dias 26 e 27 de setembro, o Parque Capivari recebe o 3º encontro de motos do BMW Motorrad Fest — dois dias de shows, gastronomia e as estradas da Mantiqueira como caminho até lá.',
+    body: `A BMW Motorrad completa **103 anos** em 2026 e a festa sobe a serra. Nos dias **26 e 27 de setembro**, o **Parque Capivari**, em **Campos do Jordão (SP)**, recebe o **3º encontro de motos do BMW Motorrad Fest 2026** — a terceira edição do encontro dentro do festival que marca a linha do tempo da marca, de **1923 a 2026**.
+
+Para quem viaja de moto, o detalhe que importa é onde a festa acontece. Campos do Jordão está no coração da Serra da Mantiqueira: chegar até lá já é metade do programa.
+
+## Datas, horários e local
+
+O festival ocupa o Parque Capivari nos dois dias, com horários diferentes em cada um:
+
+- **Sábado, 26/9** — das 10h às 22h
+- **Domingo, 27/9** — das 10h às 15h
+
+Local: **Parque Capivari, Campos do Jordão/SP**. O sábado concentra a programação longa, com a noite inteira de música; o domingo é o dia curto, feito para quem vai desmontar acampamento e pegar estrada de volta antes do fim da tarde.
+
+## O que tem na programação
+
+A organização anuncia **mais de 7 horas de shows** e **mais de 10 horas de DJs** somando os dois dias, além de **lançamento de produto, gastronomia e ativações** das marcas presentes.
+
+O formato repete o que funcionou nas edições anteriores no mesmo parque: palco principal montado na estrutura coberta do Capivari, corredor de tendas com expositores e concessionárias, área gastronômica e roda-gigante como ponto de encontro no meio do pátio.
+
+## De 101 a 103 anos: como o Fest chegou até aqui
+
+O primeiro BMW Motorrad Fest no Parque Capivari foi em **28 de setembro de 2024**, para celebrar os **101 anos** da marca. Foi um dia só — das 14h às 22h, entrada gratuita — e a expectativa divulgada era de reunir **cerca de 5 mil pessoas** em Campos do Jordão.
+
+O grande anúncio daquela edição foi o **lançamento da BMW R 12** no Brasil, apresentada no palco pelo CEO da BMW Motorrad Brasil, **Matheus Pereira**, que descreveu o evento como forma de "reforçar a presença da BMW Motorrad no Brasil e proporcionar imersão no universo da marca". A programação alternou DJs e bandas ao longo das oito horas — DJ Andinho Vezzu, Banda Classic Zoom e Live by Night —, com área gastronômica e um parque infantil com tirolesa, arvorismo, escalada, carrossel e bobsled.
+
+Parte do público subiu a serra em comboio: a **Osten Motors**, concessionária parceira, abriu café da manhã às 8h em São José dos Campos e saiu em grupo para Campos do Jordão às 10h. A mesma Osten está entre as marcas presentes no [Motosul Festival](/motosul), em Itajubá.
+
+Duas edições depois, o formato cresceu: 2026 tem **dois dias** em vez de um, e o bloco de música saltou para mais de 7 horas de shows e 10 horas de DJs. A tradição de anunciar novidade no palco, essa, continua — a organização confirma lançamento na programação de setembro.
+
+Fontes: [BMW Group PressClub](https://www.press.bmwgroup.com/brazil/article/detail/T0445323PT/bmw-motorrad-fest-2024-celebra-101-anos-da-marca-com-lan%C3%A7amento-da-bmw-r-12-em-campos-do-jord%C3%A3o?language=pt) e [Net Campos](https://www.netcampos.com/noticias/2024/09/bmw-motorrad-comemora-101-anos-com-evento-em-campos-do-jordao-que-deve-reunir-5-mil-pessoas.html).
+
+## Estacionamento: BMW de graça, demais marcas pago
+
+Regra divulgada pela organização:
+
+- **Motos BMW: estacionamento gratuito.**
+- **Demais marcas: estacionamento pago.**
+- **Todas as marcas são bem-vindas** no evento.
+
+Ou seja: o encontro é da BMW, mas a porta não está fechada para quem chega de outra moto — muda apenas o custo de deixar a moto no pátio.
+
+## Registro na chegada
+
+A equipe de fotógrafos do **@doncruzoficial** fica posicionada **próxima à entrada do estacionamento do Capivari**. É ali que a chegada em comboio costuma render as melhores fotos — vale combinar com o grupo para entrar junto em vez de pingado.
+
+Se você fotografa eventos de moto, o [diretório de fotógrafos da Pistaviva](/fotografos) reúne quem cobre esse tipo de encontro pelo Brasil.
+
+## A viagem até Campos do Jordão
+
+Campos do Jordão é um dos polos clássicos do mototurismo no Sudeste, ligado por estradas de serra a São Bento do Sapucaí, Gonçalves e Monte Verde. Quem sai do eixo Rio–São Paulo–BH chega em algumas horas e ainda encadeia mirante, curva e frio de montanha no mesmo dia.
+
+Duas leituras da região para planejar a ida:
+
+- [Serra da Mantiqueira](/estradas/serra-da-mantiqueira) — o guia da região, com as pontas Campos do Jordão · Gonçalves · Monte Verde.
+- [Travessia da Mantiqueira](/desafios/desafio-travessia-mantiqueira) — cerca de 220 km cruzando a serra de ponta a ponta, carimbando SP, MG e RJ no mesmo dia. Campos do Jordão está no meio do traçado.
+
+Dá para transformar o fim de semana do festival na primeira metade da travessia: sobe no sábado para o Capivari, dorme na região e emenda a serra no domingo depois das 15h.
+
+## Onde dormir
+
+Setembro é alta temporada em Campos do Jordão e o festival lota a cidade. Hospedagem no centro do Capivari e no Jaguaribe some primeiro. Alternativas a menos de uma hora de moto: **São Bento do Sapucaí**, **Santo Antônio do Pinhal** e **Pindamonhangaba**, no vale — mais barato e com a serra inteira no caminho de volta.
+
+## Antes de subir a serra
+
+- [ ] Confirmar horários no dia (sábado 10h–22h, domingo 10h–15h)
+- [ ] Reservar hospedagem com antecedência — setembro é alta temporada
+- [ ] Levar roupa de frio: Capivari à noite cai bem abaixo do vale
+- [ ] Chegar cedo no sábado para pegar vaga no pátio
+- [ ] Combinar a entrada em comboio com o grupo
+
+Monte sua ida pelo [planejador de rotas](/rotas) e acompanhe a [agenda de eventos](/eventos) para não perder confirmações de programação.
+
+## Perguntas frequentes
+
+### Quando é o BMW Motorrad Fest 2026?
+Nos dias 26 e 27 de setembro de 2026. Sábado, 26/9, das 10h às 22h; domingo, 27/9, das 10h às 15h.
+
+### Onde acontece o BMW Motorrad Fest 2026?
+No Parque Capivari, em Campos do Jordão, São Paulo.
+
+### O que a BMW celebra em 2026?
+Os 103 anos da BMW Motorrad, contados de 1923 a 2026. É também a terceira edição do encontro de motos dentro do festival.
+
+### Quando foi a primeira edição em Campos do Jordão?
+Em 28 de setembro de 2024, também no Parque Capivari, para celebrar os 101 anos da BMW Motorrad. Foi um evento de um dia só, das 14h às 22h, com entrada gratuita e lançamento da BMW R 12 no palco.
+
+### Preciso ter uma BMW para participar?
+Não. Todas as marcas são bem-vindas. A diferença está no estacionamento: gratuito para motos BMW e pago para as demais marcas.
+
+### Como chegar de moto a Campos do Jordão?
+A cidade fica na Serra da Mantiqueira, ligada por estradas de serra a São Bento do Sapucaí, Gonçalves e Monte Verde. Veja o [guia da Serra da Mantiqueira](/estradas/serra-da-mantiqueira) e monte o trajeto em [rotas](/rotas).`,
+    cover_url: null,
+    tags: ['BMW Motorrad', 'Campos do Jordão', 'Mototurismo', 'Eventos', 'Mantiqueira'],
+    author: 'Wellyson Machado',
+    published: true,
+    featured: true,
+    published_at: '2026-08-31T09:00:00-03:00',
+    updated_at: '2026-08-31T09:00:00-03:00',
+  },
+  {
     id: '9a74d53e-88c8-4f2d-95c9-37b5ee4e8ee1',
     slug: 'motosul-itajuba-mototurismo-gastronomia-minas-gerais',
     title: 'Motosul coloca Itajubá no mapa do mototurismo gastronômico',
