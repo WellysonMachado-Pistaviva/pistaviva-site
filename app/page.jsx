@@ -4,6 +4,7 @@ import HomeBanner from './components/HomeBanner';
 import HomeNextRide from './components/HomeNextRide';
 import EventsRail from './components/EventsRail';
 import CommunityRail from './components/CommunityRail';
+import EditorialSplit from './components/EditorialSplit';
 import ProductShowcase from './components/ProductShowcase';
 import AffiliateGear from './components/AffiliateGear';
 import { getPublishedPosts, getFeaturedPosts } from './lib/blog';
@@ -36,7 +37,7 @@ const fmtDate = (iso) => {
 };
 
 export default async function Home() {
-  const posts = await getPublishedPosts(3);
+  const posts = await getPublishedPosts(4);
   const featured = await getFeaturedPosts(1);
   const banners = await getBanners();
   const destinos = await getDestinos();
@@ -44,7 +45,11 @@ export default async function Home() {
   const eventos = await getEventsForSeo({ limit: 12 });
   const goingCounts = await getGoingCounts(eventos.map((event) => event.id));
   const agendaEventos = eventos.slice(1);
-  const news = [...(featured || []), ...posts.filter((post) => !featured?.some((item) => item.id === post.id))].slice(0, 3);
+  // A matéria de capa sai do grid e vira o bloco 50/50 — o grid fica com as
+  // três seguintes, todas do mesmo peso.
+  const ranked = [...(featured || []), ...posts.filter((post) => !featured?.some((item) => item.id === post.id))];
+  const lead = ranked[0] || null;
+  const news = ranked.filter((post) => post.id !== lead?.id).slice(0, 3);
 
   return (
     <div className="ignis home-story">
@@ -76,20 +81,32 @@ export default async function Home() {
 
       <CommunityRail items={community} />
 
+      {lead && (
+        <EditorialSplit
+          eyebrow="Matéria de capa"
+          title={lead.title}
+          excerpt={lead.excerpt}
+          href={`/blog/${lead.slug}`}
+          image={lead.cover_url}
+          imageAlt={lead.title}
+          meta={[lead.tags?.[0], fmtDate(lead.published_at)]}
+        />
+      )}
+
       {news.length > 0 && (
         <section className="ig-news" id="blog">
           <div className="wrap">
             <div className="ig-sechead">
               <div className="lead">
                 <span className="ig-eyebrow">Caderno de bordo</span>
-                <h2 className="ig-title">Matérias</h2>
+                <h2 className="ig-title">Mais do caderno</h2>
                 <p>Reportagens, relatos e guias escritos por quem foi, voltou e conhece caminho.</p>
               </div>
               <Link href="/blog" className="ig-btn ig-btn--ghost">Ver todas</Link>
             </div>
             <div className="ig-news-grid">
-              {news.map((post, index) => (
-                <article key={post.id} className={`ig-post${index === 0 ? ' feat' : ''}`}>
+              {news.map((post) => (
+                <article key={post.id} className="ig-post">
                   <Link href={`/blog/${post.slug}`} aria-label={post.title}>
                     <div className="pic">
                       {post.cover_url

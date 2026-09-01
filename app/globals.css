@@ -689,9 +689,37 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
 .crail-meta span{ font-size:11px; opacity:.88; }
 .crail-txt{ font-size:13px; line-height:1.45; color:var(--ink-soft,#555); margin:0; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 
+/* =========================================================
+   SPLIT EDITORIAL — foto de um lado, texto do outro.
+   Respiro entre os rails e o grid de matérias, que hoje se empilham sem pausa.
+   Fundo escuro de propósito: separa duas seções claras vizinhas.
+   ========================================================= */
+.esplit{ background:var(--ink); color:#fff; padding:var(--sec-y) 0; }
+.esplit-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(26px,4vw,64px); align-items:center; }
+.esplit--reverse .esplit-media{ order:2; }
+
+.esplit-media{ position:relative; aspect-ratio:4/3; overflow:hidden; border-radius:4px; background:var(--ink-2); display:grid; place-items:center; }
+.esplit-media img{ transition:transform .6s cubic-bezier(.2,.7,.2,1); }
+.esplit:hover .esplit-media img{ transform:scale(1.03); }
+.esplit-ph{ font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:28px; letter-spacing:.06em; color:rgba(255,255,255,.16); }
+
+.esplit-body h2{ font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:clamp(32px,4.4vw,62px); line-height:.92; letter-spacing:-.015em; margin:18px 0 0; text-wrap:balance; }
+.esplit-body h2 a:hover{ color:var(--accent); }
+.esplit-body p{ font-size:clamp(15px,1.5vw,18px); line-height:1.5; color:rgba(255,255,255,.72); margin-top:16px; max-width:46ch; }
+.esplit-meta{ display:flex; flex-wrap:wrap; gap:10px 18px; list-style:none; margin:18px 0 0; padding:0; }
+.esplit-meta li{ font-family:var(--mono); font-weight:600; text-transform:uppercase; letter-spacing:.1em; font-size:10.5px; color:rgba(255,255,255,.56); }
+.esplit-body .ig-btn{ margin-top:26px; }
+
+@media(max-width:900px){
+  .esplit-grid{ grid-template-columns:1fr; gap:22px; }
+  /* No empilhado a foto vem sempre primeiro — inverter só faz sentido lado a lado. */
+  .esplit--reverse .esplit-media{ order:0; }
+  .esplit-media{ aspect-ratio:16/10; }
+}
+
 /* NOTÍCIAS */
 .ig-news{ background:var(--paper); padding:var(--sec-y) 0; }
-.ig-news-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:22px; }
+.ig-news-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; }
 @media(max-width:980px){ .ig-news-grid{ grid-template-columns:1fr 1fr; } }
 @media(max-width:600px){ .ig-news-grid{ grid-template-columns:1fr; } }
 .ig-post .pic{ position:relative; aspect-ratio:16/10; overflow:hidden; background:var(--paper-2); border-radius:4px; display:grid; place-items:center; }
