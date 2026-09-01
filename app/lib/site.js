@@ -18,7 +18,7 @@ export async function getBanners() {
     const sb = supabaseServer();
     const { data, error } = await sb
       .from('pv_banners')
-      .select('id, kind, tag_label, title, subtitle, image_url, cta_label, cta_href, cta2_label, cta2_href, sort_order')
+      .select('id, kind, tag_label, title, subtitle, image_url, video_url, cta_label, cta_href, cta2_label, cta2_href, sort_order')
       .eq('active', true)
       .order('sort_order', { ascending: true })
       .order('created_at', { ascending: true });

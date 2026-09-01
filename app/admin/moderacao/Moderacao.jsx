@@ -348,7 +348,7 @@ function LinkPicker({ onPick }) {
   );
 }
 
-const EMPTY_BANNER = { kind: 'lancamento', tag_label: '', title: '', subtitle: '', image_url: '', cta_label: '', cta_href: '', cta2_label: '', cta2_href: '', active: true, sort_order: 0 };
+const EMPTY_BANNER = { kind: 'lancamento', tag_label: '', title: '', subtitle: '', image_url: '', video_url: '', cta_label: '', cta_href: '', cta2_label: '', cta2_href: '', active: true, sort_order: 0 };
 
 function BannersEditor() {
   const [rows, setRows] = useState(null);
@@ -378,7 +378,8 @@ function BannersEditor() {
     }
     const payload = {
       kind: b.kind, tag_label: b.tag_label || null, title: b.title, subtitle: b.subtitle || null,
-      image_url: imageUrl, cta_label: b.cta_label || null, cta_href: b.cta_href || null,
+      image_url: imageUrl, video_url: b.video_url?.trim() || null,
+      cta_label: b.cta_label || null, cta_href: b.cta_href || null,
       cta2_label: b.cta2_label || null, cta2_href: b.cta2_href || null, active: b.active,
       sort_order: b.sort_order ?? 0, updated_at: new Date().toISOString(),
     };
@@ -497,6 +498,12 @@ function BannersEditor() {
             </div>
             <input style={inp} value={editing.image_url} onChange={e => set('image_url', e.target.value)} placeholder="https://..." />
             <p style={{ fontSize: 11, color: 'var(--paper-mut)', margin: '-3px 0 10px' }}>URL externa será copiada para o Supabase ao salvar.</p>
+
+            <label style={{ fontSize: 12, color: 'var(--paper-mut)' }}>Vídeo de fundo (opcional)</label>
+            <input style={inp} value={editing.video_url || ''} onChange={e => set('video_url', e.target.value)} placeholder="https://....mp4" />
+            <p style={{ fontSize: 11, color: 'var(--paper-mut)', margin: '-3px 0 10px' }}>
+              MP4 ou WebM, mudo, até ~6s e 3MB. A imagem acima vira o poster. Cole a URL do arquivo já hospedado (Storage do Supabase).
+            </p>
 
             <hr style={{ border: 0, borderTop: '1px solid var(--border)', margin: '14px 0' }} />
             <p style={{ fontWeight: 700, marginBottom: 8 }}>Botão principal</p>

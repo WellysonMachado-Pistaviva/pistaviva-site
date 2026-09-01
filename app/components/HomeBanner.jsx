@@ -6,6 +6,8 @@ import { isOptimizable } from '../lib/img';
 
 // Carrossel de banners da home (porta do layout IGNIS, 100% funcional):
 // autoplay 6s, dots com barra de progresso, setas, swipe e pause no hover.
+// Slide com video_url vira vídeo mudo em loop (só o slide ativo roda);
+// image_url segue como poster/fallback.
 // Os banners vêm do admin (tabela pv_banners) — cada um com tag, título,
 // subtítulo e até 2 botões que linkam pra matéria/parada/fotógrafo/evento/URL.
 
@@ -18,6 +20,55 @@ const TAG = {
   evento: { label: 'Evento', cls: 'pvb-tag pvb-tag--evento' },
   aviso: { label: 'Aviso', cls: 'pvb-tag pvb-tag--aviso' },
 };
+
+// Mídia do slide: vídeo mudo em loop quando o banner tem video_url, imagem caso
+// contrário. Só o slide ativo toca — os outros ficam pausados no poster, o que
+// evita gastar banda e bateria com 3 ou 4 vídeos rodando fora da tela.
+function BannerMedia({ banner, active, priority }) {
+  const vid = useRef(null);
+
+  useEffect(() => {
+    const el = vid.current;
+    if (!el) return;
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+    if (active && !reduced) {
+      // play() rejeita se o navegador bloquear o autoplay; o poster fica.
+      el.play().catch(() => {});
+    } else {
+      el.pause();
+      el.currentTime = 0;
+    }
+  }, [active]);
+
+  if (banner.video_url) {
+    return (
+      <video
+        ref={vid}
+        src={banner.video_url}
+        poster={banner.image_url}
+        muted
+        loop
+        playsInline
+        tabIndex={-1}
+        aria-hidden="true"
+        preload={priority ? 'auto' : 'none'}
+      />
+    );
+  }
+
+  return (
+    <Image
+      src={banner.image_url}
+      alt={banner.title || ''}
+      fill
+      sizes="100vw"
+      quality={75}
+      priority={priority}
+      unoptimized={!isOptimizable(banner.image_url)}
+      style={{ objectFit: 'cover', objectPosition: 'center' }}
+    />
+  );
+}
 
 // Renderiza um botão como <Link> (interno) ou <a> (externo), conforme o href.
 function CTA({ href, label, variant }) {
@@ -85,16 +136,7 @@ export default function HomeBanner({ banners = [] }) {
             return (
               <article className="pvb-slide" key={b.id || k}>
                 <div className="pvb-media">
-                  <Image
-                    src={b.image_url}
-                    alt={b.title || ''}
-                    fill
-                    sizes="100vw"
-                    quality={75}
-                    priority={k === 0}
-                    unoptimized={!isOptimizable(b.image_url)}
-                    style={{ objectFit: 'cover', objectPosition: 'center' }}
-                  />
+                  <BannerMedia banner={b} active={k === i} priority={k === 0} />
                   <span className={tag.cls}><span className="dot" />{b.tag_label || tag.label}</span>
                 </div>
                 <div className="pvb-cap">
