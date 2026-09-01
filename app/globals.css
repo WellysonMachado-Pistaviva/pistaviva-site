@@ -751,7 +751,7 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
     linear-gradient(180deg,rgba(8,8,9,.75) 0%,transparent 22%) !important; }
 
   /* vira carrossel: rola na horizontal, encaixa card a card */
-  .cats, .ig-model-grid, .ig-news-grid{
+  .cats, .ig-model-grid, .ig-news-grid, .home-affiliate-grid{
     display:flex !important; flex-wrap:nowrap; gap:12px;
     overflow-x:auto; overflow-y:hidden;
     scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
@@ -759,13 +759,22 @@ img{ background:var(--ink-2); }  /* evita flash branco enquanto carrega */
     margin-inline:calc(-1 * var(--gut)); padding:2px var(--gut) 14px;
     scrollbar-width:none;
   }
-  .cats::-webkit-scrollbar, .ig-model-grid::-webkit-scrollbar, .ig-news-grid::-webkit-scrollbar{ display:none; }
+  .cats::-webkit-scrollbar, .ig-model-grid::-webkit-scrollbar, .ig-news-grid::-webkit-scrollbar, .home-affiliate-grid::-webkit-scrollbar{ display:none; }
 
   .cat{ scroll-snap-align:start; flex:0 0 64%; min-height:auto; }
   .ig-cat-card{ scroll-snap-align:start; }
   .ig-model{ scroll-snap-align:start; flex:0 0 80%; }
   .ig-news-grid .ig-post{ scroll-snap-align:start; flex:0 0 86%; }
   .ig-news-grid .ig-post.feat .pic{ aspect-ratio:16/10; }
+
+  /* Garagem: empilhada, os quatro cards somavam ~2.500px — mais de um quarto
+     da home no celular, antes de qualquer matéria. Vira carrossel como o resto. */
+  .home-affiliate-grid .affiliate-card{ scroll-snap-align:start; flex:0 0 78%; }
+  .home-affiliate-grid > .affiliate-card:first-child{ grid-row:auto; }
+  .home-affiliate-grid > .affiliate-card:last-child{ grid-column:auto; flex-direction:column; }
+  .home-affiliate-grid > .affiliate-card:last-child .affiliate-card-media{ flex:none; aspect-ratio:1; }
+  .home-affiliate-head{ position:relative; }
+  .home-affiliate-head::after{ content:"deslize →"; position:absolute; right:0; bottom:-2px; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.6); }
 
   /* dica visual de que dá pra arrastar */
   .ig-sechead{ position:relative; }
