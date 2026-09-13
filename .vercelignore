@@ -1,0 +1,12 @@
+# Local credentials, agent state, and generated artifacts must not be uploaded.
+.env*
+**/*.bak
+.git
+.next
+.netlify
+.claude
+.agents
+.codex
+.playwright
+.playwright-cli
+node_modules

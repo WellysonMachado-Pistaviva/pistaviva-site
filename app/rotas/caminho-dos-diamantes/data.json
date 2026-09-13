@@ -1,0 +1,256 @@
+{
+  "checkedAt": "2026-09-13",
+  "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/",
+  "gpx": "https://files.institutoestradareal.com.br/files/way/gps_gpx/1737574402299/caminho_caminho_dos_diamantes_mapa.gpx",
+  "entries": [
+    {
+      "name": "Diamantina",
+      "point": [
+        -18.245082423,
+        -43.597525209
+      ]
+    },
+    {
+      "name": "Serro",
+      "point": [
+        -18.603836587,
+        -43.379578549
+      ]
+    },
+    {
+      "name": "Conceição do Mato Dentro",
+      "point": [
+        -19.035541238,
+        -43.426136076
+      ]
+    },
+    {
+      "name": "Ipoema",
+      "point": [
+        -19.621799469,
+        -43.43453598
+      ]
+    },
+    {
+      "name": "Catas Altas",
+      "point": [
+        -20.075261593,
+        -43.409020901
+      ]
+    },
+    {
+      "name": "Mariana",
+      "point": [
+        -20.376206953,
+        -43.41791762
+      ]
+    },
+    {
+      "name": "Ouro Preto",
+      "point": [
+        -20.385920908,
+        -43.503871271
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "id": 1,
+      "from": "Diamantina",
+      "to": "São Gonçalo do Rio das Pedras",
+      "km": 33,
+      "surface": "unknown",
+      "note": "Terra predominante no resumo do caminho; a etapa também cita calçamento histórico. Limites de piso não georreferenciados.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/diamantina-mg+sao-goncalo-do-rio-das-pedras-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640898809065/trecho_caminho_dos_diamantes_diamantina_sao_goncalo_do_rio_das_pedras_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575383487/trecho_caminho_dos_diamantes_diamantina_sao_goncalo_do_rio_das_pedras_mapa.gpx"
+    },
+    {
+      "id": 2,
+      "from": "São Gonçalo do Rio das Pedras",
+      "to": "Serro",
+      "km": 30,
+      "surface": "asphalt",
+      "note": "Asfalto em toda a etapa, passando por Milho Verde, segundo a descrição oficial.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/sao-goncalo-do-rio-das-pedras-mg+serro-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640898831527/trecho_caminho_dos_diamantes_sao_goncalo_do_rio_das_pedras_serro_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575501929/trecho_caminho_dos_diamantes_sao_goncalo_do_rio_das_pedras_serro_mapa.gpx"
+    },
+    {
+      "id": 3,
+      "from": "Serro",
+      "to": "Alvorada de Minas",
+      "km": 18,
+      "surface": "asphalt",
+      "note": "Estrada asfaltada em toda a etapa, segundo a descrição oficial.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/serro-mg+alvorada-de-minas-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640898853154/trecho_caminho_dos_diamantes_serro_alvorada_de_minas_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575527404/trecho_caminho_dos_diamantes_serro_alvorada_de_minas_mapa.gpx"
+    },
+    {
+      "id": 4,
+      "from": "Alvorada de Minas",
+      "to": "Itapanhoacanga",
+      "km": 17,
+      "surface": "unknown",
+      "note": "Resumo do caminho indica terra fora das exceções asfaltadas. A planilha desta etapa não delimita as mudanças de piso.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/alvorada-de-minas-mg+itapanhoacanga-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640898874775/trecho_caminho_dos_diamantes_alvorada_de_minas_itapanhoacanga_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575553196/trecho_caminho_dos_diamantes_alvorada_de_minas_itapanhoacanga_mapa.gpx"
+    },
+    {
+      "id": 5,
+      "from": "Itapanhoacanga",
+      "to": "Santo Antônio do Norte (Tapera)",
+      "km": 14,
+      "surface": "unknown",
+      "note": "Resumo indica terra; subidas e descidas fortes na descrição. Transições de piso não delimitadas.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/itapanhoacanga-mg+santo-antonio-do-norte-tapera-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640898898466/trecho_caminho_dos_diamantes_itapanhoacanga_santo_antonio_do_norte_tapera_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575578954/trecho_caminho_dos_diamantes_itapanhoacanga_santo_antonio_do_norte_tapera_mapa.gpx"
+    },
+    {
+      "id": 6,
+      "from": "Santo Antônio do Norte (Tapera)",
+      "to": "Conceição do Mato Dentro",
+      "km": 34,
+      "surface": "mixed",
+      "note": "Os últimos 10 km, chegando a Conceição do Mato Dentro pela MG-10, são asfaltados. Antes disso, terra indicada pelo resumo; transição aproximada.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/santo-antonio-do-norte-tapera-mg+conceicao-do-mato-dentro-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640898919988/trecho_caminho_dos_diamantes_santo_antonio_do_norte_tapera_conceicao_do_mato_dentro_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575604468/trecho_caminho_dos_diamantes_santo_antonio_do_norte_tapera_conceicao_do_mato_dentro_mapa.gpx"
+    },
+    {
+      "id": 7,
+      "from": "Conceição do Mato Dentro",
+      "to": "Morro do Pilar",
+      "km": 27,
+      "surface": "unknown",
+      "note": "Terra indicada pelo resumo geral. A descrição da etapa não confirma limites de pavimentação.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/conceicao-do-mato-dentro-mg+morro-do-pilar-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640898942012/trecho_caminho_dos_diamantes_conceicao_do_mato_dentro_morro_do_pilar_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575630316/trecho_caminho_dos_diamantes_conceicao_do_mato_dentro_morro_do_pilar_mapa.gpx"
+    },
+    {
+      "id": 8,
+      "from": "Morro do Pilar",
+      "to": "Itambé do Mato Dentro",
+      "km": 35,
+      "surface": "unknown",
+      "note": "Terra indicada pelo resumo geral. A descrição da etapa não confirma limites de pavimentação.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/morro-do-pilar-mg+itambe-do-mato-dentro-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640898963846/trecho_caminho_dos_diamantes_morro_do_pilar_itambe_do_mato_dentro_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575656398/trecho_caminho_dos_diamantes_morro_do_pilar_itambe_do_mato_dentro_mapa.gpx"
+    },
+    {
+      "id": 9,
+      "from": "Itambé do Mato Dentro",
+      "to": "Ipoema",
+      "km": 31,
+      "surface": "mixed",
+      "note": "Saída de Itambé no asfalto: 14 km na descrição da etapa; 15,2 km até Senhora do Carmo no resumo. A fonte também cita obras de pavimentação. Confirme o restante até Ipoema.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/itambe-do-mato-dentro-mg+ipoema-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640898986079/trecho_caminho_dos_diamantes_itambe_do_mato_dentro_ipoema_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575682168/trecho_caminho_dos_diamantes_itambe_do_mato_dentro_ipoema_mapa.gpx"
+    },
+    {
+      "id": 10,
+      "from": "Ipoema",
+      "to": "Bom Jesus do Amparo",
+      "km": 13,
+      "surface": "asphalt",
+      "note": "Etapa descrita como asfaltada pelo Instituto Estrada Real.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/ipoema-mg+bom-jesus-do-amparo-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640899007625/trecho_caminho_dos_diamantes_ipoema_bom_jesus_do_amparo_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575387887/trecho_caminho_dos_diamantes_ipoema_bom_jesus_do_amparo_mapa.gpx"
+    },
+    {
+      "id": 11,
+      "from": "Bom Jesus do Amparo",
+      "to": "Cocais",
+      "km": 25,
+      "surface": "mixed",
+      "note": "Sai de Bom Jesus do Amparo no asfalto; após o marco 417, entra em terra com cascalho e valas. Resumo informa 7 km asfaltados. Confirme acessos no eucaliptal.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/bom-jesus-do-amparo-mg+cocais-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640899028913/trecho_caminho_dos_diamantes_bom_jesus_do_amparo_cocais_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575413975/trecho_caminho_dos_diamantes_bom_jesus_do_amparo_cocais_mapa.gpx"
+    },
+    {
+      "id": 12,
+      "from": "Cocais",
+      "to": "Barão de Cocais",
+      "km": 14,
+      "surface": "unknown",
+      "note": "Resumo indica terra. A etapa cita mata-burros e piso escorregadio com chuva; mudanças de piso não delimitadas.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/cocais-mg+barao-de-cocais-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640899050714/trecho_caminho_dos_diamantes_cocais_barao_de_cocais_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575439730/trecho_caminho_dos_diamantes_cocais_barao_de_cocais_mapa.gpx"
+    },
+    {
+      "id": 13,
+      "from": "Barão de Cocais",
+      "to": "Santa Bárbara",
+      "km": 14,
+      "surface": "unknown",
+      "note": "Terra indicada pelo resumo geral; piso não detalhado na página da etapa.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/barao-de-cocais-mg+santa-barbara-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640899071754/trecho_caminho_dos_diamantes_barao_de_cocais_santa_barbara_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575465391/trecho_caminho_dos_diamantes_barao_de_cocais_santa_barbara_mapa.gpx"
+    },
+    {
+      "id": 14,
+      "from": "Santa Bárbara",
+      "to": "Catas Altas",
+      "km": 20,
+      "surface": "trail",
+      "note": "Trecho com trilha: 2 km no resumo e 3 km na descrição da etapa. Há alternativa em terra para veículos. Acesso de moto precisa de confirmação local.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/santa-barbara-mg+catas-altas-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640899093516/trecho_caminho_dos_diamantes_santa_barbara_catas_altas_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575488395/trecho_caminho_dos_diamantes_santa_barbara_catas_altas_mapa.gpx"
+    },
+    {
+      "id": 15,
+      "from": "Catas Altas",
+      "to": "Santa Rita Durão",
+      "km": 19,
+      "surface": "dirt",
+      "note": "Descrição registra estrada de terra na Trilha Parque e trecho sobre minério após Morro da Água Quente; podem existir pisos urbanos diferentes.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/catas-altas-mg+santa-rita-durao-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640899115323/trecho_caminho_dos_diamantes_catas_altas_santa_rita_durao_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575490614/trecho_caminho_dos_diamantes_catas_altas_santa_rita_durao_mapa.gpx"
+    },
+    {
+      "id": 16,
+      "from": "Santa Rita Durão",
+      "to": "Camargos",
+      "km": 16,
+      "surface": "blocked",
+      "note": "Aviso oficial de interdição entre Santa Rita Durão e Mariana. O Instituto indica MG-129 para carros, com 53,6 km até Mariana; confirme acesso para moto.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/santa-rita-durao-mg+camargos-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640899137202/trecho_caminho_dos_diamantes_santa_rita_durao_camargos_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575492908/trecho_caminho_dos_diamantes_santa_rita_durao_camargos_mapa.gpx"
+    },
+    {
+      "id": 17,
+      "from": "Camargos",
+      "to": "Mariana",
+      "km": 18,
+      "surface": "blocked",
+      "note": "Descrição registra terra, mas o aviso geral inclui esta etapa na interdição Santa Rita Durão–Mariana. Consulte a alternativa pela MG-129.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/camargos-mg+mariana-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640899157845/trecho_caminho_dos_diamantes_camargos_mariana_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575495146/trecho_caminho_dos_diamantes_camargos_mariana_mapa.gpx"
+    },
+    {
+      "id": 18,
+      "from": "Mariana",
+      "to": "Ouro Preto",
+      "km": 11,
+      "surface": "asphalt",
+      "note": "Todo o trajeto é descrito como asfaltado. O Instituto informa ausência de marcos nesta etapa.",
+      "source": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-dos-diamantes/trecho/mariana-mg+ouro-preto-mg",
+      "pdf": "https://files.institutoestradareal.com.br/files/way-route/spreadsheet/1640899178845/trecho_caminho_dos_diamantes_mariana_ouro_preto_planilha.pdf",
+      "gpx": "https://files.institutoestradareal.com.br/files/way-route/gps_gpx/1737575497762/trecho_caminho_dos_diamantes_mariana_ouro_preto_mapa.gpx"
+    }
+  ]
+}

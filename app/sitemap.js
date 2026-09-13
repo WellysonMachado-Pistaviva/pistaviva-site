@@ -32,6 +32,7 @@ export default async function sitemap() {
     { path: '/blog' },
     { path: '/diretorio-duas-rodas' },
     { path: '/rotas' },
+    { path: '/rotas/caminho-dos-diamantes', lastModified: '2026-09-13' },
     { path: '/comunidade' },
     { path: '/estradas' },
     { path: '/desafios' },
