@@ -9,6 +9,7 @@ import EventsRail from './components/EventsRail';
 import CommunityRail from './components/CommunityRail';
 import PhotoRibbon from './components/PhotoRibbon';
 import ContentIndex from './components/ContentIndex';
+import TopicNavigation from './components/TopicNavigation';
 import EditorialSplit from './components/EditorialSplit';
 import ProductShowcase from './components/ProductShowcase';
 import AffiliateGear from './components/AffiliateGear';
@@ -19,8 +20,8 @@ import { getCommunityRailItems } from './lib/community';
 import { DESAFIOS } from './lib/desafios';
 
 export const metadata = {
-  title: { absolute: 'Pistaviva — Mototurismo no Brasil' },
-  description: 'Estradas, roteiros, eventos e histórias reais de quem viaja de moto pelo Brasil.',
+  title: { absolute: 'Pistaviva — Mototurismo, rotas de moto e eventos' },
+  description: 'Planeje viagens de moto, descubra estradas e eventos pelo Brasil. Conheça o Parque da Cidade de Itajubá e o Motosul Festival com a Pistaviva.',
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
@@ -28,7 +29,7 @@ export const metadata = {
     siteName: 'Pistaviva',
     locale: 'pt_BR',
     title: 'Pistaviva — Mototurismo no Brasil',
-    description: 'Estradas, roteiros, eventos e histórias reais de quem viaja de moto pelo Brasil.',
+    description: 'Planeje viagens de moto, descubra estradas e eventos pelo Brasil. Conheça o Parque da Cidade de Itajubá e o Motosul Festival com a Pistaviva.',
   },
 };
 
@@ -93,6 +94,7 @@ export default async function Home() {
       <ContentIndex />
 
       <HomeExperiences />
+      <TopicNavigation />
       <CommunityRail items={community} />
 
       {lead && (

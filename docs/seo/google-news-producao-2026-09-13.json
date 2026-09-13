@@ -1,0 +1,71 @@
+{
+  "checked_at": "2026-09-13T13:37:09.752568+00:00",
+  "urls": {
+    "/robots.txt": {
+      "status": 200,
+      "content_type": "text/plain",
+      "final_url": "https://www.pistavivamototurismo.com.br/robots.txt"
+    },
+    "/news-sitemap.xml": {
+      "status": 200,
+      "content_type": "application/xml; charset=utf-8",
+      "final_url": "https://www.pistavivamototurismo.com.br/news-sitemap.xml"
+    },
+    "/sitemap.xml": {
+      "status": 200,
+      "content_type": "application/xml",
+      "final_url": "https://www.pistavivamototurismo.com.br/sitemap.xml"
+    },
+    "/politica-editorial": {
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "final_url": "https://www.pistavivamototurismo.com.br/politica-editorial",
+      "h1": [
+        "Política editorial da Pistaviva"
+      ],
+      "canonical": [
+        "https://www.pistavivamototurismo.com.br/politica-editorial"
+      ],
+      "schema_errors": []
+    },
+    "/sobre": {
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "final_url": "https://www.pistavivamototurismo.com.br/sobre",
+      "h1": [
+        "De um caféde domingo a um movimento"
+      ],
+      "canonical": [
+        "https://www.pistavivamototurismo.com.br/sobre"
+      ],
+      "schema_errors": []
+    },
+    "/contato": {
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "final_url": "https://www.pistavivamototurismo.com.br/contato",
+      "h1": [
+        "Contato"
+      ],
+      "canonical": [
+        "https://www.pistavivamototurismo.com.br/contato"
+      ],
+      "schema_errors": []
+    },
+    "/blog/estrada-real-de-moto-roteiro": {
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "final_url": "https://www.pistavivamototurismo.com.br/blog/estrada-real-de-moto-roteiro",
+      "h1": [
+        "Estrada Real de moto: roteiro por Ouro Preto, Tiradentes e São João del-Rei"
+      ],
+      "canonical": [
+        "https://www.pistavivamototurismo.com.br/blog/estrada-real-de-moto-roteiro"
+      ],
+      "schema_errors": [],
+      "brasilia_time_visible": true
+    }
+  },
+  "news_count": 0,
+  "general_sitemap_count": 148
+}

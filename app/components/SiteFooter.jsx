@@ -49,6 +49,7 @@ export default function SiteFooter() {
         <div className="foot-legal">
           <Link href="/sobre">Sobre</Link>
           <Link href="/contato">Contato</Link>
+          <Link href="/politica-editorial">Política editorial</Link>
           <Link href="/privacidade">Privacidade</Link>
           <Link href="/termos">Termos</Link>
           <Link href="/apoie">Apoie</Link>

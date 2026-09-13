@@ -1,0 +1,47 @@
+{
+  "/": {
+    "status": 200,
+    "politica_link": true,
+    "title": [
+      "Pistaviva — Mototurismo, rotas de moto e eventos"
+    ],
+    "navegacao_tematica": true
+  },
+  "/parque-da-cidade": {
+    "status": 200,
+    "politica_link": true,
+    "title": [
+      "Parque da Cidade de Itajubá: atrações, horários e mapa"
+    ],
+    "navegacao_tematica": true
+  },
+  "/motosul": {
+    "status": 200,
+    "politica_link": true,
+    "title": [
+      "Motosul Festival 2027 em Itajubá | Evento de Moto"
+    ],
+    "navegacao_tematica": true
+  },
+  "/politica-editorial": {
+    "status": 200,
+    "politica_link": true,
+    "title": [
+      "Política editorial: fontes, autoria e correções · Pistaviva"
+    ]
+  },
+  "/blog/motosul-itajuba-mototurismo-gastronomia-minas-gerais": {
+    "status": 200,
+    "politica_link": true,
+    "title": [
+      "Motosul coloca Itajubá no mapa do mototurismo gastronômico · Pistaviva"
+    ],
+    "article_author": [
+      {
+        "@type": "Person",
+        "name": "Wellyson Machado",
+        "url": "https://www.pistavivamototurismo.com.br/sobre"
+      }
+    ]
+  }
+}

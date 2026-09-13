@@ -9,7 +9,7 @@ export default function robots() {
         disallow: ['/admin', '/api/'],
       },
     ],
-    sitemap: `${BASE}/sitemap.xml`,
+    sitemap: [`${BASE}/sitemap.xml`, `${BASE}/news-sitemap.xml`],
     host: BASE,
   };
 }

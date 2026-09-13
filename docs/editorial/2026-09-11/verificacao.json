@@ -1,0 +1,165 @@
+{
+  "checkedAt": "2026-09-12T13:15:20.501Z",
+  "pages": [
+    {
+      "url": "https://www.pistavivamototurismo.com.br/blog/o-que-fazer-em-itajuba-fim-de-semana",
+      "status": 200,
+      "titlePresent": true,
+      "bodyPresent": true,
+      "canonical": "https://www.pistavivamototurismo.com.br/blog/o-que-fazer-em-itajuba-fim-de-semana",
+      "noindex": false,
+      "inSitemap": true,
+      "inBlogListing": true,
+      "articleSchema": true,
+      "dateModified": "2026-09-11T13:00:00+00:00"
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/blog/onde-comer-parque-da-cidade-itajuba",
+      "status": 200,
+      "titlePresent": true,
+      "bodyPresent": true,
+      "canonical": "https://www.pistavivamototurismo.com.br/blog/onde-comer-parque-da-cidade-itajuba",
+      "noindex": false,
+      "inSitemap": true,
+      "inBlogListing": true,
+      "articleSchema": true,
+      "dateModified": "2026-09-11T13:00:00+00:00"
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/blog/planejar-viagem-moto-motosul-2027",
+      "status": 200,
+      "titlePresent": true,
+      "bodyPresent": true,
+      "canonical": "https://www.pistavivamototurismo.com.br/blog/planejar-viagem-moto-motosul-2027",
+      "noindex": false,
+      "inSitemap": true,
+      "inBlogListing": true,
+      "articleSchema": true,
+      "dateModified": "2026-09-11T13:00:00+00:00"
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/blog/roteiro-moto-mantiqueira-parada-itajuba",
+      "status": 200,
+      "titlePresent": true,
+      "bodyPresent": true,
+      "canonical": "https://www.pistavivamototurismo.com.br/blog/roteiro-moto-mantiqueira-parada-itajuba",
+      "noindex": false,
+      "inSitemap": true,
+      "inBlogListing": true,
+      "articleSchema": true,
+      "dateModified": "2026-09-11T13:00:00+00:00"
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/blog/bate-volta-de-moto-saindo-de-bh",
+      "status": 200,
+      "titlePresent": true,
+      "bodyPresent": true,
+      "canonical": "https://www.pistavivamototurismo.com.br/blog/bate-volta-de-moto-saindo-de-bh",
+      "noindex": false,
+      "inSitemap": true,
+      "inBlogListing": true,
+      "articleSchema": true,
+      "dateModified": "2026-09-11"
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/blog/serra-do-rio-do-rastro-de-moto-guia",
+      "status": 200,
+      "titlePresent": true,
+      "bodyPresent": true,
+      "canonical": "https://www.pistavivamototurismo.com.br/blog/serra-do-rio-do-rastro-de-moto-guia",
+      "noindex": false,
+      "inSitemap": true,
+      "inBlogListing": true,
+      "articleSchema": true,
+      "dateModified": "2026-09-11",
+      "creditPresent": true
+    }
+  ],
+  "assetsAndLinks": [
+    {
+      "path": "/motosul/hero-motos.jpg",
+      "status": 200,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "/parque-da-cidade",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/blog/onde-comer-parque-da-cidade-itajuba",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/blog/roteiro-moto-mantiqueira-parada-itajuba",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/motosul",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/rotas",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/motosul/gastronomia.jpg",
+      "status": 200,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "/blog/planejar-viagem-moto-motosul-2027",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/parque-da-cidade#gastronomia",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/blog/o-que-fazer-em-itajuba-fim-de-semana",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/motosul/g-chegada.jpg",
+      "status": 200,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "/guias/o-que-levar-na-viagem-de-moto",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/blog/serra-da-mantiqueira-de-moto-rotas",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "https://cnvsooegnraedwmemzgl.supabase.co/storage/v1/object/public/post-images/admin/covers/br/bate-volta-de-moto-saindo-de-bh.jpg",
+      "status": 200,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "/blog/destinos-de-mototurismo-no-sul-de-minas",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Serra_do_Rio_do_Rastro_%28SC-390%29.jpg",
+      "status": 200,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "/destinos",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    }
+  ]
+}

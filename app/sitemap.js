@@ -7,6 +7,9 @@ import { DESAFIOS } from './lib/desafios';
 import { getEventsForSeo } from './lib/events';
 import { FOTOS as FOTOS_PARQUE } from './parque-da-cidade/dados';
 
+// Atualiza descoberta de publicações sem depender de novo deploy.
+export const revalidate = 3600;
+
 const BASE = 'https://www.pistavivamototurismo.com.br';
 
 // Next 15 não escapa & em <image:loc> → quebra o parse do Google. Escapa XML na mão.
@@ -25,7 +28,7 @@ export default async function sitemap() {
   // Só informa lastModified quando existe atualização editorial verificável.
   // Google ignora priority/changefreq e pode desconsiderar lastmod impreciso.
   const staticPages = [
-    { path: '' },
+    { path: '', lastModified: '2026-09-11' },
     { path: '/blog' },
     { path: '/diretorio-duas-rodas' },
     { path: '/rotas' },
@@ -41,7 +44,7 @@ export default async function sitemap() {
     { path: '/eventos' },
     {
       path: '/motosul',
-      lastModified: '2026-08-21',
+      lastModified: '2026-09-11',
       images: [
         `${BASE}/motosul/hero-motos.jpg`,
         `${BASE}/motosul/hero-publico.jpg`,
@@ -51,7 +54,7 @@ export default async function sitemap() {
     },
     {
       path: '/parque-da-cidade',
-      lastModified: '2026-08-31',
+      lastModified: '2026-09-11',
       // Sai da própria galeria: foto nova na página entra no sitemap sozinha.
       // A do destaque não está na galeria, então entra à parte — daí o Set.
       images: [...new Set([
@@ -60,9 +63,10 @@ export default async function sitemap() {
       ])],
     },
     { path: '/sobre' },
+    { path: '/politica-editorial', lastModified: '2026-09-11' },
     { path: '/apoie' },
     // /loja é doorway pra loja externa (noindex) — fora do sitemap.
-    { path: '/estrada-x' },
+    { path: '/estrada-x', lastModified: '2026-09-11' },
     { path: '/contato' },
     { path: '/privacidade' },
     { path: '/termos' },
@@ -80,7 +84,9 @@ export default async function sitemap() {
     const slugs = await getAllSlugs();
     posts = slugs.map(s => ({
       url: `${BASE}/blog/${s.slug}`,
-      ...(s.published_at ? { lastModified: new Date(s.published_at).toISOString() } : {}),
+      ...(['bate-volta-de-moto-saindo-de-bh', 'serra-do-rio-do-rastro-de-moto-guia', 'serra-da-mantiqueira-de-moto-rotas', 'destinos-de-mototurismo-no-sul-de-minas'].includes(s.slug)
+        ? { lastModified: new Date(Math.max(new Date(s.published_at || 0).getTime() || 0, new Date('2026-09-11').getTime())).toISOString() }
+        : s.published_at ? { lastModified: new Date(s.published_at).toISOString() } : {}),
       ...safeImages(s.cover_url),
     }));
   } catch { /* DB indisponível no build */ }

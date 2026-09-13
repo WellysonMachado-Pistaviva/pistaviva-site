@@ -1,3 +1,5 @@
+import { isNewsArticle, formatEditorialDate } from '../../lib/news.mjs';
+import ArticlePlanning from '../../components/ArticlePlanning';
 import Link from 'next/link';
 import Cover from '../../components/Cover';
 import { notFound } from 'next/navigation';
@@ -7,6 +9,7 @@ import ReadingProgress from '../../components/ReadingProgress';
 import ArticleChecklist from '../../components/ArticleChecklist';
 import InstagramEmbeds from '../../components/InstagramEmbeds';
 import { parseArticleBody } from '../../lib/articleBody.mjs';
+import { getArticleFaq } from '../../lib/articleFaq.mjs';
 
 export const revalidate = 300;
 
@@ -85,16 +88,8 @@ export default async function BlogPost({ params }) {
 
   const blocks = parseArticleBody(post.body);
 
-  // FAQPage: dentro da seção "## Perguntas frequentes", cada h3 (pergunta) + p seguinte (resposta).
-  const faq = [];
-  let inFaq = false;
-  let faqStart = -1;
-  for (let i = 0; i < blocks.length; i++) {
-    const b = blocks[i];
-    if (b.t === 'h2') { inFaq = /perguntas frequentes|faq|d[úu]vidas/i.test(b.v); if (inFaq && faqStart < 0) faqStart = i; }
-    else if (inFaq && b.t === 'h3' && blocks[i + 1]?.t === 'p') faq.push({ q: b.v, a: blocks[i + 1].v });
-  }
-  const bodyBlocks = (faq.length >= 2 && faqStart >= 0) ? blocks.slice(0, faqStart) : blocks;
+  // FAQ metadata never removes sections from the visible article.
+  const faq = getArticleFaq(blocks);
   const faqLd = faq.length >= 2 ? {
     '@context': 'https://schema.org', '@type': 'FAQPage',
     mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
@@ -106,15 +101,18 @@ export default async function BlogPost({ params }) {
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
+    '@type': isNewsArticle(post) ? 'NewsArticle' : 'BlogPosting',
     headline: post.title,
     description: post.excerpt || post.title,
     image: [coverAbs],
     datePublished: post.published_at || undefined,
     dateModified: post.updated_at || post.published_at || undefined,
-    author: post.author ? { '@type': 'Person', name: post.author } : { '@type': 'Organization', name: 'Pistaviva' },
+    author: !post.author || /^(reda[çc][ãa]o\s+)?pistaviva$/i.test(post.author.trim())
+      ? { '@type': 'Organization', '@id': `${SITE_URL}/#org`, name: post.author || 'Pistaviva', url: SITE_URL }
+      : { '@type': 'Person', name: post.author, ...(post.author === 'Wellyson Machado' ? { url: `${SITE_URL}/sobre` } : {}) },
     publisher: {
       '@type': 'Organization',
+      '@id': `${SITE_URL}/#org`,
       name: 'Pistaviva',
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/pwa-512x512.png`, width: 512, height: 512 },
     },
@@ -140,7 +138,8 @@ export default async function BlogPost({ params }) {
   const readMin = Math.max(2, Math.round(words / 200));
   const author = post.author || 'Pistaviva';
   const initials = author.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
-  const dateFmt = post.published_at ? new Date(post.published_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }) : null;
+  const dateFmt = formatEditorialDate(post.published_at);
+  const updatedFmt = Date.parse(post.updated_at) > Date.parse(post.published_at) ? formatEditorialDate(post.updated_at) : null;
   const related = await getRelatedPosts(slug, post.tags, 3);
   const url = `${SITE_URL}/blog/${slug}`;
   const share = {
@@ -172,15 +171,17 @@ export default async function BlogPost({ params }) {
         <div className="wrap">
           <div className="art-meta">
             {post.tags?.[0] && <span className="tag">{post.tags[0]}</span>}
-            {dateFmt && <span className="date">{dateFmt}</span>}
+            {dateFmt && <time className="date" dateTime={post.published_at}>Publicado em {dateFmt}</time>}
             <span className="dot" /><span className="read">{readMin} min de leitura</span>
           </div>
           <h1>{post.title}</h1>
+          {updatedFmt && <p>Atualizado em <time dateTime={post.updated_at}>{updatedFmt}</time></p>}
           {post.excerpt && <p className="sub">{post.excerpt}</p>}
           <div className="art-byline">
             <span className="av">{initials}</span>
-            <span className="who"><b>{author}</b><span>Pistaviva · Mototurismo</span></span>
+            <span className="who"><b>{author === 'Wellyson Machado' || /^(reda[çc][ãa]o\s+)?pistaviva$/i.test(author.trim()) ? <Link href="/sobre" rel="author">{author}</Link> : author}</b><span>Pistaviva · Mototurismo</span></span>
           </div>
+          <p><Link href="/politica-editorial">Fontes, autoria e correções</Link></p>
         </div>
       </header>
 
@@ -193,7 +194,16 @@ export default async function BlogPost({ params }) {
       <div className="art-body">
         <div className="wrap">
           <div className="art-col">
-            {bodyBlocks.map((b, i) => {
+            {blocks.filter((block) => block.t === 'h2').length >= 3 && (
+              <nav className="art-index" aria-label="Índice da matéria">
+                <strong>Encontre o que você precisa</strong>
+                <ul>{blocks.map((block, index) => block.t === 'h2' ? (
+                  <li key={index}><a href={`#secao-${index + 1}`}>{block.v}</a></li>
+                ) : null)}</ul>
+              </nav>
+            )}
+            <ArticlePlanning slug={slug} />
+            {blocks.map((b, i) => {
               if (b.t === 'gallery') return (
                 <div key={i} className="art-media-grid" aria-label="Galeria de recortes da imprensa">
                   {b.items.map((item, itemIndex) => (
@@ -225,23 +235,12 @@ export default async function BlogPost({ params }) {
                 </figure>
               );
               if (b.t === 'h3') return <h3 key={i}>{b.v}</h3>;
-              if (b.t === 'h2') return <h2 key={i}>{b.v}</h2>;
+              if (b.t === 'h2') return <h2 key={i} id={`secao-${i + 1}`}>{b.v}</h2>;
               if (b.t === 'checklist') {
                 return <ArticleChecklist key={i} items={b.items} storageKey={`pv:checklist:${post.slug}:${i}`} />;
               }
               return <p key={i}>{renderInline(b.v)}</p>;
             })}
-
-            {faq.length >= 2 && (
-              <>
-                <h2>Perguntas frequentes</h2>
-                <div className="faq">
-                  {faq.map((f, i) => (
-                    <details key={i}><summary>{f.q}</summary><div className="ans">{f.a}</div></details>
-                  ))}
-                </div>
-              </>
-            )}
 
             {/* share + tags */}
             <div className="art-share">

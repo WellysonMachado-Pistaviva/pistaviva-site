@@ -6,9 +6,9 @@ const PORTRAIT = 'https://cnvsooegnraedwmemzgl.supabase.co/storage/v1/object/pub
 export const revalidate = 600;
 
 export const metadata = {
-  title: 'Wellyson Machado — Referência em Mototurismo na Serra da Mantiqueira',
+  title: 'Nossa história — Wellyson Machado, Pistaviva e a Mantiqueira',
   description:
-    'A história do movimento que começou com um café de domingo na Venda do Chico e virou o maior encontro de mototurismo da Serra da Mantiqueira. Conheça Wellyson Machado, marketeiro, designer e referência em Mantiqueira em duas rodas.',
+    'Do café na Venda do Chico aos encontros na Mantiqueira: conheça Wellyson Machado, a história da Pistaviva e a parceria com o fotógrafo Don Cruz.',
   keywords: [
     'Wellyson Machado', 'Wellyson Machado Itajubá', 'mototurismo Serra da Mantiqueira',
     'Mantiqueira em duas rodas', 'mototurismo Minas Gerais', 'Venda do Chico',
@@ -16,9 +16,9 @@ export const metadata = {
   ],
   alternates: { canonical: '/sobre' },
   openGraph: {
-    type: 'profile',
-    title: 'Wellyson Machado — Referência em Mototurismo na Mantiqueira',
-    description: 'Do café de domingo na Venda do Chico ao maior movimento de mototurismo da Serra da Mantiqueira.',
+    type: 'website',
+    title: 'Nossa história — Wellyson Machado e Pistaviva',
+    description: 'Encontros, amizade e mototurismo na Mantiqueira. A trajetória da Pistaviva e a parceria com o fotógrafo Don Cruz.',
     url: `${SITE_URL}/sobre`,
     images: [PORTRAIT],
   },
@@ -82,7 +82,7 @@ export default function SobrePage() {
         <div className="wrap ig-hero-inner">
           <span className="ig-eyebrow on-dark">Mantiqueira em duas rodas</span>
           <h1>De um café<br />de domingo a um <span className="it">movimento</span></h1>
-          <p className="ig-lede">Tudo começou simples: reunir os amigos pra um café na Venda do Chico, em Três Corações. Aquele bate-volta despretensioso acendeu uma faísca — e virou o maior movimento de mototurismo da Serra da Mantiqueira.</p>
+          <p className="ig-lede">Tudo começou simples: reunir os amigos pra um café na Venda do Chico, em Três Corações. Da vontade de pegar a estrada junto, a Pistaviva ganhou novos encontros, parceiros e histórias pela Serra da Mantiqueira mineira e paulista.</p>
         </div>
       </section>
 
@@ -97,6 +97,16 @@ export default function SobrePage() {
           ].map(([v, k]) => (
             <div key={k} className="sobre-num"><b>{v}</b><span>{k}</span></div>
           ))}
+        </div>
+      </section>
+
+      <section className="ig-cats sobre-story" aria-labelledby="sobre-origem">
+        <div className="wrap sobre-story-copy">
+          <span className="ig-eyebrow">Nossa história</span>
+          <h2 className="ig-title" id="sobre-origem">O destino era um café. O que ficou foi a turma.</h2>
+          <p>A Pistaviva nasceu desse jeito de viver o mototurismo: escolher um caminho, chamar os amigos e descobrir o que existe entre a saída e a chegada. Uma venda, um restaurante, uma cidade pequena ou uma conversa na parada podem ser o motivo do próximo rolê.</p>
+          <p>Wellyson Machado levou para esse movimento sua experiência em comunicação, marketing e design. Reunir motociclistas também passou a ser uma forma de apresentar destinos, dar visibilidade a quem recebe a turma e aproximar as pessoas que fazem o turismo acontecer na Mantiqueira.</p>
+          <p>Os bate-voltas abriram espaço para encontros maiores, como o Motosul. A escala mudou, mas a razão continua próxima daquele primeiro café: criar oportunidades para estar junto e voltar para casa com uma história pra contar.</p>
         </div>
       </section>
 
@@ -144,6 +154,45 @@ export default function SobrePage() {
                 <Link className="ig-btn ig-btn--ghost on-dark" href="/comunidade">Entrar na comunidade</Link>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="ig-cats sobre-story" aria-labelledby="sobre-parceria">
+        <div className="wrap sobre-story-copy">
+          <span className="ig-eyebrow">Amizade que faz parte da história</span>
+          <h2 className="ig-title" id="sobre-parceria">Don Cruz: o olhar de quem está junto</h2>
+          <p>Essa história também é construída por quem caminha perto. <b>Don Cruz, fotógrafo e amigo de Wellyson</b>, tem contribuído muito para a Pistaviva. Sua parceria faz parte do crescimento do projeto e merece estar aqui, ao lado dos encontros e das pessoas que deram vida ao movimento.</p>
+          <p>A fotografia guarda aquilo que o passeio deixa: a chegada, a moto na estrada, os amigos reunidos. O trabalho de Don Cruz ajuda a transformar esses momentos em memória e a contar, por imagens, a experiência de quem vive o mototurismo.</p>
+          <div className="sobre-cta">
+            <a className="ig-btn ig-btn--primary" href="https://www.instagram.com/doncruzoficial/" target="_blank" rel="noopener noreferrer">Conhecer o trabalho de Don Cruz <span className="arr">→</span></a>
+            <Link className="ig-btn ig-btn--ghost" href="/fotografos">Fotógrafos de estrada</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="ig-cats sobre-story sobre-story--alternate" aria-labelledby="sobre-presente">
+        <div className="wrap sobre-story-copy">
+          <span className="ig-eyebrow">O que fazemos hoje</span>
+          <h2 className="ig-title" id="sobre-presente">A estrada continua entre um encontro e outro</h2>
+          <p>A Pistaviva também leva essa troca para o digital. O portal reúne destinos, estradas, paradas e uma agenda de eventos para ajudar a tirar a próxima viagem do papel. Rotas, desafios e a comunidade dão espaço para planejar o caminho, registrar experiências e compartilhar descobertas.</p>
+          <p>O conteúdo acompanha esse universo: lugares para conhecer, histórias de quem roda e informações para quem gosta de viajar de moto. O Instagram é mais um ponto de encontro para acompanhar a Pistaviva e seguir perto da comunidade.</p>
+          <div className="sobre-cta">
+            <Link className="ig-btn ig-btn--primary" href="/destinos">Descobrir destinos <span className="arr">→</span></Link>
+            <Link className="ig-btn ig-btn--ghost" href="/eventos">Ver próximos encontros</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="ig-cats sobre-story" aria-labelledby="sobre-futuro">
+        <div className="wrap sobre-story-copy">
+          <span className="ig-eyebrow">O caminho que queremos construir</span>
+          <h2 className="ig-title" id="sobre-futuro">Mais lugares, mais encontros, mais gente junto</h2>
+          <p>Queremos continuar aproximando motociclistas, destinos e parceiros. Fortalecer os encontros, ampliar o conteúdo que ajuda a viajar e dar espaço a quem recebe, fotografa e movimenta a vida na estrada é o rumo que guia a Pistaviva.</p>
+          <p>A Mantiqueira é nossa base para seguir descobrindo outros caminhos. Com Wellyson, amigos como Don Cruz e a participação da comunidade, queremos que cada novo capítulo mantenha o que trouxe a gente até aqui: amizade, vontade de conhecer e prazer de rodar junto.</p>
+          <div className="sobre-cta">
+            <Link className="ig-btn ig-btn--primary" href="/comunidade">Fazer parte dessa história <span className="arr">→</span></Link>
+            <a className="ig-btn ig-btn--ghost" href="https://www.instagram.com/pistavivaoficial/" target="_blank" rel="noopener noreferrer">Acompanhar @pistavivaoficial</a>
           </div>
         </div>
       </section>

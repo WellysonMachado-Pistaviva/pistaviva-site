@@ -1,3 +1,4 @@
+import GrowthEvents from './components/GrowthEvents';
 import { Saira, Saira_Condensed, Saira_Semi_Condensed } from 'next/font/google';
 import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
@@ -30,7 +31,7 @@ export const metadata = {
     template: '%s · Pistaviva',
   },
   description:
-    'O hub do mototurismo no Brasil: estradas icônicas, desafios com certificado, rotas, paradas mapeadas, guias de viagem e a maior comunidade aberta sobre duas rodas.',
+    'O hub do mototurismo no Brasil: estradas icônicas, desafios com certificado, rotas, paradas mapeadas, guias de viagem e uma comunidade aberta sobre duas rodas.',
   applicationName: 'Pistaviva',
   keywords: ['mototurismo', 'big trail', 'rotas de moto', 'desafios de moto', 'estradas de moto', 'tabela fipe moto', 'Serra da Mantiqueira', 'viagem de moto', 'comunidade motociclista'],
   authors: [{ name: 'Pistaviva' }],
@@ -74,6 +75,8 @@ export default function RootLayout({ children }) {
         areaServed: { '@type': 'Country', name: 'Brasil' },
         knowsAbout: ['mototurismo', 'viagem de moto', 'Big Trail', 'rotas de moto', 'motociclismo'],
         sameAs: ['https://www.instagram.com/pistavivaoficial'],
+        publishingPrinciples: `${SITE_URL}/politica-editorial`,
+        correctionsPolicy: `${SITE_URL}/politica-editorial#correcoes`,
       },
       {
         '@type': 'WebSite',
@@ -102,6 +105,7 @@ export default function RootLayout({ children }) {
           </div>
         </AuthProvider>
         <Analytics />
+        <GrowthEvents />
         <SpeedInsights />
 
         {GA_ID && (

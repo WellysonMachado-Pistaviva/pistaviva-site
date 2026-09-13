@@ -1,0 +1,52 @@
+[
+  {
+    "path": "/estrada-x",
+    "checks": {
+      "HTTP 200": true,
+      "canonical": true,
+      "ação mensurável": true,
+      "novo título": true,
+      "sem superlativo": true
+    }
+  },
+  {
+    "path": "/blog/bate-volta-de-moto-saindo-de-bh",
+    "checks": {
+      "HTTP 200": true,
+      "canonical": true,
+      "ação mensurável": true,
+      "índice automático": true,
+      "descrição corrigida": true,
+      "planejamento BH": true
+    }
+  },
+  {
+    "path": "/blog/serra-do-rio-do-rastro-de-moto-guia",
+    "checks": {
+      "HTTP 200": true,
+      "canonical": true,
+      "ação mensurável": true,
+      "índice automático": true,
+      "fonte Epagri": true,
+      "sem garantia antiga": true
+    }
+  },
+  {
+    "path": "/blog/serra-da-mantiqueira-de-moto-rotas",
+    "checks": {
+      "HTTP 200": true,
+      "canonical": true,
+      "ação mensurável": true,
+      "índice automático": true
+    }
+  },
+  {
+    "path": "/blog/destinos-de-mototurismo-no-sul-de-minas",
+    "checks": {
+      "HTTP 200": true,
+      "canonical": true,
+      "ação mensurável": true,
+      "índice conforme número de seções": true
+    }
+  }
+]

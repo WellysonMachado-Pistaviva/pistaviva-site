@@ -698,3 +698,19 @@ button, a, summary { touch-action:manipulation; }
   .evb .topbar .pill { max-width:100%; }
   .site-foot .pv-online { margin-top:28px; margin-bottom:var(--pv-space-2); }
 }
+
+/* Navegação editorial entre preparação, destino e encontro. */
+.pv-topic-navigation .ig-title,
+.pv-topic-navigation .ig-post h3 { color: var(--pv-text-dark); }
+.pv-topic-navigation .ig-sechead p,
+.pv-topic-navigation .ig-post p { color: var(--pv-muted-dark); }
+.pv-topic-navigation .ig-post .tag { color: var(--pv-orange-deep); }
+.pv-topic-navigation .ig-post a { display: block; padding-block: 16px; }
+.pv-topic-navigation .ig-post a:focus-visible { outline: 3px solid var(--pv-orange-deep); outline-offset: 4px; }
+
+.art-index { margin-block: 24px; padding: 24px; border: 1px solid var(--pv-line-light); border-radius: var(--pv-radius); background: var(--pv-offwhite); color: var(--pv-text-dark); }
+.art-index ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; list-style: none; padding: 0; }
+.art-index a { display: flex; align-items: center; min-height: 44px; color: var(--pv-orange-deep); }
+.art-index a:focus-visible { outline: 3px solid var(--pv-orange-deep); outline-offset: 4px; }
+.art-col h2[id] { scroll-margin-top: 120px; }
+@media (max-width: 640px) { .art-index ul { grid-template-columns: 1fr; } }

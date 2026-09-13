@@ -1,3 +1,4 @@
+import { reviseGrowthEditorial } from './growthEditorial.mjs';
 import { supabaseServer } from './supabaseServer';
 import { LOCAL_MATERIAS, getLocalMateria } from '../content/materias';
 
@@ -19,7 +20,7 @@ export async function getPublishedPosts(limit = 50) {
       ...(data || []),
       ...LOCAL_MATERIAS.filter((post) => !databaseSlugs.has(post.slug)),
     ].sort((a, b) => new Date(b.published_at || 0) - new Date(a.published_at || 0));
-    return merged.slice(0, limit);
+    return merged.slice(0, limit).map(reviseGrowthEditorial);
   } catch {
     return LOCAL_MATERIAS.slice(0, limit);
   }
@@ -34,10 +35,14 @@ export async function getPostBySlug(slug) {
       .eq('slug', slug)
       .eq('published', true)
       .maybeSingle();
-    if (error) return getLocalMateria(slug);
-    return data || getLocalMateria(slug);
-  } catch {
-    return getLocalMateria(slug);
+    if (error) throw error;
+    return reviseGrowthEditorial(data || getLocalMateria(slug));
+  } catch (error) {
+    const local = getLocalMateria(slug);
+    if (local) return reviseGrowthEditorial(local);
+    // Let ISR retain the last valid page when the database is unavailable.
+    // Returning null here would cache a false 404 for an existing article.
+    throw error;
   }
 }
 
@@ -89,7 +94,7 @@ export async function getRelatedPosts(slug, tags = [], limit = 3) {
         if (related.length >= limit) break;
       }
     }
-    return related.slice(0, limit);
+    return related.slice(0, limit).map(reviseGrowthEditorial);
   } catch {
     return [];
   }

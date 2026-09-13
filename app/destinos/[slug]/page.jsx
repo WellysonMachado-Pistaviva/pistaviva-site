@@ -52,7 +52,9 @@ export default async function DestinoPage({ params }) {
       { '@type': 'ListItem', position: 3, name: d.nome, item: `${BASE}/destinos/${d.slug}` },
     ],
   };
-  const outros = DESTINOS.filter((x) => x.slug !== d.slug).slice(0, 4);
+  const outros = DESTINOS.filter((x) => x.slug !== d.slug)
+    .sort((a, b) => Number(b.bandeira === d.bandeira) - Number(a.bandeira === d.bandeira))
+    .slice(0, 4);
 
   return (
     <div className="ignis ph-page">
@@ -123,10 +125,21 @@ export default async function DestinoPage({ params }) {
             </div>
           )}
 
+          {d.fontes?.length > 0 && (
+            <section style={{ marginTop: 24 }} aria-label="Fontes e informações do destino">
+              <h2>Fontes e informações para planejar</h2>
+              <ul>
+                {d.fontes.map((fonte) => (
+                  <li key={fonte.url}><a href={fonte.url} target="_blank" rel="noopener noreferrer">{fonte.label}</a></li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           <section className="ph-cta" style={{ marginTop: 30 }}>
             <div className="inner">
-              <h2>Comece treinando no Brasil</h2>
-              <p>Enquanto o grande sonho não chega, role as estradas icônicas do Brasil, prepare-se com os guias e planeje a rota.</p>
+              <h2>Planeje sua próxima viagem</h2>
+              <p>Explore as estradas do caminho, prepare-se com os guias e monte um roteiro que combine com sua moto e seu tempo.</p>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 12 }}>
                 <Link className="ig-btn ig-btn--primary" href="/estradas">Estradas do Brasil</Link>
                 <Link className="ig-btn ig-btn--ghost" href="/guias">Guias pra viajar</Link>
