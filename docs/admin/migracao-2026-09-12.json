@@ -1,0 +1,15 @@
+{
+  "at": "2026-09-12T14:24:37.108Z",
+  "checks": [
+    {
+      "table": "pv_banners",
+      "column": "video_url",
+      "status": 200
+    },
+    {
+      "table": "pv_site_config",
+      "column": "instagram_posts",
+      "status": 200
+    }
+  ]
+}

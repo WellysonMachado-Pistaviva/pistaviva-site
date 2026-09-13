@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { supabase } from '../../src/lib/supabaseClient';
+import { adminGet } from '../lib/adminDb';
 import { useAuth } from '../components/AuthProvider';
 
 /* ── ícones inline (sem dependência) ─────────────────────────── */
@@ -49,6 +49,7 @@ export default function AdminShell({ children }) {
   const [collapsed, setCollapsed] = useState(() => typeof window !== 'undefined' && localStorage.getItem('ig-collapsed') === '1');
   const [drawer, setDrawer] = useState(false);
   const [hash, setHash] = useState(() => typeof window !== 'undefined' ? ((window.location.hash || '#visao').slice(1) || 'visao') : 'visao');
+  const [search, setSearch] = useState('');
   const [reportsOpen, setReportsOpen] = useState(0);
 
   const toggleCollapse = () => setCollapsed(c => { localStorage.setItem('ig-collapsed', c ? '0' : '1'); return !c; });
@@ -56,9 +57,11 @@ export default function AdminShell({ children }) {
   // hash p/ abas da home (setState só no callback do evento)
   useEffect(() => {
     const read = () => setHash((window.location.hash || '#visao').slice(1) || 'visao');
+    read();
     window.addEventListener('hashchange', read);
-    return () => window.removeEventListener('hashchange', read);
-  }, []);
+    window.addEventListener('popstate', read);
+    return () => { window.removeEventListener('hashchange', read); window.removeEventListener('popstate', read); };
+  }, [pathname]);
 
   // atalho "/" foca a busca
   useEffect(() => {
@@ -75,11 +78,16 @@ export default function AdminShell({ children }) {
   // badge de denúncias abertas
   const loadReports = useCallback(async () => {
     try {
-      const { count } = await supabase.from('pv_reports').select('*', { count: 'exact', head: true }).eq('status', 'open');
-      setReportsOpen(count || 0);
+      const { data, error } = await adminGet('/api/admin/reports?count=true');
+      if (!error) setReportsOpen(data.count || 0);
     } catch { /* sem acesso */ }
   }, []);
-  useEffect(() => { if (auth?.isAdmin) { (async () => { await loadReports(); })(); } }, [auth?.isAdmin, loadReports]);
+  useEffect(() => {
+    if (!auth?.isAdmin) return;
+    queueMicrotask(() => { void loadReports(); });
+    window.addEventListener('admin-reports-changed', loadReports);
+    return () => window.removeEventListener('admin-reports-changed', loadReports);
+  }, [auth?.isAdmin, loadReports]);
 
   // esconde o chrome público do site enquanto o painel está montado
   useEffect(() => {
@@ -89,16 +97,16 @@ export default function AdminShell({ children }) {
 
   // ── gate ──
   if (!auth?.isAdmin) {
-    const logged = !!auth?.user;
+    const logged = !!auth?.adminEmail;
     return (
       <div className="ig-gate">
         <div className="box">
           <div className="lock">{I.lock}</div>
           <h2>Painel IGNIS</h2>
           {logged
-            ? <p>Esta conta ({auth.user.email}) não tem acesso de administrador.</p>
+            ? <p>Esta conta ({auth.adminEmail}) não tem acesso de administrador.</p>
             : <p>Entre com seu e-mail e senha de administrador para acessar o painel.</p>}
-          {!logged && <button className="ig-btn ig-btn--primary" onClick={() => auth?.openAdminLogin?.()}>Entrar</button>}
+          <button className="ig-btn ig-btn--primary" onClick={() => auth?.openAdminLogin?.()}>{logged ? 'Entrar com outra conta' : 'Entrar'}</button>
         </div>
       </div>
     );
@@ -128,7 +136,7 @@ export default function AdminShell({ children }) {
           {NAV.map(g => (
             <div key={g.group}>
               <div className="ig-group">{g.group}</div>
-              {g.items.map(it => {
+              {g.items.filter(it => it.label.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(search.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase())).map(it => {
                 const badge = it.badge === 'reports' && reportsOpen > 0 ? reportsOpen : null;
                 const onNav = (e) => {
                   setDrawer(false);
@@ -169,7 +177,7 @@ export default function AdminShell({ children }) {
           <span className="sp" />
           <label className="ig-search">
             {I.search}
-            <input id="ig-search-input" placeholder="Buscar matéria, parada, usuário…" />
+            <input id="ig-search-input" aria-label="Filtrar seções do painel" placeholder="Buscar seção do painel…" value={search} onChange={e => { setSearch(e.target.value); if (e.target.value) setDrawer(true); }} />
             <kbd>/</kbd>
           </label>
           <Link href="/admin/blog" className="ig-btn ig-btn--primary ig-btn--sm">{I.plus} Novo post</Link>

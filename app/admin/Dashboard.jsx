@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../src/lib/supabaseClient';
-import { adminGet, adminImportImageUrl, adminUploadFile, adminWrite, shouldImportRemoteImageUrl } from '../lib/adminDb';
+import { adminGet, adminPost, adminImportImageUrl, adminUploadFile, adminWrite, shouldImportRemoteImageUrl } from '../lib/adminDb';
 import { useAuth, showToast } from '../components/AuthProvider';
 import PV from '../../src/palette';
 
@@ -97,12 +97,14 @@ function DataStatus({ errors = [], generatedAt, coverage }) {
 // ════════════════════════════════════════════════════════════════
 function Visao() {
   const [s, setS] = useState(null);
+  const [health, setHealth] = useState(null);
   const [meta, setMeta] = useState({ errors: [], generatedAt: null });
   const [loadError, setLoadError] = useState('');
 
   const load = useCallback(async () => {
     setLoadError('');
-    const { data, error } = await adminGet('/api/admin/analytics');
+    const [{ data, error }, diagnosis] = await Promise.all([adminGet('/api/admin/analytics'), adminGet('/api/admin/doctor')]);
+    setHealth(diagnosis.error ? { ok: false, error: diagnosis.error.message } : diagnosis.data);
     if (error) {
       setLoadError(error.message);
       return;
@@ -141,6 +143,7 @@ function Visao() {
 
   return (
     <div className="ig-screen">
+      {health && !health.ok && <div className="ig-alert danger" role="alert"><span className="at"><b>Painel com recursos indisponíveis</b><span>{health.error || health.services?.supabase?.message}</span></span></div>}
       <PageHead
         eyebrow="Painel · Pistaviva"
         title="Visão geral"
@@ -239,19 +242,12 @@ function Users() {
   const [resetTarget, setResetTarget] = useState(null);
   const [newPw, setNewPw] = useState('');
 
-  const token = async () => {
-    const { data } = await supabase.auth.getSession();
-    return data?.session?.access_token || '';
-  };
-
   const load = useCallback(async () => {
     setErr('');
-    try {
-      const res = await fetch('/api/admin/users', { headers: { Authorization: `Bearer ${await token()}` } });
-      const json = await res.json();
-      if (!res.ok) { setErr(json.error || 'Erro.'); setUsers([]); return; }
-      setUsers(json.users);
-    } catch (e) { setErr(e.message); setUsers([]); }
+    const { data, error } = await adminGet('/api/admin/users');
+    if (error) { setErr(error.message); setUsers([]); return; }
+    setUsers(data.users);
+    if (data.warnings?.length) setErr(data.warnings.join(' · '));
   }, []);
   useEffect(() => { (async () => { await load(); })(); }, [load]);
 
@@ -260,16 +256,12 @@ function Users() {
     if (['delete', 'block', 'removeAdmin'].includes(action) && !confirm(`Confirmar: ${labels[action]} "${u.nome}"?`)) return;
     setBusy(u.id);
     try {
-      const res = await fetch('/api/admin/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${await token()}` },
-        body: JSON.stringify({ action, userId: u.id, password }),
-      });
-      const json = await res.json();
-      showToast(res.ok ? 'Feito ✓' : (json.error || 'Erro'), res.ok ? 'success' : 'error');
-      if (res.ok) await load();
-    } catch (e) { showToast(e.message, 'error'); }
-    setBusy(null);
+      const { error } = await adminPost('/api/admin/users', { action, userId: u.id, password });
+      showToast(error ? error.message : 'Feito ✓', error ? 'error' : 'success');
+      if (!error) { await load(); return true; }
+      return false;
+    } catch (e) { showToast(e.message, 'error'); return false; }
+    finally { setBusy(null); }
   };
 
   const filtered = (users || []).filter(u => !search || u.nome.toLowerCase().includes(search.toLowerCase()) || (u.email || '').toLowerCase().includes(search.toLowerCase()) || (u.cidade || '').toLowerCase().includes(search.toLowerCase()));
@@ -307,13 +299,13 @@ function Users() {
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
                   {u.isAdmin
-                    ? <button className="ig-btn ig-btn--ghost ig-btn--sm" disabled={busy === u.id} onClick={() => act('removeAdmin', u)}>Remover admin</button>
+                    ? <button className="ig-btn ig-btn--ghost ig-btn--sm" disabled={busy === u.id || u.isProtected} onClick={() => act('removeAdmin', u)}>Remover admin</button>
                     : <button className="ig-btn ig-btn--ghost ig-btn--sm" disabled={busy === u.id} onClick={() => act('makeAdmin', u)}>Tornar admin</button>}
                   <button className="ig-btn ig-btn--ghost ig-btn--sm" disabled={busy === u.id} onClick={() => { setResetTarget(u); setNewPw(''); }}>Resetar senha</button>
                   {u.isBlocked
                     ? <button className="ig-btn ig-btn--ghost ig-btn--sm" disabled={busy === u.id} onClick={() => act('unblock', u)}>Desbloquear</button>
-                    : <button className="ig-btn ig-btn--ghost ig-btn--sm" disabled={busy === u.id} onClick={() => act('block', u)}>Bloquear</button>}
-                  <button className="ig-btn ig-btn--danger ig-btn--sm" style={{ marginLeft: 'auto' }} disabled={busy === u.id} onClick={() => act('delete', u)}>Excluir</button>
+                    : <button className="ig-btn ig-btn--ghost ig-btn--sm" disabled={busy === u.id || u.isProtected} onClick={() => act('block', u)}>Bloquear</button>}
+                  <button className="ig-btn ig-btn--danger ig-btn--sm" style={{ marginLeft: 'auto' }} disabled={busy === u.id || u.isProtected} onClick={() => act('delete', u)}>Excluir</button>
                 </div>
               </div>
             ))}
@@ -325,9 +317,9 @@ function Users() {
           <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 380, padding: 24 }}>
             <button className="modal-close" onClick={() => setResetTarget(null)}>×</button>
             <h3 style={{ fontFamily: 'var(--display)', marginBottom: 12 }}>Nova senha — {resetTarget.nome}</h3>
-            <input type="text" placeholder="Senha nova (mín. 6)" value={newPw} onChange={e => setNewPw(e.target.value)} autoFocus
+            <input type="password" autoComplete="new-password" placeholder="Senha nova (mín. 6)" value={newPw} onChange={e => setNewPw(e.target.value)} autoFocus
               style={{ width: '100%', padding: '10px 13px', marginBottom: 12, background: 'var(--ink-2)', border: '1px solid var(--line)', borderRadius: 8, color: 'var(--text)', fontFamily: 'inherit', fontSize: 14 }} />
-            <button className="ig-btn ig-btn--primary" disabled={newPw.length < 6} onClick={() => { act('resetPassword', resetTarget, newPw); setResetTarget(null); }}>Salvar senha</button>
+            <button className="ig-btn ig-btn--primary" disabled={newPw.length < 6 || busy === resetTarget.id} onClick={async () => { if (await act('resetPassword', resetTarget, newPw)) { setResetTarget(null); setNewPw(''); } }}>Salvar senha</button>
           </div>
         </div>
       )}
@@ -375,8 +367,8 @@ function HeroSettings() {
       storedUrl = imported.url;
       setUrl(storedUrl);
     }
-    const { error } = await adminWrite({ table: 'pv_site_config', op: 'update', data: { hero_bg_image: storedUrl || null, updated_at: new Date().toISOString() }, match: { id: 1 } });
-    showToast(error ? 'Erro: ' + error.message : 'Hero salvo ✓ (atualiza na home em ~5 min)', error ? 'error' : 'success');
+    const { error } = await adminWrite({ table: 'pv_site_config', op: 'upsert', data: { id: 1, hero_bg_image: storedUrl || null, updated_at: new Date().toISOString() }, match: { id: 1 } });
+    showToast(error ? 'Erro: ' + error.message : 'Hero salvo ✓', error ? 'error' : 'success');
     setBusy(false);
   };
 
@@ -386,7 +378,7 @@ function HeroSettings() {
     if (file.size > 6 * 1024 * 1024) { showToast('Imagem muito pesada (máx 6MB)', 'error'); return; }
     setBusy(true);
     try {
-      const { error } = await supabase.storage.from('post-images').upload('site/wellyson.jpg', file, { upsert: true, contentType: file.type });
+      const { error } = await adminUploadFile({ file, kind: 'portrait' });
       if (error) throw error;
       showToast('Foto da página Sobre enviada ✓', 'success');
     } catch (err) { showToast('Erro: ' + err.message, 'error'); }

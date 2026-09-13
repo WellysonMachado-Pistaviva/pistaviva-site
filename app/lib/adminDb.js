@@ -46,6 +46,23 @@ export async function adminGet(path) {
   }
 }
 
+export async function adminPost(path, body) {
+  try {
+    const { data } = await supabase.auth.getSession();
+    let token = data?.session?.access_token;
+    if (!token) return { data: null, error: { message: 'Sessão admin expirada. Entre novamente.' } };
+    let { res, j } = await postJson(token, path, body);
+    if (res.status === 401) {
+      const { data: refreshed } = await supabase.auth.refreshSession();
+      token = refreshed?.session?.access_token;
+      if (token) ({ res, j } = await postJson(token, path, body));
+    }
+    return res.ok ? { data: j, error: null } : { data: null, error: { message: j.error || `Erro ${res.status}` } };
+  } catch (error) {
+    return { data: null, error: { message: error.message || 'Falha de rede.' } };
+  }
+}
+
 export async function adminWrite({ table, op, data, match }) {
   try {
     const body = { table, op, data, match };

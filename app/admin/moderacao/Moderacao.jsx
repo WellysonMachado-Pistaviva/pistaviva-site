@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../../src/lib/supabaseClient';
-import { adminImportImageUrl, adminUploadFile, adminWrite, shouldImportRemoteImageUrl } from '../../lib/adminDb';
+import { adminGet, adminImportImageUrl, adminUploadFile, adminWrite, shouldImportRemoteImageUrl } from '../../lib/adminDb';
 import { getReportsQueue, resolveReport, getAllRouteComments, deleteRouteComment, getAnnouncement, saveAnnouncement } from '../../../src/services/storage';
 import { useAuth, showToast } from '../../components/AuthProvider';
 import PV, { withAlpha } from '../../../src/palette';
@@ -48,8 +48,10 @@ function Section({ cfg }) {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data } = await supabase.from(cfg.table).select('*').order('created_at', { ascending: false }).limit(300);
-    setRows(data || []); setLoading(false);
+    const { data, error } = await adminGet(`/api/admin/db?table=${encodeURIComponent(cfg.table)}`);
+    if (error) showToast('Erro ao carregar conteúdo: ' + error.message, 'error');
+    else setRows(data.rows || []);
+    setLoading(false);
   }, [cfg.table]);
   useEffect(() => { (async () => { await load(); })(); }, [load]);
 
@@ -192,26 +194,41 @@ function Section({ cfg }) {
 function ReportsQueue() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
-  const load = useCallback(async () => { setLoading(true); setRows(await getReportsQueue('open')); setLoading(false); }, []);
+  const [error, setError] = useState('');
+  const load = useCallback(async () => {
+    setLoading(true); setError('');
+    try { setRows(await getReportsQueue('open')); }
+    catch (err) { setError(err.message); }
+    finally { setLoading(false); }
+  }, []);
+  const resolve = async (id) => {
+    const { error } = await resolveReport(id);
+    if (error) { showToast(error.message, 'error'); return false; }
+    window.dispatchEvent(new Event('admin-reports-changed'));
+    return true;
+  };
   useEffect(() => { (async () => { await load(); })(); }, [load]);
   const TARGET = { post: 'Post', comment: 'Comentário', spot: 'Parada', photographer: 'Fotógrafo', blog: 'Matéria', event: 'Evento' };
   const TABLE = { post: 'pv_posts', spot: 'pv_spots', photographer: 'pv_photographers', blog: 'pv_blog_posts', event: 'pv_events', comment: 'pv_post_comments' };
   const delTarget = async (r) => {
     if (!confirm(`Excluir o ${TARGET[r.target_type] || r.target_type} denunciado?`)) return;
     const t = TABLE[r.target_type];
-    if (t) await adminWrite({ table: t, op: 'delete', match: { id: r.target_id } });
-    await resolveReport(r.id); showToast('Conteúdo excluído + denúncia resolvida', 'success'); load();
+    if (!t) return showToast('Tipo de conteúdo não suportado.', 'error');
+    const { error } = await adminWrite({ table: t, op: 'delete', match: { id: r.target_id } });
+    if (error) return showToast(error.message, 'error');
+    if (!await resolve(r.id)) return;
+    showToast('Conteúdo excluído + denúncia resolvida', 'success'); load();
   };
   return (
     <div>
-      {loading ? <div className="spinner-wrap"><span className="loading-spinner" /></div> : rows.length === 0 ? <p style={{ color: 'var(--paper-dim)' }}>Nenhuma denúncia aberta. 🎉</p> : (
+      {error ? <div role="alert">{error} <button className="btn btn--ghost" onClick={load}>Tentar novamente</button></div> : loading ? <div className="spinner-wrap"><span className="loading-spinner" /></div> : rows.length === 0 ? <p style={{ color: 'var(--paper-dim)' }}>Nenhuma denúncia aberta. 🎉</p> : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {rows.map(r => (
             <div key={r.id} style={{ background: 'var(--bg2)', border: '1px solid var(--danger)', borderRadius: 10, padding: '12px 14px' }}>
               <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
                 <span style={{ fontFamily: 'var(--mono)', fontSize: 11, background: 'var(--danger)', color: PV.white, padding: '2px 8px', borderRadius: 4 }}>{TARGET[r.target_type] || r.target_type}</span>
                 <span style={{ flex: 1, minWidth: 120, fontSize: 13 }}>{r.target_label || r.target_id}</span>
-                <button className="btn btn--ghost" style={{ padding: '.4rem .8rem' }} onClick={async () => { await resolveReport(r.id); load(); }}>Ignorar</button>
+                <button className="btn btn--ghost" style={{ padding: '.4rem .8rem' }} onClick={async () => { if (await resolve(r.id)) load(); }}>Ignorar</button>
                 <button className="btn btn--ghost" style={{ padding: '.4rem .8rem', borderColor: 'var(--danger)', color: 'var(--danger)' }} onClick={() => delTarget(r)}>Excluir conteúdo</button>
               </div>
               {r.reason && <div style={{ fontSize: 13, color: 'var(--paper-dim)', marginTop: 8 }}>Motivo: {r.reason}</div>}
@@ -229,7 +246,7 @@ function CommentsMod() {
   const [loading, setLoading] = useState(true);
   const load = useCallback(async () => { setLoading(true); setRows(await getAllRouteComments()); setLoading(false); }, []);
   useEffect(() => { (async () => { await load(); })(); }, [load]);
-  const del = async (id) => { if (!confirm('Excluir comentário?')) return; await deleteRouteComment(id); showToast('Excluído', 'success'); load(); };
+  const del = async (id) => { if (!confirm('Excluir comentário?')) return; const { error } = await deleteRouteComment(id); if (error) return showToast(error.message, 'error'); showToast('Excluído', 'success'); load(); };
   return (
     <div>
       <p style={{ color: 'var(--paper-mut)', fontSize: 13, marginBottom: 12 }}>Comentários de trechos/roteiros. (Comentários do feed: aba Feed do painel antigo.)</p>
@@ -272,12 +289,14 @@ function BannerEditor() {
 function InstagramEditor() {
   const [text, setText] = useState('');
   const [loaded, setLoaded] = useState(false);
-  useEffect(() => { supabase.from('pv_site_config').select('instagram_posts').eq('id', 1).maybeSingle().then(({ data }) => { setText((data?.instagram_posts || []).join('\n')); setLoaded(true); }); }, []);
+  const [error, setError] = useState('');
+  useEffect(() => { supabase.from('pv_site_config').select('instagram_posts').eq('id', 1).maybeSingle().then(({ data, error }) => { setError(error ? 'Instagram indisponível. Atualize a configuração do banco antes de salvar.' : ''); setText((data?.instagram_posts || []).join('\n')); setLoaded(true); }); }, []);
   const save = async () => {
     const arr = text.split('\n').map(s => s.trim()).filter(Boolean);
     const { error } = await adminWrite({ table: 'pv_site_config', op: 'upsert', data: { id: 1, instagram_posts: arr, updated_at: new Date().toISOString() } });
     showToast(error ? 'Erro: ' + error.message : 'Instagram salvo ✓', error ? 'error' : 'success');
   };
+  if (error) return <div className="ig-alert danger" role="alert">{error}</div>;
   if (!loaded) return <div className="spinner-wrap"><span className="loading-spinner" /></div>;
   return (
     <div style={{ maxWidth: 620 }}>
@@ -379,7 +398,8 @@ function BannersEditor() {
     }
     const payload = {
       kind: b.kind, tag_label: b.tag_label || null, title: b.title, subtitle: b.subtitle || null,
-      image_url: imageUrl, video_url: b.video_url?.trim() || null,
+      image_url: imageUrl,
+      ...('video_url' in (rows?.find(row => row.id === b.id) || {}) || b.video_url?.trim() ? { video_url: b.video_url?.trim() || null } : {}),
       cta_label: b.cta_label || null, cta_href: b.cta_href || null,
       cta2_label: b.cta2_label || null, cta2_href: b.cta2_href || null, active: b.active,
       sort_order: b.sort_order ?? 0, updated_at: new Date().toISOString(),

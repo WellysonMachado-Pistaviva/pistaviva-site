@@ -7,7 +7,7 @@ const EXTENSIONS = new Map([
   ['image/gif', 'gif'],
 ]);
 
-const KINDS = new Set(['covers', 'body', 'banners', 'destinations', 'hero', 'spots']);
+const KINDS = new Set(['covers', 'body', 'banners', 'destinations', 'hero', 'spots', 'portrait']);
 
 export function validateAdminImage({ type, size, kind }) {
   if (!EXTENSIONS.has(type)) {

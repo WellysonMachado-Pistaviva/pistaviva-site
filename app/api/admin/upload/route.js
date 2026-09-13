@@ -13,12 +13,12 @@ async function storeImage({ gate, kind, buffer, type, ext }) {
   }
 
   const userId = gate.user.id.replace(/[^a-zA-Z0-9_-]/g, '');
-  const path = `admin/${kind}/${userId}/${Date.now()}-${randomUUID()}.${ext || validation.ext}`;
+  const path = kind === 'portrait' ? 'site/wellyson.jpg' : `admin/${kind}/${userId}/${Date.now()}-${randomUUID()}.${ext || validation.ext}`;
   const sb = supabaseAdmin();
   const { data, error } = await sb.storage.from('post-images').upload(path, buffer, {
     contentType: type,
-    cacheControl: '31536000',
-    upsert: false,
+    cacheControl: kind === 'portrait' ? '0' : '31536000',
+    upsert: kind === 'portrait',
   });
 
   if (error || !data) {

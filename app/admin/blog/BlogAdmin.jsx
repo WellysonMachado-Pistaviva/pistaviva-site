@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { supabase } from '../../../src/lib/supabaseClient';
 import { adminGet, adminImportImageUrl, adminUploadDataUrl, adminWrite, shouldImportRemoteImageUrl } from '../../lib/adminDb';
 import { prepareCoverImageDataUrl, preparePostImageDataUrl } from '../../../src/services/storage';
 import { useAuth, showToast } from '../../components/AuthProvider';
@@ -9,7 +8,7 @@ const slugify = (s) =>
   String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
     .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
 
-const EMPTY = { id: null, title: '', slug: '', excerpt: '', body: '', tags: [], cover_url: '', published: false };
+const EMPTY = { published_at: null, id: null, title: '', slug: '', excerpt: '', body: '', tags: [], cover_url: '', published: false };
 
 // blocos inseridos no corpo — no formato do nosso renderizador de blog
 const SNIP = {
@@ -65,6 +64,7 @@ export default function BlogAdmin() {
   const [posts, setPosts] = useState([]);
   const [coverStatus, setCoverStatus] = useState({}); // id -> 'ok' | 'broken' | 'none' | 'loading'
   const reportCover = useCallback((id, s) => setCoverStatus(m => (m[id] === s ? m : { ...m, [id]: s })), []);
+  const [loadError, setLoadError] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -77,8 +77,10 @@ export default function BlogAdmin() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data } = await supabase.from('pv_blog_posts').select('*').order('created_at', { ascending: false });
-    setPosts(data || []); setLoading(false);
+    const { data, error } = await adminGet('/api/admin/db?table=pv_blog_posts');
+    setLoadError(error?.message || '');
+    if (!error) setPosts(data.rows || []);
+    setLoading(false);
   }, []);
   useEffect(() => { (async () => { await load(); })(); }, [load]);
 
@@ -143,7 +145,7 @@ export default function BlogAdmin() {
     setDoctorBusy(false);
   };
 
-  const edit = (p) => { slugTouched.current = true; setForm({ id: p.id, title: p.title, slug: p.slug, excerpt: p.excerpt || '', body: p.body || '', tags: p.tags || [], cover_url: p.cover_url || '', published: p.published }); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+  const edit = (p) => { slugTouched.current = true; setForm({ author: p.author, published_at: p.published_at, id: p.id, title: p.title, slug: p.slug, excerpt: p.excerpt || '', body: p.body || '', tags: p.tags || [], cover_url: p.cover_url || '', published: p.published }); window.scrollTo({ top: 0, behavior: 'smooth' }); };
   const reset = () => { slugTouched.current = false; setForm(EMPTY); };
 
   const save = async (publishNow) => {
@@ -166,8 +168,8 @@ export default function BlogAdmin() {
       title: form.title.trim(), slug: (form.slug.trim() || slugify(form.title)),
       excerpt: form.excerpt.trim() || null, body: form.body,
       tags: form.tags, cover_url: coverUrl || null,
-      author: auth.user?.nome || auth.user?.name || 'Pistaviva',
-      published: pub, published_at: pub ? new Date().toISOString() : null,
+      author: form.author || auth.user?.nome || auth.user?.name || 'Pistaviva',
+      published: pub, published_at: form.published_at || (pub ? new Date().toISOString() : null),
     };
     const res = form.id
       ? await adminWrite({ table: 'pv_blog_posts', op: 'update', data: payload, match: { id: form.id } })
@@ -193,6 +195,7 @@ export default function BlogAdmin() {
 
   return (
     <div className="wrap section post-editor" style={{ paddingTop: 'clamp(20px,3vw,36px)' }}>
+      {loadError && <div className="ig-alert danger" role="alert">{loadError} <button className="pe-btn" onClick={load}>Tentar novamente</button></div>}
       {/* TOP BAR */}
       <div className="pe-top">
         <span className="pe-crumb">Blog / <b>{form.id ? 'Editar' : 'Novo post'}</b></span>
@@ -312,6 +315,7 @@ export default function BlogAdmin() {
               </div>
               <div className="pe-field">
                 <span className="pe-lbl">Tags</span>
+                <p>Para cobertura jornalística de fatos recentes, use a tag <strong>Notícias</strong>. Confira fontes, autoria e data original antes de publicar. Guias e publicidade não devem receber essa classificação.</p>
                 <div className="pe-tags">{form.tags.map((t, i) => <span key={i} className="pe-tag">{t}<button onClick={() => set('tags', form.tags.filter((_, k) => k !== i))}>×</button></span>)}</div>
                 <input className="pe-in" placeholder="Digite e tecle Enter (ex: Big Trail)" value={tagInput}
                   onChange={e => setTagInput(e.target.value)}

@@ -9,6 +9,8 @@ export function resolveSupabaseAdminConfig(env = process.env) {
     '';
 
   const pairs = [
+    // Explicit server-only pair takes precedence over managed integrations.
+    [env.SUPABASE_ADMIN_URL, env.SUPABASE_ADMIN_KEY],
     [integratedUrl, env.SUPABASE_URL_SUPABASE_SERVICE_ROLE_KEY],
     [integratedUrl, env.SUPABASE_URL_SUPABASE_SECRET_KEY],
     [publicUrl, env.SUPABASE_SERVICE_ROLE_KEY],

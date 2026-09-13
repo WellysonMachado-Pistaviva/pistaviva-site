@@ -92,3 +92,18 @@ test('uses normal local Supabase pair when integration variables are absent', ()
     key: 'local-service-role',
   });
 });
+
+test('accepts portrait uploads through authenticated admin destination', () => {
+  assert.equal(validateAdminImage({ type: 'image/jpeg', size: 1024, kind: 'portrait' }).error, null);
+});
+
+test('explicit admin pair overrides stale integration without mixing credentials', () => {
+  const env = {
+    SUPABASE_ADMIN_URL: 'https://verified.supabase.co',
+    SUPABASE_ADMIN_KEY: 'verified-server-key',
+    NEXT_PUBLIC_SUPABASE_URL_SUPABASE_URL: 'https://stale.supabase.co',
+    SUPABASE_URL_SUPABASE_SERVICE_ROLE_KEY: 'stale-key',
+  };
+  assert.deepEqual(resolveSupabaseAdminConfig(env), { url: env.SUPABASE_ADMIN_URL, key: env.SUPABASE_ADMIN_KEY });
+  assert.deepEqual(resolveSupabaseAdminConfig({ SUPABASE_ADMIN_URL: env.SUPABASE_ADMIN_URL }), { url: '', key: '' });
+});

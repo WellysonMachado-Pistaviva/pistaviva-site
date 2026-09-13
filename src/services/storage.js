@@ -4,7 +4,7 @@
 // ============================================================
 
 import { supabase } from '../lib/supabaseClient';
-import { adminWrite } from '../../app/lib/adminDb';
+import { adminGet, adminWrite } from '../../app/lib/adminDb';
 
 const KEYS = {
   USER:            'pv_user',
@@ -931,7 +931,7 @@ export const getAllRouteComments = async () => {
 };
 
 export const deleteRouteComment = async (id) => {
-  await adminWrite({ table: 'pv_route_comments', op: 'delete', match: { id } });
+  return adminWrite({ table: 'pv_route_comments', op: 'delete', match: { id } });
 };
 
 // Trechos Lendários ────────────────────────────────────────
@@ -1192,7 +1192,7 @@ export const updateEvent = async (id, event) => {
 
 export const deleteEvent = async (id) => {
   const { error } = await adminWrite({ table: 'pv_events', op: 'delete', match: { id } });
-  if (error) console.error(error);
+  return !error;
 };
 
 // ── Event RSVPs (Supabase) ────────────────────────────────────
@@ -1288,10 +1288,11 @@ export const reportContent = async (targetType, targetId, targetLabel, reason, u
   return !error;
 };
 export const getReportsQueue = async (status = 'open') => {
-  const { data } = await supabase.from('pv_reports').select('*').eq('status', status).order('created_at', { ascending: false }).limit(300);
-  return data || [];
+  const { data, error } = await adminGet(`/api/admin/reports?status=${encodeURIComponent(status)}`);
+  if (error) throw new Error(error.message);
+  return data.rows || [];
 };
-export const resolveReport = async (id) => { await adminWrite({ table: 'pv_reports', op: 'update', data: { status: 'resolved' }, match: { id } }); };
+export const resolveReport = async (id) => { return adminWrite({ table: 'pv_reports', op: 'update', data: { status: 'resolved' }, match: { id } }); };
 export const deleteReport  = async (id) => { await adminWrite({ table: 'pv_reports', op: 'delete', match: { id } }); };
 
 // ── Comentários (moderação global) ────────────────────────────

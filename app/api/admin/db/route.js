@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { supabaseAdmin, requireAdmin } from '../../../lib/supabaseAdmin';
 import { getAdminRevalidationTargets } from '../../../lib/adminRevalidation.mjs';
+import { collectAllPages } from '../../../lib/adminAnalytics.mjs';
 
 // Escrita admin via service-role (bypassa RLS). Só admin (Bearer + requireAdmin).
 // As telas admin chamam isto em vez de escrever direto pelo client anon — assim a
@@ -21,6 +22,7 @@ const TABLES = new Set([
   'pv_users',
   'pv_reports',
   'pv_posts',
+  'pv_spots',
   'pv_post_comments',
   'pv_post_likes',
   'pv_photographers',
@@ -34,6 +36,25 @@ const TABLES = new Set([
   'pv_route_comments',
 ]);
 const OPS = new Set(['insert', 'update', 'delete', 'upsert']);
+
+export async function GET(req) {
+  const gate = await requireAdmin(req);
+  if (!gate.ok) return NextResponse.json({ error: gate.error }, { status: gate.status });
+  const table = new URL(req.url).searchParams.get('table');
+  if (!TABLES.has(table)) return NextResponse.json({ error: 'Tabela não permitida.' }, { status: 403 });
+  try {
+    const sb = supabaseAdmin();
+    const rows = await collectAllPages(async ({ from, to }) => {
+      const { data, error } = await sb.from(table).select('*').order('id').range(from, to);
+      if (error) throw error;
+      return data;
+    });
+    rows.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+    return NextResponse.json({ rows });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 503 });
+  }
+}
 
 export async function POST(req) {
   const gate = await requireAdmin(req);
@@ -62,6 +83,7 @@ export async function POST(req) {
     const result = await q.select();
     if (result.error) return NextResponse.json({ error: result.error.message }, { status: 400 });
     out = result.data;
+    if (op === 'update' && !out?.length) return NextResponse.json({ error: 'Registro não encontrado. Atualize a lista e tente novamente.' }, { status: 404 });
   } catch (error) {
     console.error('[Admin DB] Falha de configuração/conexão:', error?.message || error);
     return NextResponse.json({ error: error?.message || 'Falha ao acessar banco administrativo.' }, { status: 503 });

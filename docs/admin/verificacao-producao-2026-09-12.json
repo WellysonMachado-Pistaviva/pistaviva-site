@@ -1,0 +1,77 @@
+{
+  "at": "2026-09-12T19:16:18.727Z",
+  "checks": [
+    {
+      "name": "password login",
+      "ok": true
+    },
+    {
+      "name": "editable metadata cannot grant admin",
+      "ok": true
+    },
+    {
+      "name": "password login",
+      "ok": true
+    },
+    {
+      "name": "server-managed admin role accepted",
+      "ok": true
+    },
+    {
+      "name": "database features available",
+      "ok": true
+    },
+    {
+      "name": "authenticated reports counter",
+      "ok": true
+    },
+    {
+      "name": "authenticated user list",
+      "ok": true
+    },
+    {
+      "name": "table allowlist",
+      "ok": true
+    },
+    {
+      "name": "self-demotion blocked",
+      "ok": true
+    },
+    {
+      "name": "draft creation",
+      "ok": true
+    },
+    {
+      "name": "draft visible in admin",
+      "ok": true
+    },
+    {
+      "name": "draft has no public article",
+      "ok": true
+    },
+    {
+      "name": "draft edit",
+      "ok": true
+    },
+    {
+      "name": "authenticated image upload",
+      "ok": true
+    },
+    {
+      "name": "upload belongs to test account",
+      "ok": true
+    },
+    {
+      "name": "uploaded image loads",
+      "ok": true
+    },
+    {
+      "name": "draft delete",
+      "ok": true
+    }
+  ],
+  "cleanup": [
+    "uploaded image",
+    "temporary account"
+  ]
+}

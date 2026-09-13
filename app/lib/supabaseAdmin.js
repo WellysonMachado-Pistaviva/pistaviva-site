@@ -1,4 +1,5 @@
 import 'server-only';
+import { isAdminAccount } from './adminAccess.mjs';
 import { createClient } from '@supabase/supabase-js';
 import { supabaseServer } from './supabaseServer';
 import { resolveSupabaseAdminConfig } from './supabaseAdminConfig.mjs';
@@ -31,7 +32,6 @@ export async function requireAdmin(req) {
   const sb = supabaseServer();
   const { data, error } = await sb.auth.getUser(token);
   if (error || !data?.user) return { ok: false, status: 401, error: 'Token inválido.' };
-  const email = (data.user.email || '').toLowerCase();
-  if (!ADMIN_EMAILS.includes(email)) return { ok: false, status: 403, error: 'Não autorizado.' };
+  if (!isAdminAccount(data.user, ADMIN_EMAILS)) return { ok: false, status: 403, error: 'Não autorizado.' };
   return { ok: true, user: data.user };
 }

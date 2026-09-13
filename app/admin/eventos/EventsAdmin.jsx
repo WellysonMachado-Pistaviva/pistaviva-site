@@ -35,7 +35,7 @@ export default function EventsAdmin() {
   };
   const remove = async (ev) => {
     if (!confirm(`Excluir o evento "${ev.title}"? Não dá pra desfazer.`)) return;
-    await deleteEvent(ev.id);
+    if (!await deleteEvent(ev.id)) return showToast('Erro ao excluir evento. Tente novamente.', 'error');
     showToast('Evento excluído', 'success');
     load();
   };
