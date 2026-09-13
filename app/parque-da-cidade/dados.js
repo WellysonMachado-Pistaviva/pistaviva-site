@@ -275,6 +275,8 @@ export const EXPERIENCIAS = [
   {
     kicker: 'De graça',
     t: 'Pedalinho no lago',
+    imagem: '/parque/pedalinho-cisne-serra.jpg',
+    imagemAlt: 'Pedalinho em forma de cisne no lago, com a serra ao fundo',
     d: 'Cisne, amarelo ou azul: sábado e domingo o passeio no lago é gratuito.',
     acao: 'Ver no mapa',
     href: '#mapa',
@@ -283,6 +285,8 @@ export const EXPERIENCIAS = [
   {
     kicker: 'Natal',
     t: 'Brilha Itajubá',
+    imagem: '/parque/natal-brilha-itajuba.jpg',
+    imagemAlt: 'Iluminação de Natal no Parque da Cidade de Itajubá',
     d: 'A cidade acende o parque e a queima de fogos reflete no lago inteiro.',
     acao: 'Ver a agenda',
     href: '#eventos',
@@ -307,6 +311,8 @@ export const EXPERIENCIAS = [
   {
     kicker: 'Vertical',
     t: 'Parede de escalada',
+    imagem: '/parque/escalada.jpg',
+    imagemAlt: 'Estrutura de escalada no Parque da Cidade de Itajubá',
     d: 'Boulder e vias com corda, sob cobertura e com luz para escalar à noite.',
     acao: 'Ver no mapa',
     href: '#mapa',

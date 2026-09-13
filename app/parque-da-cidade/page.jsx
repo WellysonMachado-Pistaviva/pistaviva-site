@@ -18,6 +18,7 @@ import {
   Utensils,
 } from 'lucide-react';
 import ParqueMapa from './ParqueMapa';
+import TopicNavigation from '../components/TopicNavigation';
 import Contagem from './Contagem';
 import Experiencias from './Experiencias';
 import Agenda from './Agenda';
@@ -70,7 +71,7 @@ const BASE = 'https://www.pistavivamototurismo.com.br';
 export const revalidate = 3600;
 
 export const metadata = {
-  title: { absolute: 'Parque da Cidade de Itajubá | O que fazer no Sul de Minas' },
+  title: { absolute: 'Parque da Cidade de Itajubá: atrações, horários e mapa' },
   description:
     'O que fazer em Itajubá e no Sul de Minas: guia do Parque da Cidade com atrações, mapa, pedalinho grátis, onde comer e hotéis com telefone e avaliações.',
   keywords: [
@@ -127,6 +128,7 @@ export const metadata = {
 };
 
 const CAPITULOS = [
+  { href: '#experiencias', label: 'Experiências' },
   { href: '#visita', label: 'Planeje a visita' },
   { href: '#mapa', label: 'Mapa e atrações' },
   { href: '#gastronomia', label: 'Onde comer' },
@@ -161,7 +163,7 @@ export default async function ParqueDaCidadePage() {
         description:
           'Guia editorial do Parque da Cidade de Itajubá com atrações, mapa, gastronomia, roteiros e hotéis.',
         inLanguage: 'pt-BR',
-        dateModified: '2026-09-08',
+        dateModified: '2026-09-11',
         isPartOf: { '@id': `${BASE}/#site` },
         about: { '@id': `${BASE}/parque-da-cidade#parque` },
         breadcrumb: { '@id': `${BASE}/parque-da-cidade#breadcrumb` },
@@ -297,7 +299,7 @@ export default async function ParqueDaCidadePage() {
     <div className="pq pq-editorial">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* ── PORTAL (modelo Tomorrowland: hero cinematográfico + contagem) ── */}
+      {/* Abertura de destino: fotografia, mensagem curta e ação principal. */}
       <header className="pq-hero" id="topo">
         <picture className="pq-hero__bg">
           <source media="(max-width: 640px)" srcSet="/motosul/parque-mobile.jpg" />
@@ -319,26 +321,16 @@ export default async function ParqueDaCidadePage() {
           <h1 className="pq-hero__titulo">
             <span>Parque</span>
             <span>da Cidade</span>
-            <span className="pq-hero__cidade">Itajubá · MG</span>
           </h1>
 
-          <p className="pq-hero__claim">O dia é seu. O encontro é aqui.</p>
+          <p className="pq-hero__claim">Um lago, uma serra e o dia inteiro.</p>
 
-          <p className="pq-hero__dek">Um lago, sabores de Minas e a Mantiqueira ao redor. Escolha seu ritmo e descubra o Parque da Cidade de Itajubá.</p>
+          <p className="pq-hero__dek">Escolha seu ritmo no Parque da Cidade de Itajubá.</p>
 
           <div className="pq-hero__acoes">
             <a className="pq-btn pq-btn--gold" href="#visita">Planejar minha visita ↗</a>
-            <a className="pq-btn" href="#mapa">Explorar o mapa</a>
-          </div>
-
-          <div className="pq-hero__location">
-            <span>Seu ponto de partida</span>
-            <strong>Itajubá · MG</strong>
-            <a href={PARQUE_MAPS} target="_blank" rel="noopener noreferrer">Como chegar ↗</a>
           </div>
         </div>
-
-
       </header>
 
       <nav className="pq-nav" aria-label="Seções da página">
@@ -359,7 +351,43 @@ export default async function ParqueDaCidadePage() {
             <div><dt>Custos</dt><dd>Área verde e estacionamento gratuitos. Atrações com cobrança própria.</dd><dd><a href="#incluso">Ver o que é pago ↓</a></dd></div>
             <div><dt>Vai ficar mais?</dt><dd>Faça de Itajubá sua base na Mantiqueira.</dd><dd><a href="#hoteis">Encontrar hospedagem ↓</a></dd></div>
           </dl>
-          <p className="pq-arrival__note">Guia editorial · informações levantadas em 26/08/2026. Consulte a operação para confirmar horários e condições.</p>
+          <p className="pq-arrival__note">Guia editorial da Pistaviva · informações levantadas em 26/08/2026. Consulte a operação para confirmar horários e condições. <Link href="/politica-editorial">Fontes e correções</Link>.</p>
+        </div>
+      </section>
+
+      <section className="pq-sec pq-sec--escura" id="experiencias">
+        <div className="pq-wrap pq-wrap--larga">
+          <p className="pq-cap"><span>Experiências</span></p>
+          <h2 className="pq-display">Encontre seu jeito<br />de viver o parque.</h2>
+          <span className="pq-rule" aria-hidden="true" />
+          <Experiencias />
+        </div>
+      </section>
+
+      <section className="pq-destaque" id="destaque">
+        <div className="pq-wrap pq-wrap--larga">
+          <div className="pq-destaque__in">
+            <div className="pq-destaque__texto">
+              <p className="pq-eyebrow">Sábado e domingo</p>
+              <h2 className="pq-display">Pedalinho no lago,<br />de graça.</h2>
+              <p className="pq-lead">A vista muda quando você sai do píer. Pedale pelo lago com a Mantiqueira ao fundo e aproveite o passeio gratuito aos sábados e domingos. Confirme as condições de funcionamento antes de ir.</p>
+              <div className="pq-hero__acoes pq-hero__acoes--esq">
+                <a className="pq-btn pq-btn--gold" href="#mapa">Localizar no mapa</a>
+              </div>
+            </div>
+
+            <figure className="pq-destaque__foto">
+              <img
+                src="/parque/pedalinho-cisne-serra.jpg"
+                alt="Pedalinho em formato de cisne no lago do Parque da Cidade de Itajubá, com a serra verde ao fundo"
+                loading="lazy"
+                decoding="async"
+                width="1600"
+                height="1200"
+              />
+              <figcaption>Pedalinho no lago · Parque da Cidade</figcaption>
+            </figure>
+          </div>
         </div>
       </section>
 
@@ -530,7 +558,7 @@ export default async function ParqueDaCidadePage() {
         </div>
       </section>
 
-      <section className="pq-sec pq-sec--escura" id="mapa">
+      <section className="pq-sec" id="mapa">
         <div className="pq-wrap pq-wrap--larga">
           <p className="pq-cap"><span>Nossas atrações</span></p>
           <h2 className="pq-display">Seu passeio,<br />ponto por ponto.</h2>
@@ -541,43 +569,6 @@ export default async function ParqueDaCidadePage() {
           </p>
 
           <ParqueMapa />
-        </div>
-      </section>
-
-      <section className="pq-sec pq-sec--escura" id="experiencias">
-        <div className="pq-wrap pq-wrap--larga">
-          <p className="pq-cap"><span>Experiências</span></p>
-          <h2 className="pq-display">Encontre seu jeito<br />de viver o parque.</h2>
-          <span className="pq-rule" aria-hidden="true" />
-          <Experiencias />
-        </div>
-      </section>
-
-      <section className="pq-destaque" id="destaque">
-        <div className="pq-wrap pq-wrap--larga">
-          <div className="pq-destaque__in">
-            <div className="pq-destaque__texto">
-              <p className="pq-eyebrow">Sábado e domingo</p>
-              <h2 className="pq-display">Pedalinho no lago,<br />de graça.</h2>
-              <p className="pq-lead">A vista muda quando você sai do píer. Pedale pelo lago com a Mantiqueira ao fundo e aproveite o passeio gratuito aos sábados e domingos. Confirme as condições de funcionamento antes de ir.</p>
-              <div className="pq-hero__acoes pq-hero__acoes--esq">
-                <a className="pq-btn pq-btn--gold" href="#mapa">Localizar no mapa</a>
-                <a className="pq-btn" href="#experiencias">Ver todas as experiências</a>
-              </div>
-            </div>
-
-            <figure className="pq-destaque__foto">
-              <img
-                src="/parque/pedalinho-cisne-serra.jpg"
-                alt="Pedalinho em formato de cisne no lago do Parque da Cidade de Itajubá, com a serra verde ao fundo"
-                loading="lazy"
-                decoding="async"
-                width="1600"
-                height="1200"
-              />
-              <figcaption>Pedalinho no lago · Parque da Cidade</figcaption>
-            </figure>
-          </div>
         </div>
       </section>
 
@@ -667,9 +658,15 @@ export default async function ParqueDaCidadePage() {
           <span className="pq-rule" aria-hidden="true" />
           <p className="pq-lead">Festivais, encontros e celebrações mudam o ritmo do parque ao longo do ano. Consulte a agenda e confira as informações de cada organização.</p>
 
-          <div className="pq-festival-feature">
+          <div className="pq-festival-feature" aria-labelledby="pq-festival-title">
             <img src="/motosul/g-publico-palco.jpg" alt="Público reunido em frente ao palco do Motosul Festival" width="1200" height="800" loading="lazy" />
-            <div><p className="pq-eyebrow">Encontro marcado · 2027</p><h3>Motosul Festival</h3><Contagem /><Link className="pq-btn pq-btn--gold" href="/motosul">Conhecer a edição 2027 ↗</Link></div>
+            <div className="pq-festival-feature__content">
+              <p className="pq-eyebrow">Encontro marcado · 2027</p>
+              <h3 id="pq-festival-title">Motosul<br />Festival</h3>
+              <p className="pq-festival-feature__intro">A estrada traz. O parque reúne.</p>
+              <Contagem />
+              <Link className="pq-btn pq-btn--gold" href="/motosul">Conhecer a edição 2027 ↗</Link>
+            </div>
           </div>
           <Agenda />
 
@@ -1132,6 +1129,8 @@ export default async function ParqueDaCidadePage() {
       </aside>
 
       {/* ── FECHO ── */}
+      <TopicNavigation current="/parque-da-cidade" />
+
       <section className="pq-fecho">
         <div className="pq-wrap">
           <p className="pq-eyebrow">Sul de Minas</p>

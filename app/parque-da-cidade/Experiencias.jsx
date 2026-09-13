@@ -4,15 +4,14 @@ import { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { EXPERIENCIAS } from './dados';
 
-// Carrossel de experiências no modelo Hopi Hari: trilho com scroll-snap,
-// sem biblioteca. As setas só empurram o scroll nativo.
+// Trilho editorial com scroll nativo e fotografias do acervo do parque.
 export default function Experiencias() {
   const trilho = useRef(null);
 
   const empurrar = (dir) => {
     const el = trilho.current;
     if (!el) return;
-    el.scrollBy({ left: dir * Math.min(el.clientWidth * 0.8, 520), behavior: 'smooth' });
+    el.scrollBy({ left: dir * Math.min(el.clientWidth * 0.8, 520), behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   };
 
   return (
@@ -32,6 +31,9 @@ export default function Experiencias() {
       <ul className="pq-exp__trilho" ref={trilho}>
         {EXPERIENCIAS.map((e) => (
           <li key={e.t} className="pq-exp__card" style={{ '--tint': e.cor }}>
+            {e.imagem && (
+              <img className="pq-exp__foto" src={e.imagem} alt={e.imagemAlt} width="800" height="600" loading="lazy" decoding="async" />
+            )}
             <span className="pq-exp__kicker">{e.kicker}</span>
             <h3>{e.t}</h3>
             <p>{e.d}</p>

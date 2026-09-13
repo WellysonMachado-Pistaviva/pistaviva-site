@@ -2,6 +2,7 @@ import Link from 'next/link';
 import './motosul.css';
 import PlacesCarousel from './PlacesCarousel';
 import PhotoRibbon from '../components/PhotoRibbon';
+import TopicNavigation from '../components/TopicNavigation';
 
 const BASE = 'https://www.pistavivamototurismo.com.br';
 const IG_EVENTO = 'https://instagram.com/motosulfestival';
@@ -1170,6 +1171,8 @@ export default function MotosulPage() {
         <span><b>10 e 11 abr 2027</b><small>Itajubá · MG</small></span>
         <a href="#planeje">Planejar viagem ↗</a>
       </aside>
+
+      <TopicNavigation current="/motosul" />
 
       {/* ── CONTATO ── */}
       <section className="ms-contato" id="contato">
