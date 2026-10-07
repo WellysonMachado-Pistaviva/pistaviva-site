@@ -1,7 +1,7 @@
 import { supabaseServer } from './supabaseServer';
 
-const EVENT_COLS = 'id, title, category, date, time, local, address, organizer, organizer_ig, description, image_url, images, tags, type, price, lineup, schedule, max_participants, lat, lng';
-const EVENT_COLS_BASE = 'id, title, category, date, time, local, organizer, description, image_url, tags, type, max_participants';
+const EVENT_COLS = 'id, hidden, title, category, date, time, local, address, organizer, organizer_ig, description, image_url, images, tags, type, price, lineup, schedule, max_participants, lat, lng';
+const EVENT_COLS_BASE = 'id, hidden, title, category, date, time, local, organizer, description, image_url, tags, type, max_participants';
 
 // Eventos futuros pro SEO/home (server-side). Filtra ocultos e ENCERRADOS, e
 // ordena por data real (a coluna `date` é texto tipo "22–25 Mai 2026" — ordenar

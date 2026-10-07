@@ -1,4 +1,4 @@
 {
   "framework": "nextjs",
-  "buildCommand": "node scripts/migrate-admin.mjs && npm run build"
+  "buildCommand": "node scripts/migrate-admin.mjs && node scripts/migrate-event-departures.mjs && node scripts/migrate-event-departure-cities.mjs --apply && npm run build"
 }

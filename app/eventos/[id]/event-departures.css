@@ -1,0 +1,54 @@
+.event-departures { scroll-margin-top:100px; }
+.event-departures p { line-height:1.65; }
+.departure-help,.departure-by { color:var(--paper-mut); font-size:13px; }
+.departure-eyebrow { display:flex; align-items:center; gap:8px; font-family:var(--mono); color:var(--accent); font-size:12px; text-transform:uppercase; letter-spacing:.06em; }
+.departure-toolbar,.departure-actions { display:flex; flex-wrap:wrap; gap:12px; margin:20px 0; }
+.event-departures button { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:12px 16px; border:1px solid var(--border); border-radius:var(--pv-radius-sm); background:var(--bg2); color:var(--text); font:inherit; font-size:14px; cursor:pointer; }
+.event-departures button:disabled { opacity:.55; cursor:default; }
+.event-departures .departure-primary,.event-departures .is-joined { background:var(--accent); color:var(--pv-black); border-color:var(--accent); font-weight:700; }
+.event-departures :is(button,input,select,textarea):focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.departure-create,.departure-discussion { padding:20px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--pv-radius-sm); margin:20px 0; }
+.event-departures label { display:flex; flex-direction:column; gap:8px; font-size:14px; margin-bottom:16px; min-width:0; }
+.event-departures input,.event-departures select,.event-departures textarea { box-sizing:border-box; width:100%; min-width:0; padding:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); border-radius:var(--pv-radius-sm); font:inherit; font-size:16px; }
+.event-departures textarea { resize:vertical; }
+.departure-fields { display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:12px; }
+.departure { padding:24px 0; border-top:1px solid var(--border); overflow-wrap:anywhere; }
+.departure header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.departure h3 { font-family:var(--display); font-size:26px; margin:12px 0; }
+.departure-mine { font-size:12px; white-space:nowrap; color:var(--accent); }
+.departure-text,.departure-comment p { white-space:pre-wrap; }
+.departure-members span { display:block; font-size:14px; color:var(--paper-mut); }
+.departure-error { color:var(--danger); }
+.departure-empty { border:1px dashed var(--border); padding:24px; margin-top:20px; line-height:1.6; }
+.departure-comment { padding:20px 0; border-top:1px solid var(--border); }
+.departure-comment>div { display:flex; justify-content:space-between; gap:12px; font-size:13px; }
+.departure-comment time { color:var(--paper-mut); }
+.event-social-links { display:flex; flex-wrap:wrap; gap:12px; margin:16px 0; }
+.event-social-links a { color:var(--accent); text-decoration:underline; text-underline-offset:4px; }
+.event-poster { display:block; width:100%; max-width:640px; height:auto; margin:20px auto; }
+.event-instagram { border:1px solid var(--border); width:100%; max-width:640px; height:620px; background:var(--pv-white); }
+@media(max-width:640px) { .departure-fields { grid-template-columns:1fr; gap:0; } .departure-create,.departure-discussion { padding:16px; } .departure header { display:block; } }
+
+/* Combobox de municípios do IBGE */
+.departure-city { position:relative; display:flex; flex-direction:column; gap:8px; margin-bottom:16px; font-size:14px; }
+.departure-city-help { color:var(--paper-mut); font-size:13px; }
+.departure-city-picked { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; padding:12px; border:1px solid var(--accent); border-radius:var(--pv-radius-sm); background:var(--bg); }
+.departure-city-picked>span { display:inline-flex; align-items:center; gap:8px; font-size:16px; font-weight:700; }
+.event-departures .departure-city-picked button { min-height:36px; padding:8px 12px; font-size:13px; }
+.departure-city-list { position:absolute; z-index:5; top:100%; left:0; right:0; max-height:280px; overflow-y:auto; margin:4px 0 0; padding:0; list-style:none; background:var(--bg); border:1px solid var(--border); border-radius:var(--pv-radius-sm); box-shadow:0 12px 32px rgb(0 0 0 / .28); }
+.event-departures .departure-city-list button { width:100%; min-height:44px; justify-content:flex-start; border:0; border-radius:0; background:transparent; text-align:left; }
+.event-departures .departure-city-list button.is-active { background:var(--bg2); color:var(--accent); }
+.departure-city-list span { color:var(--paper-mut); }
+
+/* Cards de resumo por cidade */
+.departure-cities { margin:24px 0 8px; }
+.departure-cities h3 { display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--paper-mut); margin:0 0 12px; }
+.departure-cities-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+.event-departures .departure-city-card { flex-direction:column; align-items:flex-start; gap:4px; padding:16px; text-align:left; min-height:0; }
+.departure-city-card strong { font-size:16px; }
+.departure-city-card strong span { color:var(--paper-mut); font-weight:400; }
+.departure-city-people { font-family:var(--mono); color:var(--accent); font-size:14px; }
+.departure-city-count { color:var(--paper-mut); font-size:13px; }
+.event-departures .departure-city-card.is-selected { border-color:var(--accent); background:var(--bg); }
+.departure-filter { display:flex; flex-wrap:wrap; align-items:center; gap:12px; font-size:14px; }
+.event-departures .departure-filter button { min-height:36px; padding:8px 12px; font-size:13px; }

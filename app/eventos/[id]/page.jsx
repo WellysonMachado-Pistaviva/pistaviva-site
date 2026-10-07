@@ -6,6 +6,7 @@ import ViewPing from '../../components/ViewPing';
 import EventTicket from './EventTicket';
 import EventHero from './EventHero';
 import EventRouteMap from './EventRouteMap';
+import EventDepartures from './EventDepartures';
 import { getEventById, getEventGoingCount, eventStartISO, eventEndISO } from '../../lib/events';
 import { getEventRsvpBase } from '../../lib/eventRsvpBases.mjs';
 
@@ -48,16 +49,22 @@ export default async function EventoPage({ params }) {
   const e = await getEventById(id);
   if (!e) notFound();
 
+  const meta = Array.isArray(e.schedule) ? e.schedule.find(s => s?.departuresEnabled === true) || {} : {};
+  const socialGroups = Array.isArray(meta.socialGroups) ? meta.socialGroups : [];
+  const instagramUrl = value => { try { const u = new URL(value); return u.protocol === 'https:' && ['instagram.com', 'www.instagram.com'].includes(u.hostname) ? u.href : null; } catch { return null; } };
+  const previousVideo = instagramUrl(meta.previousInstagram);
   const going = await getEventGoingCount(id);
   const goingDisplay = going + getEventRsvpBase(e).going;
   const gallery = imgs(e);
   const cover = gallery[0];
   const tags = parseTags(e.tags);
-  const statusLabel = STATUS[e.type] || STATUS.open;
+  const statusLabel = meta.departuresEnabled ? 'Encontro de motociclistas' : STATUS[e.type] || STATUS.open;
   const price = priceLabel(e.price);
   const start = eventStartISO(e.date, e.time);
-  const end = eventEndISO(e.date, e.time);
-  const mapsUrl = (e.address || e.local) ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address || e.local)}` : null;
+  const end = meta.endUnknown ? null : eventEndISO(e.date, e.time);
+  // Com coordenadas no evento o link abre o pin exato; sem elas cai no texto do endereço.
+  const mapsQuery = Number.isFinite(e.lat) && Number.isFinite(e.lng) ? `${e.lat},${e.lng}` : (e.address || e.local);
+  const mapsUrl = mapsQuery ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQuery)}` : null;
   const lineup = Array.isArray(e.lineup) ? e.lineup.filter(a => a && (a.name || a.time)) : [];
   const schedule = Array.isArray(e.schedule) ? e.schedule.filter(s => s && (s.title || s.time)) : [];
   const heroImages = Array.isArray(e.schedule)
@@ -88,7 +95,7 @@ export default async function EventoPage({ params }) {
       ? { '@type': 'Place', name: e.local, address: { '@type': 'PostalAddress', addressLocality: e.local, addressCountry: 'BR' } }
       : { '@type': 'VirtualLocation', url: `${BASE}/eventos/${id}` },
     organizer: { '@type': 'Organization', name: e.organizer || 'Pistaviva', url: BASE },
-    offers: { '@type': 'Offer', price: /^\d/.test(String(e.price || '').replace(/[^\d.,]/g, '')) ? String(e.price).replace(/[^\d.,]/g, '').replace(',', '.') : '0', priceCurrency: 'BRL', availability: e.type === 'full' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock', ...(validFrom ? { validFrom } : {}), url: ticketUrl || `${BASE}/eventos/${id}` },
+    ...(!/^consultar/i.test(String(e.price || '')) ? { offers: { '@type': 'Offer', price: /^\d/.test(String(e.price || '').replace(/[^\d.,]/g, '')) ? String(e.price).replace(/[^\d.,]/g, '').replace(',', '.') : '0', priceCurrency: 'BRL', availability: e.type === 'full' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock', ...(validFrom ? { validFrom } : {}), url: ticketUrl || `${BASE}/eventos/${id}` } } : {}),
     url: `${BASE}/eventos/${id}`,
   };
   const breadcrumbLd = {
@@ -126,6 +133,7 @@ export default async function EventoPage({ params }) {
             {e.local && <div className="qi"><span className="ic"><MapPin size={18} /></span><div><div className="k">Local</div><div className="v">{e.local}</div></div></div>}
             <div className="qi"><span className="ic"><Users size={18} /></span><div><div className="k">Confirmados</div><div className="v">{goingDisplay} {goingDisplay === 1 ? 'piloto' : 'pilotos'}</div></div></div>
           </div>
+          {meta.departuresEnabled && <a className="ig-btn ig-btn--primary" href="#saidas">Combinar minha saída →</a>}
         </div>
       </section>
 
@@ -139,6 +147,18 @@ export default async function EventoPage({ params }) {
                 <div className="evpage-prose">{e.description.split('\n').filter(Boolean).map((p, i) => <p key={i}>{p}</p>)}</div>
               </section>
             )}
+
+            {meta.departuresEnabled && <EventDepartures eventId={e.id} eventDate={start?.slice(0, 10)} />}
+
+            {socialGroups.map((group, index) => <section className="evpage-block" key={index}>
+              <h2>{group.title}</h2>
+              {group.description && <p>{group.description}</p>}
+              <div className="event-social-links">{(group.links || []).filter(link => instagramUrl(link.url)).map(link => <a key={link.url} href={instagramUrl(link.url)} target="_blank" rel="noopener noreferrer">{link.label} ↗</a>)}</div>
+            </section>)}
+
+            {meta.posterUrl && cover && <section className="evpage-block"><h2>Cartaz do encontro</h2><a href={cover} target="_blank" rel="noopener noreferrer"><img className="event-poster" src={cover} alt={`Cartaz oficial — ${e.title}`} width="1080" height="1320" loading="lazy" /></a></section>}
+
+            {previousVideo && <section className="evpage-block"><h2>Como foi o último encontro</h2><p>Veja o registro compartilhado no Instagram e entre no clima do próximo café.</p><iframe className="event-instagram" src={`${previousVideo.replace(/\/$/, '')}/embed/`} title="Vídeo do encontro anterior na Garganta do Registro" loading="lazy" allow="encrypted-media; fullscreen; picture-in-picture" /><p><a href={previousVideo} target="_blank" rel="noopener noreferrer">Assistir no Instagram ↗</a></p></section>}
 
             {(e.address || e.local) && (
               <section className="evpage-block">

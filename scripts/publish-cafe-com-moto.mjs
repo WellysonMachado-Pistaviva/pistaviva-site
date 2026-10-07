@@ -1,0 +1,22 @@
+import fs from 'node:fs/promises';
+import {createClient} from '@supabase/supabase-js';
+import {resolveSupabaseAdminConfig} from '../app/lib/supabaseAdminConfig.mjs';
+const {url,key}=resolveSupabaseAdminConfig();
+const sb=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}});
+const id='cbb79f85-3cbf-4dea-8dda-1df38d2c0261';
+const title='2º Café com Moto na Serra — Garganta do Registro';
+const ig=handle=>({label:`@${handle}`,url:`https://www.instagram.com/${handle}/`});
+const posterPath='eventos/2026-11-01/cafe-com-moto-garganta.jpg';
+const poster=sb.storage.from('post-images').getPublicUrl(posterPath).data.publicUrl;
+const event={id,title,category:'Encontro',date:'01 Nov 2026',time:'09:00',local:'Bar do Miguelzinho — Garganta do Registro',address:'Bar do Miguelzinho, Garganta do Registro, Rodovia BR-354, Engenheiro Passos, Resende - RJ',lat:-22.376862,lng:-44.760003,organizer:'Don Cruz · Bar do Miguelzinho · Pistaviva',organizer_ig:'pistavivaoficial',description:'Café com Moto na Serra! A Garganta do Registro será novamente o ponto de encontro para quem gosta de alguns quilômetros longe de casa, moto e um bom café da manhã.\nPrepare sua moto, reúna os amigos e venha passar o dia com a gente na Serra da Mantiqueira. O encontro acontece no domingo, 1º de novembro de 2026, a partir das 9h, no Bar do Miguelzinho.\nFotógrafo oficial: Don Cruz. A cobertura fotográfica e a disponibilização das fotos do encontro serão realizadas por @doncruzoficial. Acompanhe o perfil para encontrar seus registros.\nZoação? Tô fora! Respeito, organização e segurança. Sem corte de giro ou barulho excessivo.\nQuer companhia no caminho? Publique abaixo sua cidade, horário e ponto de saída. Quem quiser acompanhar pode marcar “Vou junto” e conversar com a turma.',image_url:poster,images:[poster],tags:['Café com Moto','Garganta do Registro','Mantiqueira','Don Cruz','Pistaviva'],type:'open',price:'Consultar organização',hidden:false,schedule:[{time:'09:00',title:'Início do encontro no Bar do Miguelzinho',desc:'Café, motos e reencontro com a turma na Garganta do Registro.'},{departuresEnabled:true,endUnknown:true,posterUrl:poster,previousInstagram:'https://www.instagram.com/p/DVcBZq4gRPF/',socialGroups:[{title:'Fotografia oficial',description:'Don Cruz registra a chegada e os momentos do encontro. A disponibilização das fotos será divulgada pelo fotógrafo.',links:[ig('doncruzoficial')]},{title:'Realização',links:['doncruzoficial','obardomiguelzinho','pistavivaoficial'].map(ig)},{title:'Apoio',links:['prefresende','prefeitura_de_itamonte','brunocarazza3','estradaxoficial','casalhornet_z900','portalsaolourencomg','saolourenco.cvb','_itamontemg'].map(ig)},{title:'Publicações do encontro',links:[{label:'Confira o convite no Instagram',url:'https://www.instagram.com/p/DeFt7AGGRKJ/'},{label:'Mais informações sobre o encontro',url:'https://www.instagram.com/p/Ddhe3HDvShA/'}]}]}]};
+await fs.writeFile(new URL('../docs/eventos/2026-11-01/evento.json',import.meta.url),JSON.stringify(event,null,2));
+if(!process.argv.includes('--apply')){console.log({ready:true,id,title});process.exit(0);}
+const {data:existing,error:lookup}=await sb.from('pv_events').select('id,title').or(`id.eq.${id},and(title.ilike.%Café com Moto%,date.eq.01 Nov 2026)`);
+if(lookup)throw new Error(lookup.message);
+if(existing.length)throw new Error('Evento já existe. Verifique antes de repetir.');
+const bytes=await fs.readFile('/Users/wellysonmachado/Downloads/cafécomotoPrancheta 1_1.jpg');
+const {error:upload}=await sb.storage.from('post-images').upload(posterPath,bytes,{contentType:'image/jpeg',cacheControl:'31536000',upsert:false});
+if(upload&&!['409',409].includes(upload.statusCode))throw new Error(upload.message);
+const remote=await fetch(poster);if(!remote.ok||!Buffer.from(await remote.arrayBuffer()).equals(bytes))throw new Error('Poster verification failed');
+const {data,error}=await sb.from('pv_events').insert(event).select('id,title,date,time').single();if(error)throw new Error(error.message);
+await fs.writeFile(new URL('../docs/eventos/2026-11-01/publication.json',import.meta.url),JSON.stringify({...data,url:`https://www.pistavivamototurismo.com.br/eventos/${id}`},null,2));console.log(data);
