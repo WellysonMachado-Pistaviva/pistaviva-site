@@ -328,3 +328,51 @@
   .mb-page .mb-instagram h2 { font-size:48px; }
   .mb-instagram-post { width:100%; max-width:400px; justify-self:center; }
 }
+
+/* Monumentos por estado: bloco na página principal e páginas /destinos/monumentos/[estado]. */
+.mb-states { display:grid; grid-template-columns:.8fr 1.2fr; gap:64px; padding-block:96px; border-top:1px solid var(--pv-line-light-2); scroll-margin-top:112px; }
+.mb-states h2 { margin-bottom:24px; }
+.mb-states p:not(.mb-kicker) { color:var(--pv-muted-dark); line-height:1.7; max-width:36ch; }
+.mb-states-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-content:start; border-top:1px solid var(--pv-line-light-2); }
+.mb-states-grid a, .mb-state-others a { display:flex; align-items:center; gap:16px; min-height:72px; padding:16px 0; border-bottom:1px solid var(--pv-line-light-2); color:var(--pv-text-dark); }
+.mb-states-grid a:nth-child(odd) { padding-right:24px; }
+.mb-states-grid a:nth-child(even) { padding-left:24px; border-left:1px solid var(--pv-line-light-2); }
+.mb-states-grid strong { font:800 24px/1.1 var(--display); text-transform:uppercase; }
+.mb-states-grid span { font-size:12px; color:var(--pv-muted-dark); }
+.mb-states-grid svg, .mb-state-others svg { margin-left:auto; flex-shrink:0; }
+.mb-states-grid a:hover, .mb-state-others a:hover { color:var(--pv-orange-deep); }
+.mb-cover .study-kicker a { color:inherit; text-decoration:underline; text-underline-offset:4px; }
+.mb-state { padding-block:96px; scroll-margin-top:112px; }
+.mb-state-list { margin:0; padding:0; list-style:none; border-top:1px solid var(--pv-line-light-2); }
+.mb-state-list li { display:grid; grid-template-columns:80px 1fr auto; gap:24px; align-items:center; padding-block:24px; border-bottom:1px solid var(--pv-line-light-2); scroll-margin-top:112px; }
+.mb-state-number { font:800 44px/1 var(--display); color:var(--pv-orange-deep); }
+.mb-page .mb-state-copy h3 { margin:0 0 8px; font-size:28px; line-height:1.05; }
+.mb-state-copy p { display:flex; align-items:center; gap:8px; margin:0 0 12px; font-size:14px; color:var(--pv-muted-dark); }
+.mb-state-status { display:inline-block; padding:4px 8px; font:700 11px var(--mono); text-transform:uppercase; letter-spacing:.08em; background:var(--pv-offwhite-2); }
+.mb-state-status.is-pronto { background:var(--pv-text-dark); color:var(--pv-text-light); }
+.mb-state-actions { display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+.mb-state-contact { min-height:44px; display:inline-flex; align-items:center; font-size:13px; font-weight:600; color:var(--pv-text-dark); }
+.mb-state-note { margin-top:32px; max-width:70ch; color:var(--pv-muted-dark); line-height:1.7; }
+.mb-state-note a, .mb-state-faq a { color:var(--pv-orange-deep); text-decoration:underline; text-underline-offset:3px; }
+.mb-state-faq { display:grid; grid-template-columns:.8fr 1.2fr; gap:64px; padding-block:96px; border-top:1px solid var(--pv-line-light-2); }
+.mb-page .mb-state-faq h3 { margin:32px 0 8px; font-size:24px; line-height:1.1; }
+.mb-page .mb-state-faq h3:first-child { margin-top:0; }
+.mb-state-faq p { margin:0; color:var(--pv-muted-dark); line-height:1.7; }
+.mb-state-others { padding-block:64px; border-top:1px solid var(--pv-line-light-2); }
+.mb-state-others > div { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:32px; }
+.mb-state-others a span { font:800 22px/1.1 var(--display); text-transform:uppercase; }
+.mb-state-others a small { font-size:12px; color:var(--pv-muted-dark); }
+@media (max-width: 1024px) {
+  .mb-states, .mb-state-faq { grid-template-columns:1fr; gap:32px; }
+  .mb-state-others > div { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 640px) {
+  .mb-states, .mb-state, .mb-state-faq { padding-block:56px; }
+  .mb-states-grid { grid-template-columns:1fr; }
+  .mb-states-grid a:nth-child(odd), .mb-states-grid a:nth-child(even) { padding-inline:0; border-left:0; }
+  .mb-state-list li { grid-template-columns:48px 1fr; gap:16px; }
+  .mb-state-number { font-size:32px; }
+  .mb-page .mb-state-copy h3 { font-size:22px; }
+  .mb-state-actions { grid-column:1 / -1; align-items:stretch; }
+  .mb-state-others > div { grid-template-columns:1fr; }
+}

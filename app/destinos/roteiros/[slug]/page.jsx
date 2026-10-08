@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ROTEIROS_CURADOS, getRoteiro, COLECOES } from '../../../lib/roteirosCurados.mjs';
 import RouteAccess from '../RouteAccess';
+import { MONUMENTOS } from '../../../lib/monumentosBikers.mjs';
 import MonumentExplorer from '../../monumentos/MonumentExplorer';
 import MonumentPage from '../../monumentos/MonumentPage';
 import '../roteiros.css';
@@ -10,6 +11,15 @@ export function generateStaticParams() { return ROTEIROS_CURADOS.filter(r => r.e
 export async function generateMetadata({ params }) {
   const r = getRoteiro((await params).slug);
   if(!r?.entradas) return { title:'Roteiro não encontrado' };
+  if (r.colecao === 'bikers') {
+    const total = MONUMENTOS.filter(m => m.coordinates).length;
+    return {
+      title: { absolute: `Rota Biker: mapa dos ${total} monumentos, roteiros e como chegar · Pistaviva` },
+      description: `Encontre o monumento da Rota Biker mais perto de você: ${total} locais em SP, PR, SC, RS, MG e mais estados, além do Paraguai. Mapa, rota pelo Google Maps e situação do carimbo.`,
+      alternates: { canonical: r.href },
+      openGraph: { title: `Rota Biker: mapa dos ${total} monumentos`, url: r.href, type: 'website', images: [{ url: '/monumentos/galeria/monumento-encontro.webp', width: 1600, height: 1067, alt: 'Monumento da Rota Biker entre motos, visitantes e montanhas' }] },
+    };
+  }
   return { title:`${r.nome} — Roteiro de moto e como chegar`, description:r.resumo, alternates:{canonical:r.href} };
 }
 export default async function Page({ params }) {

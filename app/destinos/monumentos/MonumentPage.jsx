@@ -7,6 +7,7 @@ import MonumentExplorer from './MonumentExplorer';
 import RouteCoverage from './RouteCoverage';
 import RingCards from './RingCards';
 import Sculptors from './Sculptors';
+import { ESTADOS_COM_MONUMENTOS, estadoHref, listaLd, BASE_MONUMENTOS, MONUMENTOS_HREF } from '../../lib/monumentosEstados.mjs';
 import '../../home-experience.css';
 import '../../components/home-layout.css';
 import './monumentos.css';
@@ -19,7 +20,10 @@ function Instagram({ size = 24, ...props }) {
 export default function MonumentPage() {
   const mapped = MONUMENTOS.filter(m => m.coordinates);
   const ready = MONUMENTOS.filter(m => m.status === 'pronto');
+  const url = `${BASE_MONUMENTOS}${MONUMENTOS_HREF}`;
+  const jsonLd = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Monumentos da Rota Biker', url, inLanguage: 'pt-BR', description: `Mapa dos ${mapped.length} monumentos da Rota Biker no Brasil e no Paraguai, com rota e situação do carimbo.`, mainEntity: listaLd('Monumentos da Rota Biker', url, mapped, m => `${BASE_MONUMENTOS}${estadoHref(m.uf)}#monumento-${m.id}`) };
   return <div className="mb-page pv-study">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     <header className="study-hero mb-cover" aria-labelledby="mb-page-title">
       <Cover src="/monumentos/galeria/monumento-encontro.webp" alt="Monumento da Rota Biker entre motos, visitantes e montanhas" priority />
       <div className="study-hero-shade" aria-hidden="true" />
@@ -58,6 +62,10 @@ export default function MonumentPage() {
       <div className="mb-stats"><div><strong>{MONUMENTOS.length}</strong><span>registros na rede</span></div><div><strong>{mapped.length}</strong><span>pontos no mapa</span></div><div><strong>{ready.length}</strong><span>prontos e carimbando</span></div><div><strong>02</strong><span>países para descobrir</span></div></div>
       <MonumentExplorer />
       <RingCards />
+      <nav className="mb-states" aria-labelledby="mb-states-title">
+        <div><p className="mb-kicker">Perto de você</p><h2 id="mb-states-title">Monumentos<br />por estado.</h2><p>Escolha onde você está e veja cada parada com rota pelo Google Maps.</p></div>
+        <div className="mb-states-grid">{ESTADOS_COM_MONUMENTOS.map(e => <Link key={e.uf} href={estadoHref(e.uf)}><strong>{e.nome}</strong><span>{e.monumentos.length} {e.monumentos.length === 1 ? 'monumento' : 'monumentos'}</span><ArrowUpRight size={18} aria-hidden="true" /></Link>)}</div>
+      </nav>
     </div>
     <section className="mb-story" id="historia"><div className="mb-shell mb-story-inner"><Image src="/monumentos/wellyson-rota-biker.webp" alt="Wellyson Machado diante de um monumento da Rota Biker, com jaqueta de motociclista preta e vermelha" width={1920} height={1280} /><div><p className="mb-kicker">Mais que um ponto no mapa</p><h2>O caminho passa.<br />O encontro fica.</h2><p>Os monumentos celebram o cumprimento entre motociclistas. Cada parada é um convite para conhecer o lugar, conversar com quem recebe e continuar a viagem com mais uma história.</p><p>Escolha uma região para começar. Confirme atendimento e disponibilidade do carimbo com o guardião antes de partir.</p></div></div></section>
     <section className="mb-shell mb-instagram" id="instagram-rota-biker" aria-labelledby="mb-instagram-title">
