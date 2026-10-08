@@ -12,6 +12,7 @@ import AuthProvider from './components/AuthProvider';
 import AdSenseLoader from './components/AdSenseLoader';
 import SiteHeader from './components/SiteHeader';
 import SiteFooter from './components/SiteFooter';
+import OnlineCounter from './components/OnlineCounter';
 import AnnouncementBar from './components/AnnouncementBar';
 import MobileShell from './components/MobileShell';
 
@@ -100,6 +101,7 @@ export default function RootLayout({ children }) {
             <AnnouncementBar />
             <MobileShell />
             <SiteHeader />
+            <OnlineCounter />
             <main id="app" tabIndex={-1} style={{ flex: 1 }}>{children}</main>
             <SiteFooter />
           </div>

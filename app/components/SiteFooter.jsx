@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import OnlineCounter from './OnlineCounter';
 import { ArrowUpRight } from 'lucide-react';
 
 export default function SiteFooter() {
@@ -45,7 +44,6 @@ export default function SiteFooter() {
             <Link href="/loja">Loja</Link>
           </div>
         </div>
-        <OnlineCounter />
         <div className="foot-legal">
           <Link href="/sobre">Sobre</Link>
           <Link href="/contato">Contato</Link>

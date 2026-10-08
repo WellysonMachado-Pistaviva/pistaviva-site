@@ -685,7 +685,6 @@ button, a, summary { touch-action:manipulation; }
 .art-col { min-width:0; width:100%; overflow-wrap:anywhere; }
 .rotas-hub .rotas-tabs { padding-inline:0; }
 .evb .crumb { background:transparent; border:0; }
-.site-foot .pv-online { position:static; margin:var(--pv-space-3) 0; width:max-content; max-width:100%; min-width:0; box-shadow:none; background:var(--pv-black-2); }
 .community-story { background:var(--pv-offwhite); }
 .community-story__card { background:var(--pv-black-2); box-shadow:none; border:1px solid var(--pv-line-dark); border-radius:var(--pv-radius); }
 .community-story__title { font:700 18px/1.4 var(--font); margin:0 0 20px; color:var(--pv-muted-light); }
@@ -696,7 +695,6 @@ button, a, summary { touch-action:manipulation; }
   .evb .topbar .brand { flex:1 1 auto; }
   .evb .topbar .btn { flex:1 1 auto; white-space:normal; }
   .evb .topbar .pill { max-width:100%; }
-  .site-foot .pv-online { margin-top:28px; margin-bottom:var(--pv-space-2); }
 }
 
 /* Navegação editorial entre preparação, destino e encontro. */
