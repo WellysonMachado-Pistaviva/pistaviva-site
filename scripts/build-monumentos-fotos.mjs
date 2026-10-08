@@ -22,6 +22,8 @@ const FOTOS = [
   // Guardado para uso futuro: recorte retrato 2:3 centrado em Wellyson, sem
   // terceiros no enquadramento.
   { arquivo: 'fots.jpg', destino: '../wellyson-monumento', largura: 900, recorte: '2:3', foco: 0.47 },
+  // Escultor finalizando um monumento: abre a seção sobre quem talha as peças.
+  { arquivo: 'artista-461x1024.jpeg', destino: '../escultores-trabalho', largura: 900 },
 ];
 
 const existentes = new Set(await readdir(ORIGEM));

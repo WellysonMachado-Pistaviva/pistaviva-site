@@ -245,3 +245,56 @@
 .mb-gallery-grid img { aspect-ratio:1/1; object-fit:cover; }
 .mb-gallery-credit { margin-top:32px; padding-top:20px; border-top:1px solid var(--pv-line-light-2); font-size:13px; color:var(--pv-muted-dark); }
 @media (max-width:768px) { .mb-gallery { padding-block:48px; } .mb-gallery-grid { gap:24px; } }
+
+/* Circuitos fechados */
+.mb-rings { padding-block:64px; border-top:1px solid var(--pv-line-light-2); }
+.mb-rings h2 { font-size:clamp(40px,4.5vw,64px); line-height:.98; margin:12px 0 20px; }
+.mb-rings-lead { max-width:680px; font-size:15px; line-height:1.7; color:var(--pv-muted-dark); }
+.mb-rings-sub { font:800 24px/1.2 var(--display); margin:56px 0 12px; }
+.mb-rings-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; margin-top:32px; }
+.mb-ring { display:flex; flex-direction:column; gap:16px; padding:24px; border:1px solid var(--pv-line-light); background:var(--pv-white); }
+.mb-ring-nivel { font:600 11px/1 var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--pv-orange); }
+.mb-ring h3 { font:800 22px/1.2 var(--display); margin:8px 0 4px; }
+.mb-ring header p { font-size:13px; color:var(--pv-muted-dark); margin:0; }
+.mb-ring-mapa { width:100%; height:auto; aspect-ratio:1; background:var(--pv-offwhite); }
+.mb-ring-mapa path { stroke:var(--pv-orange); stroke-width:1.8; stroke-linejoin:round; stroke-linecap:round; }
+.mb-ring-mapa circle { fill:var(--pv-black); }
+.mb-ring-numeros { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:0; }
+.mb-ring-numeros dt { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--pv-muted-dark); }
+.mb-ring-numeros dd { margin:2px 0 0; font:700 18px/1.2 var(--display); }
+.mb-ring-paradas h4 { font:600 11px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--pv-muted-dark); margin:0 0 8px; }
+.mb-ring-paradas ol { margin:0; padding:0; list-style:none; font-size:13px; line-height:1.9; }
+.mb-ring-paradas b { font:600 11px/1 var(--mono); color:var(--pv-orange); margin-right:8px; }
+.mb-ring-paradas small, .mb-ring-municipios small { margin-left:4px; font-family:var(--mono); font-size:10px; color:var(--pv-muted-dark); }
+.mb-ring-municipios summary { font-size:13px; font-weight:600; cursor:pointer; padding:8px 0; min-height:40px; display:flex; align-items:center; }
+.mb-ring-municipios p { font-size:12px; line-height:1.6; color:var(--pv-muted-dark); margin:0 0 12px; }
+.mb-ring-lista { font-size:12px; line-height:1.9; color:var(--pv-muted-dark); overflow-wrap:anywhere; margin:0; }
+.mb-ring-lista b { color:var(--pv-black); }
+.mb-ring-liga { display:flex; align-items:center; gap:8px; margin:auto 0 0; padding-top:12px; border-top:1px solid var(--pv-line-light-2); font-size:12px; color:var(--pv-muted-dark); }
+.mb-ring-liga svg { flex:0 0 auto; color:var(--pv-orange); }
+.mb-rings-nota { margin-top:40px; padding-top:20px; border-top:1px solid var(--pv-line-light-2); font-size:13px; line-height:1.7; color:var(--pv-muted-dark); max-width:720px; }
+@media (max-width:768px) { .mb-rings { padding-block:48px; } }
+.mb-ring-paradas li { display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 8px; }
+.mb-ring-paradas li > span { font-weight:600; }
+.mb-ring-paradas li a { display:inline-flex; align-items:center; gap:4px; font-size:11px; color:var(--pv-orange); text-decoration:underline; text-underline-offset:3px; overflow-wrap:anywhere; }
+.mb-ring-ir { display:flex; flex-direction:column; gap:8px; }
+.mb-ring-botao { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:48px; padding:12px 16px; background:var(--pv-orange); color:var(--pv-white); font-size:14px; font-weight:700; }
+.mb-ring-ir summary { font-size:13px; font-weight:600; cursor:pointer; padding:8px 0; min-height:40px; display:flex; align-items:center; }
+.mb-ring-ir details p { font-size:12px; line-height:1.6; color:var(--pv-muted-dark); margin:0 0 8px; }
+.mb-ring-ir details ol { margin:0; padding:0; list-style:none; }
+.mb-ring-ir details li { padding:4px 0; }
+.mb-ring-ir details a { display:flex; gap:8px; font-size:13px; color:var(--pv-black); text-decoration:underline; text-underline-offset:3px; }
+.mb-ring-ir details b { font:600 11px/1.6 var(--mono); color:var(--pv-orange); }
+
+/* Os escultores */
+.mb-sculptors { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start; padding-block:72px; border-top:1px solid var(--pv-line-light-2); }
+.mb-sculptors h2 { font-size:clamp(40px,4.5vw,64px); line-height:.98; margin:12px 0 24px; }
+.mb-sculptors-copy p { font-size:15px; line-height:1.7; color:var(--pv-muted-dark); margin-bottom:16px; }
+.mb-sculptors-copy strong { color:var(--pv-black); }
+.mb-sculptors-copy .mb-kicker { margin:0; }
+.mb-sculptors-media { display:grid; gap:32px; }
+.mb-sculptors-media figure { margin:0; }
+.mb-sculptors-media img { width:100%; max-width:380px; height:auto; }
+.mb-sculptors-media figcaption { margin-top:12px; font-size:13px; line-height:1.6; color:var(--pv-muted-dark); }
+.mb-sculptors-media figcaption a { color:var(--pv-orange); text-decoration:underline; text-underline-offset:4px; }
+@media (max-width:900px) { .mb-sculptors { grid-template-columns:1fr; gap:40px; padding-block:48px; } }
