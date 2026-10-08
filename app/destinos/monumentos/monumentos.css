@@ -222,3 +222,27 @@
 .mb-coverage-legs h4::before { content:"Etapa " counter(etapa); flex:0 0 auto; font:600 11px/1.6 var(--mono); letter-spacing:.06em; color:var(--pv-orange); }
 .mb-coverage-leg-meta { font:600 12px/1.6 var(--mono); color:var(--pv-black); margin:0; }
 .mb-coverage-leg-seq { font-size:13px; line-height:1.8; color:var(--pv-muted-dark); margin:4px 0 0; overflow-wrap:anywhere; }
+
+/* Passaporte Rota Biker */
+.mb-passport { display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr); gap:64px; align-items:center; padding-block:72px; border-top:1px solid var(--pv-line-light-2); }
+.mb-passport img { width:100%; max-width:340px; height:auto; justify-self:center; filter:drop-shadow(0 24px 48px rgb(12 12 13 / .28)); }
+.mb-passport h2 { font-size:clamp(40px,4.5vw,64px); line-height:.98; margin:12px 0 24px; }
+.mb-passport p { font-size:15px; line-height:1.7; color:var(--pv-muted-dark); margin-bottom:16px; }
+.mb-passport .mb-kicker { margin:0; }
+@media (max-width:768px) {
+  .mb-passport { grid-template-columns:1fr; gap:32px; padding-block:48px; }
+  .mb-passport img { max-width:260px; }
+}
+
+/* Galeria de fotos dos monumentos */
+.mb-gallery { padding-block:72px; border-top:1px solid var(--pv-line-light-2); }
+.mb-gallery h2 { font-size:clamp(40px,4.5vw,64px); line-height:.98; margin:12px 0 32px; }
+.mb-gallery figure { margin:0; }
+.mb-gallery img { width:100%; height:auto; display:block; }
+.mb-gallery-wide img { max-height:520px; object-fit:cover; }
+.mb-gallery figcaption { margin-top:12px; font-size:13px; line-height:1.6; color:var(--pv-muted-dark); }
+.mb-gallery figcaption b { color:var(--pv-black); font:600 12px/1.6 var(--mono); letter-spacing:.04em; }
+.mb-gallery-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:32px; margin-top:40px; }
+.mb-gallery-grid img { aspect-ratio:1/1; object-fit:cover; }
+.mb-gallery-credit { margin-top:32px; padding-top:20px; border-top:1px solid var(--pv-line-light-2); font-size:13px; color:var(--pv-muted-dark); }
+@media (max-width:768px) { .mb-gallery { padding-block:48px; } .mb-gallery-grid { gap:24px; } }
