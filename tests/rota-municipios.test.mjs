@@ -13,6 +13,8 @@ test('cobertura traz os dois modos de rota com totais coerentes', () => {
     assert.equal(municipios.length, rota.totalMunicipios, `${nome}: total divergente`);
     assert.equal(rota.estados.length, rota.totalEstados, `${nome}: estados divergentes`);
     assert.ok(rota.distanciaKm > 0 && rota.ids.length > 1, `${nome}: rota vazia`);
+    // Travessias por Argentina e Paraguai: declaradas, e sempre menores que a rota.
+    assert.ok(rota.kmForaDoBrasil > 0 && rota.kmForaDoBrasil < rota.distanciaKm, `${nome}: km fora do Brasil incoerente`);
   }
 });
 
@@ -40,6 +42,15 @@ test('nomes conferem com o cadastro do IBGE e não se repetem', () => {
       }
     }
   }
+});
+
+test('a varredura é fina o bastante para não perder municípios', () => {
+  // Amostrar só os vértices do traçado (≈410 m) perdia 15 municípios; a linha é
+  // densificada e varrida a cada 10 m, passo em que a contagem para de crescer.
+  assert.ok(cobertura.modos.todos.totalMunicipios >= 511, `contagem caiu para ${cobertura.modos.todos.totalMunicipios}: a varredura regrediu`);
+  const perdidos = ['Sarandi', 'Jaboti', 'Itapeva', 'Barueri', 'Natalândia', 'Louveira', 'Pedro de Toledo'];
+  const nomes = new Set(cobertura.modos.todos.estados.flatMap(e => e.municipios.map(m => m.nome)));
+  for (const nome of perdidos) assert.ok(nomes.has(nome), `${nome} sumiu da rota`);
 });
 
 test('municípios com monumento trazem número oficial e perfil válido', () => {

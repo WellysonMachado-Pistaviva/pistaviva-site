@@ -17,9 +17,11 @@ import { ROUTING_VERSION } from '../app/lib/monumentosRoute.mjs';
 
 const MALHA_URL = 'https://raw.githubusercontent.com/tbrugz/geodata-br/master/geojson/geojs-100-mun.json';
 const CACHE = new URL('../.cache/malha-municipal.geojson', import.meta.url);
-// Uma amostra por quilômetro: o traçado tem ~31 mil pontos, e municípios menores
-// que isso na direção da estrada são raros o bastante para não justificar o custo.
-const PASSO_KM = 1;
+// O traçado do OSRM traz ~31 mil vértices, mas espaçados ~410 m em média: amostrar
+// só os vértices perde municípios atravessados de raspão. Densificamos a linha e
+// varremos a cada 10 m, passo em que a contagem para de crescer (5 m não acrescenta
+// nenhum município).
+const PASSO_KM = 0.01;
 const CELL = 0.5;
 const UF_POR_PREFIXO = Object.fromEntries(Object.entries(UF_IBGE).map(([uf, prefix]) => [prefix, uf]));
 const ESTADOS = { AC:'Acre', AL:'Alagoas', AP:'Amapá', AM:'Amazonas', BA:'Bahia', CE:'Ceará', DF:'Distrito Federal', ES:'Espírito Santo', GO:'Goiás', MA:'Maranhão', MT:'Mato Grosso', MS:'Mato Grosso do Sul', MG:'Minas Gerais', PA:'Pará', PB:'Paraíba', PR:'Paraná', PE:'Pernambuco', PI:'Piauí', RJ:'Rio de Janeiro', RN:'Rio Grande do Norte', RS:'Rio Grande do Sul', RO:'Rondônia', RR:'Roraima', SC:'Santa Catarina', SP:'São Paulo', SE:'Sergipe', TO:'Tocantins' };
@@ -30,6 +32,18 @@ function distanceKm([lat1, lng1], [lat2, lng2]) {
   const dLng = rad(lng2 - lng1);
   const a = Math.sin(dLat / 2) ** 2 + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLng / 2) ** 2;
   return 6371 * 2 * Math.asin(Math.min(1, Math.sqrt(a)));
+}
+
+// Insere pontos intermediários para que o espaçamento nunca passe do passo.
+function densify(line, passo) {
+  const out = line.length ? [line[0]] : [];
+  for (let i = 1; i < line.length; i += 1) {
+    const from = line[i - 1];
+    const to = line[i];
+    const partes = Math.max(1, Math.ceil(distanceKm(from, to) / passo));
+    for (let k = 1; k <= partes; k += 1) out.push([from[0] + (to[0] - from[0]) * (k / partes), from[1] + (to[1] - from[1]) * (k / partes)]);
+  }
+  return out;
 }
 
 async function malha() {
@@ -109,23 +123,44 @@ for (const m of MONUMENTOS) {
 
 const geo = await malha();
 const index = buildIndex(geo.features);
+
+// Confere o cadastro contra a geometria: as coordenadas de cada monumento
+// precisam cair no município declarado. Divergência aqui significa catálogo ou
+// malha errados, e apareceria depois como cidade errada na lista.
+let conferidos = 0;
+for (const m of MONUMENTOS) {
+  if (!m.coordinates || m.pais !== 'Brasil') continue;
+  const feature = locate(index, geo.features, m.coordinates);
+  const declarado = m.uf && m.cidade ? findCity(m.uf, m.cidade) : null;
+  if (!feature) { console.warn(`[aviso] monumento ${m.id} (${m.cidade}/${m.uf}) caiu fora da malha brasileira`); continue; }
+  conferidos += 1;
+  if (declarado && String(feature.properties.id) !== declarado.code) {
+    console.warn(`[divergência] monumento ${m.id}: cadastro diz ${m.cidade}/${m.uf}, coordenadas caem em ${feature.properties.name}`);
+  }
+}
+console.log(`${conferidos} monumentos conferidos contra a malha`);
 const resultado = { routingVersion: ROUTING_VERSION, geradoEm: new Date().toISOString().slice(0, 10), fonte: MALHA_URL, modos: {} };
 
 for (const mode of ['todos', 'prontos']) {
   const route = JSON.parse(await readFile(new URL(`../public/monumentos/rota-${mode}.json`, import.meta.url), 'utf8'));
-  const line = route.line || [];
+  const line = densify(route.line || [], PASSO_KM);
   const ordem = [];
   const vistos = new Map();
-  let foraDoBrasil = 0;
+  let foraDoBrasilKm = 0;
   let anterior = null;
   let acumulado = PASSO_KM;
   for (const point of line) {
     if (anterior) acumulado += distanceKm(anterior, point);
     anterior = point;
     if (acumulado < PASSO_KM) continue;
+    // Distância que esta amostra representa: o espaçamento real desde a
+    // anterior, nunca o passo nominal — somar o passo subestima o total.
+    const avanco = acumulado;
     acumulado = 0;
     const feature = locate(index, geo.features, point);
-    if (!feature) { foraDoBrasil += 1; continue; }
+    // Fora da malha são as travessias por Argentina e Paraguai: contamos os
+    // quilômetros para declarar o que a lista não cobre.
+    if (!feature) { foraDoBrasilKm += avanco; continue; }
     const codigo = String(feature.properties.id);
     if (vistos.has(codigo)) continue;
     const uf = UF_POR_PREFIXO[codigo.slice(0, 2)];
@@ -146,10 +181,10 @@ for (const mode of ['todos', 'prontos']) {
     distanciaKm: Math.round(route.distanceKm),
     totalMunicipios: ordem.length,
     totalEstados: estados.length,
-    amostrasForaDoBrasil: foraDoBrasil,
+    kmForaDoBrasil: Math.round(foraDoBrasilKm),
     estados,
   };
-  console.log(`${mode}: ${estados.length} estados, ${ordem.length} municípios, ${foraDoBrasil} amostras fora da malha brasileira`);
+  console.log(`${mode}: ${estados.length} estados, ${ordem.length} municípios, ${Math.round(foraDoBrasilKm)} km fora do Brasil`);
 }
 
 await writeFile(new URL('../app/lib/rotaMunicipios.json', import.meta.url), `${JSON.stringify(resultado)}\n`);

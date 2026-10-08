@@ -43,8 +43,8 @@ export default function RouteCoverage() {
     </div>
     <p className="mb-coverage-note">
       {marca(18, 'mb-coverage-mark')} marca os municípios que abrigam um monumento, com o número oficial e o perfil do guardião quando publicado.
-      A travessia ao Paraguai não entra nesta contagem: a lista cobre apenas a malha municipal brasileira.
-      Apuração automática sobre o traçado rodoviário de {cobertura.geradoEm.split('-').reverse().join('/')}; mudar as paradas no planejador muda o caminho e, com ele, as cidades atravessadas.
+      Os {rota.kmForaDoBrasil} km em que o traçado deixa o país — travessias pela Argentina e pelo Paraguai — não entram na contagem: a lista cobre a malha municipal brasileira.
+      Apuração automática sobre o traçado rodoviário de {cobertura.geradoEm.split('-').reverse().join('/')}, varrido a cada 10 metros; mudar as paradas no planejador muda o caminho e, com ele, as cidades atravessadas.
     </p>
   </section>;
 }
