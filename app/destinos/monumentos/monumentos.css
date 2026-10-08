@@ -92,7 +92,6 @@
 .mb-plan-tools button { display:inline-flex; gap:8px; align-items:center; border:0; background:transparent; text-decoration:underline; text-underline-offset:4px; font-size:13px; min-height:44px; }
 .mb-feedback { color:var(--pv-orange-deep); font-size:14px; overflow-wrap:anywhere; }
 .mb-feedback:empty { display:none; }
-.mb-trip-note { background:var(--pv-orange-subtle); border-left:3px solid var(--pv-orange); padding:16px 20px; font-size:13px; margin-top:12px; }
 .mb-method { color:var(--pv-muted-dark); font-size:12px; line-height:1.7; max-width:1000px; margin-top:16px; }
 .mb-plan-head { padding:20px; border-bottom:1px solid var(--pv-line-light); }
 .mb-plan-head h3 { font-size:24px; line-height:1.1; }

@@ -39,7 +39,6 @@ export default function MonumentExplorer() {
   const active = MONUMENTOS.find(m => m.id === selected);
   const stages = useMemo(() => navigationStages(stops, origin), [stops, origin]);
   const viaPoints = useMemo(() => routePoints(stops).filter(point => point.type === 'via'), [stops]);
-  const pending = stops.filter(m => m.status !== 'pronto').length;
 
   useEffect(() => {
     let mounted = true;
@@ -159,8 +158,6 @@ export default function MonumentExplorer() {
     <div className="mb-route-bar"><div><span className="mb-kicker">Seu roteiro</span><strong>{stops.length} paradas <span> / </span> {road ? `${km(road.distanceKm)} km` : 'Distância a calcular'}</strong><p>{road ? `≈ ${Math.round(road.durationSec / 3600)} h ao guidão, sem paradas · não representa duração da viagem` : 'Recalcule após mudar a sequência ou a origem.'}</p></div><button className="mb-primary" onClick={calculate} disabled={stops.length < 2 || busy}><Route size={18} />{busy ? 'Calculando…' : 'Calcular estradas'}</button></div>
     <div className="mb-plan-tools"><button onClick={save} disabled={!ids.length}>Salvar neste navegador</button><button onClick={restore}>Recuperar</button><button onClick={share} disabled={!ids.length}><Share2 size={16} /> Compartilhar</button><button onClick={download} disabled={!ids.length}><Download size={16} /> {road ? 'Baixar rota GPX' : 'Baixar pontos GPX'}</button></div>
     <p className="mb-feedback" role="status">{message}</p>
-    {pending > 0 && <p className="mb-trip-note">Seu roteiro inclui {pending} monumentos em construção. Para planejar carimbos, escolha “Só prontos” em Meu roteiro.</p>}
-    {viaPoints.length > 0 && <p className="mb-trip-note">São Bento do Sapucaí ↔ São Lourenço: passagem por Itajubá incluída no traçado e na navegação.</p>}
     <p className="mb-method">Sequência sugerida por proximidade, editável. Traçado rodoviário estimado para automóveis; não classifica piso, acesso para moto ou condições atuais. A travessia ao Paraguai exige planejamento próprio. Confira acessos e horários com os guardiões.</p>
     {stages.length > 0 && <details className="mb-navigation"><summary>Navegar por etapas · {stages.length} trechos</summary><p>Abra uma etapa de cada vez. O Google Maps recalcula as estradas e pode apresentar distância diferente.</p><ol>{stages.map((stage, index) => <li key={stage.url}><a href={stage.url} target="_blank" rel="noopener noreferrer"><span>Etapa {index + 1}</span><strong>{stage.from} → {stage.to}</strong>{stage.via.length > 0 && <span>Via {stage.via.join(', ')}</span>}<span>Abrir navegação ↗</span></a></li>)}</ol></details>}
   </section>;
