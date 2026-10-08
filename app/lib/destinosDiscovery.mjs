@@ -59,12 +59,13 @@ export const NOTAS_DESTINOS = {
 };
 
 const normalizar = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-export function filtrarDestinos(destinos, { vontade = 'todos', regiao = 'brasil', busca = '', soSalvos = false, salvos = [] } = {}) {
+export function filtrarDestinos(destinos, { vontade = 'todos', regiao = 'brasil', colecao = 'todos', busca = '', soSalvos = false, salvos = [] } = {}) {
   const termo = normalizar(busca.trim());
   return destinos.filter((d) =>
-    (regiao === 'todos' || (regiao === 'brasil' ? d.bandeira === '🇧🇷' : d.bandeira !== '🇧🇷')) &&
-    (vontade === 'todos' || PERFIS_DESTINOS[d.slug]?.includes(vontade)) &&
+    (regiao === 'todos' || (regiao === 'brasil' ? d.bandeira === '🇧🇷' : regiao === 'mundo' ? d.bandeira !== '🇧🇷' : d.ufs?.includes(regiao))) &&
+    (colecao === 'todos' || d.colecao === colecao) &&
+    (vontade === 'todos' || (d.vontades || PERFIS_DESTINOS[d.slug])?.includes(vontade)) &&
     (!soSalvos || salvos.includes(d.slug)) &&
-    (!termo || normalizar(`${d.nome} ${d.regiao} ${d.resumo}`).includes(termo))
+    (!termo || normalizar(`${d.nome} ${d.regiao} ${d.resumo} ${d.colecao || ''} ${(d.entradas || []).map(e => `${e.nome} ${e.query}`).join(' ')}`).includes(termo))
   );
 }

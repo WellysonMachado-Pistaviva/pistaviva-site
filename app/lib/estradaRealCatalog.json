@@ -1,0 +1,586 @@
+[
+  {
+    "slug": "caminho-velho",
+    "nome": "Caminho Velho",
+    "colecao": "estrada-real",
+    "bandeira": "🇧🇷",
+    "vontades": [
+      "terra",
+      "natureza",
+      "sem-pressa"
+    ],
+    "ufs": [
+      "MG",
+      "SP",
+      "RJ"
+    ],
+    "dificuldade": "Confira trilhas e acessos nas planilhas",
+    "image": "/rotas/caminho-velho.gif",
+    "tracks": "/rotas/caminho-velho-tracks.json",
+    "km": 710,
+    "etapas": 27,
+    "gpx": "https://files.institutoestradareal.com.br/files/way/gps_gpx/1737574433121/caminho_caminho_velho_mapa.gpx",
+    "fonte": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/",
+    "entradas": [
+      {
+        "nome": "Ouro Preto",
+        "query": "Ouro Preto, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Glaura",
+        "query": "Glaura, Ouro Preto, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Santo Antônio do Leite",
+        "query": "Santo Antônio do Leite, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Lobo Leite",
+        "query": "Lobo Leite, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Congonhas",
+        "query": "Congonhas, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Povoado de Pequeri",
+        "query": "Povoado de Pequeri, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "São Brás do Suaçuí",
+        "query": "São Brás do Suaçuí, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Entre Rios de Minas",
+        "query": "Entre Rios de Minas, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Casa Grande",
+        "query": "Casa Grande, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Lagoa Dourada",
+        "query": "Lagoa Dourada, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Prados",
+        "query": "Prados, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Tiradentes",
+        "query": "Tiradentes, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "São João del Rei",
+        "query": "São João del Rei, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "São Sebastião da Vitória",
+        "query": "São Sebastião da Vitória, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Caquende",
+        "query": "Caquende, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Capela do Saco",
+        "query": "Capela do Saco, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Carrancas",
+        "query": "Carrancas, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Traituba",
+        "query": "Traituba, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Cruzília",
+        "query": "Cruzília, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Caxambu",
+        "query": "Caxambu, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "São Lourenço",
+        "query": "São Lourenço, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Pouso Alto",
+        "query": "Pouso Alto, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Itamonte",
+        "query": "Itamonte, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Itanhandu",
+        "query": "Itanhandu, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Passa Quatro",
+        "query": "Passa Quatro, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Vila Embaú",
+        "query": "Vila Embaú, SP, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Guaratinguetá",
+        "query": "Guaratinguetá, SP, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Cunha",
+        "query": "Cunha, SP, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Paraty",
+        "query": "Paraty, RJ, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      }
+    ],
+    "planilhas": [
+      {
+        "nome": "Ouro Preto → Glaura",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/ouro-preto-mg+glaura-mg"
+      },
+      {
+        "nome": "Glaura → Santo Antônio do Leite",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/glaura-mg+santo-antonio-do-leite-mg"
+      },
+      {
+        "nome": "Santo Antônio do Leite → Lobo Leite",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/santo-antonio-do-leite-mg+lobo-leite-mg"
+      },
+      {
+        "nome": "Lobo Leite → Congonhas",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/lobo-leite-mg+congonhas-mg"
+      },
+      {
+        "nome": "Congonhas → Povoado de Pequeri",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/congonhas-mg+povoado-de-pequeri-mg"
+      },
+      {
+        "nome": "Povoado de Pequeri → São Brás do Suaçuí",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/povoado-de-pequeri-mg+sao-bras-do-suacui-mg"
+      },
+      {
+        "nome": "São Brás do Suaçuí → Entre Rios de Minas",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/sao-bras-do-suacui-mg+entre-rios-de-minas-mg"
+      },
+      {
+        "nome": "Entre Rios de Minas → Casa Grande",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/entre-rios-de-minas-mg+casa-grande-mg"
+      },
+      {
+        "nome": "Casa Grande → Lagoa Dourada",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/casa-grande-mg+lagoa-dourada-mg"
+      },
+      {
+        "nome": "Lagoa Dourada → Prados",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/lagoa-dourada-mg+prados-mg"
+      },
+      {
+        "nome": "Prados → Tiradentes",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/prados-mg+tiradentes-mg"
+      },
+      {
+        "nome": "Tiradentes → São João del Rei",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/tiradentes-mg+sao-joao-del-rei-mg"
+      },
+      {
+        "nome": "São João del Rei → São Sebastião da Vitória",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/sao-joao-del-rei-mg+sao-sebastiao-da-vitoria-mg"
+      },
+      {
+        "nome": "São Sebastião da Vitória → Caquende",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/sao-sebastiao-da-vitoria-mg+caquende-mg"
+      },
+      {
+        "nome": "Capela do Saco → Carrancas",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/capela-do-saco-mg+carrancas-mg"
+      },
+      {
+        "nome": "Carrancas → Traituba",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/carrancas-mg+traituba-mg"
+      },
+      {
+        "nome": "Traituba → Cruzília",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/traituba-mg+cruzilia-mg"
+      },
+      {
+        "nome": "Cruzília → Caxambu",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/cruzilia-mg+caxambu-mg"
+      },
+      {
+        "nome": "Caxambu → São Lourenço",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/caxambu-mg+sao-lourenco-mg"
+      },
+      {
+        "nome": "São Lourenço → Pouso Alto",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/sao-lourenco-mg+pouso-alto-mg"
+      },
+      {
+        "nome": "Pouso Alto → Itamonte",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/pouso-alto-mg+itamonte-mg"
+      },
+      {
+        "nome": "Itamonte → Itanhandu",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/itamonte-mg+itanhandu-mg"
+      },
+      {
+        "nome": "Itanhandu → Passa Quatro",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/itanhandu-mg+passa-quatro-mg"
+      },
+      {
+        "nome": "Passa Quatro → Vila Embaú",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/passa-quatro-mg+vila-embau-sp"
+      },
+      {
+        "nome": "Vila Embaú → Guaratinguetá",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/vila-embau-sp+guaratingueta-sp"
+      },
+      {
+        "nome": "Guaratinguetá → Cunha",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/guaratingueta-sp+cunha-sp"
+      },
+      {
+        "nome": "Cunha → Paraty",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-velho/trecho/cunha-sp+paraty-rj"
+      }
+    ],
+    "regiao": "Minas Gerais, São Paulo e Rio de Janeiro",
+    "resumo": "De Ouro Preto a Paraty, por cidades históricas, serras e caminhos rurais.",
+    "piso": "82,5% terra · 10% asfalto · 6% trilha · 1,5% calçamento",
+    "alerta": "O trecho Ouro Preto–São Bartolomeu inclui trilha de grande dificuldade. Consulte desvios nas planilhas e confirme acesso para moto.",
+    "notas": [
+      "Glaura–Cachoeira do Campo: 7,5 km de asfalto; Cachoeira do Campo–Santo Antônio do Leite: 5 km.",
+      "Tiradentes–São João del-Rei: 10 km de calçamento.",
+      "Guaratinguetá–Cunha: 22 km de asfalto; Cunha–Paraty: 24 km no resumo histórico. Confirme pavimentação atual."
+    ]
+  },
+  {
+    "slug": "caminho-novo",
+    "nome": "Caminho Novo",
+    "colecao": "estrada-real",
+    "bandeira": "🇧🇷",
+    "vontades": [
+      "terra",
+      "natureza",
+      "sem-pressa"
+    ],
+    "ufs": [
+      "MG",
+      "RJ"
+    ],
+    "dificuldade": "Confira trilhas e acessos nas planilhas",
+    "image": "/rotas/caminho-novo.gif",
+    "tracks": "/rotas/caminho-novo-tracks.json",
+    "km": 515,
+    "etapas": 18,
+    "gpx": "https://files.institutoestradareal.com.br/files/way/gps_gpx/1780921551386/caminho_caminho_novo_mapa.gpx",
+    "fonte": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/",
+    "entradas": [
+      {
+        "nome": "Ouro Preto",
+        "query": "Ouro Preto, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Lavras Novas",
+        "query": "Lavras Novas, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Itatiaia",
+        "query": "Itatiaia, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Ouro Branco",
+        "query": "Ouro Branco, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Conselheiro Lafaiete",
+        "query": "Conselheiro Lafaiete, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Queluzito",
+        "query": "Queluzito, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Carandaí",
+        "query": "Carandaí, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Ressaquinha",
+        "query": "Ressaquinha, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Barbacena",
+        "query": "Barbacena, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Antônio Carlos",
+        "query": "Antônio Carlos, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Santos Dumont",
+        "query": "Santos Dumont, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Ewbank da Câmara",
+        "query": "Ewbank da Câmara, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Juiz de Fora",
+        "query": "Juiz de Fora, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Matias Barbosa",
+        "query": "Matias Barbosa, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Monte Serrat",
+        "query": "Monte Serrat, RJ, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Paraíba do Sul",
+        "query": "Paraíba do Sul, RJ, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Secretário",
+        "query": "Secretário, RJ, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Petrópolis",
+        "query": "Petrópolis, RJ, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Porto Estrela",
+        "query": "Porto Estrela, Magé, RJ, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      }
+    ],
+    "planilhas": [
+      {
+        "nome": "Ouro Preto → Lavras Novas",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/ouro-preto-mg+lavras-novas-mg"
+      },
+      {
+        "nome": "Lavras Novas → Itatiaia",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/lavras-novas-mg+itatiaia-mg"
+      },
+      {
+        "nome": "Itatiaia → Ouro Branco",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/itatiaia-mg+ouro-branco-mg"
+      },
+      {
+        "nome": "Ouro Branco → Conselheiro Lafaiete",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/ouro-branco-mg+conselheiro-lafaiete-mg"
+      },
+      {
+        "nome": "Conselheiro Lafaiete → Queluzito",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/conselheiro-lafaiete-mg+queluzito-mg"
+      },
+      {
+        "nome": "Queluzito → Carandaí",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/queluzito-mg+carandai-mg"
+      },
+      {
+        "nome": "Carandaí → Ressaquinha",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/carandai-mg+ressaquinha-mg"
+      },
+      {
+        "nome": "Ressaquinha → Barbacena",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/ressaquinha-mg+barbacena-mg"
+      },
+      {
+        "nome": "Barbacena → Antônio Carlos",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/barbacena-mg+antonio-carlos-mg"
+      },
+      {
+        "nome": "Antônio Carlos → Santos Dumont",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/antonio-carlos-mg+santos-dumont-mg"
+      },
+      {
+        "nome": "Santos Dumont → Ewbank da Câmara",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/santos-dumont-mg+ewbank-da-camara-mg"
+      },
+      {
+        "nome": "Ewbank da Câmara → Juiz de Fora",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/ewbank-da-camara-mg+juiz-de-fora-mg"
+      },
+      {
+        "nome": "Juiz de Fora → Matias Barbosa",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/juiz-de-fora-mg+matias-barbosa-mg"
+      },
+      {
+        "nome": "Matias Barbosa → Monte Serrat",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/matias-barbosa-mg+monte-serrat-rj"
+      },
+      {
+        "nome": "Monte Serrat → Paraíba do Sul",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/monte-serrat-rj+paraiba-do-sul-rj"
+      },
+      {
+        "nome": "Paraíba do Sul → Secretário",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/paraiba-do-sul-rj+secretario-rj"
+      },
+      {
+        "nome": "Secretário → Petrópolis",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/secretario-rj+petropolis-rj"
+      },
+      {
+        "nome": "Petrópolis → Porto Estrela",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-novo/trecho/petropolis-rj+porto-estrela-rj"
+      }
+    ],
+    "regiao": "Minas Gerais e Rio de Janeiro",
+    "resumo": "Ouro Preto a Porto Estrela, passando pela região de Juiz de Fora e Petrópolis.",
+    "piso": "63% terra · 32% asfalto · 5% trilha",
+    "alerta": "O Instituto informa desvio por porteira fechada entre Ewbank da Câmara e Juiz de Fora. As trilhas exigem confirmação de acesso para moto.",
+    "notas": [
+      "Ouro Preto–Lavras Novas: 17 km de trilha; Lavras Novas–Chapada: 5 km.",
+      "Secretário–Pedro do Rio–Petrópolis: 34 km asfaltados no resumo.",
+      "Petrópolis–Porto Estrela: 31 km de calçamento e asfalto. Consulte condições e alternativas."
+    ]
+  },
+  {
+    "slug": "caminho-do-sabarabucu",
+    "nome": "Caminho do Sabarabuçu",
+    "colecao": "estrada-real",
+    "bandeira": "🇧🇷",
+    "vontades": [
+      "terra",
+      "natureza",
+      "sem-pressa"
+    ],
+    "ufs": [
+      "MG"
+    ],
+    "dificuldade": "Confira trilhas e acessos nas planilhas",
+    "image": "/rotas/caminho-do-sabarabucu.gif",
+    "tracks": "/rotas/caminho-do-sabarabucu-tracks.json",
+    "km": 160,
+    "etapas": 6,
+    "gpx": "https://files.institutoestradareal.com.br/files/way/gps_gpx/1737574444687/caminho_caminho_do_sabarabucu_mapa.gpx",
+    "fonte": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-do-sabarabucu/",
+    "entradas": [
+      {
+        "nome": "Cocais",
+        "query": "Cocais, Barão de Cocais, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Caeté",
+        "query": "Caeté, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Sabará",
+        "query": "Sabará, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Raposos",
+        "query": "Raposos, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Honório Bicalho",
+        "query": "Honório Bicalho, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Rio Acima",
+        "query": "Rio Acima, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      },
+      {
+        "nome": "Glaura",
+        "query": "Glaura, Ouro Preto, MG, Brasil",
+        "tipo": "Cidade de entrada · confirme o ponto no Maps"
+      }
+    ],
+    "planilhas": [
+      {
+        "nome": "Cocais → Caeté",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-do-sabarabucu/trecho/cocais-mg+caete-mg"
+      },
+      {
+        "nome": "Caeté → Sabará",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-do-sabarabucu/trecho/caete-mg+sabara-mg"
+      },
+      {
+        "nome": "Sabará → Raposos",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-do-sabarabucu/trecho/sabara-mg+raposos-mg"
+      },
+      {
+        "nome": "Raposos → Honório Bicalho",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-do-sabarabucu/trecho/raposos-mg+honorio-bicalho-mg"
+      },
+      {
+        "nome": "Honório Bicalho → Rio Acima",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-do-sabarabucu/trecho/honorio-bicalho-mg+rio-acima-mg"
+      },
+      {
+        "nome": "Rio Acima → Glaura",
+        "url": "https://institutoestradareal.com.br/roteiros-planilhados/caminho-do-sabarabucu/trecho/rio-acima-mg+glaura-mg"
+      }
+    ],
+    "regiao": "Minas Gerais",
+    "resumo": "Cocais a Glaura, por Sabará, Raposos e Rio Acima, entre rios e serras.",
+    "piso": "124 km de terra · 36 km de trilha",
+    "alerta": "Aviso oficial: ponte sobre o córrego do Feijão, entre Honório Bicalho e Rio Acima, interditada para manutenção. Alternativa indicada: MG-030. Confirme situação atual.",
+    "notas": [
+      "Morro Vermelho–Sabará: 20 km de trilha; Sabará–Raposos: 3 km.",
+      "Raposos–Honório Bicalho: 13 km de trilha. Passagem de moto não confirmada.",
+      "Percentuais da página oficial não fecham 100%; aqui usamos as quilometragens publicadas."
+    ]
+  }
+]

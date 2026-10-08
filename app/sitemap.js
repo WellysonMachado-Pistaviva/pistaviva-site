@@ -3,6 +3,7 @@ import { getAllPhotographerSlugs } from './lib/photographers';
 import { ESTRADAS } from './lib/estradas';
 import { GUIAS } from './lib/guias';
 import { DESTINOS } from './lib/destinos';
+import { ROTEIROS_CURADOS } from './lib/roteirosCurados.mjs';
 import { DESAFIOS } from './lib/desafios';
 import { getEventsForSeo } from './lib/events';
 import { FOTOS as FOTOS_PARQUE } from './parque-da-cidade/dados';
@@ -32,7 +33,8 @@ export default async function sitemap() {
     { path: '/blog' },
     { path: '/diretorio-duas-rodas' },
     { path: '/rotas' },
-    { path: '/rotas/caminho-dos-diamantes', lastModified: '2026-09-13' },
+    { path: '/destinos/caminho-dos-diamantes', lastModified: '2026-09-13' },
+    ...ROTEIROS_CURADOS.filter(r => r.entradas).map(r => ({ path: r.href, lastModified: r.checkedAt })),
     { path: '/comunidade' },
     { path: '/estradas' },
     { path: '/desafios' },

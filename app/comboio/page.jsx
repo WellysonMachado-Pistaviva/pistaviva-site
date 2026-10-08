@@ -20,11 +20,11 @@ const SECOES = [
   {
     h: 'Como funciona, passo a passo',
     lista: [
-      'Crie o comboio e dê um nome pro rolê (ex.: "Serra da Canastra · domingo").',
-      'Compartilhe o link no grupo do WhatsApp — quem abrir entra na hora, sem cadastro.',
+      'Identifique-se com seu nome e crie o comboio para gerar um código de seis caracteres.',
+      'Compartilhe o código no grupo do WhatsApp — cada piloto informa seu nome e digita o código para entrar.',
       'Cada piloto aparece no mapa com sua posição ao vivo enquanto roda.',
       'Use o chat pra combinar parada, reagrupar no posto ou avisar de buraco e blitz.',
-      'No fim do rolê, é só fechar o comboio — nada fica gravado depois.',
+      'No fim do rolê, toque em Sair para encerrar sua transmissão de localização. O chat mostra mensagens das últimas duas horas; as paradas salvas continuam disponíveis.',
     ],
   },
   {
@@ -37,9 +37,10 @@ const SECOES = [
 ];
 
 const FAQS = [
-  { q: 'Preciso instalar algum app pra usar o comboio?', a: 'Não. O comboio roda no navegador do celular. Você cria a sala, compartilha o link e a galera entra direto — sem baixar app nem fazer cadastro.' },
+  { q: 'Preciso instalar algum app pra usar o comboio?', a: 'Não. O comboio roda no navegador do celular. Você cria a sala e compartilha o código. Cada piloto informa seu nome e o código — sem baixar app nem criar conta.' },
   { q: 'O rastreamento ao vivo gasta muita bateria/internet?', a: 'Usa o GPS e uma conexão leve de dados. Pra viagem longa, vale levar um carregador veicular ou power bank, como em qualquer navegação por GPS.' },
-  { q: 'Minha localização fica salva depois do rolê?', a: 'Não. A posição é compartilhada só enquanto o comboio está ativo. Ao encerrar, o rastreamento para e nada da rota fica gravado.' },
+  { q: 'Minha localização fica salva depois do rolê?', a: 'Não. A posição é compartilhada só enquanto o comboio está ativo. Ao tocar em Sair, sua transmissão para. As paradas planejadas e mensagens são salvas separadamente; mensagens com coordenadas, como SOS, também ficam no histórico.' },
+  { q: 'Funciona com a tela bloqueada?', a: 'O navegador pode suspender GPS e conexão quando a tela bloqueia ou você troca de aplicativo. Mantenha a página visível e a tela ligada durante o acompanhamento.' },
   { q: 'Quantas pessoas podem entrar num comboio?', a: 'Dá pra rodar de dupla a grupos grandes. Pra grupos muito grandes, o ideal é dividir em sub-comboios com líderes, que é mais seguro na estrada.' },
 ];
 

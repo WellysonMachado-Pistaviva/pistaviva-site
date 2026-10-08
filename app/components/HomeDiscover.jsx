@@ -17,9 +17,9 @@ export default function HomeDiscover({ destination }) {
         </div>
         <div className="ride-hero-shade" aria-hidden="true" />
         <div className="wrap ride-hero-inner">
-          <span className="ride-kicker"><span /> Mototurismo pelo Brasil</span>
-          <h1 id="ride-hero-title">Vá pelo caminho.<br /><em>Volte pela história.</em></h1>
-          <p>Estradas que surpreendem. Encontros que ficam. Descubra seu próximo motivo para viajar de moto.</p>
+          <span className="ride-kicker"><span /> Wellyson Machado · Pistaviva</span>
+          <h1 id="ride-hero-title">Conectando pessoas<br /><em>a lugares.</em></h1>
+          <p>Destinos e encontros de moto na Mantiqueira, no Sul de Minas e no Vale do Paraíba. Encontre informações para escolher sua próxima parada e histórias para inspirar a viagem.</p>
           <div className="ride-hero-actions">
             <Link href="/destinos" className="ride-button">Explorar destinos <ArrowUpRight aria-hidden="true" /></Link>
             <Link href="/rotas" className="ride-button ride-button--outline">Planejar minha viagem <Route aria-hidden="true" /></Link>

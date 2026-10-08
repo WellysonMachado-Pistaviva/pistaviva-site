@@ -1,0 +1,29 @@
+[
+  {
+    "id": "e4e1a360-7578-4eb8-b05b-f19e2cf93f84",
+    "slug": "monumento-rota-biker-29-sao-jose-do-barreiro",
+    "title": "Monumento Rota Biker 29 em São José do Barreiro: parada no Rancho",
+    "published": true,
+    "published_at": "2026-10-06T12:51:52.742+00:00",
+    "author": "Pistaviva",
+    "cover_url": "https://cnvsooegnraedwmemzgl.supabase.co/storage/v1/object/public/post-images/editorial/2026-10-06/guias/guia-29.png"
+  },
+  {
+    "id": "8eccd637-c400-4af2-9cd4-629dbc6c2dfc",
+    "slug": "monumento-rota-biker-35-sao-lourenco",
+    "title": "Monumento Rota Biker 35 em São Lourenço: onde fica e onde carimbar",
+    "published": true,
+    "published_at": "2026-10-06T12:51:54.749+00:00",
+    "author": "Pistaviva",
+    "cover_url": "https://cnvsooegnraedwmemzgl.supabase.co/storage/v1/object/public/post-images/editorial/2026-10-06/guias/guia-35.png"
+  },
+  {
+    "id": "db37d49b-ad64-4b3b-bd9b-d80c6f8b4f08",
+    "slug": "monumento-rota-biker-27-pedra-do-bau",
+    "title": "Monumento Rota Biker 27: onde fica na Pedra do Baú e como planejar a visita",
+    "published": true,
+    "published_at": "2026-10-06T12:51:55.987+00:00",
+    "author": "Pistaviva",
+    "cover_url": "https://cnvsooegnraedwmemzgl.supabase.co/storage/v1/object/public/post-images/editorial/2026-10-06/guias/guia-27.png"
+  }
+]

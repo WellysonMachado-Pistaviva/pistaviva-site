@@ -1,0 +1,41 @@
+import { MONUMENTOS, ESTADOS_BIKERS, STATUS_BIKERS } from './monumentosBikers.mjs';
+import estradaReal from './estradaRealCatalog.json' with { type: 'json' };
+export const COLECOES = [
+  { id: 'todos', label: 'Todos os destinos' },
+  { id: 'estrada-real', label: 'Estrada Real' },
+  { id: 'vinicolas', label: 'Vinícolas e gastronomia' },
+  { id: 'bikers', label: 'Paradas biker' },
+];
+const mantiqueira = 'https://www.rotadosvinhosdamantiqueira.com.br/vin%C3%ADcolas';
+const minas = 'https://descubraminasgerais.com.br/roteiros_minas_gerais/rota-das-vinicolas';
+const vinho = 'https://www.roteirodovinho.com.br/';
+const ponto = (nome, query, fonte, nota = 'Confirme reserva, endereço e piso do acesso com o estabelecimento.') => ({ nome, query, fonte, nota, tipo: 'Estabelecimento · confira o destino no Maps' });
+const saoRoque = [
+  ponto('Vinícola Góes', 'Vinícola Góes, Estrada do Vinho 9111, São Roque SP', `${vinho}guia/vinicola-goes`, 'Visitas e gastronomia. Endereço publicado: Estrada do Vinho, km 9, nº 9111. Confirme atividade e reserva.'),
+  ponto('Vinícola Canguera', 'Vinícola Canguera, Estrada do Vinho km 8, São Roque SP', `${vinho}guia/vinicola-canguera`, 'Vinícola e restaurante na Estrada do Vinho, km 8. Confirme acesso e atendimento.'),
+  ponto('Quinta do Olivardo', 'Quinta do Olivardo, São Roque SP', `${vinho}guia/adega-e-restaurante-quinta-do-olivardo`, 'Gastronomia e hospedagem. Confirme endereço, reserva e estacionamento para motos.'),
+];
+const vinicolasMantiqueira = [
+  ponto('Raízes do Baú', 'Vinícola Raízes do Baú, Estrada Municipal José Theotônio da Silva 9400, São Bento do Sapucaí SP', mantiqueira, 'São Bento do Sapucaí. Visita com reserva prévia; confirme piso do acesso.'),
+  ponto('Villa Santa Maria', 'Vinícola Villa Santa Maria, Estrada Municipal José Theotônio da Silva, São Bento do Sapucaí SP', mantiqueira, 'São Bento do Sapucaí. Vinhedos e gastronomia; reserva prévia.'),
+  ponto('Bela Vista', 'Vinícola Bela Vista, Estrada Major Pereira, São Bento do Sapucaí SP', mantiqueira, 'São Bento do Sapucaí. A fonte cita passeio off-road; isso não confirma o piso de todo o acesso. Reserve antes.'),
+  ponto('Entre Vilas', 'Vinícola Entre Vilas, Estrada Major Pereira km 5.5, São Bento do Sapucaí SP', mantiqueira, 'São Bento do Sapucaí. Restaurante e vinhedos, mediante agendamento.'),
+  ponto('Espaço Essenza', 'Espaço Essenza, Estrada Barreirinho 1900, Santo Antônio do Pinhal SP', mantiqueira, 'Santo Antônio do Pinhal. Visitação e restaurante mediante reserva.'),
+];
+export const ROTEIROS_CURADOS = [
+  { slug: 'caminho-dos-diamantes', nome: 'Caminho dos Diamantes', href: '/destinos/caminho-dos-diamantes', colecao: 'estrada-real', bandeira: '🇧🇷', regiao: 'Minas Gerais', ufs: ['MG'], vontades: ['terra', 'natureza', 'sem-pressa'], resumo: 'Diamantina a Ouro Preto: mapa oficial, localização e 18 etapas com informações de piso.', dificuldade: 'Terra, asfalto e trilha · confira interdição', image: '/rotas/diamantes-referencia.gif' },
+  ...estradaReal,
+  { slug: 'roteiro-do-vinho-sao-roque', nome: 'Roteiro do Vinho de São Roque', colecao: 'vinicolas', regiao: 'São Roque · São Paulo', ufs: ['SP'], resumo: 'Vinícolas, restaurantes e hospedagem pela Estrada do Vinho, Estrada dos Venâncios e Rodovia Quintino de Lima.', fonte: vinho, piso: 'Piso dos acessos às propriedades não confirmado', alerta: 'Escolha as paradas antes de sair e confirme reserva e estacionamento. Não há um percurso único obrigatório.', notas: ['O passeio combina vinícolas, gastronomia e atividades ao ar livre.', 'Acesso ao roteiro e atividades dos estabelecimentos são coisas diferentes: confirme ingressos e reservas diretamente.'], entradas: saoRoque },
+  { slug: 'rotas-do-vinho-sao-paulo', nome: 'Rotas do Vinho de São Paulo', colecao: 'vinicolas', regiao: 'Interior de São Paulo', ufs: ['SP'], resumo: 'Um panorama dos circuitos paulistas, com paradas de São Roque e Mantiqueira para começar sua viagem.', fonte: 'https://www.rotasdesp.sp.gov.br/rotasdesp/as-rotas/rotas-do-vinho', fontes: [{ nome: 'Catálogo estadual de rotas', url: 'https://www.rotasdovinho.sp.gov.br/rotas/As%20rotas/outros%20destinos/casa%20soncini' }, { nome: 'Roteiro do Vinho de São Roque', url: vinho }, { nome: 'Vinícolas da Mantiqueira', url: mantiqueira }], piso: 'Piso varia por estabelecimento · não confirmado', alerta: 'Esta é uma rede regional. Escolha uma vinícola como destino; a lista abaixo é uma seleção, não o catálogo completo do estado.', notas: ['O catálogo estadual apresenta Circuito das Frutas, Bandeirantes, Alta Mogiana, Alto da Mantiqueira e Serra dos Encontros, além de enodestinos.', 'São Roque e Mantiqueira têm guias próprios nesta mesma coleção. Alguns estabelecimentos aparecem em mais de um roteiro.'], entradas: [...saoRoque, ...vinicolasMantiqueira.slice(0, 2)] },
+  { slug: 'rota-das-vinicolas-minas-gerais', nome: 'Rota das Vinícolas de Minas Gerais', colecao: 'vinicolas', regiao: 'Andradas, Boa Esperança, Diamantina e outras regiões de MG', ufs: ['MG'], resumo: 'Escolha um polo mineiro por viagem: vinícolas espalhadas pelo Sul de Minas, Vertentes e Espinhaço.', fonte: minas, piso: 'Acessos rurais · terra/asfalto a confirmar', alerta: 'O guia de referência está em atualização e reúne regiões distantes. Confirme endereço e visita com cada vinícola.', notas: ['A seleção abaixo mantém estabelecimentos em Minas Gerais. Paradas paulistas citadas pelo guia ficam nos roteiros de São Paulo e Mantiqueira.', 'Planeje uma região de cada vez; não há distância total única nem piso único para esta coleção.'], entradas: [
+    ponto('Casa Geraldo', 'Casa Geraldo, Andradas MG', minas),
+    ponto('Stella Valentino', 'Vinícola Stella Valentino, Andradas MG', minas),
+    ponto('Vinhos Marcon', 'Vinhos Marcon, Rua Olinto Trevisan 60, Andradas MG', minas),
+    ponto('Maria Maria', 'Vinícola Maria Maria, Fazenda Capetinga, Boa Esperança MG', minas),
+    ponto('Adega Rosso', 'Adega Rosso, Rua Cristóvão Colombo 93, São João del Rei MG', minas),
+    ponto('Quinta do Campo Alegre', 'Quinta do Campo Alegre, Guinda, Diamantina MG', minas),
+  ] },
+  { slug: 'rota-dos-vinhos-mantiqueira', nome: 'Rota dos Vinhos da Mantiqueira', colecao: 'vinicolas', regiao: 'São Bento do Sapucaí e Santo Antônio do Pinhal · SP', ufs: ['SP'], resumo: 'Cinco vinícolas entre montanhas, com vinhedos, restaurantes e visitas agendadas.', fonte: mantiqueira, fontes: [{ nome: 'Rota dos Vinhos da Mantiqueira', url: 'https://www.rotadosvinhosdamantiqueira.com.br/' }], piso: 'Piso do acesso a cada vinícola a confirmar', alerta: 'A página da associação informa reserva prévia nos cinco estabelecimentos. Confirme também acesso para moto e condição após chuva.', notas: ['A seleção desta associação fica no lado paulista da Mantiqueira. Vinícolas mineiras estão no roteiro de Minas Gerais.'], entradas: vinicolasMantiqueira },
+  { slug: 'monumentos-bikers', checkedAt: '2026-10-08', nome: 'Monumentos da Rota Biker', colecao: 'bikers', regiao: 'Brasil e Paraguai', ufs: Object.keys(ESTADOS_BIKERS).filter(uf => uf !== 'PY'), resumo: '43 pontos no Brasil e Paraguai: mapa interativo, roteiro editável por estradas, GPX e navegação por etapas.', fonte: 'https://monumentobikers.com.br/monumentos/', mapaExterno: 'https://www.google.com/maps/d/viewer?mid=1ZHPck3Yykbhc8M1GYPrCcKf5pajiTvk', piso: 'Piso do acesso a cada monumento a confirmar', alerta: 'Confirme visita e carimbo com o guardião. A rede inclui monumentos prontos, em implantação e em construção; uma listagem não garante funcionamento.', notas: ['Catálogo consultado em 08/10/2026: 44 registros, 43 locais identificados, 37 prontos e seis em construção. Nº 2 em atualização.', 'Carimbos da Rota Biker e passaporte da Estrada Real pertencem a iniciativas diferentes.'], entradas: MONUMENTOS.filter(m => m.coordinates).map(m => ({ nome: m.nome, query: `${m.nome}, ${m.cidade} ${m.uf}`, fonte: 'https://monumentobikers.com.br/monumentos/', nota: STATUS_BIKERS[m.status], tipo: 'Ponto no mapa oficial', coordinates: m.coordinates })) },
+].map(r => ({ bandeira: '🇧🇷', vontades: ['sem-pressa', 'natureza'], dificuldade: 'Confirme piso e acesso antes de sair', checkedAt: '2026-09-13', ...r, href: r.href || `/destinos/roteiros/${r.slug}` }));
+export const getRoteiro = slug => ROTEIROS_CURADOS.find(r => r.slug === slug);

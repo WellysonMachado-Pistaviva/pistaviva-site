@@ -131,3 +131,62 @@
 @media (prefers-reduced-motion: reduce) {
   .dx-page *, .dx-page *::before, .dx-page *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* Coleções compartilham o catálogo e os favoritos existentes. */
+.dx-collections { border-bottom: 1px solid var(--pv-line-light-2); padding-bottom: 16px; margin-bottom: 20px; }
+.dx-route-thumbnail { display:flex; align-items:center; gap:24px; background:var(--pv-black-2); color:var(--pv-muted-light); padding:16px; margin:12px 0 20px; text-decoration:none; }
+.dx-route-thumbnail img { width:88px; height:140px; object-fit:contain; }
+.dx-route-thumbnail span { font-family:var(--font-mono); text-transform:uppercase; font-size:12px; letter-spacing:.08em; }
+.dx-explorer { scroll-margin-top:96px; }
+
+/* O diretório biker ocupa o destaque editorial, antes das coleções. */
+.dx-biker-feature { display:grid; grid-template-columns:1.25fr .75fr; margin:48px 0; background:var(--pv-forest); color:var(--pv-text-light); overflow:hidden; }
+.dx-biker-copy { padding:48px; }
+.dx-biker-copy .dx-kicker { color:var(--pv-orange-soft); }
+.dx-biker-copy h2 { font-size:clamp(40px,5vw,68px); line-height:1; letter-spacing:-.025em; margin:16px 0 24px; }
+.dx-biker-copy h2 em { font-style:normal; color:var(--pv-orange-soft); }
+.dx-biker-copy > p { max-width:52ch; color:var(--pv-muted-light); }
+.dx-biker-stats { display:flex; flex-wrap:wrap; gap:28px; margin:28px 0; }
+.dx-biker-stats strong { display:block; font:700 40px var(--font-display); }
+.dx-biker-stats span { display:block; font-size:11px; color:var(--pv-muted-light); }
+.dx-biker-copy .dx-biker-note { font-size:11px; margin-top:20px; }
+.dx-biker-art { position:relative; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; background:var(--pv-orange); margin:0; min-width:0; }
+.dx-biker-art > span { position:absolute; top:0; right:16px; font:800 clamp(160px,22vw,320px)/1 var(--font-display); letter-spacing:-.08em; color:var(--pv-orange-deep); }
+.dx-biker-art img { width:100%; height:440px; object-fit:contain; position:relative; }
+.dx-biker-art figcaption { position:relative; color:var(--pv-black); font-size:10px; padding:12px 16px; }
+.dx-biker-art a { color:inherit; text-underline-offset:3px; }
+.dx-collections { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; padding:0; border:0; margin:0 0 32px; }
+.dx-collections button { display:flex; position:relative; flex-direction:column; align-items:flex-start; text-align:left; gap:12px; padding:24px; background:var(--pv-offwhite); min-height:184px; border:0; border-right:1px solid var(--pv-line-light-2); transition:background 180ms; }
+.dx-collections button:last-child { border-right:0; }
+.dx-collections button:hover { background:var(--pv-line-light); }
+.dx-collections button[aria-pressed="true"] { background:var(--pv-forest); }
+.dx-collection-number { font:500 12px var(--font-mono); text-transform:uppercase; }
+.dx-collections strong { font:700 25px/1.1 var(--font-display); }
+.dx-collection-note { font-size:12px; line-height:1.5; max-width:22ch; padding-right:12px; }
+.dx-collection-arrow { margin-top:auto; align-self:flex-end; font-size:24px; }
+.dx-destination-list { gap:24px; }
+.dx-destination { border:1px solid var(--pv-line-light-2); padding:24px; background:var(--pv-offwhite); }
+.dx-destination h3 { font-size:30px; }
+.dx-route-thumbnail { width:100%; justify-content:space-around; background:var(--pv-forest); margin:12px 0 24px; min-height:212px; }
+.dx-route-thumbnail img { width:112px; height:176px; }
+.dx-route-thumbnail span { line-height:1.8; }
+.dx-card-facts { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+.dx-card-facts span { padding:4px 8px; background:var(--pv-offwhite-2); font:500 11px var(--font-mono); }
+.dx-card-facts:empty { display:none; }
+.dx-card-photo { width:100%; margin:12px 0 20px; }
+.dx-card-photo img { width:100%; height:212px; object-fit:cover; }
+.dx-card-photo figcaption { font-size:10px; color:var(--pv-muted-dark); padding-top:8px; }
+.dx-card-photo figcaption a { color:inherit; }
+.dx-card-biker-art { width:100%; height:212px; display:flex; align-items:center; justify-content:space-around; background:var(--pv-forest); color:var(--pv-text-light); margin:12px 0 24px; text-decoration:none; padding:12px; }
+.dx-card-biker-art img { width:120px; height:188px; object-fit:contain; }
+.dx-card-biker-art span { font:700 24px/1.2 var(--font-display); }
+.dx-card-vinicolas { border-top:4px solid var(--pv-orange-deep); }
+.dx-load-more { width:100%; padding:20px; min-height:56px; border:1px solid var(--pv-line-light-2); color:var(--pv-text-dark); background:var(--pv-offwhite-2); margin-top:24px; font-weight:700 !important; }
+.dx-load-more span { margin-left:20px; }
+@media(max-width:1024px) { .dx-biker-copy { padding:32px; } .dx-collections button { padding:20px; } .dx-collections strong { font-size:22px; } }
+@media(max-width:768px) { .dx-biker-feature { grid-template-columns:1fr; } .dx-biker-art { height:280px; } .dx-biker-art img { height:248px; } .dx-biker-art > span { font-size:220px; right:12%; } .dx-collections { grid-template-columns:1fr 1fr; } .dx-collections button { border-bottom:1px solid var(--pv-line-light-2); min-height:164px; } }
+@media(max-width:640px) { .dx-hero h1 { font-size:52px; } .dx-hero-copy > p { font-size:17px; } .dx-biker-copy { padding:24px; } .dx-biker-copy h2 { font-size:44px; } .dx-biker-stats { gap:20px; } .dx-destination { padding:20px; } .dx-collections button { padding:16px; } .dx-collection-note { font-size:11px; } .dx-collections strong { font-size:21px; } .dx-collection-arrow { font-size:20px; } }
+
+.dx-biker-art img,.dx-card-biker-art img { background:transparent; }
+
+.dx-page input,.dx-page select { font-size:17px !important; }

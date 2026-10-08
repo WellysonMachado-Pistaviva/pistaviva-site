@@ -1,0 +1,118 @@
+{
+  "id": "cbb79f85-3cbf-4dea-8dda-1df38d2c0261",
+  "title": "2º Café com Moto na Serra — Garganta do Registro",
+  "category": "Encontro",
+  "date": "01 Nov 2026",
+  "time": "09:00",
+  "local": "Bar do Miguelzinho — Garganta do Registro",
+  "address": "Bar do Miguelzinho, Garganta do Registro, Rodovia BR-354, Serra da Mantiqueira",
+  "organizer": "Don Cruz · Bar do Miguelzinho · Pistaviva",
+  "organizer_ig": "pistavivaoficial",
+  "description": "Café com Moto na Serra! A Garganta do Registro será novamente o ponto de encontro para quem gosta de alguns quilômetros longe de casa, moto e um bom café da manhã.\nPrepare sua moto, reúna os amigos e venha passar o dia com a gente na Serra da Mantiqueira. O encontro acontece no domingo, 1º de novembro de 2026, a partir das 9h, no Bar do Miguelzinho.\nFotógrafo oficial: Don Cruz. A cobertura fotográfica e a disponibilização das fotos do encontro serão realizadas por @doncruzoficial. Acompanhe o perfil para encontrar seus registros.\nZoação? Tô fora! Respeito, organização e segurança. Sem corte de giro ou barulho excessivo.\nQuer companhia no caminho? Publique abaixo sua cidade, horário e ponto de saída. Quem quiser acompanhar pode marcar “Vou junto” e conversar com a turma.",
+  "image_url": "https://cnvsooegnraedwmemzgl.supabase.co/storage/v1/object/public/post-images/eventos/2026-11-01/cafe-com-moto-garganta.jpg",
+  "images": [
+    "https://cnvsooegnraedwmemzgl.supabase.co/storage/v1/object/public/post-images/eventos/2026-11-01/cafe-com-moto-garganta.jpg"
+  ],
+  "tags": [
+    "Café com Moto",
+    "Garganta do Registro",
+    "Mantiqueira",
+    "Don Cruz",
+    "Pistaviva"
+  ],
+  "type": "open",
+  "price": "Consultar organização",
+  "hidden": false,
+  "schedule": [
+    {
+      "time": "09:00",
+      "title": "Início do encontro no Bar do Miguelzinho",
+      "desc": "Café, motos e reencontro com a turma na Garganta do Registro."
+    },
+    {
+      "departuresEnabled": true,
+      "endUnknown": true,
+      "posterUrl": "https://cnvsooegnraedwmemzgl.supabase.co/storage/v1/object/public/post-images/eventos/2026-11-01/cafe-com-moto-garganta.jpg",
+      "previousInstagram": "https://www.instagram.com/p/DZ0uTENBPNj/",
+      "socialGroups": [
+        {
+          "title": "Fotografia oficial",
+          "description": "Don Cruz registra a chegada e os momentos do encontro. A disponibilização das fotos será divulgada pelo fotógrafo.",
+          "links": [
+            {
+              "label": "@doncruzoficial",
+              "url": "https://www.instagram.com/doncruzoficial/"
+            }
+          ]
+        },
+        {
+          "title": "Realização",
+          "links": [
+            {
+              "label": "@doncruzoficial",
+              "url": "https://www.instagram.com/doncruzoficial/"
+            },
+            {
+              "label": "@obardomiguelzinho",
+              "url": "https://www.instagram.com/obardomiguelzinho/"
+            },
+            {
+              "label": "@pistavivaoficial",
+              "url": "https://www.instagram.com/pistavivaoficial/"
+            }
+          ]
+        },
+        {
+          "title": "Apoio",
+          "links": [
+            {
+              "label": "@prefresende",
+              "url": "https://www.instagram.com/prefresende/"
+            },
+            {
+              "label": "@prefeitura_de_itamonte",
+              "url": "https://www.instagram.com/prefeitura_de_itamonte/"
+            },
+            {
+              "label": "@brunocarazza3",
+              "url": "https://www.instagram.com/brunocarazza3/"
+            },
+            {
+              "label": "@estradaxoficial",
+              "url": "https://www.instagram.com/estradaxoficial/"
+            },
+            {
+              "label": "@casalhornet_z900",
+              "url": "https://www.instagram.com/casalhornet_z900/"
+            },
+            {
+              "label": "@portalsaolourencomg",
+              "url": "https://www.instagram.com/portalsaolourencomg/"
+            },
+            {
+              "label": "@saolourenco.cvb",
+              "url": "https://www.instagram.com/saolourenco.cvb/"
+            },
+            {
+              "label": "@_itamontemg",
+              "url": "https://www.instagram.com/_itamontemg/"
+            }
+          ]
+        },
+        {
+          "title": "Publicações do encontro",
+          "links": [
+            {
+              "label": "Confira o convite no Instagram",
+              "url": "https://www.instagram.com/p/DeFt7AGGRKJ/"
+            },
+            {
+              "label": "Mais informações sobre o encontro",
+              "url": "https://www.instagram.com/p/Ddhe3HDvShA/"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

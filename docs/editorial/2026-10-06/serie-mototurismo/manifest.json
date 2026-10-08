@@ -1,0 +1,72 @@
+[
+  {
+    "slug": "primeiro-passeio-moto-trecho-terra",
+    "title": "Primeiro passeio com trecho de terra: o que avaliar antes de escolher o roteiro",
+    "excerpt": "Antes de seguir uma indicação de destino, confira acesso, condições do piso e alternativas para voltar. A preparação começa no mapa.",
+    "tags": [
+      "Planejamento",
+      "Off-road",
+      "Mototurismo"
+    ],
+    "author": "Pistaviva",
+    "published": false,
+    "published_at": null,
+    "file": "primeiro-passeio-moto-trecho-terra.md"
+  },
+  {
+    "slug": "preciso-moto-grande-para-viajar",
+    "title": "Preciso de moto grande para viajar? Como escolher o primeiro roteiro",
+    "excerpt": "Cilindrada não decide o passeio sozinha. Percurso, carga, condição da moto e experiência do piloto precisam entrar na escolha.",
+    "tags": [
+      "Planejamento",
+      "Primeira viagem",
+      "Mototurismo"
+    ],
+    "author": "Pistaviva",
+    "published": false,
+    "published_at": null,
+    "file": "preciso-moto-grande-para-viajar.md"
+  },
+  {
+    "slug": "cambio-automatizado-mototurismo-dct-asa",
+    "title": "Câmbio automatizado no mototurismo: entenda DCT, ASA e o que avaliar",
+    "excerpt": "Honda DCT e BMW ASA automatizam operações da transmissão de formas diferentes. Entenda os sistemas antes de decidir o que faz sentido para suas viagens.",
+    "tags": [
+      "Tecnologia",
+      "Motos",
+      "Mototurismo"
+    ],
+    "author": "Pistaviva",
+    "published": false,
+    "published_at": null,
+    "file": "cambio-automatizado-mototurismo-dct-asa.md"
+  },
+  {
+    "slug": "escolher-moto-viagem-asfalto-terra-garupa",
+    "title": "Qual moto combina com sua viagem? Asfalto, terra, bagagem e garupa",
+    "excerpt": "Antes de comparar cilindrada e acessórios, descreva os passeios que você pretende fazer. Seu uso ajuda a definir o que realmente precisa avaliar.",
+    "tags": [
+      "Motos",
+      "Planejamento",
+      "Mototurismo"
+    ],
+    "author": "Pistaviva",
+    "published": false,
+    "published_at": null,
+    "file": "escolher-moto-viagem-asfalto-terra-garupa.md"
+  },
+  {
+    "slug": "encontros-motos-marcas-comunidades-pistaviva",
+    "title": "Da concessionária à estrada: como encontros criam comunidades",
+    "excerpt": "A participação do Pistaviva no BMW Motorrad Fest ajuda a discutir o papel de criadores, marcas e organizadores na conexão entre motociclistas.",
+    "tags": [
+      "Comunidade",
+      "Eventos",
+      "Pistaviva"
+    ],
+    "author": "Pistaviva",
+    "published": false,
+    "published_at": null,
+    "file": "encontros-motos-marcas-comunidades-pistaviva.md"
+  }
+]

@@ -1,6 +1,7 @@
 'use client';
 import PV, { withAlpha } from '../../src/palette';
-import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import GlobalTracker from '../../src/components/GlobalTracker';
 import { supabase } from '../../src/lib/supabaseClient';
 
 const AuthCtx = createContext(null);
@@ -76,7 +77,11 @@ export default function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    queueMicrotask(() => setDeviceId(getDeviceId()));
+    queueMicrotask(() => {
+      setDeviceId(getDeviceId());
+      const saved = readLastIdentity();
+      if (sessionStorage.getItem('activeComboio') && saved.nome) setIdentity(saved);
+    });
     supabase.auth.getSession().then(({ data }) => {
       setAdminEmail(data.session?.user?.email || null);
       verifyAdmin(data.session);
@@ -153,12 +158,13 @@ export default function AuthProvider({ children }) {
   // `user` derivado da identificação anônima (não é conta/login). Mantém o
   // mesmo formato que as telas antigas esperam (id/nome/name/cidade/uf), pra
   // que o código existente funcione assim que a pessoa se identifica.
-  const user = identity ? { id: deviceId, nome: identity.nome, name: identity.nome, cidade: identity.cidade, uf: identity.uf } : null;
+  const user = useMemo(() => identity && deviceId !== 'anon' ? { id: deviceId, nome: identity.nome, name: identity.nome, cidade: identity.cidade, uf: identity.uf } : null, [identity, deviceId]);
 
   const inp = { width: '100%', padding: '12px 14px', marginBottom: 10, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)', fontFamily: 'inherit', fontSize: 15 };
 
   return (
     <AuthCtx.Provider value={{ user, deviceId, identity, promptIdentity, openAuthModal, isAdmin, adminEmail, openAdminLogin, doLogout, showToast }}>
+      <GlobalTracker user={user} />
       {children}
 
       {/* Modal de identificação da comunidade — sem login, só nome + cidade/UF */}

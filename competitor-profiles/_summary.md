@@ -1,43 +1,61 @@
-# Referências de experiência — resumo competitivo
+# Pistaviva: comparação internacional e prioridades
 
-**Generated:** 2026-08-21  
-**Product:** Pistaviva  
-**References profiled:** 7
+Análise em 7 de outubro de 2026. Páginas públicas consultadas; não é auditoria completa de segurança, desempenho, vendas ou SEO. Nenhum recurso, cadastro ou pagamento dos concorrentes foi testado. Nenhuma alteração publicada nesta análise.
 
-## Side-by-side
+## Conclusão
 
-| Referência | Melhor padrão | Risco observado | Aplicação no Pistaviva |
-|---|---|---|---|
-| Jaguariúna Rodeo | Campanha e data imediatas | Texto preso em imagens | Destaques visuais com HTML semântico |
-| Barretos | Serviço completo ao visitante | Excesso de opções | Bloco compacto “antes de sair” |
-| BITES | Calendário e categorias | Site indisponível no acesso direto | Filtros por terreno, nível e moto |
-| MX1 GP | Próxima etapa, contagem e resultados | Página pesada | Próximo evento como estado vivo |
-| Romaniacs Enduro | Navegação por público | Arquitetura profunda | Rotas por intenção do usuário |
-| Romaniacs Adventure | Jornada específica por perfil | Entradas muito parecidas | Personalização sem duplicar páginas |
-| Festival Interlagos | Agenda e comparação de acesso | Muitas opções | Data, preço, mapa e CTA juntos |
+A oportunidade proposta é construir autoridade regional a partir da presença de Wellyson nos encontros, conectando relatos a informações práticas. Pashnit é a referência mais próxima para autoria e território; Motorcycle Diaries para descoberta e planejamento; ABR Festival para experiência presencial. Trata-se de interpretação estratégica, não de prova de demanda ou superioridade competitiva.
 
-## Diagnosis: Pistaviva home
+## Referências
 
-Current home has strong visual identity but delays its core promise. Store and affiliate rails appear before destinations, events, community and editorial content. Multiple sections repeat the same header-plus-carousel rhythm, while store products appear once as best sellers and again as a full collection rail. Mobile “More” navigation also repeats primary destinations.
+| Referência | Oferta observada | Adaptação sugerida |
+|---|---|---|
+| [Pashnit](https://www.pashnit.com/) | Autor identificado, guias de estradas da Califórnia, mapas e tours | Guias pessoais da Mantiqueira e ligação entre conteúdo e encontros |
+| [Motorcycle Diaries](https://motorcycle-diaries.com/en) | Estradas, fotos, pontos de interesse, planejamento e exportação GPS | Uma página conecta inspiração, parada e viagem |
+| [Best Biking Roads](https://www.bestbikingroads.com/) | Rotas colaborativas, avaliações e busca de percursos próximos | Relatos de visita com data, piso e acesso |
+| [REVER](https://www.rever.co/) | Planejamento, gravação, navegação e recursos sociais; [PRO](https://www.rever.co/pro) | Medir e melhorar continuidade do planejamento existente |
+| [RoadRUNNER](https://www.roadrunner.travel/) | Conteúdo editorial, destinos e conteúdo premium | Coleções de roteiros e experiências por cidade-base |
+| [ABR Festival](https://www.abrfestival.com/) | Ingressos, camping, test rides, música e guia para primeira visita | Informações completas antes, durante e depois de cada encontro |
 
-## Recommended flow
+## Diagnóstico do Pistaviva
 
-1. Campaign banner.
-2. Asymmetric “start your ride” launchpad: weather, route planning, agenda and app.
-3. Destinations and next event.
-4. Community, stories and challenges.
-5. Compact store and gear curation.
-6. Community contribution call to action.
+A [home](https://www.pistavivamototurismo.com.br/) já mostra Wellyson, proposta regional, guias e histórias. Entretanto, divide atenção com FIPE, lançamentos, destinos nacionais, ferramentas, camisetas e afiliados. Minha leitura: excesso de objetivos enfraquece o próximo passo do visitante; medir cliques antes/depois para testar essa hipótese.
 
-## Priority opportunities
+Três problemas observados na captura direta:
 
-1. Move core riding value before commerce.
-2. Merge tools and destination discovery into one launchpad.
-3. Remove repeated full product rail; keep community proof plus best sellers.
-4. Limit gear curation and remove synthetic view counts.
-5. Remove duplicated mobile-menu entries.
-6. Make event state more prominent: remaining days, date, place and action.
+1. Matéria de capa BMW continua usando futuro para 26 e 27 de setembro, datas anteriores à análise. Trocar destaque por cobertura pós-evento.
+2. Texto afirma ser a maior comunidade aberta de mototurismo do Brasil. Não foi encontrada comprovação nas páginas examinadas. Remover superlativo ou apresentar evidência comparável.
+3. Promessa territorial de Mantiqueira, Sul de Minas e Vale do Paraíba convive com destaque principal para Serra do Rio do Rastro. Priorizar imagem própria e conteúdo regional.
 
-## Evidence scope
+A presença de fontes, fotos próprias e autoria deve acompanhar cada guia. Distinguir relato de visita de pesquisa; registrar revisão de dados práticos.
 
-Quick design/content scan. No paid SEO or backlink metrics were requested or used. Raw snapshots live under `competitor-profiles/raw/`.
+## Prioridades propostas
+
+### Primeiro ciclo: clareza e confiança
+
+- Corrigir capa vencida e alegações sem comprovação.
+- Enxugar home para: próximo passeio, guias regionais, encontros, Wellyson e parcerias. Loja e ferramentas continuam acessíveis por navegação.
+- Dar a cada artigo um próximo passo específico: abrir mapa, ver encontro ou consultar guia relacionado.
+
+### Segundo ciclo: utilidade regional
+
+- Série de bate-voltas partindo de Itajubá, São Lourenço e Vale do Paraíba.
+- Ficha padrão: origem, trajeto confirmado, duração estimada com base explícita, piso, parada, contatos, data de revisão, autor e fotografias.
+- Coleção de cafés e pontos de encontro, ligada aos monumentos e aos conteúdos de maior interesse já enviados pelo usuário.
+- Série proposta: Itajubá como base para diferentes passeios. Validar cada trajeto antes de publicar.
+
+### Terceiro ciclo: retorno e parcerias
+
+- Convite voluntário para receber agenda semanal por canal escolhido, sem inscrição automática.
+- Páginas completas de encontros: data, local, organizador, chegada, estacionamento e opções próximas confirmadas.
+- Propostas comerciais com entregas e identificação de publicidade. Diferenciar patrocínio de avaliação editorial.
+
+## Métricas para decisão
+
+Medir origem Instagram com UTM; leitura de guias; cliques no mapa; inscrições na agenda; interesse nos encontros; contatos de parceria; retorno ao site. Não somar visualizações a usuários únicos. Os Insights enviados não têm intervalo de datas legível; não apresentar como resultado mensal. Não prever receita ou crescimento sem dados.
+
+## Rastreabilidade
+
+Perfis individuais nesta pasta. Capturas públicas do Pistaviva em `raw/pistaviva/2026-10-07/scrapes/`. Respostas de pesquisa em `raw/comparacao/2026-10-07/`.
+
+A ferramenta de busca retornou versões antigas de Sobre e Destinos; captura HTTP direta confirmou as versões atuais e prevaleceu na análise. Sem ferramentas de inteligência de tráfego utilizadas: ausência de métricas comparativas é uma limitação explícita.

@@ -1,55 +1,40 @@
-import { useEffect, useRef } from 'react';
-import { joinGlobalRadarChannel, updateGlobalRadarLocation, leaveGlobalRadarChannel, updateComboioLocation } from '../services/realtime';
+import { useEffect, useState } from 'react';
+import { ensureComboioChannel, updateComboioLocation, leaveComboioChannel } from '../services/realtime';
 
+// Mounted above page navigation. GPS is requested only during an active ride.
 const GlobalTracker = ({ user }) => {
-  const watchIdRef = useRef(null);
+  const [code, setCode] = useState(null);
+  useEffect(() => {
+    const sync = () => setCode(sessionStorage.getItem('activeComboio'));
+    sync();
+    window.addEventListener('comboio-session', sync);
+    return () => window.removeEventListener('comboio-session', sync);
+  }, []);
 
   useEffect(() => {
-    if (!user) return;
-    let isSubscribed = true;
-
-    // Posição inicial
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        if (!isSubscribed) return;
-        const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-        joinGlobalRadarChannel(user, loc, null);
-
-        // Se há comboio ativo, envia localização para o canal do comboio também
-        if (sessionStorage.getItem('activeComboio')) {
-          updateComboioLocation(loc);
-        }
-      },
-      () => { if (isSubscribed) joinGlobalRadarChannel(user, null, null); },
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 30000 }
-    );
-
-    // Watch contínuo — roda SEMPRE que GPS atualizar, independente de qual página está
-    watchIdRef.current = navigator.geolocation.watchPosition(
-      (pos) => {
-        if (!isSubscribed) return;
-        const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-
-        // 1. Atualiza radar global
-        updateGlobalRadarLocation(loc);
-
-        // 2. Se comboio ativo, mantém localização atualizada mesmo sem estar na tela
-        if (sessionStorage.getItem('activeComboio')) {
-          updateComboioLocation(loc);
-        }
-      },
-      (err) => console.warn('GlobalTracker GPS Error:', err),
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
-
-    return () => {
-      isSubscribed = false;
-      if (watchIdRef.current !== null) navigator.geolocation.clearWatch(watchIdRef.current);
-      leaveGlobalRadarChannel();
+    if (!user || !code) return;
+    let active = true;
+    ensureComboioChannel(code, user, sessionStorage.getItem('comboioLeader'));
+    const update = pos => {
+      if (active) updateComboioLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
     };
-  }, [user]);
-
+    const geo = navigator.geolocation;
+    const id = geo?.watchPosition(update, () => {}, {
+      enableHighAccuracy: true, timeout: 10000, maximumAge: 0,
+    });
+    const resume = () => {
+      if (document.visibilityState === 'visible') geo?.getCurrentPosition(update, () => {}, {
+        enableHighAccuracy: true, timeout: 10000, maximumAge: 0,
+      });
+    };
+    document.addEventListener('visibilitychange', resume);
+    return () => {
+      active = false;
+      if (id != null) geo.clearWatch(id);
+      document.removeEventListener('visibilitychange', resume);
+      leaveComboioChannel();
+    };
+  }, [user, code]);
   return null;
 };
-
 export default GlobalTracker;

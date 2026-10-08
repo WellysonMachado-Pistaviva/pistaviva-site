@@ -1,0 +1,18 @@
+import Link from 'next/link';
+import Image from 'next/image';
+import { ArrowDown } from 'lucide-react';
+import { MONUMENTOS, BIKERS_CHECKED_LABEL, FONTE_BIKERS, MAPA_BIKERS } from '../../lib/monumentosBikers.mjs';
+import MonumentExplorer from './MonumentExplorer';
+import RouteCoverage from './RouteCoverage';
+import './monumentos.css';
+
+export default function MonumentPage() {
+  const mapped = MONUMENTOS.filter(m => m.coordinates);
+  const ready = MONUMENTOS.filter(m => m.status === 'pronto');
+  return <div className="mb-page">
+    <header className="mb-hero"><div className="mb-shell mb-hero-inner"><div className="mb-hero-copy"><p className="mb-kicker">Pistaviva / Atlas dos monumentos</p><h1>Um gesto.<br /><em>Muitos caminhos.</em></h1><p>Da primeira foto ao próximo carimbo. Explore os monumentos da Rota Biker, escolha suas paradas e desenhe uma viagem para chamar de sua.</p><div className="mb-hero-actions"><a href="#como-chegar" className="mb-primary">Explorar o mapa <ArrowDown size={18} aria-hidden="true" /></a><span>Brasil + Paraguai · atualização {BIKERS_CHECKED_LABEL}</span></div></div><div className="mb-hero-art"><span className="mb-hero-number" aria-hidden="true">{mapped.length}</span><Image className="mb-hero-statue" src="/monumentos/monumento.webp" alt="Escultura do cumprimento biker com dois dedos estendidos" width={1040} height={1600} priority /><Image className="mb-brand" src="/monumentos/rota-biker-logo.webp" alt="Rota Biker" width={1024} height={808} /></div></div></header>
+    <div className="mb-shell"><div className="mb-stats"><div><strong>{MONUMENTOS.length}</strong><span>registros na rede</span></div><div><strong>{mapped.length}</strong><span>pontos no mapa</span></div><div><strong>{ready.length}</strong><span>prontos e carimbando</span></div><div><strong>02</strong><span>países para descobrir</span></div></div><MonumentExplorer /><RouteCoverage /></div>
+    <section className="mb-story"><div className="mb-shell mb-story-inner"><Image src="/monumentos/monumento-foto.jpeg" alt="Monumento do cumprimento biker entre árvores e construções de madeira" width={447} height={447} /><div><p className="mb-kicker">Mais que um ponto no mapa</p><h2>O caminho passa.<br />O encontro fica.</h2><p>Os monumentos celebram o cumprimento entre motociclistas. Cada parada é um convite para conhecer o lugar, conversar com quem recebe e continuar a viagem com mais uma história.</p><p>Escolha uma região para começar. Confirme atendimento e disponibilidade do carimbo com o guardião antes de partir.</p></div></div></section>
+    <section className="mb-shell mb-source"><h2>Um mapa vivo, com fontes abertas.</h2><p>Consulta em {BIKERS_CHECKED_LABEL}: {MONUMENTOS.length} registros, {mapped.length} coordenadas e {MONUMENTOS.filter(m => m.status === 'construcao').length} monumentos em construção. Nº 2 permanece em atualização, sem localização publicada.</p><p>Coordenadas do mapa público da Rota Biker; situações conferidas no catálogo e nas descrições dos pontos. Divergências aparecem nos detalhes. Roteiro sugerido e ferramentas de planejamento desenvolvidos pelo Pistaviva, em guia independente da organização Rota Biker.</p><div className="mb-source-links"><a href={FONTE_BIKERS} target="_blank" rel="noopener noreferrer">Catálogo de referência ↗</a><a href={MAPA_BIKERS} target="_blank" rel="noopener noreferrer">Mapa de referência ↗</a><Link href="/destinos">Mais destinos ↗</Link><Link href="/contato">Sugerir uma atualização ↗</Link></div><p>Mapa: OpenStreetMap. Traçado: OSRM, estimativa rodoviária sem trânsito em tempo real. Marca Rota Biker e imagens fornecidas para este guia; fotografia usada como ilustração, sem atribuir local não confirmado.</p></section>
+  </div>;
+}

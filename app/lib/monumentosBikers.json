@@ -1,0 +1,662 @@
+[
+  {
+    "id": 1,
+    "nome": "Serpenteando Café",
+    "cidade": "Bocaiúva do Sul",
+    "uf": "PR",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -25.0777701,
+      -49.0862979
+    ],
+    "contato": "https://www.instagram.com/serpenteando.cafe?igsh=MWFlOGJlMXAyMDk3dQ==",
+    "mapName": "Serpenteando Café",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 2,
+    "nome": "Monumento 2",
+    "cidade": "Local em atualização",
+    "uf": null,
+    "pais": null,
+    "status": "atualizacao",
+    "coordinates": null,
+    "contato": null,
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 3,
+    "nome": "Mirante do 12",
+    "cidade": "Lauro Müller",
+    "uf": "SC",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -28.3848397,
+      -49.4850811
+    ],
+    "contato": "https://www.instagram.com/mirantedo12?igsh=Y245YXU0cG0wc2o1",
+    "mapName": "Mirante 12 Lanchonete e Entretenimento-LTDA",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 4,
+    "nome": "Rota 370",
+    "cidade": "Urubici",
+    "uf": "SC",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -27.9987446,
+      -49.5544447
+    ],
+    "contato": "https://www.instagram.com/rota370urubici?igsh=MW9hZmFyeDZmMmlzbw==",
+    "mapName": "Rota 370",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 5,
+    "nome": "Parada Rota 218",
+    "cidade": "Carlópolis",
+    "uf": "PR",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -23.4197284,
+      -49.7087751
+    ],
+    "contato": "https://www.instagram.com/rotapr218?igsh=OWZ0dDN6Zzl5YXJi",
+    "mapName": "Parada Rota 218",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 6,
+    "nome": "Parada Rota Bike Café",
+    "cidade": "Rio dos Cedros",
+    "uf": "SC",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -26.672074,
+      -49.3214022
+    ],
+    "contato": "https://www.instagram.com/rotabikecafe?igsh=MXMzeG9td3V2MDZqbw==",
+    "mapName": "Parada Rota Bike Café",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 7,
+    "nome": "Container da Serra",
+    "cidade": "Doutor Pedrinho",
+    "uf": "SC",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -26.6254623,
+      -49.5165773
+    ],
+    "contato": "https://www.instagram.com/containerdaserra?igsh=MXEwd2E0OWV3em45Ng==",
+    "mapName": "Container da Serra",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 8,
+    "nome": "Parada 261",
+    "cidade": "Guapiara",
+    "uf": "SP",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -24.1898018,
+      -48.5367075
+    ],
+    "contato": "https://www.instagram.com/parada_261?igsh=MTVkNnNlajhnYzNxaw==",
+    "mapName": "Parada 261",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 9,
+    "nome": "Posto Rota 090",
+    "cidade": "Piraí do Sul",
+    "uf": "PR",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -24.5377613,
+      -49.9592831
+    ],
+    "contato": "https://www.instagram.com/rota090?igsh=ZTRzNTN0cG45OHlu",
+    "mapName": "Posto Rota 090",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 10,
+    "nome": "Terrasul Motos",
+    "cidade": "Jaguarão",
+    "uf": "RS",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -32.5522043,
+      -53.3838142
+    ],
+    "contato": "https://www.google.com/maps?cid=9301193576256710963",
+    "mapName": "Terrasul Motos",
+    "nota": "Carimbo na loja Terra Sul Motos: Av. Vinte e Sete de Janeiro, 494. Confirme com o guardião; pode diferir do ponto do monumento.",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 11,
+    "nome": "Pad Bier Cervejaria",
+    "cidade": "Paranoá",
+    "uf": "DF",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -15.9990196,
+      -47.5603231
+    ],
+    "contato": "https://www.instagram.com/padbiercervejaria?igsh=MXF3MTlmOGhrODdkaw==",
+    "mapName": "Pad Bier Restaurante e Cervejaria",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 12,
+    "nome": "Centro Cultural Movimento",
+    "cidade": "Socorro",
+    "uf": "SP",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -22.5972528,
+      -46.5256306
+    ],
+    "contato": "https://www.instagram.com/centroculturalmovimento?igsh=aXJkbHZtbGdubjl4",
+    "mapName": "Centro Cultural Movimento",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 13,
+    "nome": "Rota 513",
+    "cidade": "Ponta Grossa",
+    "uf": "PR",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -25.1421648,
+      -49.9811553
+    ],
+    "contato": "https://www.instagram.com/portal.dos.campos?igsh=dmRjOHJjZ2VnOGs5",
+    "mapName": "Rota 513",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 14,
+    "nome": "Parador 158",
+    "cidade": "Itaara",
+    "uf": "RS",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -29.6010665,
+      -53.7677307
+    ],
+    "contato": "https://www.instagram.com/parador158?igsh=MTBuYmhnYjQ1eXNm",
+    "mapName": "Parador 158",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 15,
+    "nome": "Garimpo em Atividade",
+    "cidade": "Ametista do Sul",
+    "uf": "RS",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -27.3577814,
+      -53.1916744
+    ],
+    "contato": "https://www.instagram.com/garimpoematividade?igsh=d3A0aWM1M2ZvOXlu",
+    "mapName": "Garimpo em Atividade",
+    "nota": "O catálogo também identifica a experiência como passeio subterrâneo.",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 16,
+    "nome": "Bar Original – Pier SP-270",
+    "cidade": "Piraju",
+    "uf": "SP",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -23.184275,
+      -49.3906025
+    ],
+    "contato": "https://www.instagram.com/baroriginalpiraju?igsh=NWp3ZGVlbjZlOWk1",
+    "mapName": "Bar Original – Pier SP-270",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 17,
+    "nome": "Armazém Canastra",
+    "cidade": "Piumhi",
+    "uf": "MG",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -20.4576587,
+      -45.9784098
+    ],
+    "contato": "https://www.instagram.com/armazem_canastra/?hl=pt-br",
+    "mapName": "Armazém Canastra",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 18,
+    "nome": "Box 1200",
+    "cidade": "Jundiaí",
+    "uf": "SP",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -23.1918773,
+      -46.9628832
+    ],
+    "contato": "https://www.instagram.com/box1200oficial?igsh=cXNmanE4N3RiNjR0",
+    "mapName": "Box 1200 Concept",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 19,
+    "nome": "Rancho Terra Crua",
+    "cidade": "Salesópolis",
+    "uf": "SP",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -23.5212416,
+      -45.8982779
+    ],
+    "contato": "https://www.instagram.com/rancho.terracrua?igsh=azUydng1NWZvaDg2",
+    "mapName": "Rancho Terra Crua",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 20,
+    "nome": "Casa Rural",
+    "cidade": "Barra do Ribeiro",
+    "uf": "RS",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -30.4075303,
+      -51.4541004
+    ],
+    "contato": "https://www.instagram.com/casa_rural_barra_do_ribeiro?igsh=c2ZtZW50dWcyemRp",
+    "mapName": "Casa Rural Pastelaria",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 21,
+    "nome": "Parada Penhasco",
+    "cidade": "Penha",
+    "uf": "SC",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -26.8112913,
+      -48.6664038
+    ],
+    "contato": "https://www.instagram.com/penhascocervejaria?igsh=dTh6cHRsdngzcDh1&utm_source=qr",
+    "mapName": "Parada Penhasco",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 22,
+    "nome": "Restaurante Mata Virgem",
+    "cidade": "Três Corações",
+    "uf": "MG",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -21.6144094,
+      -45.2614054
+    ],
+    "contato": "https://www.instagram.com/matavirgemrestaurante?igsh=MTd0eHZuajg3NmoybQ==",
+    "mapName": "Restaurante Mata Virgem",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 23,
+    "nome": "Bar do Hélio",
+    "cidade": "Santo Antônio da Alegria",
+    "uf": "SP",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -21.0256805,
+      -47.1669616
+    ],
+    "contato": "https://www.instagram.com/bardoheliosaa?igsh=Y3ZjeXliNDNneHlv",
+    "mapName": "Bar Do Hélio",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 24,
+    "nome": "Pousada e Camping Poço do Caixão",
+    "cidade": "Timbé do Sul",
+    "uf": "SC",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -28.8141693,
+      -49.8813927
+    ],
+    "contato": "https://www.instagram.com/campingpocodocaixao?igsh=ODZhZnZhZXV3b3Ew",
+    "mapName": "Pousada e Camping Poço Do Caixão",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 25,
+    "nome": "Os Independentes",
+    "cidade": "Barretos",
+    "uf": "SP",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -20.5095141,
+      -48.5976393
+    ],
+    "contato": "https://www.instagram.com/barretosmotorcycles_oficial?igsh=ZWdkM3A2ejM2ajA=",
+    "mapName": "Os Independentes",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 26,
+    "nome": "Restaurante Portal Grill",
+    "cidade": "Porto União",
+    "uf": "SC",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -26.2742813,
+      -51.0541948
+    ],
+    "contato": "https://www.instagram.com/restaurante.portalgrilloficial?igsh=MTltbXkzM21yNmV3aA==",
+    "mapName": "Restaurante Portal Grill",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 27,
+    "nome": "Restaurante Pedra do Baú",
+    "cidade": "São Bento do Sapucaí",
+    "uf": "SP",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -22.680331,
+      -45.6632399
+    ],
+    "contato": "https://www.instagram.com/restaurantepedradobau/",
+    "mapName": "Restaurante Pedra do Baú",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 28,
+    "nome": "Hotel Barra Bonita",
+    "cidade": "Barra Bonita",
+    "uf": "SP",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -22.4980628,
+      -48.5620735
+    ],
+    "contato": "https://www.instagram.com/hotelbarrabonita_/",
+    "mapName": "Hotel Barra Bonita",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 29,
+    "nome": "Rancho Gastronomia e Cultura",
+    "cidade": "São José do Barreiro",
+    "uf": "SP",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -22.6452812,
+      -44.5767615
+    ],
+    "contato": "https://www.instagram.com/canalrancho/",
+    "mapName": "Rancho Gastronomia e Cultura - Restaurante, Pizzaria e Armazém.",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 30,
+    "nome": "Drei Schritte Restô Bar",
+    "cidade": "Katueté",
+    "uf": "PY",
+    "pais": "Paraguai",
+    "status": "pronto",
+    "coordinates": [
+      -24.253942,
+      -54.7702719
+    ],
+    "contato": "https://www.instagram.com/dreischrittekatuete/",
+    "mapName": "Drei Schritte Katuete",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 31,
+    "nome": "Pro Tork",
+    "cidade": "Siqueira Campos",
+    "uf": "PR",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -23.6704833,
+      -49.836561
+    ],
+    "contato": "https://www.instagram.com/protork_oficial/",
+    "mapName": "Pro Tork",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 32,
+    "nome": "Hell's Dogs Motorcycle Bar",
+    "cidade": "Foz do Iguaçu",
+    "uf": "PR",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -25.5159988,
+      -54.5751596
+    ],
+    "contato": "https://www.instagram.com/hellsdogsfoz?igsh=MXA2Mzd2NG9sYXhiYw==",
+    "mapName": "Hell's Dogs Motorcycle Bar",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 33,
+    "nome": "Zapata Garage",
+    "cidade": "Garça",
+    "uf": "SP",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -22.2001017,
+      -49.6494886
+    ],
+    "contato": "https://www.instagram.com/zapatagarage?igsh=M2hhZ291Y3dneTJ3",
+    "mapName": "Zapata Garage",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 34,
+    "nome": "Parada da Búfala",
+    "cidade": "Sete Barras",
+    "uf": "SP",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -24.2769151,
+      -47.9479979
+    ],
+    "contato": "https://www.instagram.com/parada.dabufala?igsh=MWN0ZGFtaXM2bHNpZA==",
+    "mapName": "Lanchonete Parada da Búfala",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 35,
+    "nome": "Portal de São Lourenço",
+    "cidade": "São Lourenço",
+    "uf": "MG",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -22.1270713,
+      -45.0392427
+    ],
+    "contato": null,
+    "mapName": "Portal de São Lourenço",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 36,
+    "nome": "Route 60",
+    "cidade": "Abadiânia",
+    "uf": "GO",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -16.1849568,
+      -48.688318
+    ],
+    "contato": "https://www.instagram.com/route_60/",
+    "mapName": "Route 60",
+    "nota": "A página inicial oficial informa Abadiânia; a listagem de monumentos ainda informa Goiás. Coordenada preservada do mapa oficial.",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 37,
+    "nome": "Bela Vista Mall",
+    "cidade": "Conceição do Mato Dentro",
+    "uf": "MG",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -19.0441262,
+      -43.4223614
+    ],
+    "contato": null,
+    "mapName": "Bela Vista Mall",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 38,
+    "nome": "MAPY",
+    "cidade": "Mauá da Serra",
+    "uf": "PR",
+    "pais": "Brasil",
+    "status": "pronto",
+    "coordinates": [
+      -23.9122125,
+      -51.1844918
+    ],
+    "contato": null,
+    "mapName": "MAPY - Restaurante e Cafe",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 39,
+    "nome": "Mar & Sol Praia Hotel",
+    "cidade": "Prado",
+    "uf": "BA",
+    "pais": "Brasil",
+    "status": "construcao",
+    "coordinates": [
+      -17.340253,
+      -39.2181944
+    ],
+    "contato": null,
+    "mapName": "Mar & Sol Praia Hotel",
+    "checkedAt": "2026-10-08",
+    "nota": "O mapa e a listagem oficial ainda indicam construção; a página inicial não informa situação. Confirme com o guardião antes de visitar."
+  },
+  {
+    "id": 40,
+    "nome": "Quiosque Romano",
+    "cidade": "Morro Redondo",
+    "uf": "RS",
+    "pais": "Brasil",
+    "status": "construcao",
+    "coordinates": [
+      -31.5159801,
+      -52.599415
+    ],
+    "contato": null,
+    "mapName": "Quiosque Romano",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 41,
+    "nome": "Rota 15",
+    "cidade": "Casca",
+    "uf": "RS",
+    "pais": "Brasil",
+    "status": "construcao",
+    "coordinates": [
+      -28.6400737,
+      -51.9385666
+    ],
+    "contato": null,
+    "mapName": "ROTA 15",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 42,
+    "nome": "Tapioca do Irmão Firmino",
+    "cidade": "Cajá",
+    "uf": "PB",
+    "pais": "Brasil",
+    "status": "construcao",
+    "coordinates": [
+      -7.1684174,
+      -35.3509599
+    ],
+    "contato": null,
+    "mapName": "Tapioca do Irmão Firmino",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 43,
+    "nome": "Parada Route",
+    "cidade": "São Miguel do Passa Quatro",
+    "uf": "GO",
+    "pais": "Brasil",
+    "status": "construcao",
+    "coordinates": [
+      -17.0708946,
+      -48.6570364
+    ],
+    "contato": null,
+    "mapName": "Parada Route",
+    "checkedAt": "2026-10-08"
+  },
+  {
+    "id": 44,
+    "nome": "Laranja Doce — Pão com Linguiça",
+    "cidade": "Martinópolis",
+    "uf": "SP",
+    "pais": "Brasil",
+    "status": "construcao",
+    "coordinates": [
+      -22.131556,
+      -51.1689638
+    ],
+    "contato": null,
+    "mapName": "Laranja Doce - Pão com Linguiça",
+    "checkedAt": "2026-10-08"
+  }
+]

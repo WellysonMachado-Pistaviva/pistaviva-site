@@ -17,7 +17,7 @@ export default async function Page({ searchParams }) {
       <SpaIntro eyebrow="Antes de sair" title="Planeje sua próxima viagem">
         Escolha o caminho, estime combustível e custos e salve seu roteiro. Sua próxima viagem começa aqui.
       </SpaIntro>
-      <div className="wrap" style={{ paddingBlock: 24 }}><Link href="/rotas/caminho-dos-diamantes" className="btn btn--primary">Caminho dos Diamantes: mapa, terra e asfalto ↗</Link></div>
+      <div className="wrap" style={{ paddingBlock: 24 }}><Link href="/destinos#explorar" className="btn btn--primary">Explorar destinos: Estrada Real, vinícolas e paradas biker ↗</Link></div>
       <RotasHub initial={tab} />
     </>
   );

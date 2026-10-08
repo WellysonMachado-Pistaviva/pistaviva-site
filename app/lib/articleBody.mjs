@@ -57,6 +57,13 @@ export function parseArticleBody(body) {
       continue;
     }
 
+    const driveVideo = line.match(/^\[drive-video:([a-zA-Z0-9_-]+)(?:\|([^\]]+))?\]$/);
+    if (driveVideo) {
+      flushParagraph();
+      blocks.push({ t: 'drive-video', id: driveVideo[1], title: driveVideo[2]?.trim() || 'Vídeo da matéria' });
+      continue;
+    }
+
     const video = line.match(/^\[video:([^|\]]+)(?:\|([^\]]+))?\]$/);
     if (video) {
       flushParagraph();

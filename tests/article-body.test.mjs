@@ -2,6 +2,16 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { parseArticleBody } from '../app/lib/articleBody.mjs';
 
+test('parses Drive video and separates surrounding paragraphs', () => {
+  assert.deepEqual(parseArticleBody('Antes\n[drive-video:1IgcL0Lf6973KahAHgY4TEF___3gbBTnF|BMW Motorrad Fest]\nDepois'), [
+    { t: 'p', v: 'Antes' },
+    { t: 'drive-video', id: '1IgcL0Lf6973KahAHgY4TEF___3gbBTnF', title: 'BMW Motorrad Fest' },
+    { t: 'p', v: 'Depois' },
+  ]);
+  assert.equal(parseArticleBody('[drive-video:valid_id]')[0].title, 'Vídeo da matéria');
+  assert.equal(parseArticleBody('[drive-video:https://example.com/evil]')[0].t, 'p');
+});
+
 test('turns consecutive markdown tasks into one checklist', () => {
   const blocks = parseArticleBody([
     '## Planejamento',

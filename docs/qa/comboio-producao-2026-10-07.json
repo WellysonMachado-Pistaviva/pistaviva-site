@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "Criação, entrada e presença real de dois participantes (desktop/mobile)",
+    "Chat entregue via Realtime e persistido sem duplicação",
+    "Busca preserva coordenadas; rota salva e atualiza participante com aba aberta",
+    "Falha de salvamento mantém rascunho; tentativa seguinte salva remoção da última parada",
+    "GPS continua transmitindo após navegar; participante recebe posição e alerta de distância",
+    "Recarregamento restaura identificação, grupo e histórico",
+    "Saída remove presença e encerra sessão"
+  ],
+  "errors": []
+}

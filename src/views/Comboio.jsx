@@ -3,6 +3,7 @@ import { Plus, KeyRound, Map as MapIcon, ShieldCheck, Share2, Send, Pin, Message
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 import { TILES } from '../lib/mapTiles';
 import ComboioRoute from './ComboioRoute';
+import { validRouteStops, normalizeComboioCode } from '../lib/comboio.mjs';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { joinComboioChannel, updateComboioLocation, leaveComboioChannel, sendComboioChat, updatePinnedMessage } from '../services/realtime';
@@ -62,7 +63,11 @@ const Comboio = ({ user, openAuthModal }) => {
   const [speed, setSpeed] = useState(0);            // km/h do GPS (painel de bordo)
   const [leaderId, setLeaderId] = useState(null);   // userId do líder (quem criou)
   const [sosHold, setSosHold] = useState(0);        // progresso do SOS (0-100)
-  const [routeStops, setRouteStops] = useState([]); // paradas da rota do comboio (mapa)
+  const [routeStops, setRouteStops] = useState([]);
+  const [routeError, setRouteError] = useState('');
+  const [connectionError, setConnectionError] = useState('');
+  const [gpsError, setGpsError] = useState('');
+  const [sending, setSending] = useState(false);
 
   // Chat & Presence State
   const [members, setMembers] = useState([]);
@@ -84,8 +89,16 @@ const Comboio = ({ user, openAuthModal }) => {
   const lastKnownRef = useRef({});
   const [lastKnownSnapshot, setLastKnownSnapshot] = useState({});
 
-  // Tela ativa + áudio silencioso → mantém GPS transmitindo se o usuário travar a tela
+  // Wake lock reduz o apagamento automático; navegador pode suspender GPS em segundo plano.
   const wake = useWakeLock(!!activeComboio);
+
+  useEffect(() => {
+    const timers = typingTimers.current;
+    return () => {
+      clearInterval(sosTimer.current);
+      Object.values(timers).forEach(clearTimeout);
+    };
+  }, [activeComboio]);
 
   // Inicializa: restaura comboio da sessão + carrega histórico
   useEffect(() => {
@@ -219,7 +232,13 @@ const Comboio = ({ user, openAuthModal }) => {
             notifyNewMember(name);
           }
         },
-        leaderId // propaga quem é o puxador pros membros que entram depois
+        leaderId,
+        (status) => {
+          if (!isActive) return;
+          setConnectionError(['CHANNEL_ERROR', 'TIMED_OUT', 'CLOSED'].includes(status)
+            ? 'Conexão interrompida. Verifique sua internet; tentando reconectar.' : '');
+          setConnecting(status !== 'SUBSCRIBED');
+        }
       );
     } catch (err) {
       console.error('Erro ao conectar ao Comboio:', err);
@@ -228,6 +247,7 @@ const Comboio = ({ user, openAuthModal }) => {
     // Atualiza própria localização no mapa instantaneamente (sem esperar roundtrip do Presence)
     const applySelfLocation = (loc) => {
       if (!isActive) return;
+      setGpsError('');
       lastKnownRef.current[user.id] = {
         ...lastKnownRef.current[user.id],
         userId: user.id,
@@ -241,7 +261,12 @@ const Comboio = ({ user, openAuthModal }) => {
       updateComboioLocation(loc);
     };
 
-    // Wake Lock + áudio silencioso são geridos pelo hook useWakeLock acima
+    const gpsFailure = err => {
+      if (isActive) setGpsError(err.code === 1
+        ? 'Localização bloqueada. Permita o GPS no navegador para aparecer no mapa.'
+        : 'GPS indisponível. Aguardando uma nova posição.');
+    };
+    // Screen Wake Lock é gerido pelo hook useWakeLock acima.
 
     if (navigator.geolocation) {
       // maximumAge: 30000 → usa cache de até 30s se disponível
@@ -249,15 +274,17 @@ const Comboio = ({ user, openAuthModal }) => {
       // Comboio recebe imediatamente sem esperar GPS cold start (2-10s)
       navigator.geolocation.getCurrentPosition(
         (pos) => applySelfLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        (err) => console.warn("GPS Initial Error:", err),
+        gpsFailure,
         { enableHighAccuracy: true, timeout: 5000, maximumAge: 30000 }
       );
 
       watchId = navigator.geolocation.watchPosition(
         (pos) => applySelfLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        (err) => console.warn("GPS Watch Error:", err),
+        gpsFailure,
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
       );
+    } else {
+      queueMicrotask(() => { if (isActive) setGpsError('Este navegador não oferece geolocalização.'); });
     }
 
     return () => {
@@ -265,7 +292,7 @@ const Comboio = ({ user, openAuthModal }) => {
       // NÃO chama leaveComboioChannel() aqui — GPS continua via GlobalTracker.
       // Canal encerra apenas no botão "Sair do Comboio".
       // Wake lock é liberado automaticamente pelo hook quando activeComboio vira null.
-      if (watchId) navigator.geolocation.clearWatch(watchId);
+      if (watchId != null) navigator.geolocation.clearWatch(watchId);
     };
     // leaderId é lido na entrada; não re-conecta ao mudar
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -279,9 +306,26 @@ const Comboio = ({ user, openAuthModal }) => {
     if (!activeComboio) { queueMicrotask(() => setRouteStops([])); dbChannelRef.current = null; return; }
     if (!user) return;
 
-    const loadRoute = () => supabase.from('pv_comboio_routes').select('stops').eq('comboio_code', activeComboio).maybeSingle()
-      .then(({ data }) => setRouteStops(Array.isArray(data?.stops) ? data.stops : []));
+    let active = true;
+    let loadingRoute = false;
+    const loadRoute = async () => {
+      if (loadingRoute) return;
+      loadingRoute = true;
+      try {
+        const { data, error } = await supabase.from('pv_comboio_routes').select('stops').eq('comboio_code', activeComboio).maybeSingle();
+        if (!active) return;
+        if (error) throw error;
+        setRouteStops(validRouteStops(data?.stops));
+        setRouteError('');
+      } catch {
+        if (active) setRouteError('Não foi possível atualizar a rota. Tentaremos novamente.');
+      } finally { loadingRoute = false; }
+    };
     loadRoute();
+    // Reconcile after missed broadcasts or reconnection, without requiring DB publication.
+    const poll = setInterval(loadRoute, 10000);
+    const resume = () => { if (!document.hidden) loadRoute(); };
+    document.addEventListener('visibilitychange', resume);
 
     const dbChannel = supabase
       .channel(`comboio-db-${activeComboio}`)
@@ -317,7 +361,13 @@ const Comboio = ({ user, openAuthModal }) => {
       .subscribe();
 
     dbChannelRef.current = dbChannel;
-    return () => { dbChannelRef.current = null; supabase.removeChannel(dbChannel); };
+    return () => {
+      active = false;
+      clearInterval(poll);
+      document.removeEventListener('visibilitychange', resume);
+      dbChannelRef.current = null;
+      supabase.removeChannel(dbChannel);
+    };
   }, [activeComboio, user]);
 
   // Mensagens com +2h são filtradas no SELECT do banco — sem cleanup local necessário
@@ -345,19 +395,28 @@ const Comboio = ({ user, openAuthModal }) => {
   }
 
   const createComboio = () => {
-    const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const code = Array.from(crypto.getRandomValues(new Uint8Array(6)), n => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'[n % 36]).join('');
     sessionStorage.setItem('activeComboio', code);
     sessionStorage.setItem('comboioLeader', user.id);
     setLeaderId(user.id);
     setActiveComboio(code);
     setMessages([]); // novo comboio começa sem histórico
+    setRouteStops([]);
+    setTypingUsers([]);
+    setGpsError('');
+    setConnectionError('');
+    window.dispatchEvent(new Event('comboio-session'));
   };
 
   const joinComboio = () => {
-    if (!joinCode || joinCode.length < 3) return;
-    const code = joinCode.toUpperCase();
+    const code = normalizeComboioCode(joinCode);
+    if (!code) return;
+    setLeaderId(null);
+    sessionStorage.removeItem('comboioLeader');
+    setRouteStops([]);
     sessionStorage.setItem('activeComboio', code);
     setActiveComboio(code);
+    window.dispatchEvent(new Event('comboio-session'));
     // Carrega histórico das últimas 2h do comboio que está entrando
     getComboioMessages(code).then(msgs => {
       if (msgs.length > 0) setMessages(msgs);
@@ -375,6 +434,8 @@ const Comboio = ({ user, openAuthModal }) => {
     setPinnedMsg(null);
     lastKnownRef.current = {};
     setLastKnownSnapshot({});
+    setRouteStops([]);
+    window.dispatchEvent(new Event('comboio-session'));
   };
 
   // SOS — segura 3s → dispara alerta com a coordenada exata (chat + fixado)
@@ -421,15 +482,18 @@ const Comboio = ({ user, openAuthModal }) => {
   const handleSendChat = async (e) => {
     e.preventDefault();
     const text = chatInput.trim();
-    if (!text) return;
+    if (!text || sending) return;
+    const targetComboio = activeComboio;
+    setSending(true);
     setChatInput('');
     // Remove do indicador de typing ao enviar
     setTypingUsers(prev => prev.filter(t => t.userId !== user.id));
 
     // 1. Salva no banco → gera UUID real (garante persistência de 2h)
     const dbId = await saveComboioMessage(
-      activeComboio, user.id, user.nome || user.name, text
-    );
+      targetComboio, user.id, user.nome || user.name, text
+    ).catch(() => null);
+    if (sessionStorage.getItem('activeComboio') !== targetComboio) { setSending(false); return; }
     const msgId = dbId || Date.now().toString();
 
     // 2. Mostra na própria tela imediatamente
@@ -443,7 +507,15 @@ const Comboio = ({ user, openAuthModal }) => {
     setMessages(prev => prev.some(m => m.id === msgId) ? prev : [...prev, msg]);
 
     // 3. Broadcast para os outros online (entrega em tempo real)
-    await sendComboioChat(user, text, msgId);
+    const delivery = await sendComboioChat(user, text, msgId).catch(() => 'error');
+    setSending(false);
+    if (!dbId && delivery !== 'ok') {
+      setChatInput(text);
+      setMessages(prev => prev.filter(m => m.id !== msgId));
+      cbToast('Mensagem não enviada. Verifique sua conexão e tente novamente.');
+    } else if (!dbId) {
+      cbToast('Mensagem enviada ao vivo, mas não foi salva no histórico.');
+    }
   };
 
   const handlePinMessage = async () => {
@@ -490,11 +562,13 @@ const Comboio = ({ user, openAuthModal }) => {
           {(wake.wakeLock || wake.audio) && (
             <div style={{ display:'flex', alignItems:'center', gap:'8px', padding:'8px 14px', borderRadius:'var(--radius-sm)', background:withAlpha(PV.success, 0.08), border:`1px solid ${withAlpha(PV.success, 0.24)}`, marginBottom:'8px', fontSize:'12px', fontWeight:700, color:PV.success }}>
               <div style={{ width:'7px', height:'7px', borderRadius:'50%', background:PV.success, animation:'pulse-sos 2s infinite' }} />
-              🔒 GPS ativo em segundo plano · transmissão ao grupo
+              Mantenha esta página visível durante o percurso.
               {!wake.wakeLock && wake.audio && <span style={{ opacity:.7, fontWeight:500 }}>(modo áudio)</span>}
             </div>
           )}
 
+          {connectionError && <p role="alert">{connectionError}</p>}
+          {gpsError && <p role="alert">{gpsError}</p>}
           {/* Header Compacto do Comboio Ativo */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: 'var(--bg2)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', marginBottom: '12px' }}>
             <button onClick={copyCode} title="Toque pra copiar o código" style={{ background: 'transparent', border: 'none', padding: 0, textAlign: 'left', cursor: 'pointer' }}>
@@ -713,7 +787,7 @@ const Comboio = ({ user, openAuthModal }) => {
                   placeholder="Mensagem pro Comboio..."
                   style={{ flex: 1, background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: '0', padding: '10px 16px', color: PV.white, outline: 'none' }}
                 />
-                <button type="submit" disabled={!chatInput.trim()} style={{ background: chatInput.trim() ? 'var(--accent)' : 'var(--bg3)', border: 'none', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: PV.white, cursor: chatInput.trim() ? 'pointer' : 'default', transition: '0.2s', flexShrink: 0 }}>
+                <button type="submit" aria-label="Enviar mensagem" disabled={sending || !chatInput.trim()} style={{ background: chatInput.trim() ? 'var(--accent)' : 'var(--bg3)', border: 'none', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: PV.white, cursor: chatInput.trim() ? 'pointer' : 'default', transition: '0.2s', flexShrink: 0 }}>
                   <Send size={18} />
                 </button>
               </form>
@@ -793,7 +867,18 @@ const Comboio = ({ user, openAuthModal }) => {
 
           {/* ROTA TAB */}
           {activeTab === 'rota' && (
-            <ComboioRoute comboioCode={activeComboio} isLeader={leaderId === user.id} />
+            <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'auto' }}>
+              {routeError && <p role="alert">{routeError}</p>}
+              <ComboioRoute key={activeComboio} isLeader={leaderId === user.id} savedStops={routeStops} onSave={async stops => {
+                const { error } = await supabase.from('pv_comboio_routes').upsert({ comboio_code: activeComboio, stops, updated_at: new Date().toISOString() });
+                if (error) throw error;
+                setRouteStops(stops);
+                setRouteError('');
+                // Reuse the subscribed channel: removing a second channel with the same topic
+                // also removes the original instance in supabase-js.
+                await dbChannelRef.current?.send({ type: 'broadcast', event: 'route', payload: {} });
+              }} />
+            </div>
           )}
         </div>
       ) : (
@@ -838,7 +923,8 @@ const Comboio = ({ user, openAuthModal }) => {
                 type="text" 
                 placeholder="Ex: X7K9A2" 
                 value={joinCode} 
-                onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+                maxLength={6}
+                onChange={(e) => setJoinCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))}
                 style={{ textAlign: 'center', fontSize: '18px', letterSpacing: '2px', textTransform: 'uppercase' }}
               />
             </div>
@@ -846,7 +932,7 @@ const Comboio = ({ user, openAuthModal }) => {
               className="btn-outline" 
               onClick={joinComboio} 
               style={{ width: '100%', borderColor: PV.info, color: PV.info }}
-              disabled={!joinCode || joinCode.length < 3}
+              disabled={!normalizeComboioCode(joinCode)}
             >
               ENTRAR NO COMBOIO
             </button>

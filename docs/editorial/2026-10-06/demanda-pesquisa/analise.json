@@ -1,0 +1,511 @@
+{
+  "periodo": [
+    "2026-09-06",
+    "2026-10-03"
+  ],
+  "filtros": [
+    {
+      "Filtro": "Tipo de pesquisa",
+      "Valor": "Web"
+    },
+    {
+      "Filtro": "Data",
+      "Valor": "Últimos 28 dias"
+    }
+  ],
+  "total_grafico": {
+    "cliques": 528,
+    "impressoes": 9053
+  },
+  "total_consultas": {
+    "cliques": 174,
+    "impressoes": 2986
+  },
+  "total_linhas_posts": {
+    "cliques": 531,
+    "impressoes": 10192
+  },
+  "grupos_consultas": {
+    "BMW": {
+      "cliques": 126,
+      "impressoes": 535,
+      "consultas": 17,
+      "ctr_percentual": 23.55
+    },
+    "Monumento 35 / São Lourenço": {
+      "cliques": 26,
+      "impressoes": 244,
+      "consultas": 12,
+      "ctr_percentual": 10.66
+    },
+    "Monumento 27 / Pedra do Baú": {
+      "cliques": 6,
+      "impressoes": 664,
+      "consultas": 18,
+      "ctr_percentual": 0.9
+    },
+    "Outras": {
+      "cliques": 7,
+      "impressoes": 318,
+      "consultas": 95,
+      "ctr_percentual": 2.2
+    },
+    "Monumento 29 / São José do Barreiro": {
+      "cliques": 8,
+      "impressoes": 226,
+      "consultas": 13,
+      "ctr_percentual": 3.54
+    },
+    "Perto de mim": {
+      "cliques": 1,
+      "impressoes": 280,
+      "consultas": 8,
+      "ctr_percentual": 0.36
+    },
+    "Outras buscas biker": {
+      "cliques": 0,
+      "impressoes": 374,
+      "consultas": 36,
+      "ctr_percentual": 0.0
+    },
+    "Rota 68": {
+      "cliques": 0,
+      "impressoes": 286,
+      "consultas": 10,
+      "ctr_percentual": 0.0
+    },
+    "Monumento 22 / Três Corações": {
+      "cliques": 0,
+      "impressoes": 59,
+      "consultas": 8,
+      "ctr_percentual": 0.0
+    }
+  },
+  "dispositivos": [
+    {
+      "Dispositivo": "Celular",
+      "Cliques": "472",
+      "Impressões": "7632",
+      "CTR": "6.18%",
+      "Posição": "5.28"
+    },
+    {
+      "Dispositivo": "Computador",
+      "Cliques": "55",
+      "Impressões": "1392",
+      "CTR": "3.95%",
+      "Posição": "12.23"
+    },
+    {
+      "Dispositivo": "Tablet",
+      "Cliques": "1",
+      "Impressões": "29",
+      "CTR": "3.45%",
+      "Posição": "4.45"
+    }
+  ],
+  "paises": [
+    {
+      "País": "Brasil",
+      "Cliques": "527",
+      "Impressões": "8846",
+      "CTR": "5.96%",
+      "Posição": "5.58"
+    },
+    {
+      "País": "Paraguai",
+      "Cliques": "1",
+      "Impressões": "6",
+      "CTR": "16.67%",
+      "Posição": "6.33"
+    },
+    {
+      "País": "Estados Unidos",
+      "Cliques": "0",
+      "Impressões": "114",
+      "CTR": "0%",
+      "Posição": "32.86"
+    },
+    {
+      "País": "Portugal",
+      "Cliques": "0",
+      "Impressões": "18",
+      "CTR": "0%",
+      "Posição": "6.5"
+    },
+    {
+      "País": "Canadá",
+      "Cliques": "0",
+      "Impressões": "8",
+      "CTR": "0%",
+      "Posição": "151.5"
+    },
+    {
+      "País": "Suíça",
+      "Cliques": "0",
+      "Impressões": "5",
+      "CTR": "0%",
+      "Posição": "63.2"
+    },
+    {
+      "País": "Alemanha",
+      "Cliques": "0",
+      "Impressões": "5",
+      "CTR": "0%",
+      "Posição": "165.6"
+    },
+    {
+      "País": "Países Baixos",
+      "Cliques": "0",
+      "Impressões": "5",
+      "CTR": "0%",
+      "Posição": "166.8"
+    },
+    {
+      "País": "Argentina",
+      "Cliques": "0",
+      "Impressões": "4",
+      "CTR": "0%",
+      "Posição": "2.25"
+    },
+    {
+      "País": "Índia",
+      "Cliques": "0",
+      "Impressões": "4",
+      "CTR": "0%",
+      "Posição": "5.5"
+    },
+    {
+      "País": "Reino Unido",
+      "Cliques": "0",
+      "Impressões": "4",
+      "CTR": "0%",
+      "Posição": "98.25"
+    },
+    {
+      "País": "Irlanda",
+      "Cliques": "0",
+      "Impressões": "3",
+      "CTR": "0%",
+      "Posição": "81.33"
+    },
+    {
+      "País": "Moçambique",
+      "Cliques": "0",
+      "Impressões": "2",
+      "CTR": "0%",
+      "Posição": "1.5"
+    },
+    {
+      "País": "México",
+      "Cliques": "0",
+      "Impressões": "2",
+      "CTR": "0%",
+      "Posição": "2.5"
+    },
+    {
+      "País": "Bolívia",
+      "Cliques": "0",
+      "Impressões": "2",
+      "CTR": "0%",
+      "Posição": "4"
+    },
+    {
+      "País": "Indonésia",
+      "Cliques": "0",
+      "Impressões": "2",
+      "CTR": "0%",
+      "Posição": "4.5"
+    },
+    {
+      "País": "Espanha",
+      "Cliques": "0",
+      "Impressões": "2",
+      "CTR": "0%",
+      "Posição": "7"
+    },
+    {
+      "País": "Irã",
+      "Cliques": "0",
+      "Impressões": "2",
+      "CTR": "0%",
+      "Posição": "93.5"
+    },
+    {
+      "País": "Polônia",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "1"
+    },
+    {
+      "País": "Filipinas",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "2"
+    },
+    {
+      "País": "Equador",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "3"
+    },
+    {
+      "País": "França",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "4"
+    },
+    {
+      "País": "Ilhas Faroé",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "4"
+    },
+    {
+      "País": "Singapura",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "4"
+    },
+    {
+      "País": "Angola",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "5"
+    },
+    {
+      "País": "Gana",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "5"
+    },
+    {
+      "País": "Rússia",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "5"
+    },
+    {
+      "País": "Paquistão",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "6"
+    },
+    {
+      "País": "Japão",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "7"
+    },
+    {
+      "País": "Áustria",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "8"
+    },
+    {
+      "País": "Coréia do Sul",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "8"
+    },
+    {
+      "País": "Malásia",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "8"
+    },
+    {
+      "País": "Benin",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "9"
+    },
+    {
+      "País": "Chile",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "9"
+    },
+    {
+      "País": "Itália",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "9"
+    },
+    {
+      "País": "Lituânia",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "9"
+    },
+    {
+      "País": "Finlândia",
+      "Cliques": "0",
+      "Impressões": "1",
+      "CTR": "0%",
+      "Posição": "12"
+    }
+  ],
+  "aspecto": [
+    {
+      "Aspecto da pesquisa": "Vídeos",
+      "Cliques": "39",
+      "Impressões": "3425",
+      "CTR": "1.14%",
+      "Posição": "6.22"
+    }
+  ],
+  "top_posts": [
+    {
+      "Principais posts": "https://www.instagram.com/p/DcrhKVUgWMd/",
+      "Cliques": "327",
+      "Impressões": "1535",
+      "CTR": "21.3%",
+      "Posição": "3.04"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/p/Dak7zOmkePm/",
+      "Cliques": "64",
+      "Impressões": "750",
+      "CTR": "8.53%",
+      "Posição": "4.13"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/p/DdtRUlBEUJo/",
+      "Cliques": "34",
+      "Impressões": "250",
+      "CTR": "13.6%",
+      "Posição": "4.07"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/p/DdtRBQkxuce/",
+      "Cliques": "20",
+      "Impressões": "149",
+      "CTR": "13.42%",
+      "Posição": "3.54"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/p/DVmSS5Xgbo9/",
+      "Cliques": "16",
+      "Impressões": "539",
+      "CTR": "2.97%",
+      "Posição": "6.9"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/reel/DOuDaUJgfhq/",
+      "Cliques": "13",
+      "Impressões": "2374",
+      "CTR": "0.55%",
+      "Posição": "6.83"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/reel/DYvY6ceRjOe/",
+      "Cliques": "7",
+      "Impressões": "795",
+      "CTR": "0.88%",
+      "Posição": "5.8"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/reel/DXR5w3WxCND/",
+      "Cliques": "6",
+      "Impressões": "278",
+      "CTR": "2.16%",
+      "Posição": "4.66"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/p/DdonlG8kW56/",
+      "Cliques": "6",
+      "Impressões": "68",
+      "CTR": "8.82%",
+      "Posição": "5.31"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/reel/Dbt1-vFsWyP/",
+      "Cliques": "4",
+      "Impressões": "216",
+      "CTR": "1.85%",
+      "Posição": "5.16"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/reel/DVcBZq4gRPF/",
+      "Cliques": "4",
+      "Impressões": "208",
+      "CTR": "1.92%",
+      "Posição": "5.24"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/p/DdH1-8EgTPA/",
+      "Cliques": "4",
+      "Impressões": "166",
+      "CTR": "2.41%",
+      "Posição": "6.27"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/reel/DMWYNF7On95/",
+      "Cliques": "3",
+      "Impressões": "819",
+      "CTR": "0.37%",
+      "Posição": "6.02"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/p/DQXnWElgdTQ/",
+      "Cliques": "2",
+      "Impressões": "428",
+      "CTR": "0.47%",
+      "Posição": "5.99"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/reel/DcHhW5dRYZN/",
+      "Cliques": "2",
+      "Impressões": "83",
+      "CTR": "2.41%",
+      "Posição": "7.11"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/reel/Ddzyg77Rpzl/",
+      "Cliques": "2",
+      "Impressões": "34",
+      "CTR": "5.88%",
+      "Posição": "3.53"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/p/Ddzyg77Rpzl/",
+      "Cliques": "2",
+      "Impressões": "31",
+      "CTR": "6.45%",
+      "Posição": "2.97"
+    },
+    {
+      "Principais posts": "https://www.instagram.com/p/Db9D7aQhJHe/",
+      "Cliques": "2",
+      "Impressões": "11",
+      "CTR": "18.18%",
+      "Posição": "5.45"
+    }
+  ],
+  "notas": [
+    "Métricas de pesquisa Web direcionadas a URLs do Instagram; não são Insights nem métricas do portal.",
+    "Totais das dimensões diferem; não somar gráfico, posts e consultas. Causa da diferença não identificável somente pelos arquivos.",
+    "URLs p/reel e parâmetros podem identificar mesmo conteúdo. Grupos de consultas são editoriais, exclusivos por regra; não cruzam consulta e post.",
+    "Não há série comparativa nos CSVs: percentuais de crescimento aparecem somente nos prints."
+  ]
+}

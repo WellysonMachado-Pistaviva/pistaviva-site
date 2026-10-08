@@ -46,6 +46,9 @@ export const broadcastSOS = async (user, location) => {
 // ── Comboio Channel (Private Group Ride & Chat) ────────────────
 // This channel uses Presence for locations/pinned messages, and Broadcast for ephemeral chat.
 let comboioChannel = null;
+let comboioCode = null;
+let comboioCallbacks = {};
+let comboioStatus = null;
 let _comboioUser = null;
 let _comboioPinnedMessage = null;
 let _comboioLeaderId = null;
@@ -53,54 +56,69 @@ let _trackingLocation = null;
 let _lastTrackAt = 0;
 const TRACK_THROTTLE_MS = 5000; // no máximo 1 update de Presence a cada 5s
 
-export const joinComboioChannel = (comboioId, user, location, onSync, onChatReceived, onMemberUpdate, leaderId = null) => {
+export const joinComboioChannel = (comboioId, user, location, onSync, onChatReceived, onMemberUpdate, leaderId = null, onStatus = null) => {
+  comboioCallbacks = { onSync, onChatReceived, onMemberUpdate, onStatus };
+  if (comboioChannel && comboioCode === comboioId && _comboioUser?.id === user.id) {
+    const state = comboioChannel.presenceState();
+    Object.keys(state).forEach(key => { if (state[key]?.[0]) onMemberUpdate?.(key, state[key][0]); });
+    onSync(state);
+    if (comboioStatus) onStatus?.(comboioStatus);
+    return comboioChannel;
+  }
   if (comboioChannel) supabase.removeChannel(comboioChannel);
+  comboioStatus = null;
 
+  comboioCode = comboioId;
   _comboioUser = user;
+  _lastBroadcastAt = 0;
   _comboioPinnedMessage = null;
   _comboioLeaderId = leaderId;
   _trackingLocation = location;
   _lastTrackAt = 0;
 
-  comboioChannel = supabase.channel(`comboio-${comboioId}`, {
+  const channel = supabase.channel(`comboio-${comboioId}`, {
     config: {
       presence: { key: user.id },
       broadcast: { self: true }
     }
   });
 
-  comboioChannel
+  comboioChannel = channel;
+  channel
     .on('presence', { event: 'sync' }, () => {
       // sync: dispara após qualquer mudança no canal. Re-aplica TODOS os membros
       // via onMemberUpdate — essencial porque algumas versões do Supabase Realtime
       // não refazem 'join' quando a mesma key dá track() de novo (atualização de loc).
-      const state = comboioChannel.presenceState();
-      if (onMemberUpdate) {
+      const state = channel.presenceState();
+      if (comboioCallbacks.onMemberUpdate) {
         Object.keys(state).forEach(k => {
           const m = state[k]?.[0];
-          if (m) onMemberUpdate(k, m);
+          if (m) comboioCallbacks.onMemberUpdate(k, m);
         });
       }
-      onSync(state);
+      comboioCallbacks.onSync?.(state);
     })
     .on('presence', { event: 'join' }, ({ key, newPresences }) => {
       // join: primeira aparição do membro no canal
-      if (onMemberUpdate && newPresences?.[0]) onMemberUpdate(key, newPresences[0]);
+      if (comboioCallbacks.onMemberUpdate && newPresences?.[0]) comboioCallbacks.onMemberUpdate(key, newPresences[0]);
     })
     .on('broadcast', { event: 'chat' }, (payload) => {
-      if (onChatReceived) onChatReceived(payload.payload);
+      comboioCallbacks.onChatReceived?.(payload.payload);
     })
     .on('broadcast', { event: 'loc' }, (payload) => {
       // Movimento ao vivo via broadcast (confiável). Presence não propaga re-track.
       const p = payload.payload;
-      if (onMemberUpdate && p?.user?.id) onMemberUpdate(p.user.id, { user: p.user, location: p.location });
+      if (comboioCallbacks.onMemberUpdate && p?.user?.id) comboioCallbacks.onMemberUpdate(p.user.id, { user: p.user, location: p.location });
     })
     .subscribe(async (status) => {
+      if (comboioChannel !== channel) return;
+      comboioStatus = status;
+      comboioCallbacks.onStatus?.(status);
       if (status === 'SUBSCRIBED') {
-        await comboioChannel.track({
+        await channel.track({
           user: { id: user.id, name: user.name || user.nome },
-          location,
-          pinnedMessage: null,
+          location: _trackingLocation,
+          pinnedMessage: _comboioPinnedMessage,
           leaderId: _comboioLeaderId,
           joinedAt: new Date().toISOString()
         });
@@ -108,6 +126,11 @@ export const joinComboioChannel = (comboioId, user, location, onSync, onChatRece
     });
 
   return comboioChannel;
+};
+
+export const ensureComboioChannel = (code, user, leaderId) => {
+  if (comboioChannel && comboioCode === code && _comboioUser?.id === user.id) return;
+  joinComboioChannel(code, user, null, () => {}, null, null, leaderId);
 };
 
 let _lastBroadcastAt = 0;
@@ -138,8 +161,8 @@ export const updateComboioLocation = async (location) => {
 };
 
 export const sendComboioChat = async (user, text, msgId = null) => {
-  if (!comboioChannel) return;
-  await comboioChannel.send({
+  if (!comboioChannel) return 'error';
+  return await comboioChannel.send({
     type: 'broadcast',
     event: 'chat',
     payload: {
@@ -167,9 +190,13 @@ export const updatePinnedMessage = async (pinnedMessage) => {
 
 export const leaveComboioChannel = () => {
   if (comboioChannel) {
-    comboioChannel.untrack();
-    supabase.removeChannel(comboioChannel);
+    const channel = comboioChannel;
     comboioChannel = null;
+    comboioCallbacks = {};
+    comboioStatus = null;
+    channel.untrack();
+    supabase.removeChannel(channel);
+    comboioCode = null;
     _comboioUser = null;
     _comboioPinnedMessage = null;
     _comboioLeaderId = null;

@@ -225,6 +225,21 @@ export default async function BlogPost({ params }) {
                   <InstagramEmbeds urls={b.urls} />
                 </div>
               );
+              if (b.t === 'drive-video') return (
+                <figure key={i} className="art-video">
+                  <iframe
+                    src={`https://drive.google.com/file/d/${b.id}/preview`}
+                    title={b.title}
+                    width="960"
+                    height="540"
+                    style={{ display: 'block', width: '100%', height: 'auto', aspectRatio: '16 / 9', border: 0 }}
+                    loading="lazy"
+                    allow="autoplay; encrypted-media; fullscreen"
+                    allowFullScreen
+                  />
+                  <figcaption>{b.title}</figcaption>
+                </figure>
+              );
               if (b.t === 'video') return (
                 <figure key={i} className="art-video">
                   <video controls playsInline preload="metadata" poster={b.poster || undefined}>

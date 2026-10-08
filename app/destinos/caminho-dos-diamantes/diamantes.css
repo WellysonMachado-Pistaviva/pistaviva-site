@@ -78,3 +78,4 @@
 @media(max-width:900px) { .cd-hero-grid { gap: 32px; grid-template-columns: 1fr 246px; } .cd-plan-grid { grid-template-columns: 1fr; } .cd-map { height: 440px; } .cd-bikers,.cd-resources { gap: 32px; } }
 @media(max-width:640px) { .cd-hero { padding: 32px 0; } .cd-hero-grid,.cd-overview,.cd-section-head,.cd-bikers,.cd-resources { grid-template-columns: 1fr; gap: 24px; } .cd-reference { display: flex; align-items: center; gap: 24px; text-align: left; } .cd-reference img { width: 120px; margin: 0; } .cd-stats { gap: 24px; } .cd-stages li { grid-template-columns: 28px minmax(0,1fr); gap: 12px; } .cd-km { grid-column: 2; text-align: left; } .cd-stage-number { font-size: 22px; } .cd-map { height: 400px; } .cd-section-head { padding-top: 32px; } }
 @media(prefers-reduced-motion:reduce) { .cd-page a,.cd-page button { transition: none; } }
+.cd-explorer { scroll-margin-top:96px; }
