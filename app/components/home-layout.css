@@ -68,9 +68,7 @@
 .pv-study .study-button-outline:hover { background: var(--pv-black-3); }
 .study-closing { text-align: center; padding-block: 96px; }
 .study-closing h2 { margin-bottom: 32px; }
-.study-monuments { padding-block:96px; }
-.study-monuments-photo { position:relative; aspect-ratio:3/2; overflow:hidden; }
-.study-monuments-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+.study-monuments { padding-block:96px; scroll-margin-top:112px; }
 @media (max-width: 1024px) {
   .study-container,.pv-study .ride-experiences > .wrap { width: calc(100% - 48px); }
   .study-destinations { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 32px 20px; }
@@ -81,7 +79,6 @@
 }
 @media (max-width: 640px) {
   .study-monuments { padding-block:56px; }
-  .study-monuments-photo { aspect-ratio:4/3; }
   .study-container,.pv-study .ride-experiences > .wrap { width: calc(100% - 40px); }
   .study-note { padding: 8px 20px; font-size: 10px; align-items: center; }
   .study-hero { min-height: 620px; }

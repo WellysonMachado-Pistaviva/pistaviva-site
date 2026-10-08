@@ -28,8 +28,8 @@ export default function RouteCoverage() {
       <div><strong>{comMonumento}</strong><span>com monumento</span></div>
     </div>
     <div className="mb-coverage-grid">
-      {rota.estados.map(estado => <section key={estado.uf} className="mb-coverage-state">
-        <h3>{estado.nome} <span>{estado.uf} · {estado.municipios.length}</span></h3>
+      {rota.estados.map(estado => <details key={estado.uf} className="mb-coverage-state">
+        <summary><span>{estado.nome}</span><small>{estado.uf} · {estado.municipios.length} municípios</small></summary>
         <ul>{estado.municipios.map(municipio => municipio.monumento ? <li key={municipio.codigo} className="is-monument">
           {marca(18, 'mb-coverage-mark')}
           <div>
@@ -41,7 +41,7 @@ export default function RouteCoverage() {
             </span>)}
           </div>
         </li> : <li key={municipio.codigo}>{municipio.nome}</li>)}</ul>
-      </section>)}
+      </details>)}
     </div>
     <details className="mb-coverage-legs">
       <summary>Ver etapa a etapa · {rota.etapas.length} trechos</summary>

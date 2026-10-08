@@ -1,27 +1,82 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowDown } from 'lucide-react';
+import { ArrowUpRight, MapPinned, Route, BookOpen } from 'lucide-react';
+import Cover from '../../components/Cover';
 import { MONUMENTOS, BIKERS_CHECKED_LABEL, FONTE_BIKERS, MAPA_BIKERS } from '../../lib/monumentosBikers.mjs';
 import MonumentExplorer from './MonumentExplorer';
 import RouteCoverage from './RouteCoverage';
 import RingCards from './RingCards';
 import Sculptors from './Sculptors';
+import '../../home-experience.css';
+import '../../components/home-layout.css';
 import './monumentos.css';
+
+// lucide-react 1.x não traz mais ícones de marca.
+function Instagram({ size = 24, ...props }) {
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect x="2" y="2" width="20" height="20" rx="5" /><circle cx="12" cy="12" r="4" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></svg>;
+}
 
 export default function MonumentPage() {
   const mapped = MONUMENTOS.filter(m => m.coordinates);
   const ready = MONUMENTOS.filter(m => m.status === 'pronto');
-  return <div className="mb-page">
-    <header className="mb-hero"><div className="mb-shell mb-hero-inner"><div className="mb-hero-copy"><p className="mb-kicker">Pistaviva / Atlas dos monumentos</p><h1>Um gesto.<br /><em>Muitos caminhos.</em></h1><p>Da primeira foto ao próximo carimbo. Explore os monumentos da Rota Biker, escolha suas paradas e desenhe uma viagem para chamar de sua.</p><div className="mb-hero-actions"><a href="#como-chegar" className="mb-primary">Explorar o mapa <ArrowDown size={18} aria-hidden="true" /></a><span>Brasil + Paraguai · atualização {BIKERS_CHECKED_LABEL}</span></div></div><div className="mb-hero-art"><span className="mb-hero-number" aria-hidden="true">{mapped.length}</span><Image className="mb-hero-statue" src="/monumentos/monumento.webp" alt="Escultura do cumprimento biker com dois dedos estendidos" width={1040} height={1600} priority /><Image className="mb-brand" src="/monumentos/rota-biker-logo.webp" alt="Rota Biker" width={1024} height={808} /></div></div></header>
-    <div className="mb-shell"><div className="mb-stats"><div><strong>{MONUMENTOS.length}</strong><span>registros na rede</span></div><div><strong>{mapped.length}</strong><span>pontos no mapa</span></div><div><strong>{ready.length}</strong><span>prontos e carimbando</span></div><div><strong>02</strong><span>países para descobrir</span></div></div><MonumentExplorer /><RingCards /><RouteCoverage /></div>
-    <section className="mb-story"><div className="mb-shell mb-story-inner"><Image src="/monumentos/monumento-foto.jpeg" alt="Monumento do cumprimento biker entre árvores e construções de madeira" width={447} height={447} /><div><p className="mb-kicker">Mais que um ponto no mapa</p><h2>O caminho passa.<br />O encontro fica.</h2><p>Os monumentos celebram o cumprimento entre motociclistas. Cada parada é um convite para conhecer o lugar, conversar com quem recebe e continuar a viagem com mais uma história.</p><p>Escolha uma região para começar. Confirme atendimento e disponibilidade do carimbo com o guardião antes de partir.</p></div></div></section>
+  return <div className="mb-page pv-study">
+    <header className="study-hero mb-cover" aria-labelledby="mb-page-title">
+      <Cover src="/monumentos/galeria/monumento-encontro.webp" alt="Monumento da Rota Biker entre motos, visitantes e montanhas" priority />
+      <div className="study-hero-shade" aria-hidden="true" />
+      <div className="mb-shell study-hero-content">
+        <p className="study-kicker">Pistaviva / Atlas dos monumentos</p>
+        <h1 id="mb-page-title">Um gesto.<br /><em>Muitos caminhos.</em></h1>
+        <p>Da primeira foto ao próximo carimbo.<br />Conheça os monumentos da Rota Biker e viva as histórias pelo caminho.</p>
+        <a href="#como-chegar" className="study-button">Explorar o mapa <ArrowUpRight size={18} aria-hidden="true" /></a>
+        <div className="study-hero-foot"><span>Brasil + Paraguai · Rota Biker</span><span>Atualizado em {BIKERS_CHECKED_LABEL}</span></div>
+      </div>
+    </header>
+    <nav className="mb-shell study-shortcuts" aria-label="Explore os monumentos">
+      {[{ href: '#como-chegar', icon: MapPinned, title: 'Escolha sua parada', subtitle: 'Explore monumentos no mapa' }, { href: '#circuitos', icon: Route, title: 'Encontre seu circuito', subtitle: 'Uma volta, várias histórias' }, { href: '#passaporte', icon: BookOpen, title: 'Guarde o caminho', subtitle: 'Conheça o passaporte da rota' }].map(({ href, icon: Icon, title, subtitle }, index) => <a href={href} key={href}><Icon aria-hidden="true" /><span><small>0{index + 1} / ANTES DE SAIR</small><strong>{title}</strong><span>{subtitle}</span></span><ArrowUpRight aria-hidden="true" /></a>)}
+    </nav>
+    <section className="mb-shell mb-discover" aria-labelledby="mb-discover-title">
+      <header className="ride-section-head">
+        <div><span className="ride-kicker">Cada parada tem uma história</span><h2 id="mb-discover-title">Vá pelo gesto.<br />Fique pelo encontro.</h2></div>
+        <p>Gente que recebe, caminhos para descobrir e um carimbo para lembrar de cada chegada.</p>
+      </header>
+      <div className="ride-experience-grid">
+        <a href="#como-chegar" className="ride-experience ride-experience--festival">
+          <Cover src="/monumentos/galeria/monumento-13-rota-513.webp" alt="Casal de motociclistas diante do monumento do Rota 513" sizes="(max-width: 768px) 100vw, 60vw" />
+          <span className="ride-experience-shade" aria-hidden="true" />
+          <span className="ride-experience-top"><span>O cumprimento aproxima</span><ArrowUpRight aria-hidden="true" /></span>
+          <span className="ride-experience-body"><span className="ride-place">Rota 513 · Ponta Grossa, PR</span><strong>A próxima<br /><em>parada.</em></strong><span>Escolha um monumento e comece seu caminho.</span><span className="ride-experience-cta">Explorar o mapa <ArrowUpRight size={18} aria-hidden="true" /></span></span>
+        </a>
+        <a href="#passaporte" className="ride-experience ride-experience--guide">
+          <Cover src="/monumentos/galeria/passaporte-carimbos.webp" alt="Passaporte Rota Biker aberto com carimbos de paradas visitadas" sizes="(max-width: 768px) 100vw, 40vw" />
+          <span className="ride-experience-shade" aria-hidden="true" />
+          <span className="ride-experience-top"><span>Memórias da estrada</span><ArrowUpRight aria-hidden="true" /></span>
+          <span className="ride-experience-body"><span className="ride-place">Passaporte Rota Biker</span><strong>Um carimbo.<br />Uma história.</strong><span>Leve um pouco de cada encontro com você.</span><span className="ride-experience-cta">Conhecer o passaporte <ArrowUpRight size={18} aria-hidden="true" /></span></span>
+        </a>
+      </div>
+    </section>
+    <div className="mb-shell">
+      <div className="mb-stats"><div><strong>{MONUMENTOS.length}</strong><span>registros na rede</span></div><div><strong>{mapped.length}</strong><span>pontos no mapa</span></div><div><strong>{ready.length}</strong><span>prontos e carimbando</span></div><div><strong>02</strong><span>países para descobrir</span></div></div>
+      <MonumentExplorer />
+      <RingCards />
+    </div>
+    <section className="mb-story" id="historia"><div className="mb-shell mb-story-inner"><Image src="/monumentos/wellyson-rota-biker.webp" alt="Wellyson Machado diante de um monumento da Rota Biker, com jaqueta de motociclista preta e vermelha" width={1920} height={1280} /><div><p className="mb-kicker">Mais que um ponto no mapa</p><h2>O caminho passa.<br />O encontro fica.</h2><p>Os monumentos celebram o cumprimento entre motociclistas. Cada parada é um convite para conhecer o lugar, conversar com quem recebe e continuar a viagem com mais uma história.</p><p>Escolha uma região para começar. Confirme atendimento e disponibilidade do carimbo com o guardião antes de partir.</p></div></div></section>
+    <section className="mb-shell mb-instagram" id="instagram-rota-biker" aria-labelledby="mb-instagram-title">
+      <div className="mb-instagram-copy">
+        <p className="mb-kicker">Continue o encontro</p>
+        <h2 id="mb-instagram-title">A rota segue<br />no Instagram.</h2>
+        <a className="mb-instagram-profile" href="https://www.instagram.com/rota_biker/" target="_blank" rel="noopener noreferrer"><Instagram size={24} aria-hidden="true" /> @rota_biker <ArrowUpRight size={20} aria-hidden="true" /></a>
+        <p>Acompanhe os monumentos, os encontros e as histórias compartilhadas pela Rota Biker.</p>
+        <a className="study-button" href="https://www.instagram.com/rota_biker/" target="_blank" rel="noopener noreferrer">Conhecer o perfil <ArrowUpRight size={18} aria-hidden="true" /></a>
+      </div>
+      <a className="mb-instagram-post" href="https://www.instagram.com/rota_biker/p/DaDV1SfDsag/" target="_blank" rel="noopener noreferrer" aria-label="Abrir publicação em destaque da Rota Biker no Instagram">
+        <span className="mb-instagram-post-head"><Instagram size={20} aria-hidden="true" /><strong>@rota_biker</strong><ArrowUpRight size={20} aria-hidden="true" /></span>
+        <Image src="/monumentos/rota-biker-instagram-preview.webp" alt="Prévia de publicação da Rota Biker no Instagram" width={512} height={640} sizes="(max-width: 640px) 100vw, 400px" />
+        <span className="mb-instagram-post-foot">Publicação em destaque <span>Ver no Instagram ↗</span></span>
+      </a>
+    </section>
     <section className="mb-shell mb-gallery" aria-labelledby="mb-gallery-title">
       <p className="mb-kicker">A rota por quem roda</p>
       <h2 id="mb-gallery-title">O cumprimento,<br />de perto.</h2>
-      <figure className="mb-gallery-wide">
-        <Image src="/monumentos/galeria/monumento-encontro.webp" alt="Monumento da Rota Biker em escultura de concreto, cercado de motos e visitantes em dia de encontro, com serra ao fundo" width={1600} height={1067} />
-        <figcaption>Dia de encontro: o monumento vira ponto de parada, conversa e foto.</figcaption>
-      </figure>
       <div className="mb-gallery-grid">
         <figure>
           <Image src="/monumentos/galeria/monumento-13-rota-513.webp" alt="Casal de motociclistas ao lado da moto, fazendo o cumprimento biker diante do monumento do Rota 513" width={900} height={900} />
@@ -47,7 +102,7 @@ export default function MonumentPage() {
       <p className="mb-gallery-credit">Fotos cedidas para este guia pela comunidade da Rota Biker.</p>
     </section>
     <Sculptors />
-    <section className="mb-shell mb-passport" aria-labelledby="mb-passport-title">
+    <section id="passaporte" className="mb-shell mb-passport" aria-labelledby="mb-passport-title">
       <Image src="/monumentos/passaporte-rota-biker.webp" alt="Capa do Passaporte Rota Biker: o cumprimento biker sobre uma rosa dos ventos, com bandeiras de países das Américas e da Europa" width={900} height={1303} />
       <div>
         <p className="mb-kicker">O caderno da viagem</p>
@@ -57,6 +112,8 @@ export default function MonumentPage() {
         <div className="mb-source-links"><a href="https://www.instagram.com/serpenteando.cafe/" target="_blank" rel="noopener noreferrer">Serpenteando Café no Instagram ↗</a><a href="#como-chegar">Montar meu roteiro ↗</a></div>
       </div>
     </section>
+    <div className="mb-shell"><RouteCoverage /></div>
     <section className="mb-shell mb-source"><h2>Um mapa vivo, com fontes abertas.</h2><p>Consulta em {BIKERS_CHECKED_LABEL}: {MONUMENTOS.length} registros, {mapped.length} coordenadas e {MONUMENTOS.filter(m => m.status === 'construcao').length} monumentos em construção. Nº 2 permanece em atualização, sem localização publicada.</p><p>Coordenadas do mapa público da Rota Biker; situações conferidas no catálogo e nas descrições dos pontos. Divergências aparecem nos detalhes. Roteiro sugerido e ferramentas de planejamento desenvolvidos pelo Pistaviva, em guia independente da organização Rota Biker.</p><div className="mb-source-links"><a href={FONTE_BIKERS} target="_blank" rel="noopener noreferrer">Catálogo de referência ↗</a><a href={MAPA_BIKERS} target="_blank" rel="noopener noreferrer">Mapa de referência ↗</a><Link href="/destinos">Mais destinos ↗</Link><Link href="/contato">Sugerir uma atualização ↗</Link></div><p>Mapa: OpenStreetMap. Traçado: OSRM, estimativa rodoviária sem trânsito em tempo real. Marca Rota Biker e imagens fornecidas para este guia; fotografia usada como ilustração, sem atribuir local não confirmado.</p></section>
+    <section className="mb-shell study-closing"><p className="study-kicker">O próximo capítulo é seu</p><h2>Qual será<br />sua próxima parada?</h2><a href="#como-chegar" className="study-button">Montar meu roteiro <ArrowUpRight size={18} aria-hidden="true" /></a></section>
   </div>;
 }

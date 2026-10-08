@@ -6,12 +6,9 @@ import resumo from '../../lib/aneisResumo.json' with { type: 'json' };
 // fecha um anel já tem paradas do próximo. A silhueta de cada card é um caminho
 // SVG pré-calculado (scripts/build-aneis-resumo.mjs) — oito mapas sem mapa.
 export default function RingCards() {
-  // A escada vale enquanto cada nível acrescenta coleção de verdade. Abaixo de
-  // dois monumentos novos vira variação do mesmo chão, não próximo nível.
-  const campanha = resumo.trilha.filter(t => t.novos >= 2);
-  const variacoes = resumo.trilha.filter(t => t.novos < 2);
-  const kmCampanha = campanha.reduce((total, t) => total + resumo.aneis[t.anel].km, 0);
-  const conquistados = campanha.at(-1)?.acumulado ?? 0;
+  const rotas = resumo.trilha;
+  const kmTotal = rotas.reduce((total, etapa) => total + resumo.aneis[etapa.anel].km, 0);
+  const monumentosUnicos = new Set(rotas.flatMap(etapa => resumo.aneis[etapa.anel].monumentos.map(m => m.id))).size;
 
   // Etapas de navegação: o Google Maps aceita poucos pontos por link, então o
   // anel é quebrado em trechos com até três paradas intermediárias.
@@ -39,13 +36,13 @@ export default function RingCards() {
     const trechos = etapasDeNavegacao(anel);
     return <article className="mb-ring" key={etapa.anel}>
       <header>
-        <span className="mb-ring-nivel">{posicao ? `Nível ${posicao}` : 'Variação'}</span>
+        <span className="mb-ring-nivel">{`Rota ${String(posicao).padStart(2, '0')}`}</span>
         <h3>{anel.ufs.join(' · ')}</h3>
         <p>{anel.faixa} · {anel.dias} dias a 300 km/dia</p>
       </header>
 
       <svg className="mb-ring-mapa" viewBox="0 0 100 100" role="img" aria-label={`Silhueta do circuito de ${anel.km} quilômetros ligando ${anel.monumentos.length} monumentos`}>
-        <path d={anel.silhueta} fill="none" />
+        <path d={anel.silhueta} fill="none" pathLength="100" />
         {anel.pontos.map(([x, y], i) => <circle key={i} cx={x} cy={y} r="2.1" />)}
       </svg>
 
@@ -56,14 +53,14 @@ export default function RingCards() {
         <div><dt>Ao guidão</dt><dd>{anel.horas} h</dd></div>
       </dl>
 
-      <div className="mb-ring-paradas">
-        <h4>As paradas, na ordem</h4>
+      <details className="mb-ring-paradas">
+        <summary>Ver as {anel.monumentos.length} paradas</summary>
         <ol>{anel.monumentos.map(m => <li key={m.id}>
           <b>{String(m.id).padStart(2, '0')}</b>
           <span>{m.cidade}<small>{m.uf}</small></span>
           {m.ig && <a href={`https://www.instagram.com/${m.ig}/`} target="_blank" rel="noopener noreferrer" aria-label={`Instagram de ${m.nome}`}><AtSign size={13} aria-hidden="true" />{m.ig}</a>}
         </li>)}</ol>
-      </div>
+      </details>
 
       <div className="mb-ring-ir">
         {/* Sem origem na URL, o Maps traça a partir de onde a pessoa está. */}
@@ -71,7 +68,7 @@ export default function RingCards() {
           <Navigation size={16} aria-hidden="true" />Traçar daqui até a 1ª parada
         </a>
         <details>
-          <summary>Navegar o anel por etapas · {trechos.length}</summary>
+          <summary>Navegar a rota por etapas · {trechos.length}</summary>
           <p>O Maps aceita poucas paradas por link. Abra uma etapa de cada vez; ele recalcula as estradas e pode mostrar distância diferente.</p>
           <ol>{trechos.map((t, i) => <li key={t.url}>
             <a href={t.url} target="_blank" rel="noopener noreferrer"><b>{i + 1}</b> {t.de} → {t.para}</a>
@@ -85,31 +82,23 @@ export default function RingCards() {
         <p className="mb-ring-lista">{anel.municipios.map((m, i) => <span key={`${m.n}-${i}`}>{i > 0 && ' · '}{m.m ? <b>{m.n}/{m.u}</b> : `${m.n}/${m.u}`}</span>)}</p>
       </details>
 
-      {etapa.repetidos > 0 && <p className="mb-ring-liga"><ArrowRight size={14} aria-hidden="true" />{etapa.repetidos} {etapa.repetidos === 1 ? 'parada já estará' : 'paradas já estarão'} no seu passaporte do nível anterior.</p>}
+      {etapa.repetidos > 0 && <p className="mb-ring-liga"><ArrowRight size={14} aria-hidden="true" />{etapa.repetidos} {etapa.repetidos === 1 ? 'parada também aparece' : 'paradas também aparecem'} nas rotas anteriores.</p>}
     </article>;
   };
 
-  return <section className="mb-rings" aria-labelledby="mb-rings-title">
-    <p className="mb-kicker">Circuitos fechados</p>
-    <h2 id="mb-rings-title">Fechou um anel,<br />entra no próximo.</h2>
+  return <section id="circuitos" className="mb-rings" aria-labelledby="mb-rings-title">
+    <p className="mb-kicker">Rotas para colecionar</p>
+    <h2 id="mb-rings-title">Fechou uma rota,<br />entra no próximo.</h2>
     <p className="mb-rings-lead">
-      {campanha.length} circuitos que saem e voltam ao mesmo ponto, ligando apenas os monumentos prontos — os que carimbam.
-      Cada nível reaproveita paradas do anterior: são {kmCampanha.toLocaleString('pt-BR')} km somados para chegar
-      a {conquistados} dos {resumo.totalProntos} monumentos em operação.
+      {rotas.length} rotas que saem e voltam ao mesmo ponto, reunidas em uma única sequência.
+      São {kmTotal.toLocaleString('pt-BR')} km somados e {monumentosUnicos} dos {resumo.totalProntos} monumentos em operação.
+      Algumas paradas se repetem: escolha a volta que combina com sua viagem.
     </p>
-
-    <div className="mb-rings-grid">{campanha.map((etapa, i) => card(etapa, i + 1))}</div>
-
-    {variacoes.length > 0 && <>
-      <h3 className="mb-rings-sub">Outras voltas pelo mesmo chão</h3>
-      <p className="mb-rings-lead">Estes não acrescentam monumentos novos à coleção — percorrem a mesma região por outro desenho. Servem para repetir a viagem sem repetir o caminho.</p>
-      <div className="mb-rings-grid">{variacoes.map(etapa => card(etapa, null))}</div>
-    </>}
+    <div className="mb-rings-grid">{rotas.map((etapa, i) => card(etapa, i + 1))}</div>
 
     <p className="mb-rings-nota">
       Ordem sugerida por proximidade rodoviária, otimizada e editável no planejador acima. Distâncias e tempos vêm do
-      traçado para automóveis, sem trânsito em tempo real nem promessa de piso. Seis monumentos prontos ficam fora dos
-      circuitos por estarem isolados demais para fechar anel: seguem como ida e volta.
+      traçado para automóveis, sem trânsito em tempo real nem promessa de piso. {resumo.totalProntos - monumentosUnicos} monumentos prontos ficam fora destas rotas e podem ser incluídos como ida e volta no planejador.
     </p>
   </section>;
 }
