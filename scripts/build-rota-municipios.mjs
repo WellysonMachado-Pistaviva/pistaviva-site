@@ -13,7 +13,7 @@ import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import { MONUMENTOS } from '../app/lib/monumentosBikers.mjs';
 import { findCity, cityByCode } from '../app/lib/municipios.mjs';
 import { UF_IBGE } from '../app/lib/ufs.mjs';
-import { ROUTING_VERSION } from '../app/lib/monumentosRoute.mjs';
+import { ROUTING_VERSION, orderStops, routePoints } from '../app/lib/monumentosRoute.mjs';
 
 const MALHA_URL = 'https://raw.githubusercontent.com/tbrugz/geodata-br/master/geojson/geojs-100-mun.json';
 const CACHE = new URL('../.cache/malha-municipal.geojson', import.meta.url);
@@ -141,15 +141,13 @@ for (const m of MONUMENTOS) {
 console.log(`${conferidos} monumentos conferidos contra a malha`);
 const resultado = { routingVersion: ROUTING_VERSION, geradoEm: new Date().toISOString().slice(0, 10), fonte: MALHA_URL, modos: {} };
 
-for (const mode of ['todos', 'prontos']) {
-  const route = JSON.parse(await readFile(new URL(`../public/monumentos/rota-${mode}.json`, import.meta.url), 'utf8'));
-  const line = densify(route.line || [], PASSO_KM);
-  const ordem = [];
-  const vistos = new Map();
-  let foraDoBrasilKm = 0;
+// Varre um trecho da linha e devolve os municípios na ordem de entrada.
+function municipiosDoTrecho(line) {
+  const codigos = [];
+  let foraKm = 0;
   let anterior = null;
   let acumulado = PASSO_KM;
-  for (const point of line) {
+  for (const point of densify(line, PASSO_KM)) {
     if (anterior) acumulado += distanceKm(anterior, point);
     anterior = point;
     if (acumulado < PASSO_KM) continue;
@@ -160,17 +158,52 @@ for (const mode of ['todos', 'prontos']) {
     const feature = locate(index, geo.features, point);
     // Fora da malha são as travessias por Argentina e Paraguai: contamos os
     // quilômetros para declarar o que a lista não cobre.
-    if (!feature) { foraDoBrasilKm += avanco; continue; }
+    if (!feature) { foraKm += avanco; continue; }
     const codigo = String(feature.properties.id);
-    if (vistos.has(codigo)) continue;
-    const uf = UF_POR_PREFIXO[codigo.slice(0, 2)];
-    // Nome canônico vem do cadastro do IBGE; a malha é só a geometria.
-    const nome = cityByCode(uf, codigo)?.name || feature.properties.name;
-    const monumentos = porMunicipio.get(codigo) || [];
-    const registro = { codigo, nome, uf, monumento: monumentos.length > 0, monumentos };
-    vistos.set(codigo, registro);
-    ordem.push(registro);
+    if (!codigos.includes(codigo)) codigos.push(codigo);
   }
+  return { codigos, foraKm };
+}
+
+for (const mode of ['todos', 'prontos']) {
+  const route = JSON.parse(await readFile(new URL(`../public/monumentos/rota-${mode}.json`, import.meta.url), 'utf8'));
+  const line = route.line || [];
+  const stops = orderStops(MONUMENTOS.filter(m => m.coordinates && (mode === 'todos' || m.status === 'pronto')), 10);
+  const pontos = routePoints(stops);
+  // Cada parada vira o vértice mais próximo do traçado: é o corte entre etapas.
+  const cortes = pontos.map(ponto => {
+    let melhor = 0;
+    let menor = Infinity;
+    line.forEach((vertice, i) => { const d = distanceKm(vertice, ponto.coordinates); if (d < menor) { menor = d; melhor = i; } });
+    return melhor;
+  });
+
+  const ordem = [];
+  const vistos = new Map();
+  const etapas = [];
+  let foraDoBrasilKm = 0;
+  for (let i = 1; i < pontos.length; i += 1) {
+    const { codigos, foraKm } = municipiosDoTrecho(line.slice(cortes[i - 1], cortes[i] + 1));
+    foraDoBrasilKm += foraKm;
+    etapas.push({
+      de: pontos[i - 1].name,
+      para: pontos[i].name,
+      km: Math.round(route.legs?.[i - 1]?.distanceKm || 0),
+      municipios: codigos,
+      ...(foraKm > 1 ? { kmForaDoBrasil: Math.round(foraKm) } : {}),
+    });
+    for (const codigo of codigos) {
+      if (vistos.has(codigo)) continue;
+      const uf = UF_POR_PREFIXO[codigo.slice(0, 2)];
+      // Nome canônico vem do cadastro do IBGE; a malha é só a geometria.
+      const nome = cityByCode(uf, codigo)?.name || geo.features.find(f => String(f.properties.id) === codigo)?.properties.name;
+      const monumentos = porMunicipio.get(codigo) || [];
+      const registro = { codigo, nome, uf, monumento: monumentos.length > 0, monumentos };
+      vistos.set(codigo, registro);
+      ordem.push(registro);
+    }
+  }
+
   const estados = [...new Set(ordem.map(m => m.uf))].map(uf => ({
     uf,
     nome: ESTADOS[uf],
@@ -183,8 +216,9 @@ for (const mode of ['todos', 'prontos']) {
     totalEstados: estados.length,
     kmForaDoBrasil: Math.round(foraDoBrasilKm),
     estados,
+    etapas,
   };
-  console.log(`${mode}: ${estados.length} estados, ${ordem.length} municípios, ${Math.round(foraDoBrasilKm)} km fora do Brasil`);
+  console.log(`${mode}: ${estados.length} estados, ${ordem.length} municípios, ${etapas.length} etapas, ${Math.round(foraDoBrasilKm)} km fora do Brasil`);
 }
 
 await writeFile(new URL('../app/lib/rotaMunicipios.json', import.meta.url), `${JSON.stringify(resultado)}\n`);

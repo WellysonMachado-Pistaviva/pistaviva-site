@@ -77,6 +77,23 @@ test('municípios sem monumento não carregam dados de monumento', () => {
   for (const municipio of sem) assert.equal(municipio.monumentos, undefined, `${municipio.nome} veio com monumentos`);
 });
 
+test('as etapas cobrem exatamente a mesma lista de municípios', () => {
+  for (const [nome, rota] of modos) {
+    const catalogo = new Set(rota.estados.flatMap(e => e.municipios.map(m => m.codigo)));
+    const nasEtapas = new Set(rota.etapas.flatMap(e => e.municipios));
+    for (const codigo of nasEtapas) assert.ok(catalogo.has(codigo), `${nome}: etapa cita ${codigo} fora da lista`);
+    assert.equal(nasEtapas.size, rota.totalMunicipios, `${nome}: etapas e lista divergem`);
+    // Uma etapa por par de paradas consecutivas, somando a distância da rota.
+    assert.ok(rota.etapas.length >= rota.ids.length - 1, `${nome}: etapas de menos`);
+    for (const etapa of rota.etapas) {
+      assert.ok(etapa.de && etapa.para, `${nome}: etapa sem origem ou destino`);
+      assert.ok(etapa.municipios.length > 0 || etapa.kmForaDoBrasil, `${nome}: etapa ${etapa.de}→${etapa.para} vazia`);
+    }
+    const somaEtapas = rota.etapas.reduce((total, etapa) => total + etapa.km, 0);
+    assert.ok(Math.abs(somaEtapas - rota.distanciaKm) < rota.distanciaKm * 0.02, `${nome}: soma das etapas (${somaEtapas}) longe do total (${rota.distanciaKm})`);
+  }
+});
+
 test('a rota completa cobre mais chão que a versão só com prontos', () => {
   const { todos, prontos } = cobertura.modos;
   assert.ok(todos.totalMunicipios > prontos.totalMunicipios);

@@ -13,6 +13,8 @@ const marca = (size, className) => <Image className={className} src="/monumentos
 export default function RouteCoverage() {
   const rota = cobertura.modos.todos;
   const comMonumento = rota.estados.reduce((total, estado) => total + estado.municipios.filter(m => m.monumento).length, 0);
+  // As etapas guardam só o código IBGE; o nome vem do mesmo catálogo da lista.
+  const catalogo = new Map(rota.estados.flatMap(estado => estado.municipios.map(m => [m.codigo, { nome: m.nome, uf: estado.uf }])));
   return <section className="mb-coverage" aria-labelledby="mb-coverage-title">
     <p className="mb-kicker">O caminho inteiro</p>
     <h2 id="mb-coverage-title">Por onde a rota passa</h2>
@@ -41,6 +43,18 @@ export default function RouteCoverage() {
         </li> : <li key={municipio.codigo}>{municipio.nome}</li>)}</ul>
       </section>)}
     </div>
+    <details className="mb-coverage-legs">
+      <summary>Ver etapa a etapa · {rota.etapas.length} trechos</summary>
+      <p>Os municípios de cada trecho, na ordem em que a estrada entra em cada um. Onde a rodovia corre sobre a divisa o traçado alterna entre dois municípios; aqui cada um aparece uma vez, na primeira entrada.</p>
+      <ol>{rota.etapas.map((etapa, posicao) => <li key={`${etapa.de}-${etapa.para}-${posicao}`}>
+        <h4>{etapa.de} → {etapa.para}</h4>
+        <p className="mb-coverage-leg-meta">
+          {etapa.km.toLocaleString('pt-BR')} km · {etapa.municipios.length} {etapa.municipios.length === 1 ? 'município' : 'municípios'}
+          {etapa.kmForaDoBrasil ? ` · ${etapa.kmForaDoBrasil} km fora do Brasil` : ''}
+        </p>
+        <p className="mb-coverage-leg-seq">{etapa.municipios.map(codigo => catalogo.get(codigo)).filter(Boolean).map(m => `${m.nome}/${m.uf}`).join(' → ')}</p>
+      </li>)}</ol>
+    </details>
     <p className="mb-coverage-note">
       {marca(18, 'mb-coverage-mark')} marca os municípios que abrigam um monumento, com o número oficial e o perfil do guardião quando publicado.
       Os {rota.kmForaDoBrasil} km em que o traçado deixa o país — travessias pela Argentina e pelo Paraguai — não entram na contagem: a lista cobre a malha municipal brasileira.
