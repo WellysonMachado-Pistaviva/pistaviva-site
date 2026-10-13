@@ -6,6 +6,7 @@ import { STATUS_BIKERS, BIKERS_CHECKED_LABEL } from '../../../lib/monumentosBike
 import { ESTADOS_COM_MONUMENTOS, getEstado, estadoHref, noEstado, comoChegar, resumoEstado, listaLd, BASE_MONUMENTOS, MONUMENTOS_HREF } from '../../../lib/monumentosEstados.mjs';
 import '../../../home-experience.css';
 import '../../../components/home-layout.css';
+import { monumentoHref } from '../../../lib/monumentosPaginas.mjs';
 import '../monumentos.css';
 
 export const dynamicParams = false;
@@ -33,7 +34,7 @@ export default async function EstadoMonumentos({ params }) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'CollectionPage', name: titulo, url, description: r.texto, inLanguage: 'pt-BR', mainEntity: listaLd(titulo, url, e.monumentos) },
+      { '@type': 'CollectionPage', name: titulo, url, description: r.texto, inLanguage: 'pt-BR', mainEntity: listaLd(titulo, url, e.monumentos, m => m.coordinates ? `${BASE_MONUMENTOS}${monumentoHref(m)}` : `${url}#monumento-${m.id}`) },
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Destinos', item: `${BASE_MONUMENTOS}/destinos` },
         { '@type': 'ListItem', position: 2, name: 'Monumentos da Rota Biker', item: `${BASE_MONUMENTOS}${MONUMENTOS_HREF}` },
@@ -63,7 +64,7 @@ export default async function EstadoMonumentos({ params }) {
         {e.monumentos.map(m => <li key={m.id} id={`monumento-${m.id}`}>
           <span className="mb-state-number">{String(m.id).padStart(2, '0')}</span>
           <div className="mb-state-copy">
-            <h3>{m.nome}</h3>
+            <h3>{m.coordinates ? <Link href={monumentoHref(m)}>{m.nome}</Link> : m.nome}</h3>
             <p><MapPin size={15} aria-hidden="true" /> {m.cidade}{e.uf !== 'PY' ? ` · ${e.uf}` : ''}</p>
             <span className={`mb-state-status is-${m.status}`}>{STATUS_BIKERS[m.status]}</span>
           </div>

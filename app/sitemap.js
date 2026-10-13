@@ -6,6 +6,7 @@ import { DESTINOS } from './lib/destinos';
 import { ROTEIROS_CURADOS } from './lib/roteirosCurados.mjs';
 import { ESTADOS_COM_MONUMENTOS, estadoHref } from './lib/monumentosEstados.mjs';
 import { BIKERS_CHECKED_AT } from './lib/monumentosBikers.mjs';
+import { MONUMENTOS_COM_PAGINA, monumentoHref } from './lib/monumentosPaginas.mjs';
 import { DESAFIOS } from './lib/desafios';
 import { getEventsForSeo } from './lib/events';
 import { FOTOS as FOTOS_PARQUE } from './parque-da-cidade/dados';
@@ -84,6 +85,12 @@ export default async function sitemap() {
     ...(images?.length ? { images } : {}),
   }));
 
+  // ── Cada monumento da Rota Biker ──
+  const monumentos = MONUMENTOS_COM_PAGINA.map((m) => ({
+    url: `${BASE}${monumentoHref(m)}`,
+    lastModified: m.checkedAt || BIKERS_CHECKED_AT,
+  }));
+
   // ── Posts do blog ──
   let posts = [];
   try {
@@ -137,5 +144,5 @@ export default async function sitemap() {
     }));
   } catch { /* DB indisponível no build */ }
 
-  return [...staticEntries, ...estradas, ...guias, ...destinos, ...desafios, ...posts, ...fotos, ...eventos];
+  return [...staticEntries, ...monumentos, ...estradas, ...guias, ...destinos, ...desafios, ...posts, ...fotos, ...eventos];
 }

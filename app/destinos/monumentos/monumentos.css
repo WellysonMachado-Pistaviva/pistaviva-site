@@ -376,3 +376,12 @@
   .mb-state-actions { grid-column:1 / -1; align-items:stretch; }
   .mb-state-others > div { grid-template-columns:1fr; }
 }
+
+/* Página de cada monumento: ficha reaproveita .mb-stats; perguntas vêm em blocos. */
+.mb-monument-facts { margin:0; }
+.mb-monument-facts > div { flex-direction:column; align-items:flex-start; gap:8px; }
+.mb-monument-facts dt { font-size:12px; color:var(--pv-muted-dark); }
+.mb-monument-facts dd { margin:0; font-weight:700; overflow-wrap:anywhere; }
+.mb-page .mb-state-faq > div > div + div h3 { margin-top:32px; }
+.mb-state-faq h3 svg { vertical-align:-3px; color:var(--pv-orange-deep); }
+.mb-state-copy h3 a { color:inherit; }
