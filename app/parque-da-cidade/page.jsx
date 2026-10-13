@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import { Suspense } from 'react';
 import {
+  ArrowUpRight,
+  CalendarDays,
+  MapPinned,
   Baby,
   Bath,
   BedDouble,
@@ -18,6 +21,7 @@ import {
   Utensils,
 } from 'lucide-react';
 import ParqueMapa from './ParqueMapa';
+import EditorialHero from '../components/EditorialHero';
 import TopicNavigation from '../components/TopicNavigation';
 import Contagem from './Contagem';
 import Experiencias from './Experiencias';
@@ -63,6 +67,7 @@ import {
   TURISMO_TELEFONE,
   TURISMO_TELEFONE_HREF,
 } from './dados';
+import '../components/home-layout.css';
 import './parque.css';
 import './parque-editorial.css';
 
@@ -296,42 +301,39 @@ export default async function ParqueDaCidadePage() {
   };
 
   return (
-    <div className="pq pq-editorial">
+    <div className="pq pq-editorial pv-study">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Abertura de destino: fotografia, mensagem curta e ação principal. */}
-      <header className="pq-hero" id="topo">
-        <picture className="pq-hero__bg">
-          <source media="(max-width: 640px)" srcSet="/motosul/parque-mobile.jpg" />
-          <img
-            src="/motosul/parque-aereo.jpg"
-            alt="Vista aérea do Parque da Cidade de Itajubá, com o lago no centro e a Serra da Mantiqueira ao fundo"
-            width="1800"
-            height="1012"
-            fetchPriority="high"
-            decoding="async"
-          />
-        </picture>
+      <EditorialHero
+        id="pq-page-title"
+        eyebrow="Pistaviva / Destinos / Itajubá"
+        title={<>Parque<br /><em>da Cidade.</em></>}
+        media={
+          <picture className="pq-cover-photo">
+            <source media="(max-width: 640px)" srcSet="/motosul/parque-mobile.jpg" />
+            <img src="/motosul/parque-aereo.jpg" alt="Vista aérea do Parque da Cidade de Itajubá, com o lago e a Serra da Mantiqueira ao fundo" width="1800" height="1012" fetchPriority="high" decoding="async" />
+          </picture>
+        }
+        action={{ href: '#visita', label: 'Planejar minha visita' }}
+        footer={<><span>Itajubá · Serra da Mantiqueira · MG</span><a href="#experiencias">Explore o parque ↓</a></>}
+      >
+        Um lago, uma serra e o dia inteiro.<br />
+        Descubra as experiências e prepare sua próxima parada no Sul de Minas.
+      </EditorialHero>
 
-        <div className="pq-hero__veu" aria-hidden="true" />
-
-        <div className="pq-hero__in">
-          <p className="pq-eyebrow">Itajubá · Serra da Mantiqueira · Minas Gerais</p>
-
-          <h1 className="pq-hero__titulo">
-            <span>Parque</span>
-            <span>da Cidade</span>
-          </h1>
-
-          <p className="pq-hero__claim">Um lago, uma serra e o dia inteiro.</p>
-
-          <p className="pq-hero__dek">Escolha seu ritmo no Parque da Cidade de Itajubá.</p>
-
-          <div className="pq-hero__acoes">
-            <a className="pq-btn pq-btn--gold" href="#visita">Planejar minha visita ↗</a>
-          </div>
-        </div>
-      </header>
+      <nav className="study-container study-shortcuts" aria-label="Comece sua visita ao parque">
+        {[
+          { href: '#experiencias', icon: TreePine, title: 'Encontre seu ritmo', subtitle: 'Lago, esporte e cultura' },
+          { href: '#visita', icon: CalendarDays, title: 'Planeje seu dia', subtitle: 'Um roteiro para cada visita' },
+          { href: '#mapa', icon: MapPinned, title: 'Escolha sua parada', subtitle: 'Atrações e caminhos no mapa' },
+        ].map(({ href, icon: Icon, title, subtitle }, index) => (
+          <a href={href} key={href}>
+            <Icon aria-hidden="true" />
+            <span><small>0{index + 1} / ANTES DE SAIR</small><strong>{title}</strong><span>{subtitle}</span></span>
+            <ArrowUpRight aria-hidden="true" />
+          </a>
+        ))}
+      </nav>
 
       <nav className="pq-nav" aria-label="Seções da página">
         <div className="pq-nav__in">
@@ -339,27 +341,12 @@ export default async function ParqueDaCidadePage() {
         </div>
       </nav>
 
-      <section className="pq-arrival" aria-labelledby="pq-arrival-title">
-        <div className="pq-wrap pq-wrap--larga">
-          <div className="pq-arrival__head">
-            <div><p className="pq-eyebrow">Antes de sair</p><h2 className="pq-display" id="pq-arrival-title">Tudo para chegar bem.</h2></div>
-            <p>Um passeio rápido ou o dia inteiro. Comece pelas informações que fazem diferença na sua visita.</p>
-          </div>
-          <dl className="pq-arrival__facts">
-            <div><dt>Endereço</dt><dd>{PARQUE_ENDERECO}</dd><dd><a href={PARQUE_MAPS} target="_blank" rel="noopener noreferrer">Abrir rota ↗</a></dd></div>
-            <div><dt>Horários</dt><dd>Cada operação tem o seu.</dd><dd><a href="#horarios">Consultar horários ↓</a></dd></div>
-            <div><dt>Custos</dt><dd>Área verde e estacionamento gratuitos. Atrações com cobrança própria.</dd><dd><a href="#incluso">Ver o que é pago ↓</a></dd></div>
-            <div><dt>Vai ficar mais?</dt><dd>Faça de Itajubá sua base na Mantiqueira.</dd><dd><a href="#hoteis">Encontrar hospedagem ↓</a></dd></div>
-          </dl>
-          <p className="pq-arrival__note">Guia editorial da Pistaviva · informações levantadas em 26/08/2026. Consulte a operação para confirmar horários e condições. <Link href="/politica-editorial">Fontes e correções</Link>.</p>
-        </div>
-      </section>
-
       <section className="pq-sec pq-sec--escura" id="experiencias">
         <div className="pq-wrap pq-wrap--larga">
-          <p className="pq-cap"><span>Experiências</span></p>
-          <h2 className="pq-display">Encontre seu jeito<br />de viver o parque.</h2>
-          <span className="pq-rule" aria-hidden="true" />
+          <header className="study-heading">
+            <div><p className="study-kicker">Cada visita, uma história</p><h2 className="pq-display">Encontre seu jeito<br />de viver o parque.</h2></div>
+            <p>Uma volta no lago, uma pausa para comer ou uma tarde em família. O próximo encontro começa aqui.</p>
+          </header>
           <Experiencias />
         </div>
       </section>
@@ -388,6 +375,22 @@ export default async function ParqueDaCidadePage() {
               <figcaption>Pedalinho no lago · Parque da Cidade</figcaption>
             </figure>
           </div>
+        </div>
+      </section>
+
+      <section className="pq-arrival" aria-labelledby="pq-arrival-title">
+        <div className="pq-wrap pq-wrap--larga">
+          <div className="pq-arrival__head">
+            <div><p className="pq-eyebrow">Antes de sair</p><h2 className="pq-display" id="pq-arrival-title">Tudo para chegar bem.</h2></div>
+            <p>Um passeio rápido ou o dia inteiro. Comece pelas informações que fazem diferença na sua visita.</p>
+          </div>
+          <dl className="pq-arrival__facts">
+            <div><dt>Endereço</dt><dd>{PARQUE_ENDERECO}</dd><dd><a href={PARQUE_MAPS} target="_blank" rel="noopener noreferrer">Abrir rota ↗</a></dd></div>
+            <div><dt>Horários</dt><dd>Cada operação tem o seu.</dd><dd><a href="#horarios">Consultar horários ↓</a></dd></div>
+            <div><dt>Custos</dt><dd>Área verde e estacionamento gratuitos. Atrações com cobrança própria.</dd><dd><a href="#incluso">Ver o que é pago ↓</a></dd></div>
+            <div><dt>Vai ficar mais?</dt><dd>Faça de Itajubá sua base na Mantiqueira.</dd><dd><a href="#hoteis">Encontrar hospedagem ↓</a></dd></div>
+          </dl>
+          <p className="pq-arrival__note">Guia editorial da Pistaviva · informações levantadas em 26/08/2026. Consulte a operação para confirmar horários e condições. <Link href="/politica-editorial">Fontes e correções</Link>.</p>
         </div>
       </section>
 
@@ -1131,9 +1134,9 @@ export default async function ParqueDaCidadePage() {
       {/* ── FECHO ── */}
       <TopicNavigation current="/parque-da-cidade" />
 
-      <section className="pq-fecho">
-        <div className="pq-wrap">
-          <p className="pq-eyebrow">Sul de Minas</p>
+      <section className="pq-closing study-closing">
+        <div className="study-container">
+          <p className="study-kicker">Sua próxima parada / Sul de Minas</p>
           <h2 className="pq-display pq-display--xl">Um lago, uma serra<br />e o dia inteiro.</h2>
           <div className="pq-hero__acoes">
             <a
