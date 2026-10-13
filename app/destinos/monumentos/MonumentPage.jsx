@@ -21,7 +21,26 @@ export default function MonumentPage() {
   const mapped = MONUMENTOS.filter(m => m.coordinates);
   const ready = MONUMENTOS.filter(m => m.status === 'pronto');
   const url = `${BASE_MONUMENTOS}${MONUMENTOS_HREF}`;
-  const jsonLd = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Monumentos da Rota Biker', url, inLanguage: 'pt-BR', description: `Mapa dos ${mapped.length} monumentos da Rota Biker no Brasil e no Paraguai, com rota e situação do carimbo.`, mainEntity: listaLd('Monumentos da Rota Biker', url, mapped, m => `${BASE_MONUMENTOS}${estadoHref(m.uf)}#monumento-${m.id}`) };
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage', '@id': `${url}#webpage`,
+        name: 'Monumentos da Rota Biker', url, inLanguage: 'pt-BR',
+        description: `Mapa dos ${mapped.length} monumentos da Rota Biker no Brasil e no Paraguai, com rota e situação do carimbo.`,
+        breadcrumb: { '@id': `${url}#breadcrumb` },
+        mainEntity: listaLd('Monumentos da Rota Biker', url, mapped, m => `${BASE_MONUMENTOS}${estadoHref(m.uf)}#monumento-${m.id}`),
+      },
+      {
+        '@type': 'BreadcrumbList', '@id': `${url}#breadcrumb`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Início', item: `${BASE_MONUMENTOS}/` },
+          { '@type': 'ListItem', position: 2, name: 'Destinos', item: `${BASE_MONUMENTOS}/destinos` },
+          { '@type': 'ListItem', position: 3, name: 'Rota Biker', item: url },
+        ],
+      },
+    ],
+  };
   return <div className="mb-page pv-study">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     <header className="study-hero mb-cover" aria-labelledby="mb-page-title">

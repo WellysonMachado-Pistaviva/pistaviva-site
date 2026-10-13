@@ -1,0 +1,193 @@
+{
+  "checked_at_utc": "2026-10-13T11:17:02.591186+00:00",
+  "scope": "Public HTML and sitemap signals; not Google ranking or indexation.",
+  "pages": [
+    {
+      "url": "https://www.pistavivamototurismo.com.br/destinos/roteiros/monumentos-bikers",
+      "title": "Rota Biker: mapa dos 43 monumentos, roteiros e como chegar · Pistaviva",
+      "checks": {
+        "http_200": true,
+        "no_redirect": true,
+        "canonical_self": true,
+        "no_noindex": true,
+        "single_h1": true,
+        "title_present": true,
+        "description_present": true,
+        "in_sitemap": true,
+        "collection_schema": true
+      },
+      "breadcrumb_present": false,
+      "passed": true
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/destinos/monumentos/bahia",
+      "title": "Monumentos Rota Biker na Bahia: 1 parada e como chegar · Pistaviva",
+      "checks": {
+        "http_200": true,
+        "no_redirect": true,
+        "canonical_self": true,
+        "no_noindex": true,
+        "single_h1": true,
+        "title_present": true,
+        "description_present": true,
+        "in_sitemap": true,
+        "collection_schema": true
+      },
+      "breadcrumb_present": true,
+      "passed": true
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/destinos/monumentos/distrito-federal",
+      "title": "Monumentos Rota Biker no Distrito Federal: 1 parada e como chegar · Pistaviva",
+      "checks": {
+        "http_200": true,
+        "no_redirect": true,
+        "canonical_self": true,
+        "no_noindex": true,
+        "single_h1": true,
+        "title_present": true,
+        "description_present": true,
+        "in_sitemap": true,
+        "collection_schema": true
+      },
+      "breadcrumb_present": true,
+      "passed": true
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/destinos/monumentos/goias",
+      "title": "Monumentos Rota Biker em Goiás: 2 paradas e como chegar · Pistaviva",
+      "checks": {
+        "http_200": true,
+        "no_redirect": true,
+        "canonical_self": true,
+        "no_noindex": true,
+        "single_h1": true,
+        "title_present": true,
+        "description_present": true,
+        "in_sitemap": true,
+        "collection_schema": true
+      },
+      "breadcrumb_present": true,
+      "passed": true
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/destinos/monumentos/minas-gerais",
+      "title": "Monumentos Rota Biker em Minas Gerais: 4 paradas e como chegar · Pistaviva",
+      "checks": {
+        "http_200": true,
+        "no_redirect": true,
+        "canonical_self": true,
+        "no_noindex": true,
+        "single_h1": true,
+        "title_present": true,
+        "description_present": true,
+        "in_sitemap": true,
+        "collection_schema": true
+      },
+      "breadcrumb_present": true,
+      "passed": true
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/destinos/monumentos/paraiba",
+      "title": "Monumentos Rota Biker na Paraíba: 1 parada e como chegar · Pistaviva",
+      "checks": {
+        "http_200": true,
+        "no_redirect": true,
+        "canonical_self": true,
+        "no_noindex": true,
+        "single_h1": true,
+        "title_present": true,
+        "description_present": true,
+        "in_sitemap": true,
+        "collection_schema": true
+      },
+      "breadcrumb_present": true,
+      "passed": true
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/destinos/monumentos/parana",
+      "title": "Monumentos Rota Biker no Paraná: 7 paradas e como chegar · Pistaviva",
+      "checks": {
+        "http_200": true,
+        "no_redirect": true,
+        "canonical_self": true,
+        "no_noindex": true,
+        "single_h1": true,
+        "title_present": true,
+        "description_present": true,
+        "in_sitemap": true,
+        "collection_schema": true
+      },
+      "breadcrumb_present": true,
+      "passed": true
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/destinos/monumentos/rio-grande-do-sul",
+      "title": "Monumentos Rota Biker no Rio Grande do Sul: 6 paradas e como chegar · Pistaviva",
+      "checks": {
+        "http_200": true,
+        "no_redirect": true,
+        "canonical_self": true,
+        "no_noindex": true,
+        "single_h1": true,
+        "title_present": true,
+        "description_present": true,
+        "in_sitemap": true,
+        "collection_schema": true
+      },
+      "breadcrumb_present": true,
+      "passed": true
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/destinos/monumentos/santa-catarina",
+      "title": "Monumentos Rota Biker em Santa Catarina: 7 paradas e como chegar · Pistaviva",
+      "checks": {
+        "http_200": true,
+        "no_redirect": true,
+        "canonical_self": true,
+        "no_noindex": true,
+        "single_h1": true,
+        "title_present": true,
+        "description_present": true,
+        "in_sitemap": true,
+        "collection_schema": true
+      },
+      "breadcrumb_present": true,
+      "passed": true
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/destinos/monumentos/sao-paulo",
+      "title": "Monumentos Rota Biker em São Paulo: 13 paradas e como chegar · Pistaviva",
+      "checks": {
+        "http_200": true,
+        "no_redirect": true,
+        "canonical_self": true,
+        "no_noindex": true,
+        "single_h1": true,
+        "title_present": true,
+        "description_present": true,
+        "in_sitemap": true,
+        "collection_schema": true
+      },
+      "breadcrumb_present": true,
+      "passed": true
+    },
+    {
+      "url": "https://www.pistavivamototurismo.com.br/destinos/monumentos/paraguai",
+      "title": "Monumentos Rota Biker no Paraguai: 1 parada e como chegar · Pistaviva",
+      "checks": {
+        "http_200": true,
+        "no_redirect": true,
+        "canonical_self": true,
+        "no_noindex": true,
+        "single_h1": true,
+        "title_present": true,
+        "description_present": true,
+        "in_sitemap": true,
+        "collection_schema": true
+      },
+      "breadcrumb_present": true,
+      "passed": true
+    }
+  ]
+}
