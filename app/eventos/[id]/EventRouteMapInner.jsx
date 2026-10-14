@@ -77,7 +77,7 @@ export default function EventRouteMapInner({ dest, destName = 'Evento', lat = nu
 
   if (phase !== 'done') {
     return (
-      <div style={{ border: '1px solid var(--snow-line)', borderRadius: 14, padding: 20, textAlign: 'center', background: 'var(--bg2)' }}>
+      <div className="event-route-state">
         {phase === 'loading'
           ? <p style={{ margin: 0, color: 'var(--ink-soft)', fontSize: 14.5 }}>{msg || 'Traçando a rota…'}</p>
           : <>
@@ -92,7 +92,7 @@ export default function EventRouteMapInner({ dest, destName = 'Evento', lat = nu
   const real = r.line.length > 2;
   return (
     <div>
-      <div style={{ position: 'relative', borderRadius: 14, overflow: 'hidden', border: '1px solid var(--snow-line)' }}>
+      <div className="event-route-map">
         <MapContainer bounds={bounds} style={{ height: 'min(58vh, 420px)', width: '100%' }} scrollWheelZoom={false} attributionControl={false}>
           <TileLayer url={TILES.topo.url} attribution={TILES.topo.attribution} />
           <Polyline positions={r.line} pathOptions={{ color: PV.black, weight: 7, opacity: 0.45 }} />
@@ -105,12 +105,12 @@ export default function EventRouteMapInner({ dest, destName = 'Evento', lat = nu
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 12 }}>
+      <div className="event-route-stats">
         {[
           { k: 'Distância', v: `${km} km` },
           { k: 'Tempo de moto', v: `~${fmtDur(r.durationSec, r.distanceKm)}` },
         ].map(s => (
-          <div key={s.k} style={{ border: '1px solid var(--snow-line)', borderRadius: 12, padding: '12px 14px', textAlign: 'center' }}>
+          <div key={s.k}>
             <div style={{ fontFamily: 'var(--display)', fontSize: 22, lineHeight: 1.1 }}>{s.v}</div>
             <div style={{ fontSize: 12, color: 'var(--paper-mut)', marginTop: 3 }}>{s.k}</div>
           </div>

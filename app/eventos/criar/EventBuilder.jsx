@@ -1,5 +1,8 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import EventHeading from '../components/EventHeading';
+import './event-builder.css';
 import { useRouter } from 'next/navigation';
 import { useAuth, showToast } from '../../components/AuthProvider';
 import { addEvent, updateEvent, uploadPostImage, uploadCoverImage, prepareCoverImageDataUrl, preparePostImageDataUrl } from '../../../src/services/storage';
@@ -67,17 +70,14 @@ export default function EventBuilder({ initial = null, onDone = null, onClose = 
   const [lineup, setLineup] = useState(initial?.lineup?.length ? initial.lineup.map(a => ({ time: a.time || '', name: a.name || '', image: a.image || '', role: a.role || '' })) : [{ time: '', name: '', image: '', role: '' }]);
   const [schedule, setSchedule] = useState(initial?.schedule?.length ? initial.schedule.filter(s => s?.title || s?.time).map(s => ({ time: s.time || '', title: s.title || '' })) : []);
   const [coord, setCoord] = useState({ lat: initial?.lat ?? null, lng: initial?.lng ?? null });
-  const [tog, setTog] = useState({ rsvp: true, count: true, share: true });
   const [status, setStatus] = useState(initial ? 'saved' : 'draft'); // draft | saved | published
   const [busy, setBusy] = useState(false);
   const [upBanner, setUpBanner] = useState(false);
   const [galUp, setGalUp] = useState(false);
   const [actUp, setActUp] = useState(-1);
 
-  useEffect(() => {
-    document.body.classList.add('evb-takeover');
-    return () => document.body.classList.remove('evb-takeover');
-  }, []);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const previewDialog = useRef(null);
 
   const set = (k, v) => setF(s => ({ ...s, [k]: v }));
 
@@ -174,16 +174,17 @@ export default function EventBuilder({ initial = null, onDone = null, onClose = 
     }
   };
 
+  const previewEvent = { id: initial?.id, title: f.title, category: f.type, date: fmtDate(f.dateIso), time: f.time, local: f.local, type: initial?.type || 'open' };
   const pricePreview = f.entry === 'free' ? 'Grátis' : (f.price || 'Consultar');
   const pill = status === 'published'
     ? { c: 'var(--ok)', t: 'Publicado' } : status === 'saved'
       ? { c: 'var(--warn)', t: 'Rascunho salvo' } : { c: 'var(--mut)', t: 'Rascunho' };
 
   return (
-    <div className="evb">
+    <div className="evb evb-editorial">
       {/* TOP BAR */}
       <header className="topbar">
-        <span className="brand"><span className="spark" />PISTAVIVA</span>
+        
         <span className="crumb"><a href="/eventos">Eventos</a><span>/</span><span className="now">{isEdit ? 'Editar evento' : 'Criar evento'}</span></span>
         <span className="sp" />
         <span className="pill"><span className="d" style={{ background: pill.c }} />{pill.t}</span>
@@ -339,9 +340,7 @@ export default function EventBuilder({ initial = null, onDone = null, onClose = 
                 <div className="field"><span className="lbl">Valor</span><input className="in" type="text" placeholder="Ex: 149,90 ou Consultar" value={f.price} onChange={e => set('price', e.target.value)} /></div>
                 <div className="field"><span className="lbl">Link oficial para comprar ingresso</span><input className="in" type="url" placeholder="https://..." value={f.ticketUrl} onChange={e => set('ticketUrl', e.target.value)} /></div>
               </>}
-              <div className="toggle-row"><div className="t"><b>Confirmação “Eu vou”</b><span>Pilotos confirmam presença</span></div><button className={`sw ${tog.rsvp ? 'on' : ''}`} onClick={() => setTog(t => ({ ...t, rsvp: !t.rsvp }))} /></div>
-              <div className="toggle-row"><div className="t"><b>Mostrar nº de confirmados</b><span>Exibe contador na página</span></div><button className={`sw ${tog.count ? 'on' : ''}`} onClick={() => setTog(t => ({ ...t, count: !t.count }))} /></div>
-              <div className="toggle-row"><div className="t"><b>Permitir compartilhar</b><span>Botões de compartilhar e copiar link</span></div><button className={`sw ${tog.share ? 'on' : ''}`} onClick={() => setTog(t => ({ ...t, share: !t.share }))} /></div>
+              <p className="hint">Sua página inclui confirmação de presença, agenda e compartilhamento.</p>
             </div>
           </section>
         </section>
@@ -370,17 +369,34 @@ export default function EventBuilder({ initial = null, onDone = null, onClose = 
                   </div>
                 </div>
               </div>
-              <p className="pv-note">No site, o piloto abre a <b>página completa do evento</b>.</p>
+              <p className="pv-note">Capa e informações entram no <b>padrão visual Pistaviva</b> automaticamente.</p>
             </div>
           </div>
 
           <div className="pub-actions">
-            <button className="btn btn--ghost btn--block" onClick={() => showToast('Publique o evento pra ver a página completa.')}>{I.eye}Pré-visualizar página</button>
+            <button className="btn btn--ghost btn--block" onClick={() => setPreviewOpen(true)}>{I.eye}Pré-visualizar página</button>
             <button className="btn btn--primary btn--block" onClick={publish} disabled={busy}>{busy ? 'Publicando…' : 'Publicar evento'}</button>
           </div>
           <p className="helper">Suas imagens são enviadas na hora. Publique quando quiser — o evento entra na agenda.</p>
         </aside>
       </div>
+      {previewOpen && createPortal(
+        <dialog className="event-preview-dialog" aria-labelledby="event-preview-title"
+          ref={node => { previewDialog.current = node; if (node && !node.open) node.showModal(); }}
+          onCancel={() => setPreviewOpen(false)} onClose={() => setPreviewOpen(false)}>
+          <div className="event-preview-toolbar"><h2 id="event-preview-title">Prévia do evento</h2><button type="button" autoFocus onClick={() => previewDialog.current?.close()}>Fechar prévia {I.x}</button></div>
+          <div className="evpage pv-study event-study">
+            <EventHeading event={previewEvent} cover={banner} heroImages={initial?.heroImages || []} hasLocation={Boolean(f.local || f.addr)} hasSchedule={schedule.some(s => s.title || s.time)} />
+            <div className="study-container evpage-grid">
+              <div className="event-content">
+                <section className="evpage-block" id="sobre"><p className="study-kicker">O encontro começa no caminho</p><h2>Sobre o evento</h2><div className="evpage-prose">{(f.desc || 'A descrição do seu evento aparece aqui.').split('\n').filter(Boolean).map((text, i) => <p key={i}>{text}</p>)}</div></section>
+                {schedule.some(s => s.title || s.time) && <section className="evpage-block" id="programacao"><h2>Programação</h2>{schedule.filter(s => s.title || s.time).map((s, i) => <p key={i}>{s.time} · {s.title}</p>)}</section>}
+                {(f.local || f.addr) && <section className="evpage-block" id="como-chegar"><h2>Como chegar</h2><p>{f.addr || f.local}</p></section>}
+              </div>
+              <aside className="evpage-aside" id="participar"><div className="event-participation-head"><p className="study-kicker">O próximo encontro é seu</p><h2>Bora junto?</h2></div><div className="ev-ticket"><div className="ev-tt"><span className="ev-price">{pricePreview}</span></div><div className="ev-cta"><p>Após publicar, participantes poderão confirmar presença, adicionar à agenda e compartilhar.</p></div></div></aside>
+            </div>
+          </div>
+        </dialog>, document.body)}
     </div>
   );
 }

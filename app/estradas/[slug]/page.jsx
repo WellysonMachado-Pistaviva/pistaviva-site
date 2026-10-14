@@ -1,3 +1,4 @@
+import PageIntro from '../../components/PageIntro';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ESTRADAS, getEstrada, allEstradaSlugs } from '../../lib/estradas';
@@ -56,7 +57,7 @@ export default async function EstradaPage({ params }) {
   const outras = ESTRADAS.filter((x) => x.slug !== e.slug).slice(0, 4);
 
   return (
-    <div className="ignis ph-page">
+    <div className="ignis ph-page editorial-detail">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(touristLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
@@ -69,11 +70,10 @@ export default async function EstradaPage({ params }) {
         </div>
       </nav>
 
+      <PageIntro eyebrow={e.regiao} title={e.nome} compact>{e.resumo}</PageIntro>
+
       <section className="ph-prof">
         <div className="wrap">
-          <span className="eyebrow">{e.regiao}</span>
-          <h1>{e.nome}</h1>
-          <p className="lede" style={{ maxWidth: 760 }}>{e.resumo}</p>
 
           {/* Ficha técnica */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, margin: '20px 0 28px' }}>

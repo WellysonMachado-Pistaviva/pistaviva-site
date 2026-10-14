@@ -22,6 +22,8 @@ export default function SiteFooter() {
             <Link href="/eventos">Pontos de encontro</Link>
             <Link href="/motosul">Motosul Festival</Link>
             <Link href="/parque-da-cidade">Parque da Cidade de Itajubá</Link>
+            <Link href="/selo">Selo da Estação</Link>
+            <Link href="/selos">Selos colecionáveis</Link>
             <Link href="/rotas">Planejar viagem</Link>
           </div>
           <div className="foot-col">

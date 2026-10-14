@@ -1,3 +1,4 @@
+import EditorialHero from '../../components/EditorialHero';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight, MapPinned, Route, BookOpen } from 'lucide-react';
@@ -8,8 +9,6 @@ import RouteCoverage from './RouteCoverage';
 import RingCards from './RingCards';
 import Sculptors from './Sculptors';
 import { ESTADOS_COM_MONUMENTOS, estadoHref, listaLd, BASE_MONUMENTOS, MONUMENTOS_HREF } from '../../lib/monumentosEstados.mjs';
-import '../../home-experience.css';
-import '../../components/home-layout.css';
 import './monumentos.css';
 
 // lucide-react 1.x não traz mais ícones de marca.
@@ -43,17 +42,12 @@ export default function MonumentPage() {
   };
   return <div className="mb-page pv-study">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-    <header className="study-hero mb-cover" aria-labelledby="mb-page-title">
-      <Cover src="/monumentos/galeria/monumento-encontro.webp" alt="Monumento da Rota Biker entre motos, visitantes e montanhas" priority />
-      <div className="study-hero-shade" aria-hidden="true" />
-      <div className="mb-shell study-hero-content">
-        <p className="study-kicker">Pistaviva / Atlas dos monumentos</p>
-        <h1 id="mb-page-title">Um gesto.<br /><em>Muitos caminhos.</em></h1>
-        <p>Da primeira foto ao próximo carimbo.<br />Conheça os monumentos da Rota Biker e viva as histórias pelo caminho.</p>
-        <a href="#como-chegar" className="study-button">Explorar o mapa <ArrowUpRight size={18} aria-hidden="true" /></a>
-        <div className="study-hero-foot"><span>Brasil + Paraguai · Rota Biker</span><span>Atualizado em {BIKERS_CHECKED_LABEL}</span></div>
-      </div>
-    </header>
+    <EditorialHero id="mb-page-title" className="mb-cover" eyebrow="Pistaviva / Atlas dos monumentos"
+      title={<>Rota Biker.<br /><em>Viva o caminho.</em></>} image="/monumentos/galeria/monumento-encontro.webp" imageAlt="Monumento da Rota Biker entre motos, visitantes e montanhas"
+      action={{ href: '#como-chegar', label: 'Explorar o mapa' }}
+      footer={<><span>Brasil + Paraguai · Rota Biker</span><span>Atualizado em {BIKERS_CHECKED_LABEL}</span></>}>
+      Mapa dos {mapped.length} monumentos com localização, roteiros e passaporte.<br />Escolha suas paradas no Brasil e no Paraguai com a Pistaviva, parceira oficial da Rota Biker.
+    </EditorialHero>
     <nav className="mb-shell study-shortcuts" aria-label="Explore os monumentos">
       {[{ href: '#como-chegar', icon: MapPinned, title: 'Escolha sua parada', subtitle: 'Explore monumentos no mapa' }, { href: '#circuitos', icon: Route, title: 'Encontre seu circuito', subtitle: 'Uma volta, várias histórias' }, { href: '#passaporte', icon: BookOpen, title: 'Guarde o caminho', subtitle: 'Conheça o passaporte da rota' }].map(({ href, icon: Icon, title, subtitle }, index) => <a href={href} key={href}><Icon aria-hidden="true" /><span><small>0{index + 1} / ANTES DE SAIR</small><strong>{title}</strong><span>{subtitle}</span></span><ArrowUpRight aria-hidden="true" /></a>)}
     </nav>
@@ -81,8 +75,8 @@ export default function MonumentPage() {
       <div className="mb-stats"><div><strong>{MONUMENTOS.length}</strong><span>registros na rede</span></div><div><strong>{mapped.length}</strong><span>pontos no mapa</span></div><div><strong>{ready.length}</strong><span>prontos e carimbando</span></div><div><strong>02</strong><span>países para descobrir</span></div></div>
       <MonumentExplorer />
       <RingCards />
-      <nav className="mb-states" aria-labelledby="mb-states-title">
-        <div><p className="mb-kicker">Perto de você</p><h2 id="mb-states-title">Monumentos<br />por estado.</h2><p>Escolha onde você está e veja cada parada com rota pelo Google Maps.</p></div>
+      <nav className="mb-states" id="estados" aria-labelledby="mb-states-title">
+        <div><p className="mb-kicker">Perto de você</p><h2 id="mb-states-title">Rota Biker<br />por estado.</h2><p>Escolha onde você está e veja cada parada com rota pelo Google Maps.</p></div>
         <div className="mb-states-grid">{ESTADOS_COM_MONUMENTOS.map(e => <Link key={e.uf} href={estadoHref(e.uf)}><strong>{e.nome}</strong><span>{e.monumentos.length} {e.monumentos.length === 1 ? 'monumento' : 'monumentos'}</span><ArrowUpRight size={18} aria-hidden="true" /></Link>)}</div>
       </nav>
     </div>
@@ -133,14 +127,40 @@ export default function MonumentPage() {
       <Image src="/monumentos/passaporte-rota-biker.webp" alt="Capa do Passaporte Rota Biker: o cumprimento biker sobre uma rosa dos ventos, com bandeiras de países das Américas e da Europa" width={900} height={1303} />
       <div>
         <p className="mb-kicker">O caderno da viagem</p>
-        <h2 id="mb-passport-title">Um carimbo<br />por parada.</h2>
+        <h2 id="mb-passport-title">Passaporte<br />Rota Biker.</h2>
         <p>Os monumentos prontos carimbam. O Passaporte Rota Biker, publicado pelo Serpenteando Café — o monumento nº 01, em Bocaiúva do Sul —, é onde esses carimbos ficam: cada página guarda a prova de que você esteve ali.</p>
         <p>Hoje {ready.length} dos {MONUMENTOS.length} pontos estão prontos e carimbando. Para saber como conseguir o seu, fale com quem publica.</p>
         <div className="mb-source-links"><a href="https://www.instagram.com/serpenteando.cafe/" target="_blank" rel="noopener noreferrer">Serpenteando Café no Instagram ↗</a><a href="#como-chegar">Montar meu roteiro ↗</a></div>
       </div>
     </section>
     <div className="mb-shell"><RouteCoverage /></div>
-    <section className="mb-shell mb-source"><h2>Um mapa vivo, com fontes abertas.</h2><p>Consulta em {BIKERS_CHECKED_LABEL}: {MONUMENTOS.length} registros, {mapped.length} coordenadas e {MONUMENTOS.filter(m => m.status === 'construcao').length} monumentos em construção. Nº 2 permanece em atualização, sem localização publicada.</p><p>Coordenadas do mapa público da Rota Biker; situações conferidas no catálogo e nas descrições dos pontos. Divergências aparecem nos detalhes. Roteiro sugerido e ferramentas de planejamento desenvolvidos pelo Pistaviva, em guia independente da organização Rota Biker.</p><div className="mb-source-links"><a href={FONTE_BIKERS} target="_blank" rel="noopener noreferrer">Catálogo de referência ↗</a><a href={MAPA_BIKERS} target="_blank" rel="noopener noreferrer">Mapa de referência ↗</a><Link href="/destinos">Mais destinos ↗</Link><Link href="/contato">Sugerir uma atualização ↗</Link></div><p>Mapa: OpenStreetMap. Traçado: OSRM, estimativa rodoviária sem trânsito em tempo real. Marca Rota Biker e imagens fornecidas para este guia; fotografia usada como ilustração, sem atribuir local não confirmado.</p></section>
+    <section className="mb-shell mb-state-faq" aria-labelledby="mb-guide-title">
+      <div><p className="mb-kicker">Antes de pegar a estrada</p><h2 id="mb-guide-title">Rota Biker:<br />por onde começar?</h2></div>
+      <div>
+        <h3>O que é a Rota Biker?</h3>
+        <p>A Rota Biker reúne monumentos do cumprimento entre motociclistas em pontos de parada no Brasil e no Paraguai. Você escolhe quais visitar e monta seu caminho. Este guia da Pistaviva, parceira oficial da Rota Biker, ajuda a encontrar as paradas e planejar o trajeto.</p>
+        <h3>Quantos monumentos estão no mapa?</h3>
+        <p>Na consulta de {BIKERS_CHECKED_LABEL}, o catálogo reúne {MONUMENTOS.length} registros: {mapped.length} têm coordenadas no mapa e {ready.length} estão prontos e carimbando. Registro, ponto mapeado e monumento pronto são contagens diferentes. Confira a situação de cada parada antes da viagem.</p>
+        <h3>Como encontrar um monumento da Rota Biker perto de mim?</h3>
+        <p>Consulte os <a href="#estados">monumentos por estado</a> e abra “Como chegar” na parada escolhida para navegar pelo Google Maps. Para combinar visitas, abra <a href="#como-chegar">Meu roteiro no mapa</a> e use “Sair da minha localização”. A localização é opcional; você também pode escolher um monumento como início.</p>
+        <h3>Onde conseguir o passaporte e carimbar?</h3>
+        <p>O passaporte físico apresentado neste guia é publicado pelo Serpenteando Café, em Bocaiúva do Sul (PR). Consulte o contato na <a href="#passaporte">seção Passaporte Rota Biker</a> para saber como conseguir o seu. Verifique a situação do carimbo e confirme o atendimento com o guardião de cada parada.</p>
+        <h3>Preciso visitar todos os monumentos de uma vez?</h3>
+        <p>Você pode planejar sua viagem por região e escolher quantas paradas incluir. Explore os <a href="#circuitos">circuitos sugeridos</a>, ajuste a sequência no mapa e confirme condições de estrada e atendimento antes de sair.</p>
+      </div>
+    </section>
+    <section className="mb-shell mb-state-faq" aria-labelledby="mb-local-guides">
+      <div><p className="mb-kicker">Prepare cada parada</p><h2 id="mb-local-guides">Guias de<br />monumentos.</h2></div>
+      <div>
+        <h3><Link href="/blog/monumento-rota-biker-27-pedra-do-bau">Monumento 27: Pedra do Baú</Link></h3>
+        <p>Localização e planejamento da visita em São Bento do Sapucaí, na Mantiqueira paulista.</p>
+        <h3><Link href="/blog/monumento-rota-biker-29-sao-jose-do-barreiro">Monumento 29: São José do Barreiro</Link></h3>
+        <p>Prepare sua parada no Rancho, no Vale do Paraíba.</p>
+        <h3><Link href="/blog/monumento-rota-biker-35-sao-lourenco">Monumento 35: São Lourenço</Link></h3>
+        <p>Veja onde fica o monumento e onde carimbar em São Lourenço, Minas Gerais.</p>
+      </div>
+    </section>
+    <section className="mb-shell mb-source"><h2>Um mapa vivo, com fontes abertas.</h2><p>Consulta em {BIKERS_CHECKED_LABEL}: {MONUMENTOS.length} registros, {mapped.length} coordenadas e {MONUMENTOS.filter(m => m.status === 'construcao').length} monumentos em construção. Nº 2 permanece em atualização, sem localização publicada.</p><p>Coordenadas do mapa público da Rota Biker; situações conferidas no catálogo e nas descrições dos pontos. Divergências aparecem nos detalhes. Roteiro sugerido e ferramentas de planejamento desenvolvidos pela Pistaviva, parceira oficial da Rota Biker. Informações de atendimento e carimbo devem ser confirmadas com os guardiões de cada monumento.</p><div className="mb-source-links"><a href={FONTE_BIKERS} target="_blank" rel="noopener noreferrer">Catálogo de referência ↗</a><a href={MAPA_BIKERS} target="_blank" rel="noopener noreferrer">Mapa de referência ↗</a><Link href="/destinos">Mais destinos ↗</Link><Link href="/contato">Sugerir uma atualização ↗</Link></div><p>Mapa: OpenStreetMap. Traçado: OSRM, estimativa rodoviária sem trânsito em tempo real. Marca Rota Biker e imagens fornecidas para este guia; fotografia usada como ilustração, sem atribuir local não confirmado.</p></section>
     <section className="mb-shell study-closing"><p className="study-kicker">O próximo capítulo é seu</p><h2>Qual será<br />sua próxima parada?</h2><a href="#como-chegar" className="study-button">Montar meu roteiro <ArrowUpRight size={18} aria-hidden="true" /></a></section>
   </div>;
 }

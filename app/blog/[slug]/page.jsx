@@ -1,3 +1,4 @@
+import EditorialHero from '../../components/EditorialHero';
 import { isNewsArticle, formatEditorialDate } from '../../lib/news.mjs';
 import ArticlePlanning from '../../components/ArticlePlanning';
 import Link from 'next/link';
@@ -137,7 +138,6 @@ export default async function BlogPost({ params }) {
   const words = String(post.body || '').split(/\s+/).filter(Boolean).length;
   const readMin = Math.max(2, Math.round(words / 200));
   const author = post.author || 'Pistaviva';
-  const initials = author.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
   const dateFmt = formatEditorialDate(post.published_at);
   const updatedFmt = Date.parse(post.updated_at) > Date.parse(post.published_at) ? formatEditorialDate(post.updated_at) : null;
   const related = await getRelatedPosts(slug, post.tags, 3);
@@ -149,7 +149,7 @@ export default async function BlogPost({ params }) {
   };
 
   return (
-    <article className="ignis art">
+    <article className="ignis art editorial-detail">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
@@ -166,29 +166,21 @@ export default async function BlogPost({ params }) {
         </div>
       </nav>
 
-      {/* hero da matéria */}
-      <header className="art-hero">
-        <div className="wrap">
-          <div className="art-meta">
-            {post.tags?.[0] && <span className="tag">{post.tags[0]}</span>}
-            {dateFmt && <time className="date" dateTime={post.published_at}>Publicado em {dateFmt}</time>}
-            <span className="dot" /><span className="read">{readMin} min de leitura</span>
+      <EditorialHero id="article-title" className="editorial-hero--story" eyebrow={post.tags?.[0] || 'Caderno de bordo'} title={post.title}
+        image={post.cover_url} imageAlt={post.title} compact={!post.cover_url}
+        footer={<>
+          <div className="editorial-story-meta">
+            {dateFmt && <time dateTime={post.published_at}>Publicado em {dateFmt}</time>}
+            {updatedFmt && <time dateTime={post.updated_at}>Atualizado em {updatedFmt}</time>}
+            <span>{readMin} min de leitura</span>
           </div>
-          <h1>{post.title}</h1>
-          {updatedFmt && <p>Atualizado em <time dateTime={post.updated_at}>{updatedFmt}</time></p>}
-          {post.excerpt && <p className="sub">{post.excerpt}</p>}
-          <div className="art-byline">
-            <span className="av">{initials}</span>
-            <span className="who"><b>{author === 'Wellyson Machado' || /^(reda[çc][ãa]o\s+)?pistaviva$/i.test(author.trim()) ? <Link href="/sobre" rel="author">{author}</Link> : author}</b><span>Pistaviva · Mototurismo</span></span>
+          <div className="editorial-story-meta">
+            <span>{author === 'Wellyson Machado' || /^(reda[çc][ãa]o\s+)?pistaviva$/i.test(author.trim()) ? <Link href="/sobre" rel="author">{author}</Link> : author}</span>
+            <Link href="/politica-editorial">Fontes, autoria e correções</Link>
           </div>
-          <p><Link href="/politica-editorial">Fontes, autoria e correções</Link></p>
-        </div>
-      </header>
-
-      {/* imagem principal */}
-      {post.cover_url && (
-        <figure className="art-lead"><Cover src={post.cover_url} alt={post.title} sizes="100vw" priority /></figure>
-      )}
+        </>}>
+        {post.excerpt}
+      </EditorialHero>
 
       {/* corpo */}
       <div className="art-body">

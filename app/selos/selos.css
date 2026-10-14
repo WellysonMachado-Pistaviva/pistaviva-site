@@ -1,0 +1,46 @@
+/* Catálogo público de selos (/selos): vitrine editorial, mesma linguagem do /selo. */
+.selos-wrap { padding-block: 48px 96px; display: grid; gap: 64px; }
+.selos-trilha { font-size: 14px; color: var(--pv-muted-dark); }
+.selos-trilha a { text-decoration: underline; text-underline-offset: 4px; }
+.selos-topo { display: grid; gap: 16px; max-width: 760px; }
+.selos-topo h1 { font-family: var(--display); font-size: clamp(44px, 8vw, 88px); line-height: .95; text-transform: uppercase; }
+.selos-topo h1 em { color: var(--pv-orange-deep); font-style: normal; }
+.selos-topo p { font-size: 18px; line-height: 1.6; color: var(--pv-muted-dark); }
+.selos-topo .study-button { justify-self: start; }
+.selos-h2 { font-family: var(--display); font-size: clamp(28px, 4vw, 40px); text-transform: uppercase; margin-bottom: 24px; }
+.selos-colecoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.selos-colecao { display: grid; gap: 12px; align-content: start; padding: 32px; background: var(--pv-white); border: 1px solid var(--pv-line-light-2); border-top: 4px solid var(--pv-orange); color: var(--pv-muted-dark); line-height: 1.6; }
+.selos-colecao strong { font-family: var(--display); font-size: 32px; line-height: 1; text-transform: uppercase; color: var(--pv-text-dark); }
+.selos-colecao:hover { border-color: var(--pv-orange); }
+.selos-ver { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: var(--pv-text-dark); }
+.selos-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 24px; }
+.selos-card { display: grid; gap: 4px; justify-items: center; text-align: center; padding: 24px 16px; background: var(--pv-white); border: 1px solid var(--pv-line-light-2); }
+.selos-card:hover { border-color: var(--pv-orange); }
+.selos-card-arte { display: grid; place-items: center; width: 140px; height: 140px; margin-bottom: 8px; }
+.selos-card-arte img { width: 100%; height: 100%; object-fit: contain; }
+.selos-card-arte > span { display: grid; place-items: center; width: 100%; height: 100%; border-radius: var(--pv-radius-pill); background: var(--selos-cor, var(--pv-orange-pale)); font-family: var(--display); font-size: 56px; }
+.selos-card strong { font-size: 17px; color: var(--pv-text-dark); }
+.selos-card small { font-size: 13px; color: var(--pv-muted-dark); }
+.selos-card .selos-card-total { color: var(--pv-orange-deep); font-weight: 700; }
+.selos-vazio { color: var(--pv-muted-dark); }
+.selos-vazio a { text-decoration: underline; }
+.selos-como { display: grid; gap: 16px; max-width: 760px; }
+.selos-como ol { margin: 0; padding-left: 24px; display: grid; gap: 16px; color: var(--pv-muted-dark); line-height: 1.6; }
+.selos-como strong { display: block; color: var(--pv-text-dark); }
+.selos-como .study-button { justify-self: start; }
+.selos-detalhe { display: grid; grid-template-columns: minmax(0, 420px) 1fr; gap: 64px; align-items: start; }
+.selos-detalhe-arte img { width: 100%; height: auto; }
+.selos-detalhe-texto { display: grid; gap: 20px; }
+.selos-detalhe-texto h1 { font-family: var(--display); font-size: clamp(44px, 7vw, 80px); line-height: .95; text-transform: uppercase; }
+.selos-detalhe-texto .study-button { justify-self: start; }
+.selos-resumo { font-size: 20px; line-height: 1.55; }
+.selos-fatos { display: grid; gap: 16px; margin: 0; padding-block: 24px; border-block: 1px solid var(--pv-line-light-2); }
+.selos-fatos dt { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--pv-muted-dark); }
+.selos-fatos dd { margin: 4px 0 0; font-size: 17px; }
+.selos-nota { font-size: 14px; color: var(--pv-muted-dark); }
+@media (max-width: 768px) {
+  .selos-detalhe { grid-template-columns: 1fr; gap: 32px; }
+  .selos-detalhe-arte { max-width: 320px; justify-self: center; }
+  .selos-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .selos-card-arte { width: 112px; height: 112px; }
+}

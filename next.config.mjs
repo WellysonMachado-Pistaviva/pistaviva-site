@@ -38,7 +38,7 @@ const nextConfig = {
     // Só reporta violações no console do navegador (campo blocked-uri) pra medir o que
     // uma política enforced quebraria antes de travar de verdade. Allowlist inclui o
     // ecossistema Google Ads/AdSense, Supabase (REST+realtime), Vercel, GA e as APIs
-    // públicas usadas no client (open-meteo, nominatim, FIPE parallelum).
+    // públicas usadas no client (open-meteo, nominatim, FIPE parallelum, ViaCEP).
     const cspReportOnly = [
       "default-src 'self'",
       "base-uri 'self'",
@@ -49,7 +49,7 @@ const nextConfig = {
       "style-src 'self' 'unsafe-inline' https://*.googleapis.com https://*.gstatic.com",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data: https://*.gstatic.com",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://*.google-analytics.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://pagead2.googlesyndication.com https://api.open-meteo.com https://geocoding-api.open-meteo.com https://nominatim.openstreetmap.org https://parallelum.com.br https://*.vercel-insights.com",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://*.google-analytics.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://pagead2.googlesyndication.com https://api.open-meteo.com https://geocoding-api.open-meteo.com https://nominatim.openstreetmap.org https://parallelum.com.br https://viacep.com.br https://*.vercel-insights.com",
       "frame-src 'self' https://www.youtube.com https://youtube.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://news.google.com",
       "media-src 'self' https: blob:",
       "worker-src 'self' blob:",
@@ -77,6 +77,33 @@ const nextConfig = {
           { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
           { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
         ],
+      },
+      {
+        // Link de parceiro: o token na URL é a credencial.
+        source: '/selo/parceiro/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+          { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+        ],
+      },
+      {
+        // SVG do selo aberto direto no navegador: nada executa, só desenho.
+        source: '/selo/:area/:id/selo.svg',
+        headers: [{ key: 'Content-Security-Policy', value: "default-src 'none'; style-src 'unsafe-inline'; img-src data:" }],
+      },
+      {
+        // Link pessoal da coleção: o código na URL é a credencial e a página tem dados pessoais.
+        source: '/selo/m/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+          { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+        ],
+      },
+      {
+        source: '/api/cron/:path*',
+        headers: [{ key: 'Cache-Control', value: 'private, no-store, max-age=0' }],
       },
       {
         source: '/api/admin/:path*',

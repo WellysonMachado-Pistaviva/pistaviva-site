@@ -20,6 +20,8 @@ const MENU = [
   { href: '/desafios', t: 'Desafios', s: 'Complete & carimbe', i: <><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0Z" /><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4" /></> },
   { href: '/destinos', t: 'Destinos', s: 'Próxima saída', i: <><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></> },
   { href: '/parque-da-cidade', t: 'Parque da Cidade', s: 'Guia de Itajubá', i: <><path d="M12 22V8" /><path d="M5 12c0-4 3-8 7-10 4 2 7 6 7 10a7 7 0 0 1-14 0Z" /><path d="m8 15 4-3 4 3" /></> },
+  { href: '/selo', t: 'Selo da Estação', s: 'Passaporte de Itajubá', i: <><circle cx="12" cy="10" r="6" /><path d="M9 10h6M12 7v6M7 21h10M12 16v5" /></> },
+  { href: '/selos', t: 'Selos', s: 'Colecione na estrada', i: <><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M8 4v16M4 9h4M4 14h4" /></> },
   { href: '/guias', t: 'Guias', s: 'Antes da partida', i: <><path d="M4 5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" /><path d="M8 8h6M8 12h8M8 16h5" /></> },
   { href: '/fipe', t: 'FIPE', s: 'Consulta grátis', i: <><path d="M12 14 16 9" /><circle cx="12" cy="14" r="1.6" fill="currentColor" /><path d="M4 18a8 8 0 1 1 16 0" /></> },
   { href: '/blog', t: 'Matérias', s: 'Caderno de bordo', i: <><path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 0-2 2V4Z" /></> },

@@ -1,3 +1,4 @@
+import EditorialHero from '../components/EditorialHero';
 import Link from 'next/link';
 import { ArrowUpRight, Compass, MapPin, MapPinned, Route } from 'lucide-react';
 import Cover from '../components/Cover';
@@ -5,8 +6,6 @@ import { DESTINOS, getDestino } from '../lib/destinos';
 import { FOTOS_DESTINOS } from '../lib/destinosDiscovery.mjs';
 import DestinosExplorer from './DestinosExplorer';
 import { ROTEIROS_CURADOS } from '../lib/roteirosCurados.mjs';
-import '../home-experience.css';
-import '../components/home-layout.css';
 import './destinos.css';
 import { MONUMENTOS, BIKERS_CHECKED_LABEL } from '../lib/monumentosBikers.mjs';
 
@@ -48,36 +47,15 @@ export default function DestinosIndex() {
   return (
     <div className="pv-study dx-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <header className="study-hero dx-cover" aria-labelledby="dx-page-title">
-        <Cover src={foto.src} alt={foto.alt} priority />
-        <div className="study-hero-shade" aria-hidden="true" />
-        <div className="study-container study-hero-content">
-          <p className="study-kicker">Pistaviva / Caderno de destinos</p>
-          <h1 id="dx-page-title">Escolha o destino.<br /><em>Viva o caminho.</em></h1>
-          <p>Estrada Real, vinícolas, serras e monumentos biker.<br />Encontre sua próxima parada e planeje como chegar.</p>
-          <a href="#explorar" className="study-button">Encontre sua próxima saída <ArrowUpRight aria-hidden="true" /></a>
-          <div className="study-hero-foot"><Link href={`/destinos/${rastro.slug}`}>01 / Rio do Rastro · SC — abrir o guia ↗</Link><Credito slug={rastro.slug} /></div>
-        </div>
-      </header>
+      <EditorialHero id="dx-page-title" className="dx-cover" eyebrow="Pistaviva / Caderno de destinos"
+        title={<>Escolha o destino.<br /><em>Viva o caminho.</em></>} image={foto.src} imageAlt={foto.alt}
+        action={{ href: '#explorar', label: 'Encontre sua próxima saída' }}
+        footer={<><Link href={`/destinos/${rastro.slug}`}>01 / Rio do Rastro · SC — abrir o guia ↗</Link><Credito slug={rastro.slug} /></>}>
+        Estrada Real, vinícolas, serras e monumentos biker.<br />Encontre sua próxima parada e planeje como chegar.
+      </EditorialHero>
       <nav className="study-container study-shortcuts" aria-label="Planeje sua próxima saída">
         {[{ href: '#explorar', icon: Compass, title: 'Escolha o destino', subtitle: 'Serras, vinícolas e grandes viagens' }, { href: '/destinos/caminho-dos-diamantes', icon: Route, title: 'Siga a Estrada Real', subtitle: 'Mapas, etapas e informações de piso' }, { href: '/destinos/roteiros/monumentos-bikers', icon: MapPinned, title: 'Encontre um monumento', subtitle: `${mapeados} locais da Rota Biker` }].map(({ href, icon: Icon, title, subtitle }, index) => <Link href={href} key={href}><Icon aria-hidden="true" /><span><small>0{index + 1} / ANTES DE SAIR</small><strong>{title}</strong><span>{subtitle}</span></span><ArrowUpRight aria-hidden="true" /></Link>)}
       </nav>
-      <div className="study-container">
-        <DestinosExplorer destinos={[...ROTEIROS_CURADOS, ...destinos.map(({ slug, nome, regiao, bandeira, resumo, dificuldade }) => ({ slug, nome, regiao, bandeira, resumo, dificuldade }))]} />
-      </div>
-      <section className="study-campaign dx-biker" aria-labelledby="biker-feature-title">
-        <Cover src="/monumentos/galeria/monumento-13-rota-513.webp" alt="Casal de motociclistas diante do monumento do Rota 513" sizes="100vw" />
-        <div className="study-campaign-shade" aria-hidden="true" />
-        <div className="study-container study-campaign-content">
-          <p className="study-kicker">Rota Biker / Brasil + Paraguai</p>
-          <h2 id="biker-feature-title">O cumprimento<br />vira <em>destino.</em></h2>
-          <p>{mapeados} locais para colocar no radar. Do café na serra ao encontro com os guardiões, encontre seu próximo monumento.</p>
-          <div className="dx-biker-stats"><div><strong>{MONUMENTOS.filter(m => m.status === 'pronto').length}</strong><span>prontos e carimbando</span></div><div><strong>{MONUMENTOS.filter(m => m.status === 'construcao').length}</strong><span>em construção</span></div><div><strong>09</strong><span>UFs + Paraguai</span></div></div>
-          <Link className="study-button" href="/destinos/roteiros/monumentos-bikers">Explorar os monumentos <ArrowUpRight aria-hidden="true" /></Link>
-          <p className="dx-biker-note">{MONUMENTOS.length} registros no catálogo oficial; nº 2 em atualização. Situação consultada em {BIKERS_CHECKED_LABEL}.</p>
-        </div>
-        <span className="study-campaign-mark" aria-hidden="true">ROTA BIKER / MONUMENTOS</span>
-      </section>
       <section className="ride-experiences" aria-labelledby="historias-titulo">
         <div className="wrap">
           <header className="ride-section-head">
@@ -94,6 +72,22 @@ export default function DestinosIndex() {
           </div>
           <p className="dx-story-credits">{historias.map((h) => <Credito slug={h.slug} key={h.slug} />)}</p>
         </div>
+      </section>
+      <div className="study-container">
+        <DestinosExplorer destinos={[...ROTEIROS_CURADOS, ...destinos.map(({ slug, nome, regiao, bandeira, resumo, dificuldade }) => ({ slug, nome, regiao, bandeira, resumo, dificuldade }))]} />
+      </div>
+      <section className="study-campaign dx-biker" aria-labelledby="biker-feature-title">
+        <Cover src="/monumentos/galeria/monumento-13-rota-513.webp" alt="Casal de motociclistas diante do monumento do Rota 513" sizes="100vw" />
+        <div className="study-campaign-shade" aria-hidden="true" />
+        <div className="study-container study-campaign-content">
+          <p className="study-kicker">Rota Biker / Brasil + Paraguai</p>
+          <h2 id="biker-feature-title">O cumprimento<br />vira <em>destino.</em></h2>
+          <p>{mapeados} locais para colocar no radar. Do café na serra ao encontro com os guardiões, encontre seu próximo monumento.</p>
+          <div className="dx-biker-stats"><div><strong>{MONUMENTOS.filter(m => m.status === 'pronto').length}</strong><span>prontos e carimbando</span></div><div><strong>{MONUMENTOS.filter(m => m.status === 'construcao').length}</strong><span>em construção</span></div><div><strong>09</strong><span>UFs + Paraguai</span></div></div>
+          <Link className="study-button" href="/destinos/roteiros/monumentos-bikers">Explorar os monumentos <ArrowUpRight aria-hidden="true" /></Link>
+          <p className="dx-biker-note">{MONUMENTOS.length} registros no catálogo oficial; nº 2 em atualização. Situação consultada em {BIKERS_CHECKED_LABEL}.</p>
+        </div>
+        <span className="study-campaign-mark" aria-hidden="true">ROTA BIKER / MONUMENTOS</span>
       </section>
       <section className="study-editorial dx-fieldnotes" aria-labelledby="notas-titulo">
         <div className="study-container study-editorial-grid">

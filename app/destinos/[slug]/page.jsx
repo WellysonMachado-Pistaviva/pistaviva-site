@@ -1,3 +1,4 @@
+import PageIntro from '../../components/PageIntro';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { DESTINOS, getDestino, allDestinoSlugs } from '../../lib/destinos';
@@ -57,7 +58,7 @@ export default async function DestinoPage({ params }) {
     .slice(0, 4);
 
   return (
-    <div className="ignis ph-page">
+    <div className="ignis ph-page editorial-detail">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
@@ -70,11 +71,10 @@ export default async function DestinoPage({ params }) {
         </div>
       </nav>
 
+      <PageIntro eyebrow={`${d.bandeira} ${d.regiao}`} title={d.nome} compact>{d.resumo}</PageIntro>
+
       <section className="ph-prof">
         <div className="wrap">
-          <span className="eyebrow">{d.bandeira} {d.regiao}</span>
-          <h1>{d.nome}</h1>
-          <p className="lede" style={{ maxWidth: 760 }}>{d.resumo}</p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, margin: '20px 0 28px' }}>
             {[

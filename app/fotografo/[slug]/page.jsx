@@ -1,3 +1,4 @@
+import PageIntro from '../../components/PageIntro';
 import Link from 'next/link';
 import Cover from '../../components/Cover';
 import PhotoCarousel from '../../components/PhotoCarousel';
@@ -51,7 +52,7 @@ export default async function FotografoPage({ params }) {
   const mapsUrl = f.lat && f.lng ? `https://www.google.com/maps/search/?api=1&query=${f.lat},${f.lng}` : null;
 
   return (
-    <div className="ignis ph-page">
+    <div className="ignis ph-page editorial-detail">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
@@ -63,10 +64,10 @@ export default async function FotografoPage({ params }) {
         </div>
       </nav>
 
+      <PageIntro eyebrow={`Fotógrafo${f.local ? ` · ${f.local}` : ''}`} title={f.nome} compact></PageIntro>
+
       <section className="ph-prof">
         <div className="wrap">
-          <span className="eyebrow">Fotógrafo{f.local ? ' · ' + f.local : ''}</span>
-          <h1>{f.nome}</h1>
           <div style={{ marginTop: 10 }}><LiveBadge dias={f.horario_dias} inicio={f.horario_inicio} fim={f.horario_fim} /></div>
 
           <div className="ph-layout">

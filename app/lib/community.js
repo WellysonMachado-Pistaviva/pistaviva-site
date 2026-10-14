@@ -9,7 +9,8 @@ export async function getCommunityPosts(limit = 30) {
       .from('pv_posts')
       .select('id, author_name, content, image_url, created_at')
       .order('created_at', { ascending: false })
-      .limit(limit);
+      .limit(limit)
+      .abortSignal(AbortSignal.timeout(5000));
     if (error) return [];
     return (data || []).map((p) => {
       let c = { city: '', uf: '', category: '', comment: '' };

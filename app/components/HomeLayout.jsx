@@ -1,27 +1,21 @@
+import EditorialHero from './EditorialHero';
 import Link from 'next/link';
 import { ArrowUpRight, Compass, Route, Users } from 'lucide-react';
 import Cover from './Cover';
 import HomeExperiences from './HomeExperiences';
 import DestinationGallery from './HomeDestinationGallery';
 import HomeMonuments from './HomeMonuments';
-import '../home-experience.css';
-import './home-layout.css';
 
 export default function HomeLayout({ preview = false }) {
   return (
     <div className="pv-study">
       {preview && <div className="study-note"><span>Layout aprovado · Pistaviva</span><Link href="/preview-layout/anterior">Comparar com home anterior ↗</Link></div>}
-      <section className="study-hero" aria-labelledby="study-title">
-        <Cover src="/materias/bmw-motorrad-fest-2026/comboio-serra.jpg" alt="Comboio de motociclistas percorrendo a serra" priority />
-        <div className="study-hero-shade" aria-hidden="true" />
-        <div className="study-container study-hero-content">
-          <p className="study-kicker">Pistaviva / Pessoas. Lugares. Histórias.</p>
-          <h1 id="study-title">A estrada chama.<br /><em>Viva o caminho.</em></h1>
-          <p>Uma serra, uma boa parada, gente para encontrar.<br />Sua próxima história começa quando você sai.</p>
-          <a className="study-button" href="#descobrir">Encontre seu destino <ArrowUpRight aria-hidden="true" /></a>
-          <div className="study-hero-foot"><span>01 / Pelo caminho, novas histórias</span><a href="#descobrir">Explore mais ↓</a></div>
-        </div>
-      </section>
+      <EditorialHero id="study-title" eyebrow="Pistaviva / Pessoas. Lugares. Histórias." title={<>A estrada chama.<br /><em>Viva o caminho.</em></>}
+        image="/materias/bmw-motorrad-fest-2026/comboio-serra.jpg" imageAlt="Comboio de motociclistas percorrendo a serra"
+        action={{ href: '#descobrir', label: 'Encontre seu destino' }}
+        footer={<><span>01 / Pelo caminho, novas histórias</span><a href="#descobrir">Explore mais ↓</a></>}>
+        Uma serra, uma boa parada, gente para encontrar.<br />Sua próxima história começa quando você sai.
+      </EditorialHero>
       <nav className="study-container study-shortcuts" aria-label="Planeje sua próxima saída">
         {[{ href: '#descobrir', icon: Compass, title: 'Escolha o destino', subtitle: 'Encontre seu próximo horizonte' }, { href: '/rotas', icon: Route, title: 'Desenhe o caminho', subtitle: 'Planeje sua rota e suas paradas' }, { href: '/eventos', icon: Users, title: 'Encontre sua turma', subtitle: 'Veja a agenda de encontros' }].map(({ href, icon: Icon, title, subtitle }, index) => <Link key={href} href={href}><Icon aria-hidden="true" /><span><small>0{index + 1} / ANTES DE SAIR</small><strong>{title}</strong><span>{subtitle}</span></span><ArrowUpRight aria-hidden="true" /></Link>)}
       </nav>

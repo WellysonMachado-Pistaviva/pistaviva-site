@@ -120,3 +120,15 @@
   .editorial-hero--compact .study-hero-content { padding-block: 40px; }
   .editorial-hero .study-hero-foot { flex-wrap: wrap; }
 }
+.pv-study.editorial-hero--story h1 { font-size: clamp(48px, 6vw, 88px); max-width: 24ch; text-wrap: balance; }
+.editorial-story-meta { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+.editorial-detail { --pv-radius: 0; --pv-radius-sm: 0; }
+.editorial-detail > .ph-prof { padding-block: 96px; }
+.editorial-detail > .ph-prof > .wrap, .editorial-detail .art-body > .wrap { width: min(1280px, calc(100% - 96px)); max-width: none; padding-inline: 0; }
+@media (max-width: 1024px) {
+  .editorial-detail > .ph-prof > .wrap, .editorial-detail .art-body > .wrap { width: calc(100% - 48px); }
+}
+@media (max-width: 640px) {
+  .editorial-detail > .ph-prof { padding-block: 56px; }
+  .editorial-detail > .ph-prof > .wrap, .editorial-detail .art-body > .wrap { width: calc(100% - 40px); }
+}

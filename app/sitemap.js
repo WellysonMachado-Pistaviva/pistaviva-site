@@ -10,6 +10,7 @@ import { MONUMENTOS_COM_PAGINA, monumentoHref } from './lib/monumentosPaginas.mj
 import { DESAFIOS } from './lib/desafios';
 import { getEventsForSeo } from './lib/events';
 import { FOTOS as FOTOS_PARQUE } from './parque-da-cidade/dados';
+import { CATALOGO, COLECOES } from './lib/selo/catalogo.mjs';
 
 // Atualiza descoberta de publicações sem depender de novo deploy.
 export const revalidate = 3600;
@@ -119,6 +120,14 @@ export default async function sitemap() {
     url: `${BASE}/estradas/${e.slug}`,
   }));
 
+  // ── Selos colecionáveis (catálogo do passaporte) ──
+  const selos = [
+    { url: `${BASE}/selo` },
+    { url: `${BASE}/selos` },
+    ...COLECOES.map((c) => ({ url: `${BASE}/selos/colecoes/${c.slug}` })),
+    ...CATALOGO.map((s) => ({ url: `${BASE}/selos/${s.slug}`, ...safeImages(s.arte) })),
+  ];
+
   // ── Guias práticos (conteúdo editorial fixo) ──
   const guias = GUIAS.map((g) => ({
     url: `${BASE}/guias/${g.slug}`,
@@ -144,5 +153,5 @@ export default async function sitemap() {
     }));
   } catch { /* DB indisponível no build */ }
 
-  return [...staticEntries, ...monumentos, ...estradas, ...guias, ...destinos, ...desafios, ...posts, ...fotos, ...eventos];
+  return [...staticEntries, ...selos, ...monumentos, ...estradas, ...guias, ...destinos, ...desafios, ...posts, ...fotos, ...eventos];
 }

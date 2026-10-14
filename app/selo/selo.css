@@ -1,0 +1,397 @@
+/* Selo da Estação — escopo .selo-app, na identidade Pistaviva (tokens de
+   app/tokens.css). Mobile first, uma mão só: alvos de 48px+, contraste AA.
+   As 4 cores de estação (--pv-selo-*) só aparecem na tela do balcão e nos selos. */
+
+body:has(.selo-app):not(:has(.selo-landing, .selo-public-page)) .ed-stack > :not(main),
+body:has(.selo-app):not(:has(.selo-landing, .selo-public-page)) .topo,
+body:has(.selo-app):not(:has(.selo-landing, .selo-public-page)) .pv-skip-link { display: none !important; }
+body:has(.selo-app):not(:has(.selo-landing, .selo-public-page)) { background: var(--pv-offwhite); padding: 0 !important; }
+
+.selo-app {
+  color-scheme: light;
+  min-height: 100dvh;
+  background: var(--pv-offwhite);
+  color: var(--pv-text-dark);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+}
+.selo-app *, .selo-app *::before, .selo-app *::after { box-sizing: border-box; }
+.selo-app img { background: transparent; }
+.selo-app h1, .selo-app h2 {
+  font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: .01em; line-height: 1; margin: 0;
+}
+.selo-app a { color: inherit; text-underline-offset: 3px; }
+.selo-app :focus-visible { outline: 3px solid var(--pv-orange); outline-offset: 2px; }
+.selo-app .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+.selo-wrap { max-width: 520px; margin: 0 auto; padding: var(--pv-space-3) var(--pv-space-2) var(--pv-space-4); }
+.selo-pilha { display: grid; gap: var(--pv-space-2); }
+.selo-topo { display: flex; align-items: center; gap: 12px; margin-bottom: var(--pv-space-3); }
+.selo-topo img { width: 56px; height: 56px; flex: none; }
+.selo-topo h1 { font-size: 34px; }
+.selo-topo p { margin: var(--pv-space-0) 0 0; color: var(--pv-muted-dark); font-size: 15px; }
+.selo-kicker {
+  display: block; font-family: var(--mono); font-weight: 700; font-size: 13px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--pv-orange-deep); margin-bottom: var(--pv-space-0);
+}
+
+.selo-aviso {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: var(--pv-white); border: 1px solid var(--pv-line-light-2); border-left: 4px solid var(--pv-orange);
+  border-radius: var(--pv-radius-sm); padding: var(--pv-space-1) 12px; margin-bottom: var(--pv-space-2); font-size: 15px;
+}
+.selo-aviso a { font-weight: 700; white-space: nowrap; min-height: 48px; display: inline-flex; align-items: center; color: var(--pv-orange-deep); }
+
+/* Campos */
+.selo-form { display: grid; gap: 20px; }
+.selo-campo { display: grid; gap: var(--pv-space-1); }
+.selo-campo > label, .selo-legenda {
+  font-family: var(--mono); font-weight: 700; font-size: 14px; letter-spacing: .06em; text-transform: uppercase;
+}
+.selo-campo small, .selo-dica { color: var(--pv-muted-dark); font-size: 14px; font-weight: 400; letter-spacing: 0; text-transform: none; }
+.selo-input, .selo-select {
+  width: 100%; min-height: 52px; padding: 12px 16px; font: inherit; font-size: 18px; color: var(--pv-text-dark);
+  background: var(--pv-white); border: 1px solid var(--pv-black-5); border-radius: var(--pv-radius-sm); appearance: none;
+}
+.selo-input:focus, .selo-select:focus { border-color: var(--pv-orange); }
+.selo-select {
+  background-image: linear-gradient(45deg, transparent 50%, var(--pv-text-dark) 50%), linear-gradient(135deg, var(--pv-text-dark) 50%, transparent 50%);
+  background-position: calc(100% - 22px) 50%, calc(100% - 16px) 50%; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 40px;
+}
+.selo-input[aria-invalid="true"], .selo-select[aria-invalid="true"] { border-color: var(--pv-danger-deep); box-shadow: 0 0 0 1px var(--pv-danger-deep); }
+.selo-erro { color: var(--pv-danger-deep); font-weight: 700; font-size: 15px; margin: 0; }
+.selo-linha { display: grid; grid-template-columns: 96px 1fr; gap: 12px; }
+
+fieldset.selo-campo { border: 0; padding: 0; margin: 0; min-width: 0; }
+.selo-opcoes { display: grid; gap: var(--pv-space-1); margin-top: var(--pv-space-0); }
+.selo-check {
+  display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 12px 16px;
+  background: var(--pv-white); border: 1px solid var(--pv-black-5); border-radius: var(--pv-radius-sm); cursor: pointer; font-size: 17px;
+}
+.selo-check:has(input:checked) { background: var(--pv-black-2); border-color: var(--pv-black-2); color: var(--pv-text-light); }
+.selo-check input { width: 24px; height: 24px; flex: none; accent-color: var(--pv-orange); margin: 0; }
+.selo-check.simples { background: transparent; border: 0; padding: var(--pv-space-1) 0; align-items: flex-start; }
+.selo-check.simples:has(input:checked) { background: transparent; color: var(--pv-text-dark); }
+.selo-check.simples input { margin-top: 0; }
+
+.selo-foto { display: grid; gap: 12px; }
+.selo-foto-botao { position: relative; }
+.selo-foto-botao input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+.selo-foto-preview { display: flex; align-items: center; gap: 12px; }
+.selo-foto-preview img { width: 84px; height: 84px; object-fit: cover; border-radius: var(--pv-radius-sm); border: 1px solid var(--pv-black-5); }
+
+.selo-hp { position: absolute !important; left: -9999px !important; width: 1px; height: 1px; overflow: hidden; }
+
+/* Botões — mesmo desenho do primário do site (design-system.css) */
+.selo-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--pv-space-1); width: 100%; min-height: 56px; padding: 12px 20px;
+  font-family: var(--mono); font-weight: 700; font-size: 17px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--pv-black); background: var(--pv-orange); border: 1px solid var(--pv-orange); border-radius: var(--pv-radius-sm);
+  cursor: pointer; text-decoration: none; transition: background var(--pv-motion), border-color var(--pv-motion);
+}
+.selo-btn:hover { background: var(--pv-orange-soft); }
+.selo-btn[disabled] { opacity: .6; cursor: progress; }
+.selo-btn.secundario { background: transparent; border-color: var(--pv-black-5); color: var(--pv-text-dark); min-height: 52px; }
+.selo-btn.claro { background: var(--pv-white); border-color: var(--pv-black-5); color: var(--pv-text-dark); }
+.selo-acoes { display: grid; gap: 12px; }
+
+.selo-falha {
+  background: var(--pv-white); border: 1px solid var(--pv-danger-deep); border-left: 4px solid var(--pv-danger-deep);
+  border-radius: var(--pv-radius-sm); padding: var(--pv-space-2); display: grid; gap: 12px;
+}
+.selo-falha p { margin: 0; font-weight: 700; color: var(--pv-danger-deep); font-size: 18px; }
+
+/* Tela do balcão: fundo na cor da estação (vem do JSX em --selo-cor) */
+.selo-liberado { background: var(--selo-cor); color: var(--pv-white); min-height: 100dvh; display: flex; flex-direction: column; }
+.selo-liberado .selo-wrap { flex: 1; display: flex; flex-direction: column; gap: var(--pv-space-2); text-align: center; }
+.selo-liberado .selo-coruja { width: 112px; height: 112px; margin: 0 auto; background: var(--pv-offwhite); border-radius: var(--pv-radius-pill); padding: 12px; border: 4px solid var(--pv-white); }
+.selo-liberado h1 { font-size: clamp(48px, 15vw, 76px); }
+.selo-liberado h1 span { display: inline-block; margin-top: var(--pv-space-1); padding: var(--pv-space-0) 16px; background: var(--pv-orange); color: var(--pv-black); border-radius: var(--pv-radius-sm); }
+.selo-liberado .quem { font-size: 22px; font-weight: 700; margin: 0; }
+.selo-liberado .quem small { display: block; font-size: 18px; font-weight: 400; }
+.selo-numero { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 24px; margin: 0; line-height: 1.1; }
+.selo-numero b { font-size: 48px; display: block; letter-spacing: .04em; }
+.selo-relogio { font-variant-numeric: tabular-nums; font-family: var(--display); font-weight: 800; font-size: 32px; background: rgba(0,0,0,.24); border-radius: var(--pv-radius-sm); padding: var(--pv-space-1) 12px; margin: 0; }
+.selo-relogio small { display: block; font-size: 16px; font-family: var(--font); font-weight: 500; }
+.selo-relogio small::first-letter { text-transform: uppercase; }
+.selo-balcao { font-family: var(--mono); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; font-size: 20px; border: 2px dashed var(--pv-white); border-radius: var(--pv-radius-sm); padding: 12px; margin: 0; }
+.selo-liberado a { color: var(--pv-white); }
+.selo-links { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--pv-space-0) 20px; font-weight: 700; }
+.selo-links a, .selo-links span { min-height: 48px; display: inline-flex; align-items: center; }
+
+/* Cartão do motociclista (sem visita hoje) e coleção de selos */
+.selo-cartao { background: var(--pv-white); border: 1px solid var(--pv-line-light-2); border-top: 4px solid var(--pv-orange); border-radius: var(--pv-radius-sm); padding: var(--pv-space-2); display: grid; gap: var(--pv-space-1); }
+.selo-cartao .selo-numero b { color: var(--pv-orange-deep); }
+.selo-colecao { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--pv-space-1); margin: 0; padding: 0; list-style: none; }
+.selo-colecao li { min-width: 0; display: grid; justify-items: center; gap: var(--pv-space-0); text-align: center; font-size: 13px; font-weight: 700; }
+.selo-carimbo {
+  /* overflow: hidden desliga o mínimo automático do aspect-ratio, que alargava o círculo além da coluna no celular. */
+  width: 100%; max-width: 100%; min-height: 0; overflow: hidden; aspect-ratio: 1; border-radius: var(--pv-radius-pill); display: grid; place-items: center; padding: var(--pv-space-1);
+  border: 2px dashed var(--pv-warm-700); color: var(--pv-warm-900); font-family: var(--mono); font-weight: 700; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; line-height: 1.1;
+}
+.selo-carimbo img { width: 100%; height: 100%; object-fit: contain; }
+/* Arte real do selo: sem círculo; apagada até ser conquistada. */
+.selo-carimbo.arte { border: 0; outline: 0; padding: 0; border-radius: 0; background: none; }
+.selo-carimbo.arte:not(.tem) img { filter: grayscale(1); opacity: .35; }
+.selo-carimbo.tem { border: 3px solid var(--pv-white); outline: 2px solid var(--pv-text-dark); color: var(--pv-white); }
+.selo-liberado .selo-colecao li { color: var(--pv-white); }
+.selo-liberado .selo-carimbo { border-color: var(--pv-line-dark-3); color: var(--pv-white); }
+.selo-liberado .selo-carimbo.tem { outline-color: var(--pv-white); }
+
+.selo-texto h1 { font-size: 34px; }
+.selo-texto h2 { font-size: 22px; margin-top: 20px; }
+.selo-texto p, .selo-texto li { font-size: 16px; }
+.selo-pilha p, .selo-cartao p, .selo-liberado p { margin: 0; }
+.selo-pilha h2 { font-size: 24px; }
+.selo-centro { text-align: center; margin: 0; }
+.selo-quebra { margin: 0; word-break: break-all; }
+.selo-campo > label.selo-check { font-family: var(--font); font-size: 16px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+
+/* Passaporte: apresentação editorial e cadastro direto no celular. */
+.selo-entrada { max-width: 1120px; margin: auto; display: grid; grid-template-columns: .9fr 1.1fr; min-height: 100dvh; }
+.selo-intro { background: var(--pv-black-2); color: var(--pv-text-light); padding: 48px 36px; }
+.selo-marca { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+.selo-marca img { background: var(--pv-offwhite); border-radius: 50%; padding: 4px; }
+.selo-edicao { display: inline-block; margin: 48px 0 20px; padding: 8px 12px; border: 1px solid var(--pv-line-dark-3); font-family: var(--mono); font-size: 14px; }
+.selo-intro h1 { font-size: clamp(44px, 5vw, 68px); line-height: 1.03; }
+.selo-intro h1 em { color: var(--pv-orange-light); font-style: normal; }
+.selo-intro > p { color: var(--pv-muted-light); max-width: 32ch; }
+.selo-etapas { list-style: none; padding: 0; margin: 32px 0; display: grid; gap: 24px; }
+.selo-etapas li { display: flex; gap: 16px; font-size: 15px; color: var(--pv-muted-light); }
+.selo-etapas li > b { font-family: var(--mono); font-size: 14px; color: var(--pv-orange-light); padding-top: 3px; }
+.selo-etapas strong { display: block; color: var(--pv-text-light); font-size: 17px; margin-bottom: 3px; }
+.selo-intro .selo-regra { border-top: 1px solid var(--pv-line-dark-2); padding-top: 24px; max-width: none; font-size: 14px; }
+.selo-intro > a { display: inline-flex; align-items: center; min-height: 48px; font-size: 15px; }
+.selo-cadastro { background: var(--pv-white); padding: 48px 40px; min-width: 0; }
+.selo-cadastro-topo { margin-bottom: 28px; }
+.selo-cadastro h2 { font-size: 32px; }
+.selo-cadastro-topo p { color: var(--pv-muted-dark); font-size: 15px; }
+.selo-extra { border-block: 1px solid var(--pv-line-light-2); padding: 12px 0; }
+.selo-extra summary { cursor: pointer; min-height: 44px; align-content: center; font-weight: 700; }
+.selo-extra summary small { color: var(--pv-muted-dark); font-weight: 400; margin-left: 8px; }
+.selo-extra[open] .selo-foto { padding: 12px 0; }
+.selo-digital { background: var(--selo-cor); color: var(--pv-white); text-align: center; padding: 28px 20px; border-radius: var(--pv-radius-sm); display: grid; justify-items: center; gap: 16px; }
+.selo-digital .selo-kicker { color: inherit; }
+.selo-digital img { background: var(--pv-offwhite); padding: 12px; border-radius: 50%; }
+.selo-digital h2 { font-size: 40px; }
+.selo-digital h2 span { display: block; font-family: var(--mono); font-size: 18px; margin-top: 8px; }
+.selo-btn:active { transform: translateY(1px); }
+@media (max-width: 768px) {
+  .selo-entrada { grid-template-columns: 1fr; }
+  .selo-intro { padding: 24px; }
+  .selo-edicao { margin: 24px 0 16px; }
+  .selo-intro h1 { font-size: 44px; }
+  .selo-etapas { margin: 24px 0; gap: 16px; }
+  .selo-cadastro { padding: 28px 20px; }
+}
+.selo-cartaz { background: var(--pv-white); border: 2px solid var(--pv-text-dark); padding: 32px 24px; text-align: center; display: grid; justify-items: center; gap: 20px; }
+.selo-cartaz h2 { font-size: 48px; }
+.selo-cartaz .selo-qr { width: min(100%, 300px); height: auto; }
+.selo-cartaz a { word-break: break-all; font-size: 14px; }
+@media print {
+  .selo-nao-imprimir { display: none !important; }
+  .selo-cartaz-wrap { max-width: 180mm; padding: 0; }
+  .selo-cartaz { break-inside: avoid; }
+}
+
+.selo-intro > a.selo-atalho { color: var(--pv-orange-light); font-weight: 700; }
+#selo-cadastro-titulo { scroll-margin-top: 24px; }
+
+.selo-download { min-height: 44px; display: inline-flex; align-items: center; }
+
+.selo-colecao [data-estado="bloqueado"] .selo-carimbo { background: var(--pv-offwhite-2); border-style: solid; align-content: center; gap: 4px; }
+.selo-colecao [data-estado="encerrado"] { color: var(--pv-muted-dark); }
+.selo-proximo { border-top-color: var(--pv-muted-dark); }
+
+.selo-progresso { width: 100%; height: 16px; accent-color: var(--pv-orange-deep); }
+.selo-voltar a { min-height: 48px; display: inline-flex; align-items: center; }
+.selo-mural-wrap { max-width: 800px; }
+.selo-colecao li > span:last-of-type { overflow-wrap: anywhere; }
+.selo-certificado-wrap { max-width: 800px; }
+.selo-certificado { background: var(--pv-white); border: 2px solid var(--pv-text-dark); padding: 40px 24px; display: grid; gap: 24px; justify-items: center; text-align: center; }
+.selo-certificado h1 { font-size: clamp(36px, 7vw, 64px); }
+.selo-certificado h2 { font-size: 32px; }
+.selo-certificado ul { width: 100%; list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.selo-certificado li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--pv-line-light-2); padding-bottom: 12px; text-align: left; }
+.selo-certificado small { color: var(--pv-muted-dark); }
+@media print {
+  .selo-certificado-wrap { max-width: 180mm; padding: 0; }
+  .selo-certificado { break-inside: avoid; }
+}
+
+/* Stats do passaporte (inspirado em perfis de coleção: o que é seu, de relance). */
+.selo-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--pv-space-1); margin: 0; }
+.selo-stats div { background: var(--pv-white); border: 1px solid var(--pv-line-light-2); border-radius: var(--pv-radius-sm); padding: 12px; text-align: center; }
+.selo-stats dt { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--pv-muted-dark); }
+.selo-stats dd { margin: 4px 0 0; font-family: var(--display); font-weight: 800; font-size: 32px; line-height: 1; font-variant-numeric: tabular-nums; }
+
+/* Carimbo com leve inclinação, como no papel; digital ainda sem balcão fica tracejado. */
+.selo-colecao li:nth-child(odd) .selo-carimbo.tem { transform: rotate(-4deg); }
+.selo-colecao li:nth-child(even) .selo-carimbo.tem { transform: rotate(3deg); }
+.selo-colecao [data-estado="liberado"] .selo-carimbo { outline-style: dashed; }
+.selo-data { font-family: var(--mono); font-size: 11px; color: var(--pv-muted-dark); font-weight: 700; }
+
+/* Check-in */
+.selo-checkin { border-top-color: var(--pv-black-2); }
+.selo-ou { display: flex; align-items: center; gap: 12px; color: var(--pv-muted-dark); font-family: var(--mono); font-size: 13px; text-transform: uppercase; }
+.selo-ou::before, .selo-ou::after { content: ""; flex: 1; border-top: 1px solid var(--pv-line-light-2); }
+.selo-foto-botao input[disabled] { cursor: progress; }
+
+/* Benefício */
+.selo-beneficio.selo-form { gap: 16px; }
+.selo-cupom {
+  font-family: var(--mono); font-weight: 700; font-size: clamp(32px, 11vw, 44px); letter-spacing: .12em; text-align: center;
+  padding: 16px 12px; border: 2px dashed var(--pv-text-dark); border-radius: var(--pv-radius-sm); background: var(--pv-offwhite);
+  font-variant-numeric: tabular-nums; user-select: all;
+}
+.selo-beneficio .selo-linha { grid-template-columns: 112px 1fr; }
+
+/* Painel do parceiro: veredito grande, legível no balcão de um comércio. */
+.selo-cupom-input { font-family: var(--mono); font-weight: 700; font-size: 28px; letter-spacing: .12em; text-align: center; text-transform: uppercase; }
+.selo-veredito { background: var(--pv-white); border: 1px solid var(--pv-line-light-2); border-top: 8px solid var(--pv-danger-deep); border-radius: var(--pv-radius-sm); padding: var(--pv-space-2); display: grid; gap: 12px; }
+.selo-veredito.ok { border-top-color: var(--pv-success-deep); }
+.selo-veredito-titulo { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(32px, 10vw, 44px); line-height: 1; color: var(--pv-danger-deep); }
+.selo-veredito.ok .selo-veredito-titulo { color: var(--pv-success-deep); }
+.selo-veredito-pessoa { font-size: 18px; }
+.selo-etapas-parceiro { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--pv-space-1); }
+.selo-etapas-parceiro li { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; color: var(--pv-muted-dark); }
+.selo-etapas-parceiro li > span:first-child { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; color: var(--pv-white); background: var(--pv-danger-deep); }
+.selo-etapas-parceiro li[data-ok="true"] > span:first-child { background: var(--pv-success-deep); }
+.selo-etapas-parceiro strong { display: block; color: var(--pv-text-dark); font-size: 16px; }
+.selo-vantagens { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.selo-vantagens li { display: grid; gap: 4px; padding-left: 16px; border-left: 4px solid var(--pv-line-light-2); }
+.selo-vantagens li[data-ok] { border-left-color: var(--pv-success-deep); }
+.selo-vantagens strong { color: var(--pv-text-dark); }
+.selo-vantagens span { color: var(--pv-muted-dark); font-size: 15px; }
+.selo-compartilhar { display: grid; grid-template-columns: auto 1fr; gap: var(--pv-space-2); align-items: center; }
+.selo-compartilhar-previa { width: 136px; height: auto; border-radius: var(--pv-radius-sm); box-shadow: 0 8px 24px rgba(0, 0, 0, .24); }
+@media (max-width: 480px) { .selo-compartilhar { grid-template-columns: 1fr; justify-items: center; text-align: center; } }
+.selo-cor { width: 100%; height: 48px; padding: 4px; border: 1px solid var(--pv-line-light-2); border-radius: var(--pv-radius-sm); background: var(--pv-white); cursor: pointer; }
+.selo-previa { width: 100%; max-width: 320px; height: auto; justify-self: center; }
+.selo-verificado { display: grid; gap: var(--pv-space-2); justify-items: center; text-align: center; }
+.selo-verificado img { width: 100%; max-width: 360px; height: auto; }
+.selo-almoco { display: grid; gap: var(--pv-space-1); padding-top: 12px; border-top: 1px solid var(--pv-line-light-2); color: var(--pv-muted-dark); }
+.selo-almoco strong { color: var(--pv-text-dark); font-size: 16px; }
+.selo-almoco[data-ok="true"] strong { color: var(--pv-success-deep); }
+
+/* Passaporte de vitrine: livro aberto, selos carimbados em sequência (ciclo de 12s). */
+.pp { margin: var(--pv-space-4) 0; display: grid; gap: var(--pv-space-2); }
+.pp-livro { display: grid; grid-template-columns: 1fr 1fr; perspective: 1200px; filter: drop-shadow(0 12px 24px rgba(0, 0, 0, .4)); }
+.pp-pag {
+  position: relative; min-width: 0; aspect-ratio: 3 / 4; padding: var(--pv-space-2) var(--pv-space-1); display: grid; align-content: space-between; justify-items: center; gap: var(--pv-space-1);
+  background: repeating-linear-gradient(0deg, transparent 0 15px, rgba(0, 0, 0, .04) 15px 16px), var(--pv-offwhite); color: var(--pv-text-dark); font-family: var(--mono); text-transform: uppercase;
+}
+.pp-esq { border-radius: var(--pv-radius-lg) 0 0 var(--pv-radius-lg); box-shadow: inset -12px 0 16px -12px rgba(0, 0, 0, .32); transform-origin: right center; animation: pp-abrir 1.2s ease-out both; }
+.pp-dir { border-radius: 0 var(--pv-radius-lg) var(--pv-radius-lg) 0; box-shadow: inset 12px 0 16px -12px rgba(0, 0, 0, .32); }
+.pp-topo { font-size: 10px; letter-spacing: .08em; font-weight: 700; text-align: center; }
+.pp-carimbo { width: 72%; height: auto; opacity: .85; transform: rotate(-8deg); }
+.pp-titular { margin: 0; width: 100%; display: grid; gap: var(--pv-space-0); font-size: 10px; }
+.pp-titular div { display: flex; justify-content: space-between; gap: var(--pv-space-1); border-bottom: 1px dashed var(--pv-warm-300); padding-bottom: 2px; }
+.pp-titular dt { color: var(--pv-muted-dark); }
+.pp-titular dd { margin: 0; font-weight: 700; }
+.pp-rodape { font-size: 9px; color: var(--pv-muted-dark); letter-spacing: .08em; }
+.pp-selos { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: var(--pv-space-1); }
+.pp-selos li { position: relative; aspect-ratio: 1; display: grid; place-items: center; }
+.pp-vaga { position: absolute; inset: 4px; border: 1.5px dashed var(--pv-warm-300); border-radius: var(--pv-radius-pill); display: grid; place-content: center; text-align: center; font-size: 9px; font-weight: 700; color: var(--pv-warm-500); }
+.pp-vaga small { display: block; font-size: 8px; font-weight: 400; }
+.pp-selos img {
+  position: relative; width: 100%; height: auto; opacity: 0;
+  animation: pp-carimbar 12s cubic-bezier(.2, .9, .3, 1.2) infinite; animation-delay: calc(1.4s + var(--pp-i) * 1.5s);
+}
+.pp-selos li:nth-child(odd) img { --pp-rot: -7deg; }
+.pp-selos li:nth-child(even) img { --pp-rot: 5deg; }
+.pp-selos b { position: absolute; bottom: -4px; padding: 2px var(--pv-space-0); background: var(--pv-orange); color: var(--pv-white); font-size: 9px; letter-spacing: .06em; border-radius: var(--pv-radius-sm); animation: pp-pulsar 1.6s ease-in-out infinite; }
+.pp figcaption { color: var(--pv-muted-light); font-size: 15px; max-width: 36ch; }
+.pp figcaption strong { color: var(--pv-text-light); }
+
+@keyframes pp-abrir { from { transform: rotateY(-100deg); } to { transform: rotateY(0); } }
+@keyframes pp-carimbar {
+  0% { opacity: 0; transform: scale(1.8) rotate(-20deg); }
+  4% { opacity: 1; transform: scale(.9) rotate(var(--pp-rot)); }
+  6% { transform: scale(1) rotate(var(--pp-rot)); }
+  80% { opacity: 1; transform: scale(1) rotate(var(--pp-rot)); }
+  88%, 100% { opacity: 0; transform: scale(1) rotate(var(--pp-rot)); }
+}
+@keyframes pp-pulsar { 50% { transform: scale(1.08); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-esq, .pp-selos img, .pp-selos b { animation: none; }
+  .pp-selos img { opacity: 1; transform: rotate(var(--pp-rot)); }
+}
+
+/* Vitrine animada e passaporte pessoal usam a mesma encadernação. */
+.pp-livro { aspect-ratio: 3 / 2; }
+.pp-pag { aspect-ratio: auto; }
+.pp figcaption small { display: block; margin-top: 8px; font-size: 12px; }
+.pp-titular dd { min-width: 0; overflow-wrap: anywhere; text-align: right; }
+.pp-titular dt { flex-shrink: 0; }
+.pp-pessoal { margin: 16px 0; }
+.pp-pessoal .pp-livro { filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .16)); }
+.pp-pessoal .pp-esq { animation: none; }
+.pp-pessoal .pp-selos img { animation: pp-conquista .7s cubic-bezier(.2, .9, .3, 1.2) both; animation-delay: calc(var(--pp-i) * .15s); }
+.pp-pessoal .pp-selos b { animation: none; color: var(--pv-black); font-size: 8px; white-space: nowrap; }
+.pp-pessoal .pp-selos [data-estado="liberado"] b { background: var(--pv-offwhite); border: 1px dashed var(--pv-warm-700); }
+.pp-pessoal figcaption { max-width: none; color: var(--pv-muted-dark); font-size: 14px; }
+.pp-pessoal figcaption strong { display: block; color: var(--pv-text-dark); margin-bottom: 4px; }
+@keyframes pp-conquista {
+  from { opacity: 0; transform: scale(1.5) rotate(-15deg); }
+  to { opacity: 1; transform: scale(1) rotate(var(--pp-rot)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pp-pessoal .pp-selos img { animation: none; opacity: 1; transform: rotate(var(--pp-rot)); }
+}
+
+/* Encadernação física compartilhada entre a vitrine e a coleção pessoal. */
+.pp-livro {
+  position: relative; isolation: isolate; padding: 5px 5px 9px;
+  border-radius: 6px 9px 12px 6px; background: #403c2f;
+  box-shadow: 0 2px 0 #8c8063, 0 6px 0 -2px #e2d7bb, 0 9px 0 -3px #9c8c6b, 0 18px 28px -12px #382b2670;
+  filter: none;
+}
+.pp-livro::after { content: ''; position: absolute; z-index: 2; top: 14px; bottom: 18px; left: 50%; width: 2px; background: repeating-linear-gradient(to bottom, #786c53 0 6px, transparent 6px 16px); opacity: .55; pointer-events: none; }
+.pp-pag {
+  padding: clamp(12px, 2vw, 28px) clamp(10px, 1.5vw, 24px); gap: 12px;
+  background: radial-gradient(ellipse at 20% 30%, #fffdf04d, transparent 65%), repeating-linear-gradient(17deg, #8b71450a 0 1px, transparent 1px 4px), #eee4cb;
+  color: #403d31; border: 1px solid #c9ba98;
+}
+.pp-esq { border-radius: 3px 0 0 7px; box-shadow: inset -18px 0 24px -15px #5c4a37a6; animation: none; }
+.pp-dir { border-radius: 0 3px 7px 0; box-shadow: inset 20px 0 24px -16px #5c4a3799; }
+.pp-topo { width: 100%; border-bottom: 1px solid #a7977370; padding-bottom: 10px; font-size: clamp(8px, .8vw, 11px); letter-spacing: .13em; }
+.pp-documento { text-align: center; font: 700 clamp(15px, 2vw, 29px)/1.1 Georgia, serif; letter-spacing: .02em; }
+.pp-documento small { display: block; margin-top: 6px; font: 8px var(--mono); letter-spacing: .18em; }
+.pp-carimbo { width: 64%; max-width: 160px; mix-blend-mode: multiply; opacity: .8; }
+.pp-titular { font-size: clamp(8px, .8vw, 11px); gap: 8px; }
+.pp-titular dd { font-family: Georgia, serif; font-style: italic; text-transform: none; }
+.pp-rodape { display: flex; justify-content: space-between; width: 100%; gap: 6px; font-size: 8px; border-top: 1px solid #a7977370; padding-top: 8px; color: #74664e; }
+.pp-selos { gap: 14px 8px; align-self: center; }
+.pp-selos img { opacity: 1; animation: none; transform: rotate(var(--pp-rot)); filter: drop-shadow(1px 2px 1px #53402733); }
+.pp-selos b { animation: none; font-size: 8px; letter-spacing: 0; color: var(--pv-black); }
+@media (max-width: 420px) {
+  .pp-pag { padding: 12px 8px; gap: 8px; }
+  .pp-topo { letter-spacing: .02em; }
+  .pp-rodape { font-size: 7px; letter-spacing: 0; }
+}
+
+.pp, .pp-livro, .pp-selos { min-width: 0; }
+.pp-livro, .pp-selos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* Abertura e carimbos acontecem quando o passaporte entra na tela. */
+.pp-livro.pp-animando .pp-esq { animation: pp-folhear 1.2s cubic-bezier(.2,.7,.3,1) both; backface-visibility: hidden; }
+.pp-livro.pp-animando .pp-selos img { animation: pp-imprimir .65s cubic-bezier(.2,.8,.3,1.15) both; animation-delay: calc(.8s + var(--pp-i) * .45s); }
+.pp-replay { justify-self: start; min-height: 44px; padding: 8px 0; background: transparent; border: 0; border-bottom: 1px solid currentColor; font: 600 14px var(--font); color: var(--pv-text-dark); cursor: pointer; }
+@keyframes pp-folhear { from { transform: rotateY(85deg); } to { transform: rotateY(0); } }
+@keyframes pp-imprimir { 0% { opacity: 0; transform: scale(1.35) rotate(-16deg); } 65% { opacity: 1; transform: scale(.96) rotate(var(--pp-rot)); } 100% { opacity: 1; transform: scale(1) rotate(var(--pp-rot)); } }
+@media (prefers-reduced-motion: reduce) { .pp-livro.pp-animando .pp-esq, .pp-livro.pp-animando .pp-selos img { animation: none; } }
+
+/* Passaporte de cidades da Rota Biker */
+.selo-cidades .selo-stats dd small { font-size: 14px; color: var(--pv-muted-dark); }
+.selo-carimbos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--pv-space-1); }
+.selo-carimbos li { position: relative; display: grid; place-items: center; }
+.selo-carimbos img { width: 100%; height: auto; transform: rotate(var(--carimbo-giro, 0deg)); mix-blend-mode: multiply; }
+.selo-carimbo-vez { position: absolute; bottom: 0; right: 0; background: var(--pv-black-2); color: var(--pv-white); font: 700 10px var(--mono); padding: 4px 8px; border-radius: var(--pv-radius-pill); }
+.selo-faltam summary { cursor: pointer; font-weight: 700; }
+.selo-faltam ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; font-size: 14px; }
+.selo-faltam li { display: flex; justify-content: space-between; gap: 8px; color: var(--pv-muted-dark); }
+.selo-faltam li span { font: 700 11px var(--mono); }

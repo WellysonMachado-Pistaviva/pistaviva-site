@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MessageSquare, Heart, Camera, Send, Share2, X, Image as ImageIcon } from 'lucide-react';
 import { getPosts, addPost, likePost, addComment, uploadPostImage, reportContent } from '../services/storage';
+import Conquistadores from '../../app/selo/Conquistadores';
 import PhotoCarousel from '../../app/components/PhotoCarousel';
 import PV, { withAlpha } from '../palette';
 
@@ -152,6 +153,8 @@ const Feed = ({ deviceId = 'anon', identity, promptIdentity }) => {
         <h2 className="page-title">Relatos da comunidade</h2>
         <p className="page-subtitle">Aventuras compartilhadas pelos membros</p>
       </div>
+
+      <Conquistadores compacto />
 
       {/* Category filter bar */}
       <div className="filter-bar" style={{ marginBottom: '4px' }}>

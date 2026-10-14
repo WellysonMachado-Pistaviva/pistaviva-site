@@ -1,10 +1,17 @@
 'use client';
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import { Flag, MapPin, MessageCircle, Plus, Trash2, Users, X } from 'lucide-react';
 import './event-departures.css';
 const formatDate = value => new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }).format(new Date(value));
-async function request(url, data) {
-  const response = await fetch(url, data ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) } : { cache: 'no-store' });
+function subscribeClock(callback) {
+  const timer = setInterval(callback, 1000);
+  return () => clearInterval(timer);
+}
+const clockSnapshot = () => Math.floor(Date.now() / 1000) * 1000;
+const serverClockSnapshot = () => null;
+
+async function request(url, data, signal) {
+  const response = await fetch(url, data ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) } : { cache: 'no-store', signal });
   let result;
   try { result = await response.json(); } catch { throw new Error('Serviço indisponível. Tente novamente.'); }
   if (!response.ok) throw new Error(result.error || 'Não foi possível concluir.');
@@ -24,18 +31,19 @@ function CityPicker({ value, onPick }) {
 
   useEffect(() => {
     const needle = term.trim();
-    if (needle.length < 2) { setOptions([]); setFailed(false); return undefined; }
+    if (needle.length < 2) return undefined;
     const controller = new AbortController();
     const timer = setTimeout(async () => {
       try {
         const response = await fetch(`/api/municipios?q=${encodeURIComponent(needle)}`, { signal: controller.signal });
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || 'falha');
+        if (controller.signal.aborted) return;
         setOptions(result.cities || []);
         setActive(result.cities?.length ? 0 : -1);
         setFailed(false);
       } catch (error) {
-        if (error.name !== 'AbortError') { setOptions([]); setFailed(true); }
+        if (!controller.signal.aborted && error.name !== 'AbortError') { setOptions([]); setFailed(true); }
       }
     }, 220);
     return () => { controller.abort(); clearTimeout(timer); };
@@ -83,7 +91,7 @@ function CityPicker({ value, onPick }) {
             autoComplete="off"
             placeholder="Digite sua cidade, ex.: Itajubá"
             value={term}
-            onChange={event => { setTerm(event.target.value); setOpen(true); }}
+            onChange={event => { setTerm(event.target.value); setOptions([]); setFailed(false); setActive(-1); setOpen(true); }}
             onFocus={() => setOpen(true)}
             onBlur={event => { if (!box.current?.contains(event.relatedTarget)) setOpen(false); }}
             onKeyDown={onKeyDown}
@@ -127,7 +135,7 @@ function CityCards({ cities, filter, onFilter }) {
   </div>;
 }
 
-function Departure({ item, endpoint, onRemove, name, onName, revision }) {
+function Departure({ item, endpoint, onRemove, name, onName, revision, now }) {
   const [details, setDetails] = useState(null);
   const [comments, setComments] = useState([]);
   const [offset, setOffset] = useState(0);
@@ -135,12 +143,21 @@ function Departure({ item, endpoint, onRemove, name, onName, revision }) {
   const [body, setBody] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  const load = useCallback(async (next = 0) => {
-    const result = await request(`${endpoint}?departure=${item.id}&offset=${next}`);
+  const applyDetails = useCallback((result, next = 0) => {
     setDetails(result); setOffset(next);
     setComments(previous => next ? [...previous, ...result.comments.filter(c => !previous.some(p => p.id === c.id))] : result.comments);
-  }, [endpoint, item.id]);
-  useEffect(() => { load().catch(e => setError(e.message)); }, [load, revision]);
+  }, []);
+  const load = useCallback(async (next = 0) => {
+    const result = await request(`${endpoint}?departure=${item.id}&offset=${next}`);
+    applyDetails(result, next);
+  }, [endpoint, item.id, applyDetails]);
+  useEffect(() => {
+    const controller = new AbortController();
+    request(`${endpoint}?departure=${item.id}&offset=0`, undefined, controller.signal)
+      .then(result => { if (!controller.signal.aborted) applyDetails(result); })
+      .catch(e => { if (!controller.signal.aborted) setError(e.message); });
+    return () => controller.abort();
+  }, [endpoint, item.id, applyDetails, revision]);
   async function act(action, extra = {}) {
     setBusy(true); setError('');
     try {
@@ -150,7 +167,7 @@ function Departure({ item, endpoint, onRemove, name, onName, revision }) {
       await load();
     } catch (e) { setError(e.message); } finally { setBusy(false); }
   }
-  const past = new Date(item.departure_at) <= new Date();
+  const past = now !== null && new Date(item.departure_at).getTime() <= now;
   return <article className="departure" id={`saida-${item.id}`}>
     <header><div><span className="departure-eyebrow"><MapPin size={15} /> {item.city} · {item.uf}</span><h3>Saída em {formatDate(item.departure_at)}</h3></div>{item.mine && <span className="departure-mine">Sua saída</span>}</header>
     <p><strong>Ponto de encontro:</strong> {item.meeting_point}</p>
@@ -158,7 +175,7 @@ function Departure({ item, endpoint, onRemove, name, onName, revision }) {
     {item.note && <p className="departure-text">{item.note}</p>}
     {details && <p className="departure-members"><strong>{details.totalMembers} {details.totalMembers === 1 ? 'pessoa marcou' : 'pessoas marcaram'} “Vou junto”</strong>{details.members.length > 0 && <span>{details.members.map(m => m.name).join(', ')}{details.totalMembers > details.members.length ? ` e mais ${details.totalMembers - details.members.length}` : ''}</span>}</p>}
     <div className="departure-actions">
-      {!item.mine && <button type="button" className={details?.joined ? 'is-joined' : ''} aria-pressed={Boolean(details?.joined)} disabled={busy || !details || (past && !details?.joined)} onClick={() => { if (!details?.joined && name.trim().length < 2) { setOpen(true); setError('Informe seu nome abaixo para marcar “Vou junto”.'); return; } act(details?.joined ? 'leave' : 'join'); }}><Flag size={17} />{details?.joined ? 'Vou junto ✓ · Desmarcar' : past ? 'Saída realizada' : 'Vou junto'}</button>}
+      {!item.mine && <button type="button" className={details?.joined ? 'is-joined' : ''} aria-pressed={Boolean(details?.joined)} disabled={busy || now === null || !details || (past && !details?.joined)} onClick={() => { if (!details?.joined && name.trim().length < 2) { setOpen(true); setError('Informe seu nome abaixo para marcar “Vou junto”.'); return; } act(details?.joined ? 'leave' : 'join'); }}><Flag size={17} />{details?.joined ? 'Vou junto ✓ · Desmarcar' : past ? 'Saída realizada' : 'Vou junto'}</button>}
       <button type="button" aria-expanded={open} onClick={() => setOpen(!open)}><MessageCircle size={17} />{open ? 'Fechar conversa' : 'Combinar e comentar'}</button>
       {item.mine && <button type="button" disabled={busy} onClick={() => { if (window.confirm('Excluir sua saída e os comentários ligados a ela?')) act('delete_departure'); }}><Trash2 size={15} />Excluir saída</button>}
     </div>
@@ -166,7 +183,7 @@ function Departure({ item, endpoint, onRemove, name, onName, revision }) {
     {open && <div className="departure-discussion">
       <form onSubmit={e => {e.preventDefault();act('comment',{body});}}>
         <label>Seu nome público<input name="name" required minLength={2} maxLength={60} autoComplete="given-name" value={name} onChange={e => onName(e.target.value)} /></label>
-        {!item.mine && !details?.joined && !past && <button type="button" disabled={busy || name.trim().length < 2 || !details} onClick={() => act('join')}><Flag size={16} />Marcar “Vou junto”</button>}
+        {!item.mine && !details?.joined && now !== null && !past && <button type="button" disabled={busy || name.trim().length < 2 || !details} onClick={() => act('join')}><Flag size={16} />Marcar “Vou junto”</button>}
         <label>Comentário<textarea name="comment" required maxLength={600} rows={3} placeholder="Combine o ponto de encontro ou tire uma dúvida sobre a saída." value={body} onChange={e => setBody(e.target.value)} /></label>
         <button className="departure-primary" disabled={busy || !body.trim()}>{busy ? 'Salvando…' : 'Publicar comentário'}</button>
       </form>
@@ -194,13 +211,24 @@ export default function EventDepartures({ eventId, eventDate }) {
   const [cities, setCities] = useState([]);
   const [filter, setFilter] = useState(null);
   const [form, setForm] = useState({ date: eventDate, time: '', meeting_point: '', note: '' });
-  const load = useCallback(async (next = 0) => {
-    const result = await request(`${endpoint}?offset=${next}`);
+  const now = useSyncExternalStore(subscribeClock, clockSnapshot, serverClockSnapshot);
+  const applyDepartures = useCallback((result, next = 0) => {
     setRows(prev => next ? [...prev, ...result.departures.filter(d => !prev.some(p => p.id === d.id))] : result.departures);
     if (!next) setCities(result.cities || []);
     setOffset(next);setMore(result.more);setRevision(r=>r+1);
-  }, [endpoint]);
-  useEffect(() => {load().catch(e=>setError(e.message)).finally(()=>setLoading(false));}, [load]);
+  }, []);
+  const load = useCallback(async (next = 0) => {
+    const result = await request(`${endpoint}?offset=${next}`);
+    applyDepartures(result, next);
+  }, [endpoint, applyDepartures]);
+  useEffect(() => {
+    const controller = new AbortController();
+    request(`${endpoint}?offset=0`, undefined, controller.signal)
+      .then(result => { if (!controller.signal.aborted) applyDepartures(result); })
+      .catch(e => { if (!controller.signal.aborted) setError(e.message); })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    return () => controller.abort();
+  }, [endpoint, applyDepartures]);
   const set = (key, value) => setForm(f => ({ ...f, [key]: value }));
   async function create(e) {
     e.preventDefault();
@@ -209,7 +237,7 @@ export default function EventDepartures({ eventId, eventDate }) {
     try { await request(endpoint, { action:'create', name, city:city.name, uf:city.uf, city_ibge:city.code, ...form }); await load();setOpen(false);setSuccess('Saída publicada. Compartilhe esta página para chamar a turma.'); }
     catch(err){setError(err.message);}finally{setBusy(false);}
   }
-  const ended = eventDate < new Date(Date.now()-3*3600000).toISOString().slice(0,10);
+  const ended = now !== null && eventDate < new Date(now - 3 * 3600000).toISOString().slice(0, 10);
   // O filtro age sobre as saídas já carregadas; "Carregar mais" segue disponível.
   const visible = filter ? rows.filter(row => row.city === filter.city && row.uf === filter.uf) : rows;
   return <section className="event-departures evpage-block" id="saidas" aria-labelledby="departures-title">
@@ -217,7 +245,7 @@ export default function EventDepartures({ eventId, eventDate }) {
     <h2 id="departures-title">Combine sua saída</h2>
     <p>Conte de qual cidade vai sair, em que horário e onde encontrar a turma. Encontrou uma saída que combina com você? Marque “Vou junto” e deixe seu nome.</p>
     <p className="departure-help">Nome, saída e comentários ficam públicos. Use um ponto público de encontro. Você pode excluir suas publicações neste navegador; limpar os cookies remove esse acesso. As saídas são combinadas pelos participantes.</p>
-    <div className="departure-toolbar"><button type="button" className="departure-primary" disabled={ended} aria-expanded={open} onClick={()=>setOpen(!open)}><Plus size={17}/>{ended ? 'Encontro encerrado' : open ? 'Fechar formulário' : 'Publicar minha saída'}</button><button type="button" disabled={loading} onClick={async()=>{setLoading(true);setError('');try{await load();}catch(e){setError(e.message);}finally{setLoading(false);}}}>Atualizar saídas</button></div>
+    <div className="departure-toolbar"><button type="button" className="departure-primary" disabled={now === null || ended} aria-expanded={open} onClick={()=>setOpen(!open)}><Plus size={17}/>{ended ? 'Encontro encerrado' : open ? 'Fechar formulário' : 'Publicar minha saída'}</button><button type="button" disabled={loading} onClick={async()=>{setLoading(true);setError('');try{await load();}catch(e){setError(e.message);}finally{setLoading(false);}}}>Atualizar saídas</button></div>
     {open && <form className="departure-create" onSubmit={create}>
       <label>Seu nome público<input required minLength={2} maxLength={60} name="name" autoComplete="given-name" value={name} onChange={e=>setName(e.target.value)}/></label>
       <CityPicker value={city} onPick={setCity} />
@@ -233,7 +261,7 @@ export default function EventDepartures({ eventId, eventDate }) {
     <CityCards cities={cities} filter={filter} onFilter={setFilter} />
     {filter && <p className="departure-filter" role="status">Mostrando saídas de {filter.city} · {filter.uf}. <button type="button" onClick={()=>setFilter(null)}><X size={14}/>Ver todas</button></p>}
     {filter && !visible.length && rows.length > 0 && <p className="departure-empty">As saídas de {filter.city} estão em outra página da lista. Use “Carregar mais saídas” abaixo.</p>}
-    <div className="departure-list">{visible.map(item=><Departure key={item.id} item={item} revision={revision} endpoint={endpoint} name={name} onName={setName} onRemove={id=>{setRows(prev=>prev.filter(p=>p.id!==id));setSuccess('Saída excluída.');}}/>)}</div>
+    <div className="departure-list">{visible.map(item=><Departure key={item.id} item={item} now={now} revision={revision} endpoint={endpoint} name={name} onName={setName} onRemove={id=>{setRows(prev=>prev.filter(p=>p.id!==id));setSuccess('Saída excluída.');}}/>)}</div>
     {more && <button type="button" disabled={loading} onClick={async()=>{setLoading(true);try{await load(offset+20);}catch(e){setError(e.message);}finally{setLoading(false);}}}>Carregar mais saídas</button>}
   </section>;
 }

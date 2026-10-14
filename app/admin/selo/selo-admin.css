@@ -1,0 +1,61 @@
+/* Admin do Selo da Estação — usa as variáveis do painel (admin-ignis.css). */
+
+.sa-filtro { display: flex; flex-wrap: wrap; align-items: center; gap: var(--pv-space-1); margin-bottom: 20px; }
+.sa-filtro label { display: inline-flex; align-items: center; gap: var(--pv-space-1); font-family: var(--semi); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--mut); }
+.sa-filtro input[type="date"], .sa-busca input {
+  background: var(--ink-3); color: var(--txt); border: 1px solid var(--line-2); border-radius: var(--pv-radius);
+  padding: var(--pv-space-1) 12px; font: inherit; font-size: 14px; min-height: 40px; color-scheme: dark;
+}
+
+.sa-kpis { grid-template-columns: repeat(4, 1fr); margin-bottom: var(--pv-space-2); }
+@media (max-width: 768px) { .sa-kpis { grid-template-columns: repeat(2, 1fr); } }
+
+.sa-grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 900px) { .sa-grade { grid-template-columns: 1fr; } }
+.sa-rolagem { max-height: 420px; overflow-y: auto; }
+.sa-vazio { color: var(--mut); font-size: 14px; margin: 0; }
+
+/* Barras simples em CSS: largura vem de --p (0–100) no style do item. */
+.sa-barras { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--pv-space-1); }
+.sa-barras li { display: grid; grid-template-columns: minmax(96px, 40%) 1fr 40px; align-items: center; gap: 12px; font-size: 13.5px; }
+.sa-barras .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--txt); }
+.sa-barras .t { height: 12px; background: var(--ink-3); border-radius: var(--pv-radius-xs); overflow: hidden; }
+.sa-barras .t span { display: block; height: 100%; width: calc(var(--p) * 1%); background: var(--cor, var(--accent)); }
+.sa-barras b { font-family: var(--semi); text-align: right; font-variant-numeric: tabular-nums; }
+
+.sa-fotos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.sa-fotos li { overflow: hidden; display: flex; flex-direction: column; }
+.sa-fotos img, .sa-semfoto { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--ink-3); display: grid; place-items: center; color: var(--mut); font-size: 13px; }
+.sa-info { display: grid; gap: var(--pv-space-0); padding: 12px var(--pv-space-2) 0; font-size: 13px; color: var(--mut); }
+.sa-info b { color: var(--txt); font-size: 15px; }
+.sa-tag { color: var(--warn); font-weight: 700; }
+.sa-acoes { display: flex; flex-wrap: wrap; gap: var(--pv-space-1); padding: 12px var(--pv-space-2) var(--pv-space-2); margin-top: auto; }
+.sa-acoes .ig-btn[disabled] { opacity: .4; cursor: not-allowed; }
+
+.sa-busca { display: grid; gap: var(--pv-space-1); margin-bottom: 20px; max-width: 560px; }
+.sa-busca label { font-family: var(--semi); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--mut); }
+.sa-busca div { display: flex; gap: var(--pv-space-1); }
+.sa-busca input { flex: 1; }
+
+.sa-pessoas { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.sa-pessoas li { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding-left: var(--pv-space-2); }
+.sa-pessoas .sa-info { padding: 12px 0; }
+.sa-num { font-family: var(--disp); font-weight: 800; font-size: 28px; color: var(--accent); min-width: 104px; font-variant-numeric: tabular-nums; }
+@media (max-width: 640px) {
+  .sa-pessoas li { grid-template-columns: 1fr; padding: 12px var(--pv-space-2) 0; }
+  .sa-pessoas .sa-acoes { padding-left: 0; }
+}
+
+.sa-checkin { display: grid; gap: var(--pv-space-0); justify-items: start; font-size: 13px; color: var(--mut); }
+.sa-checkin img { width: 96px; height: 96px; object-fit: cover; border-radius: var(--pv-radius-xs); background: var(--ink-3); }
+.sa-beneficio { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; padding-left: var(--pv-space-2); max-width: 760px; }
+.sa-beneficio .sa-acoes { grid-column: 1 / -1; }
+.sa-veredito { font-family: var(--disp); font-weight: 800; font-size: 22px; text-transform: uppercase; color: var(--warn); }
+.sa-veredito.ok { color: var(--accent); }
+.sa-nota {
+  flex: 1; min-width: 200px; background: var(--ink-3); color: var(--txt); border: 1px solid var(--line-2); border-radius: var(--pv-radius);
+  padding: var(--pv-space-1) 12px; font: inherit; font-size: 14px; min-height: 36px;
+}
+.sa-geo { margin-top: 12px; }
+.sa-geo code { font-size: 13px; color: var(--txt); user-select: all; overflow-wrap: anywhere; }
+@media (max-width: 640px) { .sa-beneficio { grid-template-columns: 1fr; padding: 12px var(--pv-space-2) 0; } }

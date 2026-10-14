@@ -1,12 +1,15 @@
 'use client';
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 // Carrega o AdSense só na 1ª interação do usuário (scroll/toque/tecla) — tira o
 // JS pesado do load crítico (melhora TBT/TTI/LCP). Fallback de 6s garante que o
 // anúncio ainda carrega pra quem não interage, mas fora da janela que conta no PageSpeed.
 export default function AdSenseLoader({ client }) {
+  // Selo da Estação é tela de balcão: anúncio automático ali atrapalha a conferência.
+  const semAnuncio = (usePathname() || '').startsWith('/selo');
   useEffect(() => {
-    if (!client) return;
+    if (!client || semAnuncio) return;
     let done = false;
     const evs = ['scroll', 'pointerdown', 'keydown', 'touchstart'];
     let t;
@@ -24,6 +27,6 @@ export default function AdSenseLoader({ client }) {
     evs.forEach((e) => window.addEventListener(e, load, { once: true, passive: true }));
     t = setTimeout(load, 6000);
     return cleanup;
-  }, [client]);
+  }, [client, semAnuncio]);
   return null;
 }

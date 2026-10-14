@@ -5,7 +5,6 @@ import HomeBanner from '../../components/HomeBanner';
 import HomeDiscover from '../../components/HomeDiscover';
 import WellysonEditorial from '../../components/WellysonEditorial';
 import HomeExperiences from '../../components/HomeExperiences';
-import '../../home-experience.css';
 import HomeNextRide from '../../components/HomeNextRide';
 import EventsRail from '../../components/EventsRail';
 import CommunityRail from '../../components/CommunityRail';

@@ -394,6 +394,20 @@ export default async function ParqueDaCidadePage() {
         </div>
       </section>
 
+      <section className="pq-selo" aria-labelledby="pq-selo-titulo">
+        <div className="pq-wrap pq-wrap--larga pq-selo__grid">
+          <img src="/selo/mascote/mascote-224.webp" alt="" width={112} height={112} loading="lazy" />
+          <div>
+            <p className="pq-eyebrow">Veio de moto?</p>
+            <h2 className="pq-display" id="pq-selo-titulo">Ganhe o selo da estação.</h2>
+            <p>Registre sua visita no Parque, carimbe o passaporte do motociclista e ganhe cafezinho, 10% de desconto e almoço ao fechar as quatro estações.</p>
+          </div>
+          <div className="pq-selo__acoes">
+            <Link className="study-button" href="/selo">Registrar minha visita</Link>
+            <Link href="/selos">Ver os selos colecionáveis →</Link>
+          </div>
+        </div>
+      </section>
       <section className="pq-sec" id="visita">
         <div className="pq-wrap pq-wrap--larga">
           <p className="pq-cap"><span>Planeje a visita</span></p>

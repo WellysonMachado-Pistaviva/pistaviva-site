@@ -1,3 +1,4 @@
+import PageIntro from '../../components/PageIntro';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { DESAFIOS, REGRAS_GERAIS, COMO_VALIDAR, getDesafio, allDesafioSlugs } from '../../lib/desafios';
@@ -61,7 +62,7 @@ export default async function DesafioPage({ params }) {
   const outros = DESAFIOS.filter((x) => x.slug !== d.slug).slice(0, 3);
 
   return (
-    <div className="ignis ph-page">
+    <div className="ignis ph-page editorial-detail">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
@@ -74,11 +75,10 @@ export default async function DesafioPage({ params }) {
         </div>
       </nav>
 
+      <PageIntro eyebrow={`Desafio Pistaviva · ${d.regiao}`} title={d.nome} compact>{d.resumo}</PageIntro>
+
       <section className="ph-prof">
         <div className="wrap">
-          <span className="eyebrow">Desafio Pistaviva · {d.regiao}</span>
-          <h1>{d.nome}</h1>
-          <p className="lede" style={{ maxWidth: 760 }}>{d.resumo}</p>
 
           {/* Ficha do desafio */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 10, margin: '20px 0 24px' }}>

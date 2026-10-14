@@ -14,6 +14,7 @@ const I = {
   pen:     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>,
   tools:   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.7 2.7-2.3-2.3 2.7-2.7Z"/></svg>,
   image:   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>,
+  stamp:   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="9" r="6"/><path d="m9 9 2 2 4-4"/><path d="M8.5 14.5 7 22l5-3 5 3-1.5-7.5"/></svg>,
   calendar:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>,
   logout:  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>,
   search:  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>,
@@ -35,6 +36,9 @@ const NAV = [
     { id: 'moderacao', label: 'Moderação',   href: '/admin/moderacao', icon: 'shield', badge: 'reports' },
     { id: 'eventos',   label: 'Eventos',     href: '/admin/eventos',   icon: 'calendar' },
     { id: 'blog',      label: 'Blog',        href: '/admin/blog',      icon: 'pen'   },
+  ]},
+  { group: 'Parque', items: [
+    { id: 'selo',      label: 'Selo da Estação', href: '/admin/selo', icon: 'stamp' },
   ]},
   { group: 'Sistema', items: [
     { id: 'avancado',  label: 'Avançado',    href: '/admin/avancado',  icon: 'tools' },
@@ -118,6 +122,7 @@ export default function AdminShell({ children }) {
     if (pathname.startsWith('/admin/eventos')) return 'eventos';
     if (pathname.startsWith('/admin/blog')) return 'blog';
     if (pathname.startsWith('/admin/avancado')) return 'avancado';
+    if (pathname.startsWith('/admin/selo')) return 'selo';
     if (pathname === '/admin') return HOME_TABS.includes(hash) ? hash : 'visao';
     return 'visao';
   })();

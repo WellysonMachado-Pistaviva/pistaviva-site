@@ -17,6 +17,8 @@ const MORE_LINKS = [
   { href: '/desafios', label: 'Desafios' },
   { href: '/guias', label: 'Guias' },
   { href: '/parque-da-cidade', label: 'Parque da Cidade' },
+  { href: '/selo', label: 'Selo da Estação' },
+  { href: '/selos', label: 'Selos colecionáveis' },
   { href: '/fipe', label: 'Tabela FIPE' },
   { href: '/loja', label: 'Loja' },
   { href: '/sobre', label: 'Sobre' },

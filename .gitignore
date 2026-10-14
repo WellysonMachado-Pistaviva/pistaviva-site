@@ -27,3 +27,6 @@ yarn-error.log*
 .playwright-cli/
 moskomoto-design/
 .cache/
+
+# Selo da Estação — banco e fotos locais de desenvolvimento
+.selo-local/

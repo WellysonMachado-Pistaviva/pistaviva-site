@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { Calendar, MapPin, Users, Clock, Music, ExternalLink } from 'lucide-react';
+import { MapPin, Clock, Music, ExternalLink, ArrowUpRight } from 'lucide-react';
 import ViewPing from '../../components/ViewPing';
 import EventTicket from './EventTicket';
-import EventHero from './EventHero';
+import EventHeading from '../components/EventHeading';
 import EventRouteMap from './EventRouteMap';
 import EventDepartures from './EventDepartures';
 import { getEventById, getEventGoingCount, eventStartISO, eventEndISO } from '../../lib/events';
@@ -13,7 +13,6 @@ import { getEventRsvpBase } from '../../lib/eventRsvpBases.mjs';
 export const revalidate = 60;
 const BASE = 'https://www.pistavivamototurismo.com.br';
 
-const STATUS = { open: 'Inscrições abertas', soon: 'Em breve', full: 'Vagas esgotadas' };
 const priceLabel = (p) => {
   const s = (p ?? '').toString().trim();
   if (!s || /^gr[aá]tis$/i.test(s) || s === '0') return 'Grátis';
@@ -58,7 +57,6 @@ export default async function EventoPage({ params }) {
   const gallery = imgs(e);
   const cover = gallery[0];
   const tags = parseTags(e.tags);
-  const statusLabel = meta.departuresEnabled ? 'Encontro de motociclistas' : STATUS[e.type] || STATUS.open;
   const price = priceLabel(e.price);
   const start = eventStartISO(e.date, e.time);
   const end = meta.endUnknown ? null : eventEndISO(e.date, e.time);
@@ -108,41 +106,20 @@ export default async function EventoPage({ params }) {
   };
 
   return (
-    <div className="evpage">
+    <div className="evpage pv-study event-study">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <ViewPing kind="event" id={e.id} />
 
-      {/* HERO */}
-      <section className="evpage-hero">
-        <div className="evpage-banner">
-          {heroImages.length
-            ? <EventHero images={heroImages} alt={e.title} />
-            : cover
-              ? <Image src={cover} alt={e.title} fill priority sizes="100vw" />
-              : <div className="evpage-banner-empty" />}
-        </div>
-        <div className="wrap evpage-htext">
-          <div className="evpage-chips">
-            <span className="ev-hchip type">{e.category}</span>
-            <span className="ev-hchip alt">{statusLabel}</span>
-          </div>
-          <h1>{e.title}</h1>
-          <div className="evpage-quick">
-            <div className="qi"><span className="ic"><Calendar size={18} /></span><div><div className="k">Data</div><div className="v">{[e.date, e.time].filter(Boolean).join(' · ')}</div></div></div>
-            {e.local && <div className="qi"><span className="ic"><MapPin size={18} /></span><div><div className="k">Local</div><div className="v">{e.local}</div></div></div>}
-            <div className="qi"><span className="ic"><Users size={18} /></span><div><div className="k">Confirmados</div><div className="v">{goingDisplay} {goingDisplay === 1 ? 'piloto' : 'pilotos'}</div></div></div>
-          </div>
-          {meta.departuresEnabled && <a className="ig-btn ig-btn--primary" href="#saidas">Combinar minha saída →</a>}
-        </div>
-      </section>
+      <EventHeading event={e} heroImages={heroImages} cover={cover} going={goingDisplay} departuresEnabled={meta.departuresEnabled} hasSchedule={schedule.length > 0} hasLocation={Boolean(mapsUrl)} />
 
-      <div className="wrap">
+      <div className="study-container">
         <div className="evpage-grid">
           {/* CONTENT */}
-          <div>
+          <div className="event-content">
             {e.description && (
-              <section className="evpage-block">
+              <section className="evpage-block" id="sobre">
+                <p className="study-kicker">O encontro começa no caminho</p>
                 <h2>Sobre o evento</h2>
                 <div className="evpage-prose">{e.description.split('\n').filter(Boolean).map((p, i) => <p key={i}>{p}</p>)}</div>
               </section>
@@ -161,8 +138,11 @@ export default async function EventoPage({ params }) {
             {previousVideo && <section className="evpage-block"><h2>Como foi o último encontro</h2><p>Veja o registro compartilhado no Instagram e entre no clima do próximo café.</p><iframe className="event-instagram" src={`${previousVideo.replace(/\/$/, '')}/embed/`} title="Vídeo do encontro anterior na Garganta do Registro" loading="lazy" allow="encrypted-media; fullscreen; picture-in-picture" /><p><a href={previousVideo} target="_blank" rel="noopener noreferrer">Assistir no Instagram ↗</a></p></section>}
 
             {(e.address || e.local) && (
-              <section className="evpage-block">
+              <section className="evpage-block" id="como-chegar">
+                <p className="study-kicker">Da sua cidade ao encontro</p>
                 <h2>Como chegar</h2>
+                {e.local && <p className="event-address"><MapPin size={18} aria-hidden="true" />{e.address || e.local}</p>}
+                {mapsUrl && <a className="event-map-link" href={mapsUrl} target="_blank" rel="noopener noreferrer">Abrir no Google Maps <ArrowUpRight size={18} aria-hidden="true" /></a>}
                 <EventRouteMap dest={e.address || e.local} destName={e.local || e.title} lat={e.lat ?? null} lng={e.lng ?? null} />
               </section>
             )}
@@ -204,7 +184,7 @@ export default async function EventoPage({ params }) {
                           src={src}
                           alt={`${e.title} — foto ${i + 1} de ${gallery.length}`}
                           fill
-                          sizes="(max-width: 640px) 100vw, (max-width: 920px) 50vw, 36vw"
+                          sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, 30vw"
                         />
                       </span>
                       <span className="evpage-photo__number">{String(i + 1).padStart(2, '0')}</span>
@@ -215,7 +195,8 @@ export default async function EventoPage({ params }) {
             )}
 
             {schedule.length > 0 && (
-              <section className="evpage-block">
+              <section className="evpage-block" id="programacao">
+                <p className="study-kicker">Reserve esse momento</p>
                 <h2>Programação</h2>
                 <div className="evpage-infolist">
                   {schedule.map((s, i) => (
@@ -228,24 +209,12 @@ export default async function EventoPage({ params }) {
               </section>
             )}
 
-            {e.local && (
-              <section className="evpage-block">
-                <h2>Local</h2>
-                <div className="evpage-minimap"><div className="grid-lines" /><div className="mk"><span className="pin"><MapPin size={15} /></span><b>{e.local}</b></div></div>
-                <div className="evpage-localcard" style={{ marginTop: 14 }}>
-                  <span className="ic"><MapPin size={18} /></span>
-                  <div>
-                    <b>{e.local}</b>
-                    {e.address && <span className="addr">{e.address}</span>}
-                    {mapsUrl && <a href={mapsUrl} target="_blank" rel="noopener noreferrer">Abrir no mapa →</a>}
-                  </div>
-                </div>
-              </section>
-            )}
+
           </div>
 
           {/* ASIDE */}
-          <aside className="evpage-aside">
+          <aside className="evpage-aside" id="participar" aria-labelledby="participar-title">
+            <div className="event-participation-head"><p className="study-kicker">O próximo encontro é seu</p><h2 id="participar-title">Bora junto?</h2></div>
             <EventTicket
               event={{ id: e.id, title: e.title, local: e.local, date: e.date, time: e.time, description: e.description, type: e.type }}
               price={price}
@@ -276,6 +245,11 @@ export default async function EventoPage({ params }) {
           </aside>
         </div>
       </div>
+      <section className="study-container study-closing event-closing">
+        <p className="study-kicker">Mais gente. Mais histórias.</p>
+        <h2>A estrada aproxima.<br /><em>O encontro fica.</em></h2>
+        <Link className="study-button" href="/eventos">Descobrir outros encontros <ArrowUpRight size={20} aria-hidden="true" /></Link>
+      </section>
     </div>
   );
 }

@@ -4,8 +4,6 @@ import { ArrowUpRight, MapPin, Navigation } from 'lucide-react';
 import Cover from '../../../components/Cover';
 import { STATUS_BIKERS, BIKERS_CHECKED_LABEL } from '../../../lib/monumentosBikers.mjs';
 import { ESTADOS_COM_MONUMENTOS, getEstado, estadoHref, noEstado, comoChegar, resumoEstado, listaLd, BASE_MONUMENTOS, MONUMENTOS_HREF } from '../../../lib/monumentosEstados.mjs';
-import '../../../home-experience.css';
-import '../../../components/home-layout.css';
 import { monumentoHref } from '../../../lib/monumentosPaginas.mjs';
 import '../monumentos.css';
 

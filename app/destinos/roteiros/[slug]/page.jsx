@@ -14,8 +14,8 @@ export async function generateMetadata({ params }) {
   if (r.colecao === 'bikers') {
     const total = MONUMENTOS.filter(m => m.coordinates).length;
     return {
-      title: { absolute: `Rota Biker: mapa dos ${total} monumentos, roteiros e como chegar · Pistaviva` },
-      description: `Encontre o monumento da Rota Biker mais perto de você: ${total} locais em SP, PR, SC, RS, MG e mais estados, além do Paraguai. Mapa, rota pelo Google Maps e situação do carimbo.`,
+      title: { absolute: `Rota Biker: mapa, monumentos e passaporte | Pistaviva` },
+      description: `Explore ${total} monumentos no mapa da Rota Biker. Encontre paradas por estado, planeje seu roteiro e veja onde carimbar o passaporte com a Pistaviva, parceira oficial.`,
       alternates: { canonical: r.href },
       openGraph: { title: `Rota Biker: mapa dos ${total} monumentos`, url: r.href, type: 'website', images: [{ url: '/monumentos/galeria/monumento-encontro.webp', width: 1600, height: 1067, alt: 'Monumento da Rota Biker entre motos, visitantes e montanhas' }] },
     };

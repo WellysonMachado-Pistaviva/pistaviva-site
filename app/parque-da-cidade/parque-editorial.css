@@ -22,6 +22,12 @@
 .pq-arrival__facts dt { color: var(--pv-muted-light); font-size: 13px; }
 .pq-arrival__facts dd { margin: 12px 0 0; line-height: 1.5; font-size: 15px; }
 .pq-arrival__facts a { color: var(--pv-orange); display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; font-weight: 600; }
+.pq-selo { padding-block: 48px; border-block: 1px solid var(--pv-line-light-2); }
+.pq-selo img { background: none; }
+.pq-selo__grid { display: grid; grid-template-columns: auto 1fr auto; gap: 32px; align-items: center; }
+.pq-selo__grid p:not(.pq-eyebrow) { margin-top: 12px; line-height: 1.6; max-width: 640px; }
+.pq-selo__acoes { display: grid; gap: 12px; justify-items: start; }
+.pq-selo__acoes a:not(.study-button) { font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 .pq-arrival__note { margin: 20px 0 0; color: var(--pv-muted-light); font-size: 12px; }
 .pq-editorial .pq-plan { margin-top: 32px; }
 .pq-editorial .pq-plan__opcao { box-shadow: none; border-radius: var(--pv-radius-sm); min-height: 64px; }
@@ -65,6 +71,7 @@
 .pq-visit-dock { display: none; }
 @media (max-width: 1024px) {
   .pq-arrival__facts { grid-template-columns: 1fr 1fr; }
+  .pq-selo__grid { grid-template-columns: 1fr; gap: 20px; }
   .pq-arrival__facts > div { padding: 24px 16px; border-bottom: 1px solid var(--pv-line-dark); }
   .pq-arrival__facts > div:first-child { padding-left: 16px; }
   .pq-festival-feature { gap: 24px; padding: 24px; }

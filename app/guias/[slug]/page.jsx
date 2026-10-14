@@ -1,3 +1,4 @@
+import PageIntro from '../../components/PageIntro';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { GUIAS, getGuia, allGuiaSlugs } from '../../lib/guias';
@@ -53,7 +54,7 @@ export default async function GuiaPage({ params }) {
   const outros = GUIAS.filter((x) => x.slug !== g.slug).slice(0, 4);
 
   return (
-    <div className="ignis ph-page">
+    <div className="ignis ph-page editorial-detail">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
@@ -66,11 +67,10 @@ export default async function GuiaPage({ params }) {
         </div>
       </nav>
 
+      <PageIntro eyebrow={g.categoria} title={g.h1} compact>{g.resumo}</PageIntro>
+
       <section className="ph-prof">
         <div className="wrap">
-          <span className="eyebrow">{g.categoria}</span>
-          <h1>{g.h1}</h1>
-          <p className="lede" style={{ maxWidth: 760 }}>{g.resumo}</p>
 
           <article style={{ maxWidth: 760, marginTop: 18 }}>
             {g.secoes.map((s, i) => (

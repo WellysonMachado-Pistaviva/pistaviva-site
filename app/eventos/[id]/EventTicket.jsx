@@ -70,7 +70,7 @@ export default function EventTicket({ event, price, goingInitial = 0, startISO, 
           {price === 'Grátis' && <span className="ev-save">Entrada livre</span>}
         </div>
         <div className="ev-going">
-          <b>{going}</b> confirmados{no > 0 && <> · <b>{no}</b> não vão</>}
+          <b>{going}</b> {going === 1 ? 'confirmado' : 'confirmados'}{no > 0 && <> · <b>{no}</b> não vão</>}
         </div>
       </div>
       <div className="ev-cta">

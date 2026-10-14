@@ -67,3 +67,9 @@ Consolidação a partir de três gerações de tokens empilhadas (Harley em `ind
 Verificado: build de produção, `eslint .` sem erro, 28 testes existentes passando, `git diff --check` limpo.
 
 Limites: a auditoria cobre CSS e JSX do repositório; não valida contraste nem renderização. Rendering em 24 rotas e dados externos (Supabase, scripts Google/Vercel) não foram revalidados nesta passagem.
+
+## Conquistadores — outubro de 2026
+
+O mural público mantém a composição editorial da home: fotografia de encontro, títulos condensados, fundo claro e chamadas em laranja. Nome, origem e passaporte são protagonistas; posição no ranking permanece secundária. A textura de papel fica restrita à miniatura do passaporte.
+
+Métricas usam apenas coleções públicas autorizadas. Anos completos recebem distinção textual; espaços sem confirmação ficam vazios. Busca e filtros não alteram a regra de empates. Cada coleção oferece abertura do perfil e compartilhamento de link; o perfil concentra a prévia do cartão para Stories e download. Convites explicam visita, confirmação, autorização e aprovação, sem prometer entrada automática no mural.

@@ -13,7 +13,8 @@ export async function getPublishedPosts(limit = 50) {
       .select('id, slug, title, excerpt, cover_url, tags, author, published_at')
       .eq('published', true)
       .order('published_at', { ascending: false })
-      .limit(limit);
+      .limit(limit)
+      .abortSignal(AbortSignal.timeout(5000));
     if (error) return LOCAL_MATERIAS.slice(0, limit);
     const databaseSlugs = new Set((data || []).map((post) => post.slug));
     const merged = [

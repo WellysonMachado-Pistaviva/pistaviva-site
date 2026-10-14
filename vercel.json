@@ -1,4 +1,10 @@
 {
   "framework": "nextjs",
-  "buildCommand": "node scripts/migrate-admin.mjs && node scripts/migrate-event-departures.mjs && node scripts/migrate-event-departure-cities.mjs --apply && npm run build"
+  "buildCommand": "node scripts/selo-preflight.mjs && node scripts/migrate-admin.mjs && node scripts/migrate-event-departures.mjs && node scripts/migrate-event-departure-cities.mjs --apply && npm run build",
+  "crons": [
+    {
+      "path": "/api/cron/selo-planilhas",
+      "schedule": "0 6 * * *"
+    }
+  ]
 }

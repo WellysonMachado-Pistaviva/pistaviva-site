@@ -105,6 +105,12 @@
   --pv-success:#22c55e;
   --pv-danger:#ef4444;
   --pv-warning:#f59e0b;
+  --pv-danger-deep:#b42318;     /* erro legível sobre claro (AA) */
+  /* Selo da Estação (Parque da Cidade) — fundo da tela do balcão, texto branco AA */
+  --pv-selo-verao:#1f5a9c;
+  --pv-selo-outono:#b4470d;
+  --pv-selo-inverno:#4b3a8c;
+  --pv-selo-primavera:#2a6b3c;
   --pv-whatsapp:#25d366;
 
   /* ---- Geometria — seis degraus, e só seis ------------------ */
