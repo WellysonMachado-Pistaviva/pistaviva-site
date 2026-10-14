@@ -38,6 +38,32 @@
 .selos-fatos dt { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--pv-muted-dark); }
 .selos-fatos dd { margin: 4px 0 0; font-size: 17px; }
 .selos-nota { font-size: 14px; color: var(--pv-muted-dark); }
+.selos-filtros { display: flex; flex-wrap: wrap; align-items: end; gap: 16px; padding: 24px; background: var(--pv-white); border: 1px solid var(--pv-line-light-2); }
+.selos-filtros label { display: grid; gap: 8px; font-size: 14px; flex: 1 1 180px; }
+.selos-filtros input:not([type="checkbox"]), .selos-filtros select { min-width: 0; width: 100%; min-height: 48px; padding: 12px; font: inherit; color: var(--pv-text-dark); background: var(--pv-white); border: 1px solid var(--pv-line-light-2); }
+.selos-filtros .selos-check { display: flex; align-items: center; min-height: 48px; }
+.selos-check input { width: 20px; height: 20px; }
+.selos-resultados { margin-block: 24px; color: var(--pv-muted-dark); }
+.selos-grade-brasil { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+.selos-card-brasil { display: grid; align-content: start; border: 1px solid var(--pv-line-light-2); background: var(--pv-white); }
+.selos-card-brasil:hover { border-color: var(--pv-orange); }
+.selos-cidade-arte, .selos-papel, .selos-variante { background: var(--pv-offwhite); }
+.selos-cidade-arte { padding: 16px; }
+.selos-cidade-arte img { width: 100%; height: auto; display: block; }
+.selos-brasil img { background: transparent; }
+.selos-card-legenda { display: grid; gap: 8px; padding: 24px; }
+.selos-card-legenda h2 { font-family: var(--display); font-size: 28px; line-height: 1.1; }
+.selos-card-legenda p { color: var(--pv-muted-dark); font-size: 14px; }
+.selos-paginacao { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 24px; margin-top: 32px; }
+.selos-historia { max-width: 800px; line-height: 1.7; }
+.selos-historia blockquote { margin: 0 0 16px; padding-left: 24px; border-left: 3px solid var(--pv-orange); font-size: 19px; }
+.selos-historia details { margin-top: 24px; }
+.selos-historia summary { cursor: pointer; font-weight: 700; }
+.selos-historia details p { margin-top: 16px; }
+.selos-variantes { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; }
+.selos-variante { display: grid; text-align: center; gap: 8px; padding: 12px; border: 2px solid var(--pv-line-light-2); text-transform: capitalize; }
+.selos-variante img { width: 100%; height: auto; }
+.selos-variante-ativa { border-color: var(--pv-orange); }
 @media (max-width: 768px) {
   .selos-detalhe { grid-template-columns: 1fr; gap: 32px; }
   .selos-detalhe-arte { max-width: 320px; justify-self: center; }

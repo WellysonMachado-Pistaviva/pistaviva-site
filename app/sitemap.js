@@ -37,6 +37,7 @@ export default async function sitemap() {
     { path: '/blog' },
     { path: '/diretorio-duas-rodas' },
     { path: '/rotas' },
+    { path: '/selos/brasil', lastModified: '2026-10-14' },
     { path: '/destinos/caminho-dos-diamantes', lastModified: '2026-09-13' },
     ...ROTEIROS_CURADOS.filter(r => r.entradas).map(r => ({ path: r.href, lastModified: r.checkedAt })),
     ...ESTADOS_COM_MONUMENTOS.map(e => ({ path: estadoHref(e.uf), lastModified: BIKERS_CHECKED_AT })),

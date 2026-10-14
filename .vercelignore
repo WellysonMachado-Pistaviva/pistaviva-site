@@ -10,3 +10,5 @@
 .playwright
 .playwright-cli
 node_modules
+.cache
+.selo-local

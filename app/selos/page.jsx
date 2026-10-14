@@ -28,6 +28,13 @@ export default async function SelosPage() {
         <Link className="study-button" href="/selo">Começar minha coleção <ArrowUpRight size={20} aria-hidden="true" /></Link>
       </header>
 
+      <Link className="selos-colecao" href="/selos/brasil">
+        <span className="study-kicker">Brasil · Municípios da Rota Biker em destaque</span>
+        <strong>Selos das cidades brasileiras</strong>
+        <span>Encontre sua cidade, conheça sua história e escolha entre as variações dos selos em SVG.</span>
+        <span className="selos-ver">Explorar o Brasil <ArrowUpRight size={18} aria-hidden="true" /></span>
+      </Link>
+
       <section aria-labelledby="selos-colecoes">
         <h2 id="selos-colecoes" className="selos-h2">Coleções</h2>
         <div className="selos-colecoes">

@@ -22,7 +22,7 @@ export default function PassaporteCidades({ entradas, titulo = 'Cidades da Rota 
         <ol className="selo-carimbos">
           {r.entradas.map((e) => (
             <li key={e.id} style={{ '--carimbo-giro': `${giro(e.id)}deg` }}>
-              <img src={`/selo/carimbo/${e.carimbo}?dia=${e.dia}`} alt={`Carimbo ${nome[e.carimbo] || e.carimbo}, ${dataCarimbo(e.dia)}`} width={120} height={120} loading="lazy" />
+              <img src={`/selo/carimbo/${e.carimbo}?dia=${e.dia}&arte=20261014`} alt={`Carimbo ${nome[e.carimbo] || e.carimbo}, ${dataCarimbo(e.dia)}`} width={120} height={120} loading="lazy" />
               {e.visita > 1 && <span className="selo-carimbo-vez">{e.visita}ª visita</span>}
             </li>
           ))}
