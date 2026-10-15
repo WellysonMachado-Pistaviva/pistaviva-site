@@ -1,5 +1,6 @@
 'use server';
 import { revalidatePath } from 'next/cache';
+import { createHash } from 'node:crypto';
 import { headers } from 'next/headers';
 import { excedeu } from '../lib/selo/limites';
 import { copiarEvento } from '../lib/selo/planilhas';
@@ -7,11 +8,14 @@ import { findCity, normalizeCity } from '../lib/municipios.mjs';
 import { validarEndereco } from '../lib/selo/beneficio.mjs';
 import { estacaoDe } from '../lib/selo/estacao.mjs';
 import { alvoDoLocal, avaliarCheckin } from '../lib/selo/geo.mjs';
-import { cidadeDoPonto, cidadePorSlug, diaDoCarimbo } from '../lib/selo/cidades.mjs';
-import { validarVisita } from '../lib/selo/schema.mjs';
+import { diaDoCarimbo } from '../lib/selo/cidades.mjs';
+import { municipioDoPonto } from '../lib/selo/malhaBrasil.mjs';
+import { validarPassaporte, validarVisita } from '../lib/selo/schema.mjs';
+import { codigoSerie, horaDaCaptura } from '../lib/selo/mapaCidades.mjs';
+import { urlCarimbo } from '../lib/selo/carimboUrl.mjs';
 import { normalizarWhatsapp } from '../lib/selo/whatsapp.mjs';
 import {
-  autorizarConquista, autorizarPassaporte, carimbarCidade, confirmarFoto, fotoEnviada, marcarProva, motoPorCodigo, motociclistaPorWhatsapp, registrarCheckin, registrarVisita,
+  anexarFotoCidade, autorizarConquista, autorizarPassaporte, carimbarCidade, confirmarFoto, criarPassaporte, denunciarFoto, fotoEnviada, marcarProva, motoPorCodigo, motociclistaPorWhatsapp, registrarCheckin, registrarVisita,
   salvarEndereco, urlUploadFoto, visitaAtual, visitaPorChave,
 } from '../lib/selo/store';
 
@@ -110,6 +114,7 @@ export async function autorizarMeuMural({ codigo, ano, autorizar } = {}) {
 // ── Check-in no link pessoal ───────────────────────────────────────────────
 // O código do perfil (12 hex, não sequencial) é a credencial, como no resto da coleção.
 const codigoValido = (c) => /^[a-f0-9]{12}$/.test(String(c));
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const provaDe = (visita) => `${visita.id}-prova.jpg`;
 
 const MOTIVO_GPS = {
@@ -186,60 +191,123 @@ export async function salvarMeuEndereco({ codigo, ...entrada } = {}) {
   }
 }
 
-// ── carimbo de cidade da Rota Biker ──────────────────────────────────────────
-// 1) iniciarCarimbo confere o GPS contra o contorno do município e devolve a URL
-//    de upload da foto. 2) confirmarCarimbo só grava se a foto chegou no caminho
-//    daquela pessoa/cidade/dia, que só existe depois do passo 1.
+// ── passaporte online ────────────────────────────────────────────────────────
+// Qualquer pessoa cria o passaporte pelo site, de qualquer cidade. WhatsApp já
+// cadastrado não devolve o código: quem digitou o número de outra pessoa não
+// abre o passaporte dela. Recuperação em /selo/meu-numero.
+export async function criarMeuPassaporte(entrada) {
+  if (entrada?.site) return { ok: false, erro: 'Não criou. Tente de novo.' };
+  if (await limitar('selo-passaporte-novo', 10, 10 * 60_000)) return { ok: false, erro: 'Muitas tentativas. Espere alguns minutos.' };
+  const v = validarPassaporte(entrada);
+  if (!v.ok) return { ok: false, erros: v.erros };
+  const d = v.dados;
+  const cidade = findCity(d.uf, d.cidade)?.name || d.cidade;
+  try {
+    const r = await criarPassaporte({ ...d, cidade });
+    if (r.existente) return { ok: false, existente: true, erro: 'Este WhatsApp já tem passaporte. Recupere o seu com o mesmo número.' };
+    return { ok: true, numero: Number(r.numero), codigo: r.codigo, nome: d.nome, cidade, uf: d.uf };
+  } catch (e) {
+    console.error('[selo] criarMeuPassaporte', e);
+    return { ok: false, erro: 'Não criou. Tente de novo.' };
+  }
+}
 
-const fotoCarimbo = (motoId, dia, slug) => `cidade-${motoId}-${dia}-${slug}.jpg`;
+// ── carimbo de cidade da Rota Biker ──────────────────────────────────────────
+// 1) carimbarAqui: o GPS diz em qual município a pessoa está; o servidor confere
+//    contra o contorno do IBGE e grava o carimbo. Sem foto: a foto é opcional.
+//    Sem sinal, o celular guarda a leitura e envia depois (capturadoEm, até 72 h).
+// 2) prepararFotoCidade + publicarFotoCidade: se quiser, a pessoa sobe uma foto
+//    do carimbo; pública vai na hora para o mapa da cidade.
+
+const fotoCarimbo = (motoId, entradaId) => `cidade-${motoId}-${entradaId}.jpg`;
 
 const MOTIVO_CIDADE = {
   invalido: 'Não recebemos sua localização. Permita o acesso e tente de novo.',
   precisao: 'O sinal do GPS está fraco. Vá para uma área aberta e tente de novo.',
-  fora: (r) => `Você não está em uma cidade da Rota Biker. A mais perto é ${r.cidade.nome}/${r.cidade.uf}, a ${(r.distancia / 1000).toLocaleString('pt-BR', { maximumFractionDigits: 1 })} km da divisa.`,
+  fora: 'Não encontramos um município brasileiro nesse ponto. O carimbo vale dentro de qualquer cidade do Brasil.',
+};
+const MOTIVO_HORA = {
+  futuro: 'O relógio do celular está adiantado. Acerte a hora e tente de novo.',
+  antigo: 'Esse check-in sem sinal passou de 72 horas e não vale mais.',
+  invalido: 'Horário do check-in inválido.',
 };
 
-export async function iniciarCarimbo({ codigo, lat, lng, precisao } = {}) {
+export async function carimbarAqui({ codigo, lat, lng, precisao, capturadoEm } = {}) {
   if (!codigoValido(codigo)) return { ok: false, erro: 'Link inválido.' };
-  if (await limitar('selo-cidade', 20, 10 * 60_000)) return { ok: false, erro: 'Muitas tentativas. Espere alguns minutos.' };
-  const r = cidadeDoPonto({ lat, lng, precisao });
+  if (await limitar('selo-cidade', 30, 10 * 60_000)) return { ok: false, erro: 'Muitas tentativas. Espere alguns minutos.' };
+  const hora = horaDaCaptura(capturadoEm);
+  if (!hora.ok) return { ok: false, definitivo: true, erro: MOTIVO_HORA[hora.motivo] };
+  const r = municipioDoPonto({ lat, lng, precisao });
   if (!r.ok) {
     const msg = MOTIVO_CIDADE[r.motivo];
-    return { ok: false, erro: typeof msg === 'function' ? msg(r) : msg };
+    return { ok: false, definitivo: true, erro: typeof msg === 'function' ? msg(r) : msg };
   }
   try {
-    const moto = await motoPorCodigo(codigo);
-    if (!moto) return { ok: false, erro: 'Cadastro não encontrado.' };
-    const { slug, nome, uf } = r.cidade;
-    return { ok: true, cidade: { slug, nome, uf }, distancia: r.distancia, upload: await urlUploadFoto(fotoCarimbo(moto.id, diaDoCarimbo(), slug), await baseUrl()) };
+    const { slug, nome, uf, ibge } = r.municipio;
+    const feito = await carimbarCidade(codigo, {
+      carimbo: slug, ibge, uf, dia: diaDoCarimbo(hora.quando),
+      metodo: hora.offline ? 'gps_offline' : 'gps', capturadoEm: hora.quando.toISOString(),
+      distancia: Math.max(0, Math.min(100, Math.round(r.distancia))),
+      precisao: Math.max(1, Math.min(200, Math.round(r.precisao))),
+    });
+    if (!feito) return { ok: false, definitivo: true, erro: 'Passaporte não encontrado.' };
+    revalidatePath(`/selo/m/${codigo}`);
+    revalidatePath(`/selo/cidade/${slug}`);
+    revalidatePath('/selo/mapa');
+    const dia = diaDoCarimbo(hora.quando);
+    const serie = codigoSerie(feito.serie, feito.id);
+    return { ok: true, ja: feito.ja, entradaId: feito.id, serie, dia, imagem: urlCarimbo(slug, { dia, serie }), cidade: { slug, nome, uf } };
   } catch (e) {
-    console.error('[selo] iniciarCarimbo', e);
-    return { ok: false, erro: 'Não conseguimos preparar o carimbo. Tente de novo.' };
+    console.error('[selo] carimbarAqui', e);
+    return { ok: false, erro: 'Não gravou o carimbo. Tente de novo.' };
   }
 }
 
-export async function confirmarCarimbo({ codigo, carimbo, distancia, precisao } = {}) {
-  if (!codigoValido(codigo)) return { ok: false, erro: 'Link inválido.' };
-  const cidade = cidadePorSlug(String(carimbo));
-  if (!cidade) return { ok: false, erro: 'Cidade inválida.' };
+export async function prepararFotoCidade({ codigo, entradaId } = {}) {
+  if (!codigoValido(codigo) || !UUID.test(String(entradaId))) return { ok: false, erro: 'Pedido inválido.' };
+  if (await limitar('selo-cidade-foto', 20, 10 * 60_000)) return { ok: false, erro: 'Muitas tentativas. Espere alguns minutos.' };
   try {
     const moto = await motoPorCodigo(codigo);
-    if (!moto) return { ok: false, erro: 'Cadastro não encontrado.' };
-    const dia = diaDoCarimbo();
-    const foto = fotoCarimbo(moto.id, dia, cidade.slug);
-    if (!await fotoEnviada(foto)) return { ok: false, erro: 'A foto não chegou. Tente de novo.' };
-    // Distância e precisão vêm do passo 1 pelo navegador: são só registro; a prova é a foto no caminho assinado.
-    const feito = await carimbarCidade(codigo, {
-      carimbo: cidade.slug, ibge: cidade.ibge, uf: cidade.uf, dia, foto,
-      distancia: Math.max(0, Math.min(100, Math.round(Number(distancia) || 0))),
-      precisao: Math.max(1, Math.min(200, Math.round(Number(precisao) || 1))),
-    });
-    if (!feito) return { ok: false, erro: 'Cadastro não encontrado.' };
-    revalidatePath(`/selo/m/${codigo}`);
-    return { ok: true, ja: feito.ja, cidade: { slug: cidade.slug, nome: cidade.nome, uf: cidade.uf } };
+    if (!moto) return { ok: false, erro: 'Passaporte não encontrado.' };
+    return { ok: true, upload: await urlUploadFoto(fotoCarimbo(moto.id, entradaId), await baseUrl()) };
   } catch (e) {
-    console.error('[selo] confirmarCarimbo', e);
-    return { ok: false, erro: 'Não gravou o carimbo. Tente de novo.' };
+    console.error('[selo] prepararFotoCidade', e);
+    return { ok: false, erro: 'Não conseguimos preparar o envio. Tente de novo.' };
+  }
+}
+
+export async function publicarFotoCidade({ codigo, entradaId, publica } = {}) {
+  if (!codigoValido(codigo) || !UUID.test(String(entradaId)) || typeof publica !== 'boolean') return { ok: false, erro: 'Pedido inválido.' };
+  try {
+    const moto = await motoPorCodigo(codigo);
+    if (!moto) return { ok: false, erro: 'Passaporte não encontrado.' };
+    const path = fotoCarimbo(moto.id, entradaId);
+    if (!await fotoEnviada(path)) return { ok: false, erro: 'A foto não chegou. Tente de novo.' };
+    const r = await anexarFotoCidade(codigo, entradaId, path, publica);
+    if (!r) return { ok: false, erro: 'Carimbo não encontrado.' };
+    revalidatePath(`/selo/cidade/${r.carimbo}`);
+    revalidatePath('/selo/mapa');
+    return { ok: true, status: r.status, carimbo: r.carimbo };
+  } catch (e) {
+    console.error('[selo] publicarFotoCidade', e);
+    return { ok: false, erro: 'Não salvou a foto. Tente de novo.' };
+  }
+}
+
+// Denúncia anônima: uma por IP por foto (só o hash do IP é gravado).
+export async function denunciarFotoCidade({ id } = {}) {
+  if (!UUID.test(String(id))) return { ok: false, erro: 'Foto inválida.' };
+  if (await limitar('selo-denuncia', 20, 60 * 60_000)) return { ok: false, erro: 'Muitas denúncias seguidas. Tente mais tarde.' };
+  const h = await headers();
+  const ip = (h.get('x-forwarded-for') || '').split(',')[0].trim() || h.get('x-real-ip') || 'desconhecido';
+  const quem = createHash('sha256').update(`selo-denuncia:${ip}`).digest('hex');
+  try {
+    const status = await denunciarFoto(id, quem);
+    if (status == null) return { ok: false, erro: 'Foto não encontrada.' };
+    return { ok: true, escondida: status !== 'publica' };
+  } catch (e) {
+    console.error('[selo] denunciarFotoCidade', e);
+    return { ok: false, erro: 'Não registrou a denúncia. Tente de novo.' };
   }
 }
 

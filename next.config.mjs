@@ -2,6 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Arquivos lidos em tempo de execução pelo Selo (fontes dos carimbos e a
+  // malha de municípios do check-in): garante que vão junto nas funções.
+  outputFileTracingIncludes: {
+    '/selo/**': ['./app/lib/selo/fontes/**', './app/lib/selo/malha/**'],
+    '/selos/**': ['./app/lib/selo/fontes/**', './app/lib/selo/malha/**'],
+  },
   images: {
     // Allowlist apertada — só os hosts que servem imagem via next/image.
     // Covers/banners/avatars vêm do Supabase Storage; resto é estático conhecido.

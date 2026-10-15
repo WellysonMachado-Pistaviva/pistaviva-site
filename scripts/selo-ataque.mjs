@@ -63,8 +63,10 @@ await caso('Link de parceiro inválido ou inventado → 404', async () => {
   espera(await status(`/selo/parceiro/${'A'.repeat(32)}/selo.svg`) === 404, 'prévia sem token válido');
 });
 await caso('Passaporte público de quem não autorizou → 404', async () => {
-  espera(await status('/selo/conquistadores/999999999') === 404, 'número inexistente');
-  espera(await status('/selo/conquistadores/abc') === 404, 'número inválido');
+  espera(await status('/selo/passaporte/999999999') === 404, 'número inexistente');
+  espera(await status('/selo/passaporte/abc') === 404, 'número inválido');
+  espera(await status('/selo/conquistadores/abc') === 404, 'link antigo inválido');
+  espera([307, 308].includes(await status('/selo/conquistadores/999999999')), 'link antigo redireciona');
   espera(await status('/selo/conquistadores/999999999/cartao') === 404, 'cartão inexistente');
 });
 

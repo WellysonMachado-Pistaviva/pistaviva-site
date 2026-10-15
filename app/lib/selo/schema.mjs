@@ -46,3 +46,27 @@ export function validarVisita(entrada) {
   }
   return { ok: false, erros };
 }
+
+// Passaporte criado pelo site, fora do Parque: só identidade e aceite.
+const schemaPassaporte = z.object({
+  nome: nomeProprio(2, 80, 'Digite seu nome.', 'Use só letras no nome.'),
+  whatsapp: z.string().optional().default('').transform((v, ctx) => {
+    const d = normalizarWhatsapp(v);
+    if (!d) {
+      ctx.addIssue({ code: 'custom', message: 'Informe seu WhatsApp com DDD. É com ele que você recupera o passaporte.' });
+      return z.NEVER;
+    }
+    return d;
+  }),
+  uf: z.enum(UFS, { error: 'Escolha o estado.' }),
+  cidade: nomeProprio(2, 80, 'Digite a cidade.', 'Use só letras no nome da cidade.'),
+  aceite_lgpd: z.literal(true, { error: 'Para criar, aceite o uso dos dados.' }),
+});
+
+export function validarPassaporte(entrada) {
+  const r = schemaPassaporte.safeParse(entrada ?? {});
+  if (r.success) return { ok: true, dados: r.data };
+  const erros = {};
+  for (const issue of r.error.issues) erros[String(issue.path[0] ?? 'form')] ??= issue.message;
+  return { ok: false, erros };
+}

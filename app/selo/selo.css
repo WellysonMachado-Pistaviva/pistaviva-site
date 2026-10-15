@@ -395,3 +395,20 @@ fieldset.selo-campo { border: 0; padding: 0; margin: 0; min-width: 0; }
 .selo-faltam ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; font-size: 14px; }
 .selo-faltam li { display: flex; justify-content: space-between; gap: 8px; color: var(--pv-muted-dark); }
 .selo-faltam li span { font: 700 11px var(--mono); }
+
+/* Carimbo de cidade: fila sem sinal (selo amarelo) e resultado com foto opcional. */
+.carimbo-cidade { display: grid; gap: 16px; }
+.carimbo-pendente { display: grid; grid-template-columns: auto 1fr; gap: 12px 14px; align-items: center; padding: 14px; background: #fff6d6; border: 1px solid #e8c34a; }
+.carimbo-pendente-selo { width: 28px; height: 28px; border-radius: 50%; background: #f2c230; box-shadow: inset 0 0 0 3px #fff6d6, 0 0 0 2px #c99a0e; }
+.carimbo-pendente div { display: grid; gap: 2px; font-size: 14px; color: var(--pv-text-dark); }
+.carimbo-pendente .selo-btn { grid-column: 1 / -1; }
+.carimbo-feito { display: grid; grid-template-columns: auto 1fr; gap: 12px 16px; align-items: center; padding: 16px; background: var(--pv-white); border: 1px solid var(--pv-line-light-2); }
+.carimbo-feito-arte { width: 96px; height: 96px; transform: rotate(-6deg); animation: carimbo-bate .45s cubic-bezier(.2, 1.6, .4, 1) both; }
+.carimbo-feito-texto { display: grid; gap: 4px; }
+.carimbo-feito-texto b { font-family: var(--display); font-size: 24px; line-height: 1; }
+.carimbo-feito-texto span { font-size: 14px; color: var(--pv-muted-dark); }
+.carimbo-feito-foto { grid-column: 1 / -1; display: grid; gap: 10px; margin: 0; }
+@keyframes carimbo-bate { from { transform: scale(1.6) rotate(-14deg); opacity: 0; } to { transform: scale(1) rotate(-6deg); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .carimbo-feito-arte { animation: none; } }
+.carimbo-feito-serie { justify-self: start; padding: 2px 8px; border: 2px solid #a3281c; color: #a3281c; font: 700 14px/1.4 var(--font); letter-spacing: .08em; transform: rotate(-2deg); }
+.carimbo-feito-story { grid-column: 1 / -1; }

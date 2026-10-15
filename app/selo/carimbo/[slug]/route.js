@@ -1,22 +1,25 @@
-import { cidadePorSlug } from '../../../lib/selo/cidades.mjs';
-import { montarCarimboCidadeSvg } from '../../../lib/selo/carimboCidadeArte.mjs';
-import { municipioBrasilPorSlug } from '../../../lib/selo/municipiosBrasil.mjs';
-import { montarSeloMunicipioBrasil } from '../../../lib/selo/municipioBrasilArte.mjs';
+import { localPorSlug } from '../../../lib/selo/locais.mjs';
+import { carimboDoMunicipio } from '../../../lib/selo/carimboCidade.mjs';
 
-// Arte do carimbo de cidade. ?dia=AAAA-MM-DD imprime a data (passaporte);
-// sem dia é a arte do catálogo. Pública: não leva nome nem nº da pessoa.
+const DIA = /^20\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+const SERIE = /^\d{4,6}·[A-Z]$/;
+
+// Carimbo de cidade do passaporte: moldura original das cartelas + texto da
+// cidade. ?dia=AAAA-MM-DD e ?serie=0007·K imprimem a data e o nº do check-in;
+// sem eles é a arte de catálogo. Pública: não leva nome nem nº da pessoa.
+// Lê ?dia, ?serie e ?variante: precisa responder por pedido, não virar estática.
+export const dynamic = 'force-dynamic';
+
 export async function GET(req, { params }) {
   const { slug } = await params;
-  const cidade = cidadePorSlug(slug);
-  if (!cidade) return new Response(null, { status: 404 });
-  const dia = new URL(req.url).searchParams.get('dia');
-  const valido = dia && /^20\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(dia) ? dia : null;
-  const municipio = municipioBrasilPorSlug(slug);
-  const svg = municipio ? montarSeloMunicipioBrasil(municipio, null, { dia: valido }) : montarCarimboCidadeSvg(cidade, { dia: valido });
-  return new Response(svg, {
+  if (!localPorSlug(slug)) return new Response(null, { status: 404 });
+  const q = new URL(req.url).searchParams;
+  const dia = DIA.test(q.get('dia') || '') ? q.get('dia') : null;
+  const serie = SERIE.test(q.get('serie') || '') ? q.get('serie') : null;
+  return new Response(carimboDoMunicipio(slug, { dia, serie }), {
     headers: {
       'Content-Type': 'image/svg+xml; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600',
+      'Cache-Control': 'public, max-age=86400, s-maxage=31536000',
       'X-Content-Type-Options': 'nosniff',
       'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'",
     },

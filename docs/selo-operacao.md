@@ -139,7 +139,7 @@ LGPD: as planilhas têm nome e WhatsApp. Acesso só para a equipe, com 2FA. Ao e
 
 ## Publicar sem susto (ordem obrigatória)
 1. `npm run check` (tudo verde) e `npm run selo:ataque` com `npm run dev` rodando.
-2. No Supabase → SQL Editor: rodar `supabase_selo.sql` inteiro e depois `supabase_selo_cidades.sql` (os dois idempotentes).
+2. No Supabase → SQL Editor: rodar `supabase_selo.sql` inteiro, depois `supabase_selo_cidades.sql` e depois `supabase_selo_mapa.sql` (os três idempotentes). O último libera passaporte criado pelo site, carimbo de cidade sem foto obrigatória, check-in offline, fotos públicas no mapa e denúncias.
 3. `npm run selo:preflight` → precisa terminar em "Banco pronto para publicar".
 4. Configurar as variáveis da Vercel (acima) e fazer o deploy. O build roda o pré-voo de novo: se o banco não estiver pronto, o deploy **falha e o site atual continua no ar**.
 5. Depois do deploy: abrir `/selos`, fazer um cadastro de teste, conferir a linha na aba `Eventos` e chamar `planilhas-sincronizar`.
@@ -152,3 +152,15 @@ Uma cidade por município com monumento (42). Catálogo e contornos em `app/lib/
 - GPS de navegador é falsificável: o carimbo de cidade é digital, sem adesivo nem benefício.
 - Passaporte público em `/selo/passaporte/{nº}`: só com autorização no link pessoal (`passaporte_publico_em`). Mostra primeiro nome + inicial, cidade/UF, cidades com datas e estações confirmadas no balcão. Nunca fotos, WhatsApp ou endereço. Fora da busca (noindex).
 - Excluir a pessoa no admin apaga os carimbos e as fotos deles.
+
+
+## Carimbo de cidade, mapa e fotos (2026-10-14)
+
+Fluxo da pessoa:
+1. Abre `/selo/passaporte` (ícone de passaporte no topo do site). Sem passaporte, cria ali mesmo: nome, WhatsApp, cidade e aceite. WhatsApp já cadastrado não abre o passaporte; manda para `/selo/meu-numero`.
+2. Numa cidade da Rota Biker, toca em **Carimbar esta cidade**. O GPS é conferido no servidor contra o contorno do IBGE (precisão ≤ 200 m, folga ≤ 100 m na divisa). A posição não é gravada.
+3. Sem sinal: a leitura fica no celular (selo amarelo "guardado sem sinal") e vai sozinha quando a rede volta. Vale até 72 h e carimba no dia da leitura (`metodo = gps_offline`).
+4. Foto é opcional. Logo depois do carimbo (ou mais tarde, pelo passaporte), a pessoa posta; marcada "mostrar no mapa", aparece na hora em `/selo/cidade/[slug]` como "Primeiro nome + inicial · nº".
+5. `/selo/mapa` mostra as 42 cidades com o total de carimbos; cada cidade tem página com totais e fotos.
+
+Moderação: qualquer pessoa denuncia uma foto (uma vez por IP, só o hash é gravado). Com 3 denúncias a foto sai do mapa e vai para **Admin → Selo → Fotos de cidade → Denunciadas**. Lá: **Voltar ao mapa** (zera denúncias) ou **Ocultar**. A aba **No mapa** permite ocultar qualquer foto pública a qualquer momento. A rota `/selo/foto/[id]` confere o status a cada pedido, então ocultar vale em até 2 min (cache).

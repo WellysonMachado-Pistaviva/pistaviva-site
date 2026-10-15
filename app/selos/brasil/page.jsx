@@ -1,6 +1,10 @@
 import Link from 'next/link';
 import { buscarMunicipios, MUNICIPIOS_BRASIL, MUNICIPIOS_ROTA } from '../../lib/selo/municipiosBrasil.mjs';
 import { UFS } from '../../lib/ufs.mjs';
+import { cidadePorSlug } from '../../lib/selo/cidades.mjs';
+import { VERSAO_CARIMBO, estiloIntercalado, urlMiniCarimbo } from '../../lib/selo/carimboUrl.mjs';
+import CartaoSelo from '../../selo/cartao/CartaoSelo';
+import ChamadaItajuba from '../../selo/chamada/ChamadaItajuba';
 
 export const metadata = {
   title: 'Selos do Brasil · cidades da Rota Biker',
@@ -18,6 +22,10 @@ export default async function SelosBrasilPage({ searchParams }) {
   const pages = Math.max(1, Math.ceil(lista.length / PAGE_SIZE));
   const page = Math.min(pages, Math.max(1, Number.parseInt(query.pagina, 10) || 1));
   const shown = lista.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const estados = Object.entries(shown.reduce((grupos, cidade) => {
+    (grupos[cidade.uf] ||= []).push(cidade);
+    return grupos;
+  }, {}));
   const href = (p) => `/selos/brasil?${new URLSearchParams({ q: busca, uf, rota: rota ? '1' : '', pagina: String(p) })}`;
   return <div className="study-container selos-wrap selos-brasil">
     <nav className="selos-trilha" aria-label="Você está em"><Link href="/selos">Selos</Link> / Brasil</nav>
@@ -35,11 +43,29 @@ export default async function SelosBrasilPage({ searchParams }) {
         <button className="study-button" type="submit">Buscar selos</button>
       </form>
       <p className="selos-resultados" role="status">{lista.length.toLocaleString('pt-BR')} {lista.length === 1 ? 'selo encontrado' : 'selos encontrados'} · Rota Biker primeiro</p>
-      <div className="selos-grade-brasil">
-        {shown.map((c) => <Link key={c.slug} href={`/selos/brasil/${c.slug}`} className="selos-card-brasil">
-          <div className="selos-cidade-arte"><img src={`/selos/brasil/${c.slug}/selo.svg`} alt={`Selo de ${c.nome}, ${c.uf}`} width={400} height={470} loading="lazy" /></div>
-          <div className="selos-card-legenda"><span className="study-kicker">{c.uf} · {c.naRota ? 'Rota Biker' : 'Brasil'}</span><h2>{c.nome}</h2><p>{c.ano ? `${c.tipoAno} · ${c.ano}` : 'Data histórica em pesquisa'}</p><span className="selos-ver">História e variações ↗</span></div>
-        </Link>)}
+      <p className="selos-deslize">Deslize para o lado para ver os selos de cada estado.</p>
+      <div className="selos-estados">
+      {estados.map(([estado, cidades]) => (
+        <section className="selos-estado" key={estado} aria-labelledby={`selos-uf-${estado}`}>
+          <header><h2 id={`selos-uf-${estado}`}>{estado}</h2><span>{cidades.length} {cidades.length === 1 ? 'selo nesta página' : 'selos nesta página'}</span></header>
+          <div className="selos-trilho" role="region" aria-label={`Selos de ${estado}`} tabIndex={0}>
+      <ul className="cartao-selo-grade selos-grade-cartoes">
+        {cidades.map((c, i) => {
+          // Check-in vale no Brasil inteiro: todo card tem o "+". Estilos intercalados.
+          const rota = cidadePorSlug(c.slug);
+          const estilo = estiloIntercalado(i);
+          const mini = rota ? urlMiniCarimbo(c.slug, estilo) : null;
+          const arte = mini || `/selos/brasil/${c.slug}/selo.svg?variante=${estilo === 'cor' ? 'classico' : 'carimbo'}&v=${VERSAO_CARIMBO}`;
+          return <li key={c.slug}>
+            <CartaoSelo href={`/selos/brasil/${c.slug}`} arte={arte} nome={c.nome}
+              etiquetas={[{ texto: c.uf }, c.naRota ? { texto: 'Rota Biker', tom: 'rota' } : { texto: 'Brasil' }, ...(c.ano ? [{ texto: `${c.tipoAno} ${c.ano}` }] : [])]}
+              cidade={{ slug: c.slug, nome: c.nome, uf: c.uf, mini: arte }} />
+          </li>;
+        })}
+      </ul>
+          </div>
+        </section>
+      ))}
       </div>
       {!shown.length && <p className="selos-vazio">Nenhuma cidade encontrada. <Link href="/selos/brasil">Limpar filtros</Link></p>}
       <nav className="selos-paginacao" aria-label="Páginas do catálogo">
@@ -48,6 +74,7 @@ export default async function SelosBrasilPage({ searchParams }) {
         {page < pages && <Link className="study-button" href={href(page + 1)}>Próxima</Link>}
       </nav>
     </section>
+    <ChamadaItajuba />
     <p className="selos-nota">Fundação e emancipação são marcos diferentes: cada data informa seu significado. Anos ainda sem confirmação ficam em pesquisa. As artes para download não comprovam visita nem concedem carimbos no passaporte.</p>
   </div>;
 }

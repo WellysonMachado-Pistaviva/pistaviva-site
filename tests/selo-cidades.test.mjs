@@ -98,9 +98,14 @@ test('store local: carimbo idempotente no dia, passaporte só com autorização,
     mkdirSync(join(pasta, 'fotos'), { recursive: true });
     writeFileSync(join(pasta, 'fotos', foto), 'jpg');
     const d = { carimbo: 'socorro-sp', ibge: 3552106, uf: 'SP', dia: '2026-10-14', distancia: 0, precisao: 12, foto };
-    assert.deepEqual(s.carimbarCidade(codigo, d), { ok: true, ja: false });
-    assert.deepEqual(s.carimbarCidade(codigo, d), { ok: true, ja: true });
-    assert.deepEqual(s.carimbarCidade(codigo, { ...d, dia: '2026-10-20' }), { ok: true, ja: false });
+    const primeiro = s.carimbarCidade(codigo, d);
+    assert.equal(primeiro.ok, true);
+    assert.equal(primeiro.ja, false);
+    // Repetir no mesmo dia devolve o mesmo carimbo (a foto opcional vai nele).
+    assert.deepEqual(s.carimbarCidade(codigo, d), { ok: true, ja: true, id: primeiro.id, serie: 1 });
+    const outroDia = s.carimbarCidade(codigo, { ...d, dia: '2026-10-20' });
+    assert.equal(outroDia.ja, false);
+    assert.notEqual(outroDia.id, primeiro.id);
     assert.equal(s.carimbarCidade('000000000000', d), null);
     assert.equal(s.entradas(id).length, 2);
 

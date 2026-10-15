@@ -29,3 +29,14 @@ Os SVGs são gerados no servidor; não dependem de fontes remotas. A galeria alt
 - Navegador: busca sem acentos, navegação, filtros, 24 cartões por página, ausência de overflow móvel, download de Itajubá, oito endpoints SVG e 404 para slug inexistente.
 - Revisão visual dos SVGs e páginas em desktop/celular; correções de fundo, encaixe de nomes/datas e rótulos curvos compatíveis com conversão raster.
 - Auditoria visual geral ainda aponta 48 desvios anteriores em outros componentes; nenhum nas folhas alteradas para este catálogo.
+
+### Revisão dos cinco SVGs adicionais
+
+- Importação reproduzível: `scripts/import-selos-adicionais.py <diretório dos cinco SVGs>`.
+- `1.svg`: moldura postal; `2.svg`: cartão com anel do ano; `3.svg`, `4.svg`, `5.svg`: coruja viajante, moldura quadrada e escudo.
+- Desenhos originais preservados. Letras antigas em curvas removidas por grupos; dependências SVG mantidas e definições não utilizadas descartadas.
+- Novos modelos disponíveis na página de cada município. Nomes usam linhas balanceadas por palavras e medidas reais dos glifos, preservando acentos. Variações antigas com altura de letra inferior a 16 unidades deixam de ser oferecidas.
+- Fontes convertidas em contornos; nenhuma fonte externa necessária ao abrir ou baixar SVG. Versão da arte inclui modelos novos e funções de composição, invalidando imagens antigas em cache.
+- Revisão visual inclui Vila Bela da Santíssima Trindade/MT nos cinco modelos. Testes cobrem nomes completos, datas, ausência de coordenadas inválidas e distinção entre modelos.
+
+Publicação: o preflight remoto encontrou três aliases legados `NEXT_PUBLIC_SUPABASE_URL_SUPABASE_*` de credenciais privadas. Duplicatas removidas das configurações Production e Preview. Como a integração ainda as injetava em novos builds, `scripts/build-production.mjs` remove exatamente esses três aliases do ambiente dos processos de compilação. Credenciais privadas, preflight e migrações existentes permanecem. A verificação remota passou após essa correção.

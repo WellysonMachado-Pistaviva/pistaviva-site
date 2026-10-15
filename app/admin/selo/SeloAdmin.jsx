@@ -15,7 +15,7 @@ const PRESETS = [
   { id: 'ano', label: 'Este ano', de: () => `${diaSP().slice(0, 4)}-01-01` },
   { id: 'tudo', label: 'Tudo', de: () => '' },
 ];
-const ABAS = [['painel', 'Painel'], ['fotos', 'Fotos'], ['balcao', 'Balcão'], ['beneficio', 'Benefício'], ['parceiros', 'Parceiros'], ['checkin', 'Check-in'], ['conquistas', 'Conquistadores']];
+const ABAS = [['painel', 'Painel'], ['fotos', 'Fotos'], ['cidades', 'Fotos de cidade'], ['balcao', 'Balcão'], ['beneficio', 'Benefício'], ['parceiros', 'Parceiros'], ['checkin', 'Check-in'], ['conquistas', 'Conquistadores']];
 const METODO = { gps: 'GPS', foto: 'foto do passaporte' };
 const dataHora = new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
 const qs = (o) => new URLSearchParams(Object.entries(o).filter(([, v]) => v)).toString();
@@ -72,6 +72,7 @@ export default function SeloAdmin() {
 
       {aba === 'painel' && <Painel periodo={periodo} setPeriodo={setPeriodo} onModo={setModo} />}
       {aba === 'fotos' && <Fotos />}
+      {aba === 'cidades' && <FotosCidades />}
       {aba === 'balcao' && <Balcao />}
       {aba === 'beneficio' && <Beneficio />}
       {aba === 'parceiros' && <Parceiros />}
@@ -161,6 +162,61 @@ function Barras({ titulo, itens, rolagem }) {
 /* ── Fotos ──────────────────────────────────────────────────────────────── */
 
 const STATUS = [['pendente', 'Pendentes'], ['aprovada', 'Aprovadas'], ['recusada', 'Recusadas']];
+
+// Fotos públicas do mapa das cidades. Entram na hora; 3 denúncias escondem
+// ("Denunciadas") até alguém revisar aqui.
+const STATUS_CIDADE = [['denunciada', 'Denunciadas'], ['publica', 'No mapa'], ['oculta', 'Ocultas']];
+
+function FotosCidades() {
+  const [status, setStatus] = useState('denunciada');
+  const [fotos, setFotos] = useState(null);
+
+  const load = useCallback(async () => {
+    setFotos(null);
+    const { data, error } = await adminGet(`/api/admin/selo?acao=fotos-cidades&status=${status}`);
+    if (error) { showToast(`Erro ao carregar fotos: ${error.message}`, 'error'); setFotos([]); return; }
+    setFotos(data.fotos);
+  }, [status]);
+  useEffect(() => { (async () => { await load(); })(); }, [load]);
+
+  async function mudar(f, novo) {
+    const { error } = await adminPost('/api/admin/selo', { acao: 'foto-cidade', id: f.id, status: novo });
+    if (error) return showToast(error.message, 'error');
+    setFotos((lista) => lista.filter((x) => x.id !== f.id));
+    showToast(novo === 'publica' ? 'Foto de volta ao mapa.' : 'Foto oculta do mapa.');
+  }
+
+  return (
+    <>
+      <div className="sa-filtro">
+        {STATUS_CIDADE.map(([id, label]) => (
+          <button key={id} type="button" className={`ig-tab${status === id ? ' active' : ''}`} onClick={() => setStatus(id)}>{label}</button>
+        ))}
+      </div>
+      {!fotos ? <div className="ig-empty">Carregando…</div> : fotos.length === 0 ? (
+        <div className="ig-empty">{status === 'denunciada' ? 'Nenhuma foto denunciada.' : 'Nenhuma foto aqui.'}</div>
+      ) : (
+        <ul className="sa-fotos">
+          {fotos.map((f) => (
+            <li key={f.id} className="ig-card">
+              {f.url ? <img src={f.url} alt={`Foto de ${f.nome} em ${f.carimbo}`} loading="lazy" /> : <div className="sa-semfoto">Arquivo não encontrado</div>}
+              <div className="sa-info">
+                <b>{f.nome}</b>
+                <span>nº {formatarNumero(f.numero)} · {f.carimbo} · {f.dia}</span>
+                {f.foto_em && <span>{dataHora.format(new Date(f.foto_em))}</span>}
+                {f.denuncias > 0 && <span className="sa-tag">{f.denuncias} {f.denuncias === 1 ? 'denúncia' : 'denúncias'}</span>}
+              </div>
+              <div className="sa-acoes">
+                {status !== 'publica' && <button type="button" className="ig-btn ig-btn--primary ig-btn--sm" onClick={() => mudar(f, 'publica')}>Voltar ao mapa</button>}
+                {status !== 'oculta' && <button type="button" className="ig-btn ig-btn--danger ig-btn--sm" onClick={() => mudar(f, 'oculta')}>Ocultar</button>}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
+  );
+}
 
 function Fotos() {
   const [status, setStatus] = useState('pendente');

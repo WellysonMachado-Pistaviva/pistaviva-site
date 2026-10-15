@@ -1,40 +1,49 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CORUJA, SELOS, formatarNumero } from '../../../lib/selo/constantes.mjs';
-import { ESTACOES } from '../../../lib/selo/estacao.mjs';
-import { passaportePublico } from '../../../lib/selo/store';
-import PassaporteCidades from '../../PassaporteCidades';
+import { formatarNumero } from '../../../lib/selo/constantes.mjs';
+import { carregarPassaportePublico } from '../../passaportePublico';
+import PassaporteUnico from '../../PassaporteUnico';
+import CompartilharPassaporte from '../../CompartilharPassaporte';
+import CompartilharCartao from '../../CompartilharCartao';
+import SeloNav from '../../SeloNav';
+import '../../selo-publico.css';
 
 export const dynamic = 'force-dynamic';
-// Página de pessoa: aberta só com autorização, mas fora da busca.
+const valido = (n) => /^[1-9]\d{0,14}$/.test(n);
+
 export async function generateMetadata({ params }) {
   const { numero } = await params;
   const base = { title: 'Passaporte do motociclista', robots: { index: false, follow: false } };
-  if (!/^[1-9]\d{0,14}$/.test(numero)) return base;
-  return { ...base, title: `Passaporte nº ${formatarNumero(Number(numero))} · Rota Biker`, description: 'Cidades da Rota Biker carimbadas com GPS e foto, e estações confirmadas em Itajubá.' };
+  if (!valido(numero)) return base;
+  const titulo = `Passaporte nº ${formatarNumero(Number(numero))} · Rota Biker`;
+  const imagem = { url: `/selo/conquistadores/${numero}/cartao`, width: 1200, height: 630, alt: 'Carimbos do passaporte do motociclista' };
+  return {
+    ...base, title: titulo,
+    description: 'Cidades da Rota Biker carimbadas pelo GPS e estações confirmadas em Itajubá, num passaporte só.',
+    openGraph: { title: titulo, images: [imagem], type: 'profile' },
+    twitter: { card: 'summary_large_image', images: [imagem.url] },
+  };
 }
-
-const ORDEM = ['verao', 'outono', 'inverno', 'primavera'];
 
 export default async function PassaportePublicoPage({ params }) {
   const { numero } = await params;
-  if (!/^[1-9]\d{0,14}$/.test(numero)) notFound();
-  const p = await passaportePublico(Number(numero));
-  if (!p) notFound();
-  const estacoes = [...p.estacoes].sort((a, b) => a.ano - b.ano || ORDEM.indexOf(a.estacao) - ORDEM.indexOf(b.estacao));
+  if (!valido(numero)) notFound();
+  const dados = await carregarPassaportePublico(numero);
+  if (!dados) notFound();
+  const { pessoa } = dados;
   return (
-    <div className="selo-wrap selo-pilha selo-passaporte">
-      <header className="selo-topo"><img src={CORUJA} alt="" width={56} height={56} /><div><span className="selo-kicker">Passaporte nº {formatarNumero(p.numero)}</span><h1>{p.nome}</h1><p>{p.cidade} · {p.uf}</p></div></header>
-      <PassaporteCidades entradas={p.entradas} titulo="Por onde passou na Rota Biker" />
-      {estacoes.length > 0 && <section className="selo-cartao" aria-labelledby="pp-estacoes">
-        <span className="selo-kicker">Itajubá nas 4 Estações · confirmadas no balcão</span>
-        <h2 id="pp-estacoes">{estacoes.length} {estacoes.length === 1 ? 'estação' : 'estações'} no Parque da Cidade</h2>
-        <ol className="selo-carimbos">
-          {estacoes.map((e) => <li key={`${e.estacao}-${e.ano}`}><img src={SELOS[e.estacao]} alt={`Selo ${ESTACOES[e.estacao].nome} ${e.ano}`} width={120} height={120} loading="lazy" /><span className="selo-carimbo-vez">{e.ano}</span></li>)}
-        </ol>
-      </section>}
-      <p className="selo-dica">Cada carimbo de cidade exige estar dentro do município (GPS conferido no servidor) e tirar a foto na hora.</p>
-      <Link className="selo-btn" href="/selo">Começar meu passaporte</Link>
+    <div className="pv-study selo-public-page">
+      <SeloNav />
+      <div className="study-container">
+        <PassaporteUnico {...dados} acoes={<CompartilharPassaporte numero={pessoa.numero} nome={pessoa.nome} compacto />} />
+        <section className="conquista-social" aria-labelledby="conquista-social-titulo">
+          <header><p className="study-kicker">Da estrada para a sua turma</p><h2 id="conquista-social-titulo">História boa<br /><em>merece companhia.</em></h2><p>Leve este passaporte para os Stories ou para o grupo de viagem.</p></header>
+          <CompartilharCartao imagem={`/selo/conquistadores/${pessoa.numero}/cartao?formato=story`} link={`/selo/passaporte/${pessoa.numero}?utm_source=passaporte&utm_medium=stories&utm_campaign=selo`}
+            texto="Olha o passaporte desse motociclista na Rota Biker." rotulo="Compartilhar este passaporte" />
+        </section>
+        <div className="selo-perfil-acoes"><Link className="selo-btn" href="/selo/passaporte">Começar meu passaporte</Link><Link className="selo-text-link" href="/selo/mural">Todos os Conquistadores ↗</Link></div>
+        <p className="selo-dica">Cada carimbo de cidade exige estar dentro do município: o GPS é conferido no servidor. Selos de estação só contam depois da confirmação no balcão do Parque.</p>
+      </div>
     </div>
   );
 }

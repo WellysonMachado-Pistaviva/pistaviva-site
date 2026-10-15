@@ -5,6 +5,7 @@ import { almocoStatus, beneficioApto, enderecoCompleto, formatarCodigo, gerarCod
 import { conquistaDoAno, conquistasPublicas } from './conquistas.mjs';
 import { estacaoDe } from './estacao.mjs';
 import { criarStoreLocal } from './storeLocal.mjs';
+import { autorFoto, codigoSerie } from './mapaCidades.mjs';
 
 // Onde o Selo grava. Em desenvolvimento é SEMPRE local (.selo-local/), para não
 // sujar o Supabase de produção que o .env.local aponta. Para testar contra o
@@ -101,13 +102,13 @@ export async function perfilPorCodigo(codigo) {
 
 // ── carimbos de cidade (pv_selo_entradas, supabase_selo_cidades.sql) ───────
 
-const entradaPublica = (e) => ({ id: e.id, carimbo: e.carimbo, uf: e.uf, dia: e.dia, criadoEm: e.criado_em });
+const entradaPublica = (e) => ({ id: e.id, carimbo: e.carimbo, uf: e.uf, dia: e.dia, criadoEm: e.criado_em, fotoStatus: e.foto_path ? e.foto_status || 'privada' : null, serie: codigoSerie(e.serie, e.id) });
 
 // Até a migração rodar, a tabela e a coluna não existem: o link pessoal segue
 // funcionando, só sem carimbos de cidade.
 async function passaporteDoBanco(sb, motoId) {
   const [e, p] = await Promise.all([
-    sb.from('pv_selo_entradas').select('id, carimbo, uf, dia, criado_em, foto_path').eq('motociclista_id', motoId).order('criado_em', { ascending: false }).limit(500),
+    sb.from('pv_selo_entradas').select('id, carimbo, uf, dia, criado_em, foto_path, foto_status, serie').eq('motociclista_id', motoId).order('criado_em', { ascending: false }).limit(500),
     sb.from('pv_selo_motociclistas').select('passaporte_publico_em').eq('id', motoId).maybeSingle(),
   ]);
   if (e.error || p.error) console.error('[selo] passaporte (migração de cidades aplicada?)', e.error?.message || p.error?.message);
@@ -126,17 +127,116 @@ export async function fotoEnviada(path) {
   return Boolean(data);
 }
 
-// d: { carimbo, ibge, uf, dia, distancia, precisao, foto }. { ok, ja } | null.
+// Passaporte criado pelo site. { numero, codigo, existente }; existente → codigo null.
+export async function criarPassaporte(d) {
+  if (local) return local.criarPassaporte(d);
+  const { data, error } = await supabaseAdmin().rpc('pv_selo_criar_passaporte', {
+    p_nome: d.nome, p_whatsapp: d.whatsapp, p_cidade: d.cidade, p_uf: d.uf,
+  });
+  if (error || !data?.[0]) throw new Error(`pv_selo_criar_passaporte: ${error?.message || 'sem retorno'}`);
+  return data[0];
+}
+
+// d: { carimbo, ibge, uf, dia, distancia, precisao, metodo, capturadoEm }. { ok, ja, id, serie } | null.
 export async function carimbarCidade(codigo, d) {
   if (local) return local.carimbarCidade(codigo, d);
   const m = await motoPorCodigo(codigo);
   if (!m) return null;
-  const { data, error } = await supabaseAdmin().from('pv_selo_entradas').upsert({
+  const sb = supabaseAdmin();
+  // Confere antes de inserir: o gatilho da série roda antes do conflito e
+  // gastaria um número a cada toque repetido no mesmo dia.
+  const doDia = () => sb.from('pv_selo_entradas').select('id, serie')
+    .eq('motociclista_id', m.id).eq('carimbo', d.carimbo).eq('dia', d.dia).maybeSingle();
+  const { data: ja, error: e1 } = await doDia();
+  if (e1) throw e1;
+  if (ja) return { ok: true, ja: true, id: ja.id, serie: ja.serie ?? null };
+  const { data, error } = await sb.from('pv_selo_entradas').upsert({
     motociclista_id: m.id, tipo: 'cidade', carimbo: d.carimbo, ibge: d.ibge, uf: d.uf, dia: d.dia,
-    metodo: 'gps', distancia_m: d.distancia, precisao_m: d.precisao, foto_path: d.foto,
-  }, { onConflict: 'motociclista_id,carimbo,dia', ignoreDuplicates: true }).select('id');
+    metodo: d.metodo || 'gps', capturado_em: d.capturadoEm || new Date().toISOString(),
+    distancia_m: d.distancia, precisao_m: d.precisao, foto_path: null,
+  }, { onConflict: 'motociclista_id,carimbo,dia', ignoreDuplicates: true }).select('id, serie');
   if (error) throw error;
-  return { ok: true, ja: data.length === 0 };
+  if (data.length) return { ok: true, ja: false, id: data[0].id, serie: data[0].serie ?? null };
+  const { data: outro, error: e2 } = await doDia();   // outro toque gravou no mesmo instante
+  if (e2) throw e2;
+  return { ok: true, ja: true, id: outro?.id, serie: outro?.serie ?? null };
+}
+
+// Foto opcional do carimbo; só o dono anexa à própria entrada. { carimbo, status } | null.
+export async function anexarFotoCidade(codigo, entradaId, path, publica) {
+  if (local) return local.anexarFotoCidade(codigo, entradaId, path, publica);
+  const m = await motoPorCodigo(codigo);
+  if (!m) return null;
+  const status = publica ? 'publica' : 'privada';
+  const { data, error } = await supabaseAdmin().from('pv_selo_entradas')
+    .update({ foto_path: path, foto_status: status, foto_em: new Date().toISOString() })
+    .eq('id', entradaId).eq('motociclista_id', m.id).select('carimbo');
+  if (error) throw error;
+  return data[0] ? { carimbo: data[0].carimbo, status } : null;
+}
+
+// Quantos passaportes existem (números da home; sem dado pessoal).
+export async function contarPassaportes() {
+  if (local) return local.motociclistas().length;
+  const { count, error } = await supabaseAdmin().from('pv_selo_motociclistas').select('id', { count: 'exact', head: true });
+  if (error) throw error;
+  return count || 0;
+}
+
+// [{ carimbo, carimbos, pessoas, fotos }] — só totais, sem dado pessoal.
+export async function resumoMapa() {
+  if (local) return local.resumoMapa();
+  const { data, error } = await supabaseAdmin().rpc('pv_selo_mapa_cidades');
+  if (error) throw error;
+  return data || [];
+}
+
+// Fotos públicas de uma cidade, mais novas primeiro. Autor = primeiro nome + inicial + nº.
+export async function fotosDaCidade(slug, limite = 60) {
+  if (local) return local.fotosDaCidade(slug, limite);
+  const { data, error } = await supabaseAdmin().from('pv_selo_entradas')
+    .select('id, dia, foto_em, pv_selo_motociclistas(nome, numero)')
+    .eq('carimbo', slug).eq('foto_status', 'publica').not('foto_path', 'is', null)
+    .order('foto_em', { ascending: false }).limit(limite);
+  if (error) throw error;
+  return (data || []).map((e) => ({ id: e.id, dia: e.dia, fotoEm: e.foto_em, autor: autorFoto(e.pv_selo_motociclistas?.nome, e.pv_selo_motociclistas?.numero) }));
+}
+
+// Caminho do arquivo só se a foto está pública agora.
+export async function fotoPublica(id) {
+  if (local) return local.fotoPublica(id);
+  const { data } = await supabaseAdmin().from('pv_selo_entradas').select('foto_path, foto_status').eq('id', id).maybeSingle();
+  return data?.foto_status === 'publica' && data.foto_path ? data.foto_path : null;
+}
+
+// quem = hash do IP. Devolve o status depois da denúncia (null = foto não existe).
+export async function denunciarFoto(id, quem) {
+  if (local) return local.denunciarFoto(id, quem);
+  const { data, error } = await supabaseAdmin().rpc('pv_selo_denunciar', { p_entrada: id, p_quem: quem });
+  if (error) throw error;
+  return data ?? null;
+}
+
+export async function listarFotosCidades(status) {
+  if (local) return local.listarFotosCidades(status);
+  const { data, error } = await supabaseAdmin().from('pv_selo_entradas')
+    .select('id, carimbo, dia, foto_path, foto_em, denuncias, pv_selo_motociclistas(nome, numero)')
+    .eq('foto_status', status).not('foto_path', 'is', null)
+    .order('foto_em', { ascending: false }).limit(200);
+  if (error) throw error;
+  return (data || []).map(({ pv_selo_motociclistas: m, ...e }) => ({ ...e, nome: m?.nome, numero: m?.numero }));
+}
+
+export async function mudarStatusFotoCidade(id, status) {
+  if (local) return local.mudarStatusFotoCidade(id, status);
+  const sb = supabaseAdmin();
+  // Restaurar zera as denúncias: a foto já foi revisada.
+  const extra = status === 'publica' ? { denuncias: 0 } : {};
+  const { data, error } = await sb.from('pv_selo_entradas').update({ foto_status: status, ...extra })
+    .eq('id', id).not('foto_path', 'is', null).select('id');
+  if (error) throw error;
+  if (status === 'publica' && data.length) await sb.from('pv_selo_denuncias').delete().eq('entrada_id', id);
+  return data.length > 0;
 }
 
 export async function autorizarPassaporte(codigo, publico) {

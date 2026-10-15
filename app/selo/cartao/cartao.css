@@ -1,0 +1,35 @@
+/* Card padrão de selo + modal de carimbar (mapa, catálogo, listas). */
+.cartao-selo-grade { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(176px, 1fr)); gap: 16px; }
+.cartao-selo { position: relative; container-type: inline-size; display: flex; flex-direction: column; background: #fff; border: 1px solid #e3e1dc; border-radius: 10px; overflow: hidden; transition: box-shadow .2s, border-color .2s; }
+.cartao-selo:hover { border-color: #cfccc4; box-shadow: 0 6px 20px rgba(20, 16, 10, .08); }
+.cartao-selo-link { display: grid; gap: 8px; padding: 0 0 14px; color: inherit; text-decoration: none; height: 100%; align-content: start; }
+.cartao-selo-arte { position: relative; display: grid; place-items: center; aspect-ratio: 1; background: #f6f6f8; padding: 18px; }
+.cartao-selo-arte img { width: 100%; height: 100%; object-fit: contain; transition: transform .25s; }
+.cartao-selo:hover .cartao-selo-arte img { transform: scale(1.04); }
+.cartao-selo[data-apagado] .cartao-selo-arte img { filter: grayscale(1); opacity: .55; }
+.cartao-selo-contador { position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 3px; padding: 3px 8px; border-radius: 999px; background: #ff5a00; color: #fff; font: 700 12px/1.2 var(--font, system-ui); }
+.cartao-selo-link > strong { padding: 0 14px; font: 600 16px/1.25 var(--font, system-ui); }
+.cartao-selo-etiquetas { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 14px; }
+.cartao-selo-etiquetas small { padding: 3px 10px; border-radius: 999px; background: #ebebef; color: #3a3a44; font: 600 12px/1.4 var(--font, system-ui); }
+.cartao-selo-etiquetas small[data-tom="rota"] { background: #ff5a00; color: #fff; }
+.cartao-selo-etiquetas small[data-tom="sim"] { background: #e3f6e8; color: #17692e; }
+/* A arte é quadrada (largura do card): o "+" fica no canto de baixo dela. */
+.cartao-selo-mais { position: absolute; top: calc(100cqw - 52px); right: 12px; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 1px solid #c9c6bf; background: #fff; color: #555; cursor: pointer; transition: background .15s, color .15s, border-color .15s, transform .15s; }
+.cartao-selo-mais:hover, .cartao-selo-mais:focus-visible { background: #ff5a00; border-color: #ff5a00; color: #fff; transform: scale(1.06); }
+
+.modal-carimbar { position: fixed; inset: 0; margin: auto; height: fit-content; width: min(560px, calc(100vw - 32px)); overflow: auto; max-height: calc(100dvh - 32px); padding: 0; border: 0; border-radius: 24px; background: #fff; color: #1c1c1f; box-shadow: 0 30px 80px rgba(0, 0, 0, .35); }
+.modal-carimbar::backdrop { background: rgba(20, 18, 14, .55); backdrop-filter: blur(3px); }
+.modal-carimbar-caixa { display: grid; gap: 16px; padding: 22px; }
+.modal-carimbar-topo { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid #ececef; }
+.modal-carimbar-topo p { margin: 4px 0 0; color: #666; font-size: 14px; }
+.modal-carimbar-fechar { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: transparent; color: #333; cursor: pointer; }
+.modal-carimbar-fechar:hover { background: #f1f1f3; }
+.modal-carimbar-escolhido { display: grid; grid-template-columns: 64px 1fr auto; gap: 14px; align-items: center; padding: 12px 14px; background: #ecfbef; border: 1px solid #b8e6c3; border-radius: 14px; }
+.modal-carimbar-escolhido img { width: 64px; height: 64px; object-fit: contain; background: #fff; border-radius: 10px; padding: 4px; }
+.modal-carimbar-escolhido small { display: block; color: #17692e; font: 800 11px/1.3 var(--font, system-ui); letter-spacing: .12em; text-transform: uppercase; }
+.modal-carimbar-escolhido strong { font-size: 18px; }
+.modal-carimbar-escolhido > span { color: #666; font-size: 13px; }
+.modal-carimbar .carimbo-cidade.compacto { padding: 0; border: 0; background: none; box-shadow: none; }
+.modal-carimbar-sem { display: grid; gap: 12px; }
+/* O site pinta o fundo de toda <img> enquanto carrega; selo é transparente. */
+.cartao-selo img, .modal-carimbar img, .mapa-pino img, .mapa-popup img { background: transparent; }

@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import PassaporteIcone from './PassaporteIcone';
 
 const PRIMARY_LINKS = [
   { href: '/destinos', label: 'Destinos' },
@@ -18,6 +19,7 @@ const MORE_LINKS = [
   { href: '/guias', label: 'Guias' },
   { href: '/parque-da-cidade', label: 'Parque da Cidade' },
   { href: '/selo', label: 'Selo da Estação' },
+  { href: '/selo/mapa', label: 'Mapa de carimbos' },
   { href: '/selos', label: 'Selos colecionáveis' },
   { href: '/fipe', label: 'Tabela FIPE' },
   { href: '/loja', label: 'Loja' },
@@ -61,6 +63,10 @@ export default function SiteHeader() {
           </details>
           <Link className="shop" href="/bora-rodar" onClick={close}>Bora rodar?</Link>
         </nav>
+
+        <Link className="head-passaporte" href="/selo/passaporte" onClick={close} aria-label="Meu passaporte" title="Meu passaporte" aria-current={active('/selo/passaporte') ? 'page' : undefined}>
+          <PassaporteIcone size={20} />
+        </Link>
 
         <button
           className="menu-btn"

@@ -4537,3 +4537,8 @@ body.evb-takeover #app{ flex:1; display:flex; flex-direction:column; max-width:n
 
 @media (max-width:900px) { .pv-indice__grade { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width:480px) { .pv-indice__grade { grid-template-columns: 1fr; } }
+
+/* Atalho do passaporte no header desktop. */
+.head-passaporte{ display:grid; place-items:center; flex:0 0 auto; width:44px; height:40px; margin-left:var(--pv-space-2); color:var(--paper); border:1px solid var(--line); border-radius:var(--pv-radius); transition:border-color .2s, color .2s; }
+.head-passaporte:hover, .head-passaporte[aria-current="page"]{ color:var(--clay); border-color:var(--clay); }
+@media (max-width:900px){ .head-passaporte{ margin-left:auto; margin-right:var(--pv-space-1); } }

@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import PassaporteIcone from './PassaporteIcone';
 
 // Shell mobile no estilo IGNIS: app bar (topo) + bottom-nav (5 itens) + sheet "Mais".
 // Usa rotas Next REAIS (<Link>), não hash-SPA — preserva SSR/SEO/sitemap.
@@ -21,6 +22,8 @@ const MENU = [
   { href: '/destinos', t: 'Destinos', s: 'Próxima saída', i: <><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></> },
   { href: '/parque-da-cidade', t: 'Parque da Cidade', s: 'Guia de Itajubá', i: <><path d="M12 22V8" /><path d="M5 12c0-4 3-8 7-10 4 2 7 6 7 10a7 7 0 0 1-14 0Z" /><path d="m8 15 4-3 4 3" /></> },
   { href: '/selo', t: 'Selo da Estação', s: 'Passaporte de Itajubá', i: <><circle cx="12" cy="10" r="6" /><path d="M9 10h6M12 7v6M7 21h10M12 16v5" /></> },
+  { href: '/selo/passaporte', t: 'Meu passaporte', s: 'Foto, piloto e garupa', i: <><rect x="5" y="2.5" width="14" height="19" rx="2" /><circle cx="12" cy="10" r="3.6" /><path d="M8.4 10h7.2M12 6.4c-1.4 1.1-1.4 6.1 0 7.2M12 6.4c1.4 1.1 1.4 6.1 0 7.2M9 17.5h6" /></> },
+  { href: '/selo/mapa', t: 'Mapa de carimbos', s: 'Fotos de cada cidade', i: <><path d="M9 6 4 4v14l5 2 6-2 5 2V6l-5-2-6 2Z" /><circle cx="15" cy="10" r="2.2" /></> },
   { href: '/selos', t: 'Selos', s: 'Colecione na estrada', i: <><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M8 4v16M4 9h4M4 14h4" /></> },
   { href: '/guias', t: 'Guias', s: 'Antes da partida', i: <><path d="M4 5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" /><path d="M8 8h6M8 12h8M8 16h5" /></> },
   { href: '/fipe', t: 'FIPE', s: 'Consulta grátis', i: <><path d="M12 14 16 9" /><circle cx="12" cy="14" r="1.6" fill="currentColor" /><path d="M4 18a8 8 0 1 1 16 0" /></> },
@@ -81,6 +84,9 @@ export default function MobileShell() {
           <img src="/logo.svg" alt="Pistaviva" />
         </Link>
         <span className="igm-sp" />
+        <Link href="/selo/passaporte" className="igm-iconbtn" aria-label="Meu passaporte">
+          <PassaporteIcone size={19} />
+        </Link>
         <Link href="/eventos" className="igm-iconbtn" aria-label="Ver eventos">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 9h18M8 3v4M16 3v4" /></svg>
         </Link>

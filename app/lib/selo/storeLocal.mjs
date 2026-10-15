@@ -8,6 +8,7 @@ import { createHmac, randomBytes, randomUUID, timingSafeEqual } from 'node:crypt
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { conquistaDoAno } from './conquistas.mjs';
+import { LIMITE_DENUNCIAS, autorFoto } from './mapaCidades.mjs';
 
 const DEZ_MIN = 10 * 60 * 1000;
 const SEGREDO_DEV = 'selo-local-dev';   // assina URLs de upload locais; não protege nada em produção
@@ -17,9 +18,9 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
   const pastaFotos = join(pasta, 'fotos');
 
   function ler() {
-    if (!existsSync(arquivo)) return { proximoNumero: 1, motociclistas: [], visitas: [], conquistas: [], usos: [], parceiros: [], entradas: [] };
+    if (!existsSync(arquivo)) return { proximoNumero: 1, motociclistas: [], visitas: [], conquistas: [], usos: [], parceiros: [], entradas: [], denuncias: [], series: {} };
     const db = JSON.parse(readFileSync(arquivo, 'utf8'));
-    return { ...db, conquistas: db.conquistas || [], usos: db.usos || [], parceiros: db.parceiros || [], entradas: db.entradas || [] };
+    return { ...db, conquistas: db.conquistas || [], usos: db.usos || [], parceiros: db.parceiros || [], entradas: db.entradas || [], denuncias: db.denuncias || [], series: db.series || {} };
   }
   function gravar(db) {
     mkdirSync(pasta, { recursive: true });
@@ -341,19 +342,119 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
     return m ? { id: m.id } : null;
   }
 
-  // { ok, ja } | null (código desconhecido). Um carimbo por cidade por dia.
+  // Passaporte criado pelo site (pv_selo_criar_passaporte). WhatsApp já
+  // cadastrado não devolve o código: a recuperação é em /selo/meu-numero.
+  function criarPassaporte(d, agora = new Date()) {
+    if (!/^[1-9][0-9]{9,10}$/.test(d.whatsapp || '')) throw new Error('WhatsApp obrigatório.');
+    const db = ler();
+    const ja = db.motociclistas.find((m) => m.whatsapp === d.whatsapp);
+    if (ja) return { numero: ja.numero, codigo: null, existente: true };
+    const moto = {
+      id: randomUUID(), numero: db.proximoNumero++, codigo: randomBytes(6).toString('hex'),
+      nome: d.nome, whatsapp: d.whatsapp, cidade: d.cidade, uf: d.uf, aceite_lgpd_em: agora.toISOString(),
+      criado_em: agora.toISOString(), atualizado_em: agora.toISOString(),
+    };
+    db.motociclistas.push(moto);
+    gravar(db);
+    return { numero: moto.numero, codigo: moto.codigo, existente: false };
+  }
+
+  // { ok, ja, id } | null (código desconhecido). Um carimbo por cidade por dia.
   function carimbarCidade(codigo, d, agora = new Date()) {
     const db = ler();
     const m = db.motociclistas.find((x) => x.codigo === codigo);
     if (!m) return null;
     const ja = db.entradas.find((e) => e.motociclista_id === m.id && e.carimbo === d.carimbo && e.dia === d.dia);
-    if (ja) return { ok: true, ja: true };
-    db.entradas.push({
+    if (ja) return { ok: true, ja: true, id: ja.id, serie: ja.serie ?? null };
+    // Igual ao gatilho pv_selo_entradas_serie: número nunca reaproveitado.
+    db.series[d.carimbo] = (db.series[d.carimbo] || 0) + 1;
+    const e = {
+      serie: db.series[d.carimbo],
       id: randomUUID(), motociclista_id: m.id, tipo: 'cidade', carimbo: d.carimbo, ibge: d.ibge, uf: d.uf, dia: d.dia,
-      criado_em: agora.toISOString(), metodo: 'gps', distancia_m: d.distancia, precisao_m: d.precisao, foto_path: d.foto,
-    });
+      criado_em: agora.toISOString(), metodo: d.metodo || 'gps', capturado_em: d.capturadoEm || agora.toISOString(),
+      distancia_m: d.distancia, precisao_m: d.precisao, foto_path: d.foto || null, foto_status: d.foto ? 'privada' : null,
+      foto_em: null, denuncias: 0,
+    };
+    db.entradas.push(e);
     gravar(db);
-    return { ok: true, ja: false };
+    return { ok: true, ja: false, id: e.id, serie: e.serie };
+  }
+
+  // Foto opcional do carimbo. Só o dono do passaporte anexa à própria entrada.
+  function anexarFotoCidade(codigo, entradaId, path, publica, agora = new Date()) {
+    const db = ler();
+    const m = db.motociclistas.find((x) => x.codigo === codigo);
+    const e = m && db.entradas.find((x) => x.id === entradaId && x.motociclista_id === m.id);
+    if (!e) return null;
+    e.foto_path = path;
+    e.foto_status = publica ? 'publica' : 'privada';
+    e.foto_em = agora.toISOString();
+    gravar(db);
+    return { carimbo: e.carimbo, status: e.foto_status };
+  }
+
+  function resumoMapa() {
+    const por = new Map();
+    for (const e of ler().entradas) {
+      const t = por.get(e.carimbo) || { carimbo: e.carimbo, carimbos: 0, pessoas: new Set(), fotos: 0 };
+      t.carimbos++;
+      t.pessoas.add(e.motociclista_id);
+      if (e.foto_status === 'publica') t.fotos++;
+      por.set(e.carimbo, t);
+    }
+    return [...por.values()].map((t) => ({ ...t, pessoas: t.pessoas.size }));
+  }
+
+  function fotosDaCidade(slug, limite = 60) {
+    const db = ler();
+    return db.entradas
+      .filter((e) => e.carimbo === slug && e.foto_status === 'publica' && e.foto_path)
+      .sort((a, b) => (b.foto_em || '').localeCompare(a.foto_em || ''))
+      .slice(0, limite)
+      .map((e) => {
+        const m = db.motociclistas.find((x) => x.id === e.motociclista_id);
+        return { id: e.id, dia: e.dia, fotoEm: e.foto_em, autor: autorFoto(m?.nome, m?.numero) };
+      });
+  }
+
+  // Caminho do arquivo só se a foto está pública agora.
+  function fotoPublica(id) {
+    const e = ler().entradas.find((x) => x.id === id);
+    return e?.foto_status === 'publica' && e.foto_path ? e.foto_path : null;
+  }
+
+  function denunciarFoto(id, quem) {
+    const db = ler();
+    const e = db.entradas.find((x) => x.id === id);
+    if (!e) return null;
+    if (!db.denuncias.some((d) => d.entrada_id === id && d.quem === quem)) db.denuncias.push({ entrada_id: id, quem, criado_em: new Date().toISOString() });
+    e.denuncias = db.denuncias.filter((d) => d.entrada_id === id).length;
+    if (e.foto_status === 'publica' && e.denuncias >= LIMITE_DENUNCIAS) e.foto_status = 'denunciada';
+    gravar(db);
+    return e.foto_status;
+  }
+
+  function listarFotosCidades(status) {
+    const db = ler();
+    return db.entradas
+      .filter((e) => e.foto_path && e.foto_status === status)
+      .sort((a, b) => (b.foto_em || '').localeCompare(a.foto_em || ''))
+      .slice(0, 200)
+      .map((e) => {
+        const m = db.motociclistas.find((x) => x.id === e.motociclista_id);
+        return { id: e.id, carimbo: e.carimbo, dia: e.dia, foto_path: e.foto_path, foto_em: e.foto_em, denuncias: e.denuncias || 0, nome: m?.nome, numero: m?.numero };
+      });
+  }
+
+  function mudarStatusFotoCidade(id, status) {
+    const db = ler();
+    const e = db.entradas.find((x) => x.id === id && x.foto_path);
+    if (!e) return false;
+    e.foto_status = status;
+    // Restaurar zera as denúncias: a foto já foi revisada.
+    if (status === 'publica') { e.denuncias = 0; db.denuncias = db.denuncias.filter((d) => d.entrada_id !== id); }
+    gravar(db);
+    return true;
   }
 
   function entradas(motoId) {
@@ -383,7 +484,9 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
     for (const v of visitas) {
       for (const f of [v.foto_path, v.prova_path]) if (f && fotoExiste(f)) rmSync(join(pastaFotos, f));
     }
-    for (const e of db.entradas.filter((x) => x.motociclista_id === id)) if (fotoExiste(e.foto_path)) rmSync(join(pastaFotos, e.foto_path));
+    const minhas = db.entradas.filter((x) => x.motociclista_id === id);
+    for (const e of minhas) if (fotoExiste(e.foto_path)) rmSync(join(pastaFotos, e.foto_path));
+    db.denuncias = db.denuncias.filter((d) => !minhas.some((e) => e.id === d.entrada_id));
     db.entradas = db.entradas.filter((e) => e.motociclista_id !== id);
     const antes = db.motociclistas.length;
     db.conquistas = db.conquistas.filter((c) => c.motociclista_id !== id);
@@ -400,5 +503,6 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
     criarParceiro, listarParceiros, ativarParceiro, parceiroPorToken, salvarSeloParceiro, parceiroPorSelo, contagemSelos, paradasOficiais, perfil, porWhatsapp, urlUpload, uploadValido, salvarFoto, fotoExiste, lerFoto, marcarFoto, ler,
     listarVisitas, mudarStatusFoto, motociclistas, excluirMotociclista,
     motoPorCodigo, carimbarCidade, entradas, autorizarPassaporte, passaportePublico,
+    criarPassaporte, anexarFotoCidade, resumoMapa, fotosDaCidade, fotoPublica, denunciarFoto, listarFotosCidades, mudarStatusFotoCidade,
   };
 }

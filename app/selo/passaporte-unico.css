@@ -1,0 +1,117 @@
+/* Navegação comum do passaporte (/selo/*, /selos). */
+.selo-nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 8px 16px; background: var(--pv-offwhite, #f7f3ee); border-bottom: 1px solid var(--pv-line-light-2); }
+.selo-nav::-webkit-scrollbar { display: none; }
+.selo-nav a { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; min-height: 44px; padding: 8px 14px; border-radius: var(--pv-radius-pill, 999px); color: var(--pv-muted-dark); font-weight: 700; font-size: 14px; text-decoration: none; }
+.selo-nav a:hover { color: var(--pv-text-dark, #111); background: var(--pv-white); }
+.selo-nav a[aria-current="page"] { background: var(--pv-black, #111); color: var(--pv-white); }
+.selo-nav a:focus-visible { outline: 2px solid var(--pv-orange); outline-offset: 2px; }
+@media (min-width: 768px) { .selo-nav { justify-content: center; } }
+
+/* Passaporte único: identidade + números + carimbos + coleções. */
+.pu { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; gap: 32px; max-width: 760px; margin-inline: auto; padding-block: 40px 24px; }
+.pu-topo { display: grid; justify-items: center; gap: 8px; text-align: center; }
+.pu-avatar { display: grid; place-items: center; width: 104px; height: 104px; margin-bottom: 12px; background: var(--pv-orange-deep); color: var(--pv-white); font-family: var(--display); font-size: 56px; line-height: 1; box-shadow: 0 0 0 6px var(--pv-white), 0 12px 28px rgba(0, 0, 0, .18); transform: rotate(3deg); }
+.pu-topo h1 { margin: 0; font-size: clamp(36px, 7vw, 56px); line-height: 1; overflow-wrap: anywhere; }
+.pu-id { margin: 0; color: var(--pv-muted-dark); font-family: var(--mono); font-size: 14px; }
+.pu-acoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 12px; }
+.pu-acoes .selo-btn { width: auto; }
+.pu-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; padding-bottom: 24px; border-bottom: 2px dotted var(--pv-line-light-2); }
+.pu-stats > div { display: grid; justify-items: center; gap: 4px; padding-inline: 4px; }
+.pu-stats > div + div { border-left: 1px solid var(--pv-line-light-2); }
+.pu-stats dd { margin: 0; font-family: var(--display); font-size: clamp(28px, 6vw, 40px); font-weight: 800; line-height: 1; }
+.pu-stats dd small { font-size: .5em; color: var(--pv-muted-dark); font-weight: 600; }
+.pu-stats dt { order: 2; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--pv-muted-dark); }
+.pu-secao { display: grid; gap: 16px; }
+.pu-secao > header { display: flex; align-items: baseline; gap: 12px; }
+.pu-secao h2 { margin: 0; font-size: 28px; }
+.pu-secao > header span { color: var(--pv-muted-dark); }
+.pu-vazio { padding: 32px 20px; text-align: center; border: 2px dashed var(--pv-line-light-2); color: var(--pv-muted-dark); }
+
+.pu-vista { display: grid; gap: 16px; }
+.pu-abas { justify-self: center; display: inline-flex; gap: 4px; padding: 4px; border-radius: var(--pv-radius-pill, 999px); background: var(--pv-offwhite-2, #efe8df); }
+.pu-abas button { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 6px 12px; border: 0; border-radius: inherit; background: transparent; font: inherit; font-weight: 700; font-size: 14px; color: var(--pv-muted-dark); cursor: pointer; }
+.pu-abas button[aria-pressed="true"] { background: var(--pv-white); color: var(--pv-text-dark, #111); box-shadow: 0 1px 4px rgba(0, 0, 0, .12); }
+.pu-abas button:focus-visible { outline: 2px solid var(--pv-orange); outline-offset: 2px; }
+
+.pu-folhas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); background: #f4efe6; border: 1px solid var(--pv-line-light-2); box-shadow: 0 18px 40px rgba(0, 0, 0, .14); }
+.pu-folha { list-style: none; margin: 0; padding: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-content: start; gap: 12px 8px; min-height: 300px; background: radial-gradient(circle at 50% 55%, rgba(0, 0, 0, .035) 0 30%, transparent 31%); }
+.pu-folha + .pu-folha { border-left: 1px solid var(--pv-line-light-2); box-shadow: inset 14px 0 20px -14px rgba(0, 0, 0, .2); }
+.pu-folha-topo { grid-column: 1 / -1; display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #b4483a; }
+.pu-carimbo { position: relative; display: grid; justify-items: center; gap: 4px; transform: rotate(var(--pu-giro, 0deg)); }
+.pu-carimbo a { display: grid; justify-items: center; gap: 4px; color: inherit; text-decoration: none; }
+.pu-carimbo img { background: transparent; width: 100%; max-width: 96px; height: auto; mix-blend-mode: multiply; }
+.pu-carimbo time { font-family: var(--mono); font-size: 11px; color: var(--pv-muted-dark); }
+.pu-vez { position: absolute; top: -4px; right: 4px; min-width: 24px; padding: 1px 6px; border: 1px solid var(--pv-line-light-2); border-radius: var(--pv-radius-pill, 999px); background: var(--pv-white); font-size: 11px; font-weight: 800; }
+.pu-nav { display: flex; justify-content: center; align-items: center; gap: 24px; margin-top: 12px; font-weight: 700; }
+.pu-nav button { min-width: 48px; min-height: 48px; border: 1px solid var(--pv-line-light-2); background: var(--pv-white); font-size: 20px; cursor: pointer; }
+.pu-nav button:disabled { opacity: .4; cursor: default; }
+.pu-grade { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 20px 12px; }
+.pu-grade .pu-carimbo { transform: none; }
+.pu-grade .pu-carimbo a:hover img { transform: scale(1.06); }
+
+.pu-colecoes { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.pu-colecoes a { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px 16px; min-height: 64px; padding: 12px 16px; background: var(--pv-white); border: 1px solid var(--pv-line-light-2); color: inherit; text-decoration: none; }
+.pu-colecoes a:hover { border-color: var(--pv-orange); }
+.pu-colecoes a > span { display: flex; justify-content: space-between; gap: 12px; }
+.pu-colecoes a > span span { color: var(--pv-muted-dark); font-family: var(--mono); font-size: 14px; }
+.pu-colecoes progress { grid-column: 1; width: 100%; height: 8px; accent-color: var(--pv-orange-deep); }
+.pu-colecoes svg { grid-column: 2; grid-row: 1 / span 2; }
+
+/* Painel do dono, abaixo do passaporte: o que dá para fazer agora. */
+.pu-painel { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; gap: 12px; max-width: 760px; margin-inline: auto; padding-block: 8px 48px; }
+.pu-painel > h2 { margin: 16px 0 0; font-size: 28px; }
+.pu-grupo { background: var(--pv-white); border: 1px solid var(--pv-line-light-2); }
+.pu-grupo > summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 56px; padding: 12px 16px; font-weight: 800; cursor: pointer; list-style: none; }
+.pu-grupo > summary::-webkit-details-marker { display: none; }
+.pu-grupo > summary::after { content: '+'; font-size: 22px; color: var(--pv-orange-deep); }
+.pu-grupo[open] > summary::after { content: '−'; }
+.pu-grupo > summary small { display: block; font-weight: 400; font-size: 13px; color: var(--pv-muted-dark); }
+.pu-grupo > div { display: grid; gap: 16px; padding: 0 16px 16px; }
+
+@media (max-width: 560px) {
+  .pu { padding-block: 24px 16px; gap: 24px; }
+  .pu-avatar { width: 84px; height: 84px; font-size: 44px; }
+  .pu-stats dt { font-size: 10px; letter-spacing: .06em; }
+  .pu-folhas { grid-template-columns: minmax(0, 1fr); }
+  .pu-folha + .pu-folha { border-left: 0; border-top: 1px solid var(--pv-line-light-2); box-shadow: none; }
+  .pu-folha:empty, .pu-folha:has(> .pu-folha-topo:only-child) { display: none; }
+  .pu-folha { min-height: 0; }
+}
+@media (prefers-reduced-motion: no-preference) { .pu-grade img { transition: transform .15s; } }
+
+/* Atalho do gerador (/selo/passaporte) para o passaporte completo. */
+.pu-atalho { display: flex; justify-content: space-between; align-items: center; gap: 16px; max-width: 640px; padding: 16px 20px; background: var(--pv-black); color: var(--pv-white); text-decoration: none; border-left: 6px solid var(--pv-orange); }
+.pu-atalho > span:first-child { display: grid; gap: 2px; font-size: 14px; color: var(--pv-orange-tint); }
+.pu-atalho small { font-family: var(--mono); letter-spacing: .08em; }
+.pu-atalho strong { font-size: 20px; color: var(--pv-white); }
+.pu-atalho > span:last-child { font-size: 28px; }
+.pu-atalho:focus-visible { outline: 2px solid var(--pv-orange); outline-offset: 3px; }
+.pu-secao, .pu-vista, .pu-livro, .pu-stats > div { min-width: 0; }
+.pu-stats dt { overflow-wrap: anywhere; text-align: center; }
+.pu-carimbo time { white-space: nowrap; }
+.pu-folha .pu-carimbo img { max-width: 88px; }
+
+/* Fileiras por estado: vários carimbos à vista, sem arrastar a página inteira. */
+.pu-estados { display: grid; min-width: 0; gap: 24px; }
+.pu-deslize { margin: 0; color: var(--pv-muted-dark); font-size: 14px; }
+.pu-estado { min-width: 0; }
+.pu-estado > header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+.pu-estado h3 { margin: 0; font-family: var(--mono); font-size: 20px; }
+.pu-estado > header span { font-size: 13px; color: var(--pv-muted-dark); }
+.pu-trilho { overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scroll-padding-inline: 8px; border-block: 1px solid var(--pv-line-light-2); background: var(--pv-offwhite); }
+.pu-trilho ol { display: flex; gap: 12px; list-style: none; margin: 0; padding: 16px 8px; }
+.pu-trilho .pu-carimbo { flex: 0 0 136px; transform: none; scroll-snap-align: start; }
+.pu-trilho .pu-carimbo a { width: 100%; align-content: start; padding: 4px; gap: 8px; }
+.pu-trilho .pu-carimbo img { width: 104px; max-width: 100%; height: 104px; object-fit: contain; }
+.pu-carimbo-nome { font-size: 14px; line-height: 1.35; text-align: center; overflow-wrap: anywhere; }
+.pu-trilho:focus-visible, .pu-carimbo a:focus-visible, .pu-nav button:focus-visible { outline: 2px solid var(--pv-orange-deep); outline-offset: -2px; }
+@media (max-width: 560px) {
+  .pu-topo { grid-template-columns: 56px minmax(0, 1fr); text-align: left; justify-items: start; gap: 8px 16px; }
+  .pu-avatar { grid-row: 1 / span 2; width: 56px; height: 56px; margin: 0; font-size: 32px; }
+  .pu-topo h1 { font-size: 32px; }
+  .pu-id { grid-column: 2; font-size: 12px; overflow-wrap: anywhere; }
+  .pu-acoes { grid-column: 1 / -1; justify-content: flex-start; }
+  .pu-abas { justify-self: stretch; justify-content: center; }
+  .pu-abas button { padding-inline: 8px; font-size: 13px; }
+  .pu-colecoes a > span { flex-wrap: wrap; gap: 4px 12px; }
+}

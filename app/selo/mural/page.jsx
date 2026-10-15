@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import EditorialHero from '../../components/EditorialHero';
 import Conquistadores from '../Conquistadores';
+import SeloNav from '../SeloNav';
 import '../selo-publico.css';
 export const metadata = { title: 'Conquistadores de Itajubá' };
 
 export default function MuralPage() {
   return <div className="pv-study selo-public-page">
+    <SeloNav />
     <EditorialHero id="conquistadores-titulo" eyebrow="Pistaviva / Passaportes da comunidade"
       title={<>A estrada conhece<br /><em>o seu nome.</em></>}
       image="/motosul/g-chegada.jpg" imageAlt="Motociclistas chegando a um encontro em Itajubá"

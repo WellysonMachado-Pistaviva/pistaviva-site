@@ -50,7 +50,9 @@
 .selos-cidade-arte, .selos-papel, .selos-variante { background: var(--pv-offwhite); }
 .selos-cidade-arte { padding: 16px; }
 .selos-cidade-arte img { width: 100%; height: auto; display: block; }
-.selos-brasil img { background: transparent; }
+/* Coleção Brasil: só o carimbo/selo, sem papel atrás (as artes são transparentes). */
+.selos-brasil img,
+.selos-brasil :is(.selos-papel, .selos-variante, .selos-cidade-arte, .selos-card-arte) { background: transparent; }
 .selos-card-legenda { display: grid; gap: 8px; padding: 24px; }
 .selos-card-legenda h2 { font-family: var(--display); font-size: 28px; line-height: 1.1; }
 .selos-card-legenda p { color: var(--pv-muted-dark); font-size: 14px; }
@@ -69,4 +71,45 @@
   .selos-detalhe-arte { max-width: 320px; justify-self: center; }
   .selos-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .selos-card-arte { width: 112px; height: 112px; }
+}
+/* Página de região: municípios por estado. */
+.regiao-uf { margin-top: 24px; }
+.regiao-uf h3 { margin: 0 0 10px; font-size: 20px; }
+.regiao-uf h3 small { color: var(--pv-muted-dark); font-size: 14px; font-weight: 500; }
+.regiao-lista { list-style: none; margin: 0; padding: 0; columns: 4 200px; column-gap: 24px; }
+.regiao-lista li { break-inside: avoid; padding: 4px 0; }
+.regiao-lista a { color: var(--pv-text-dark); text-decoration: none; }
+.regiao-lista a:hover { color: var(--pv-orange-deep); text-decoration: underline; }
+/* Bloco "região" e "saiba mais" na página da cidade. */
+.selos-cidade-regiao { display: grid; grid-template-columns: 96px 1fr; gap: 20px; align-items: center; padding: 20px; background: var(--pv-white); border: 1px solid var(--pv-line-light-2); text-decoration: none; color: inherit; }
+.selos-cidade-regiao:hover { border-color: var(--pv-orange); }
+.selos-cidade-regiao img { width: 96px; height: 96px; object-fit: contain; background: transparent; }
+.selos-cidade-regiao strong { display: block; font-size: 22px; }
+.selos-links { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 12px; }
+
+/* Catálogo por UF: grade no desktop, fileiras compactas no celular. */
+.selos-brasil, .selos-brasil > section, .selos-estados, .selos-estado, .selos-trilho { min-width: 0; }
+.selos-estados { display: grid; gap: 32px; }
+.selos-estado > header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+.selos-estado h2 { margin: 0; font-family: var(--mono); font-size: 22px; }
+.selos-estado > header span { font-size: 14px; color: var(--pv-muted-dark); }
+.selos-deslize { display: none; }
+.selos-trilho:focus-visible { outline: 2px solid var(--pv-orange-deep); outline-offset: 2px; }
+@media (max-width: 768px) {
+  .selos-brasil { padding-block: 24px 48px; gap: 32px; }
+  .selos-brasil .selos-topo h1 { font-size: clamp(36px, 9vw, 56px); }
+  .selos-brasil .selos-topo p { font-size: 16px; }
+  .selos-brasil .selos-filtros { padding: 16px; gap: 12px; }
+  .selos-brasil .selos-filtros input:not([type="checkbox"]), .selos-brasil .selos-filtros select { font-size: 17px; }
+  .selos-brasil .selos-filtros .study-button { width: 100%; }
+  .selos-deslize { display: block; margin-bottom: 20px; font-size: 14px; color: var(--pv-muted-dark); }
+  .selos-trilho { overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scroll-padding-inline: 4px; }
+  .selos-estado .selos-grade-cartoes { display: flex; gap: 12px; padding: 4px 4px 12px; }
+  .selos-grade-cartoes > li { flex: 0 0 148px; min-width: 0; scroll-snap-align: start; }
+  .selos-grade-cartoes .cartao-selo { height: 100%; }
+  .selos-grade-cartoes .cartao-selo-arte { padding: 12px; }
+  .selos-grade-cartoes .cartao-selo-link > strong { padding-inline: 12px; font-size: 15px; overflow-wrap: anywhere; }
+  .selos-grade-cartoes .cartao-selo-etiquetas { padding-inline: 12px; gap: 4px; }
+  .selos-grade-cartoes .cartao-selo-etiquetas small { padding-inline: 8px; }
+  .selos-grade-cartoes .cartao-selo-mais { width: 44px; height: 44px; right: 8px; }
 }

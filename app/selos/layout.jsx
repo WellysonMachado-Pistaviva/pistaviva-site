@@ -1,4 +1,5 @@
 import './selos.css';
+import SeloNav from '../selo/SeloNav';
 
 export const metadata = {
   title: { default: 'Selos colecionáveis', template: '%s · Selos colecionáveis' },
@@ -6,5 +7,5 @@ export const metadata = {
 };
 
 export default function SelosLayout({ children }) {
-  return <div className="pv-study selos">{children}</div>;
+  return <div className="pv-study selos"><SeloNav />{children}</div>;
 }

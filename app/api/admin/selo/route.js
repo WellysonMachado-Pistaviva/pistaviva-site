@@ -11,7 +11,7 @@ import { copiarEvento, sincronizarPlanilhas } from '../../../lib/selo/planilhas'
 import {
   ativarParceiro, criarParceiro, listarParceiros,
   buscarPorCupom, registrarUsoBeneficio, revogarCheckin,
-  listarConquistas, publicarConquista, retirarAdesivo, MODO, buscarMotociclistas, excluirMotociclista, listarVisitasAdmin, mudarStatusFoto, urlDownloadFoto, urlsFotos,
+  listarConquistas, publicarConquista, retirarAdesivo, MODO, buscarMotociclistas, excluirMotociclista, listarVisitasAdmin, mudarStatusFoto, urlDownloadFoto, urlsFotos, listarFotosCidades, mudarStatusFotoCidade,
 } from '../../../lib/selo/store';
 
 export const runtime = 'nodejs';
@@ -19,10 +19,12 @@ export const dynamic = 'force-dynamic';
 
 const DIA = /^\d{4}-\d{2}-\d{2}$/;
 const STATUS = ['pendente', 'aprovada', 'recusada'];
+const STATUS_CIDADE = ['publica', 'denunciada', 'oculta'];
 const erro = (msg, status = 400) => NextResponse.json({ error: msg }, { status });
 
 // GET /api/admin/selo?acao=resumo&de=AAAA-MM-DD&ate=AAAA-MM-DD
 // GET /api/admin/selo?acao=fotos&status=pendente|aprovada|recusada
+// GET /api/admin/selo?acao=fotos-cidades&status=publica|denunciada|oculta
 // GET /api/admin/selo?acao=buscar&q=0347 | 35999998888 | ana
 // GET /api/admin/selo?acao=baixar&id=<visita>
 // GET /api/admin/selo?acao=csv&de=…&ate=…
@@ -52,6 +54,15 @@ export async function GET(req) {
             id: v.id, url: urls[v.foto_path] || null, nome: v.nome, numero: v.numero, cidade: v.cidade, uf: v.uf,
             estacao: v.estacao, criado_em: v.criado_em, autorizada: v.foto_autorizada, status: v.foto_status, legenda: legenda(v),
           })),
+        });
+      }
+
+      case 'fotos-cidades': {
+        const status = STATUS_CIDADE.includes(p.get('status')) ? p.get('status') : 'denunciada';
+        const fotos = await listarFotosCidades(status);
+        const urls = await urlsFotos(fotos.map((f) => f.foto_path));
+        return NextResponse.json({
+          fotos: fotos.map(({ foto_path: path, ...f }) => ({ ...f, url: urls[path] || null })),
         });
       }
 
@@ -183,6 +194,10 @@ export async function POST(req) {
     if (body.acao === 'beneficio-uso') {
       const nota = typeof body.nota === 'string' ? body.nota.replace(/\s+/g, ' ').trim().slice(0, 120) : '';
       return (await registrarUsoBeneficio(id, nota)) ? NextResponse.json({ ok: true }) : erro('Pessoa não encontrada.', 404);
+    }
+    if (body.acao === 'foto-cidade') {
+      if (!STATUS_CIDADE.includes(body.status)) return erro('Status inválido.');
+      return (await mudarStatusFotoCidade(id, body.status)) ? NextResponse.json({ ok: true }) : erro('Foto não encontrada.', 404);
     }
     if (body.acao === 'foto') {
       if (!STATUS.includes(body.status)) return erro('Status inválido.');

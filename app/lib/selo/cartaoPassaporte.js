@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { ImageResponse } from 'next/og';
 import { formatarNumero } from './constantes.mjs';
 import { ESTACOES } from './estacao.mjs';
+import { nomeCurto } from './mapaCidades.mjs';
 
 // Imagem de compartilhamento do passaporte: Stories (1080×1920) e prévia de
 // link (1200×630). Gerada no servidor com as fontes e artes da marca, para
@@ -29,12 +30,7 @@ async function carregar() {
   return recursos;
 }
 
-// "Ana Maria Souza" → "Ana Maria S." — reconhecível sem expor o nome completo.
-export function nomeCartao(nome) {
-  const partes = String(nome || '').trim().split(/\s+/).filter(Boolean);
-  if (partes.length < 2) return partes[0] || 'Motociclista';
-  return [...partes.slice(0, -1).slice(0, 2), `${partes.at(-1)[0].toUpperCase()}.`].join(' ');
-}
+export const nomeCartao = (nome) => nomeCurto(nome);
 
 export function fraseCartao(total) {
   if (total >= 4) return 'Ano completo. Conquistador de Itajubá.';
@@ -54,7 +50,8 @@ function Selo({ id, tem, arte, tamanho }) {
 }
 
 // conquistados: Set com as estações (verao/outono/…) que contam no cartão.
-export async function cartaoPassaporte({ nome, numero, ano, conquistados, formato = 'story', site }) {
+// cidades: quantas cidades da Rota Biker estão carimbadas (0 = linha some).
+export async function cartaoPassaporte({ nome, numero, ano, conquistados, cidades = 0, formato = 'story', site }) {
   const { fontes, arte } = await carregar();
   const total = ORDEM.filter((e) => conquistados.has(e)).length;
   const story = formato === 'story';
@@ -70,6 +67,7 @@ export async function cartaoPassaporte({ nome, numero, ano, conquistados, format
       </div>
       <div style={{ display: 'flex', fontFamily: 'Display', fontSize: 72 * s + (story ? 0 : 18), color: COR.branco }}>ESTAÇÕES {ano}</div>
       <div style={{ display: 'flex', fontFamily: 'Texto', fontSize: 36 * s + (story ? 0 : 10), color: COR.apoio, marginTop: 12 * s }}>{fraseCartao(total)}</div>
+      {cidades > 0 && <div style={{ display: 'flex', fontFamily: 'Display', fontSize: 44 * s + (story ? 0 : 10), color: COR.tinta, marginTop: 12 * s }}>+ {cidades} {cidades === 1 ? 'CIDADE' : 'CIDADES'} DA ROTA BIKER</div>}
     </div>
   );
   const quem = (

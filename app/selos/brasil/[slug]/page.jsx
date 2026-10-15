@@ -1,6 +1,12 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { municipioBrasilPorSlug, VARIANTES, varianteMunicipio } from '../../../lib/selo/municipiosBrasil.mjs';
+import { municipioBrasilPorSlug } from '../../../lib/selo/municipiosBrasil.mjs';
+import { VERSAO_ARTE, variantesMunicipio } from '../../../lib/selo/municipioBrasilArte.mjs';
+import { regiaoDoMunicipio } from '../../../lib/selo/regioes.mjs';
+import { PORTAIS, ibgeCidades } from '../../../lib/selo/portaisTurismo.mjs';
+import ChamadaItajuba from '../../../selo/chamada/ChamadaItajuba';
+
+const NOMES_VARIANTES = { carimbo: 'Carimbo do passaporte', postal: 'Postal vintage', 'cartao-original': 'Cartão original', 'coruja-viajante': 'Coruja viajante', 'coruja-quadrada': 'Coruja na moldura', 'coruja-escudo': 'Coruja no escudo' };
 
 export const revalidate = 3600;
 export async function generateMetadata({ params }) {
@@ -13,10 +19,12 @@ export default async function SeloMunicipioPage({ params, searchParams }) {
   const c = municipioBrasilPorSlug((await params).slug);
   if (!c) notFound();
   const requested = (await searchParams).variante;
-  const variants = c.slug === 'itajuba-mg' ? ['itajuba', ...VARIANTES] : VARIANTES;
-  const active = variants.includes(requested) ? requested : varianteMunicipio(c);
+  const variants = ['carimbo', ...variantesMunicipio(c)];
+  const active = variants.includes(requested) ? requested : 'carimbo';
   const base = `/selos/brasil/${c.slug}`;
-  const svg = `${base}/selo.svg?variante=${active}`;
+  const svg = `${base}/selo.svg?variante=${active}&arte=${VERSAO_ARTE}`;
+  const regiao = regiaoDoMunicipio(c.slug);
+  const portal = PORTAIS[c.slug];
   return <div className="study-container selos-wrap selos-brasil">
     <nav className="selos-trilha" aria-label="Você está em"><Link href="/selos">Selos</Link> / <Link href="/selos/brasil">Brasil</Link> / <span>{c.nome}</span></nav>
     <article className="selos-detalhe">
@@ -34,14 +42,26 @@ export default async function SeloMunicipioPage({ params, searchParams }) {
         <Link href="/selo" className="selos-ver">Abrir meu passaporte ↗</Link>
       </div>
     </article>
+    {regiao && <Link className="selos-cidade-regiao" href={regiao.href}>
+      <img src={regiao.arte} alt="" width={96} height={96} loading="lazy" />
+      <span><small className="study-kicker">Região · {regiao.etiqueta}</small><strong>{regiao.nome}</strong>Veja o selo da região e as outras cidades →</span>
+    </Link>}
+
+    <ChamadaItajuba cidade={c.slug === 'itajuba-mg' ? null : c.nome} />
+
     <section className="selos-historia" aria-labelledby="historia-cidade"><h2 className="selos-h2" id="historia-cidade">Um pouco de {c.nome}</h2>
       {c.citacao ? <blockquote>{c.resumo}</blockquote> : <p>{c.resumo}</p>}
       <p className="selos-nota"><a href={c.fonte} target="_blank" rel="noreferrer">Histórico municipal · IBGE ↗</a></p>
+      {c.frase && <p><strong>Curiosidade:</strong> {c.frase}.</p>}
+      <div className="selos-links">
+        {portal && <a href={portal.url} target="_blank" rel="noreferrer">{portal.tipo === 'turismo' ? 'Portal de turismo da cidade ↗' : 'Site oficial da prefeitura ↗'}</a>}
+        <a href={ibgeCidades(c.slug, c.uf)} target="_blank" rel="noreferrer">{c.nome} no IBGE Cidades ↗</a>
+      </div>
       {c.evidencia && <details><summary>Sobre a data do selo</summary><p>{c.evidencia}</p><p className="selos-nota">{c.fonteData || 'Formação administrativa · IBGE'}</p>{c.fonteDataUrl && <a href={c.fonteDataUrl} target="_blank" rel="noreferrer">Consultar fonte ↗</a>}<p>Fundação é a origem histórica da cidade; emancipação marca sua autonomia municipal.</p></details>}
     </section>
     <section aria-labelledby="variacoes-selo"><h2 className="selos-h2" id="variacoes-selo">Escolha sua variação</h2><div className="selos-variantes">
       {variants.map((v) => <Link key={v} href={`${base}?variante=${v}`} className={`selos-variante${v === active ? ' selos-variante-ativa' : ''}`} aria-current={v === active ? 'true' : undefined}>
-        <img src={`${base}/selo.svg?variante=${v}`} alt={`Variação ${v} para ${c.nome}`} width={160} height={188} loading="lazy" /><span>{v === 'itajuba' ? 'Original Itajubá' : v}</span>
+        <img src={`${base}/selo.svg?variante=${v}&arte=${VERSAO_ARTE}`} alt={`Variação ${v} para ${c.nome}`} width={160} height={188} loading="lazy" /><span>{v === 'itajuba' ? 'Original Itajubá' : v === 'cartao' ? 'Cartão Rota Biker' : (NOMES_VARIANTES[v] || v)}</span>
       </Link>)}
     </div></section>
   </div>;

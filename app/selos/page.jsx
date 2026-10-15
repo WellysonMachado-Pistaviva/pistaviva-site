@@ -3,6 +3,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { CATALOGO, COLECOES, COLECAO_PARADAS, maisColecionados } from '../lib/selo/catalogo.mjs';
 import { BASE, contagens, paradas } from './dados';
 import SeloCard from './SeloCard';
+import { REGIOES } from '../lib/selo/regioes.mjs';
 
 export const revalidate = 3600;
 export const metadata = {
@@ -65,6 +66,13 @@ export default async function SelosPage() {
           {CATALOGO.map((s) => <SeloCard key={s.slug} href={`/selos/${s.slug}`} arte={s.arte} nome={s.nome} etiqueta={s.periodo} />)}
         </div>
       </section>}
+
+      <section aria-labelledby="selos-regioes">
+        <h2 id="selos-regioes" className="selos-h2">Regiões do Brasil</h2>
+        <div className="selos-grade">
+          {REGIOES.map((r) => <SeloCard key={r.arquivo} href={r.href} arte={r.arte} nome={r.nome} etiqueta={r.etiqueta} />)}
+        </div>
+      </section>
 
       {lista.length > 0 && <section aria-labelledby="selos-paradas">
         <h2 id="selos-paradas" className="selos-h2">Paradas oficiais</h2>

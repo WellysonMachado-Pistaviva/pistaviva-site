@@ -1,6 +1,7 @@
 import { perfilPorCodigo } from '../../../../lib/selo/store';
 import { estacaoDe, estadoSelo } from '../../../../lib/selo/estacao.mjs';
 import { cartaoPassaporte } from '../../../../lib/selo/cartaoPassaporte';
+import { resumoPassaporte } from '../../../../lib/selo/cidades.mjs';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -19,7 +20,7 @@ export async function GET(req, { params }) {
   const ano = Number.isInteger(pedido) && pedido > 2000 && pedido < 3000 ? pedido : estacaoDe(agora).ano;
   const conquistados = new Set(ORDEM.filter((estacao) => ['liberado', 'conquistado'].includes(estadoSelo({ estacao, ano, visitas: p.visitas }, agora))));
   const formato = url.searchParams.get('formato') === 'og' ? 'og' : 'story';
-  const img = await cartaoPassaporte({ nome: p.nome, numero: p.numero, ano, conquistados, formato, site: url.host });
+  const img = await cartaoPassaporte({ nome: p.nome, numero: p.numero, ano, conquistados, cidades: resumoPassaporte(p.entradas || []).cidades, formato, site: url.host });
   const headers = new Headers(img.headers);
   headers.set('Cache-Control', 'private, no-store');
   headers.set('X-Robots-Tag', 'noindex');

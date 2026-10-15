@@ -86,5 +86,6 @@ export function resumoPassaporte(entradas) {
     .map((e) => ({ ...e, visita: (vezes[e.carimbo] = (vezes[e.carimbo] || 0) + 1) }));
   const cidades = new Set(entradas.map((e) => e.carimbo));
   const ufs = new Set(entradas.map((e) => e.uf));
-  return { entradas: comVisita.reverse(), cidades: cidades.size, ufs: ufs.size, faltam: CIDADES.filter((c) => !cidades.has(c.slug)).map(resumoCidade) };
+  const rota = CIDADES.filter((c) => cidades.has(c.slug)).length;
+  return { entradas: comVisita.reverse(), cidades: cidades.size, rota, ufs: ufs.size, faltam: CIDADES.filter((c) => !cidades.has(c.slug)).map(resumoCidade) };
 }
