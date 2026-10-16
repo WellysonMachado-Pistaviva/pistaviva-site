@@ -1,14 +1,22 @@
-// Stories: seis carimbos na identificação, doze nas seguintes. Feed: quatro
-// na identificação e seis nas seguintes, com mais espaço para cada arte.
+// Stories: até seis carimbos na identificação, doze nas seguintes. Feed: até
+// quatro na identificação e seis nas seguintes, com mais espaço para cada arte.
+// Mesmo número de páginas de antes, mas os carimbos se dividem por igual: nada
+// de última página com um carimbo só (11 no feed: 4, 4 e 3 em vez de 4, 6 e 1).
 // Nenhum limite de coleção é aplicado: todas as entradas mantêm sua ordem.
 export function paginarColecao(carimbos, formato = 'stories') {
   const primeira = formato === 'feed' ? 4 : 6;
   const demais = formato === 'feed' ? 6 : 12;
-  const paginas = [{ identificacao: true, carimbos: carimbos.slice(0, primeira), inicio: 0 }];
-  for (let inicio = primeira; inicio < carimbos.length; inicio += demais) {
-    paginas.push({ identificacao: false, carimbos: carimbos.slice(inicio, inicio + demais), inicio });
-  }
-  return paginas;
+  const n = carimbos.length;
+  const total = 1 + Math.ceil(Math.max(0, n - primeira) / demais);
+  const tamanhos = [Math.min(primeira, Math.ceil(n / total))];
+  const resto = n - tamanhos[0];
+  for (let i = 0; i < total - 1; i++) tamanhos.push(Math.floor(resto / (total - 1)) + (i < resto % (total - 1) ? 1 : 0));
+  let inicio = 0;
+  return tamanhos.map((tamanho, i) => {
+    const pagina = { identificacao: i === 0, carimbos: carimbos.slice(inicio, inicio + tamanho), inicio };
+    inicio += tamanho;
+    return pagina;
+  });
 }
 
 // ZIP sem recompressão: os JPEGs já estão comprimidos. Um único download

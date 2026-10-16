@@ -94,3 +94,17 @@
   .sl-footer { font-size: 8px; letter-spacing: .08em; }
 }
 @media (max-width: 480px) { .sl-fields { grid-template-columns: 1fr; } .sl-layout-options small { font-size: 10px; } }
+
+/* Escolher quais carimbos entram na coleção compartilhada. */
+.sl-escolher legend small { margin-left: 6px; font-weight: 400; opacity: .7; }
+.sl-escolher-atalhos { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.sl-escolher-atalhos button { min-height: 36px; padding: 6px 12px; border: 1px solid var(--sl-line); background: var(--sl-field-paper); font: 600 13px var(--font); cursor: pointer; }
+.sl-escolher-atalhos button:disabled { opacity: .5; cursor: default; }
+.sl-escolher-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 6px; max-height: 260px; overflow-y: auto; padding: 2px; }
+.sl-escolher-grade label { position: relative; display: grid; justify-items: center; gap: 4px; padding: 6px 4px; border: 1px solid var(--sl-stamp); background: var(--sl-selected-paper); cursor: pointer; text-align: center; }
+.sl-escolher-grade input { position: absolute; top: 4px; left: 4px; width: 16px; height: 16px; margin: 0; accent-color: var(--sl-stamp); }
+.sl-escolher-grade img { width: 56px; height: 56px; object-fit: contain; background: transparent; }
+.sl-escolher-grade span { font: 600 11px/1.2 var(--font); overflow-wrap: anywhere; }
+.sl-escolher-grade label[data-fora] { border-color: var(--sl-line); background: var(--sl-field-paper); }
+.sl-escolher-grade label[data-fora] img { opacity: .3; filter: grayscale(1); }
+.sl-escolher-grade label:has(input:focus-visible) { outline: 2px solid var(--sl-stamp); outline-offset: 2px; }

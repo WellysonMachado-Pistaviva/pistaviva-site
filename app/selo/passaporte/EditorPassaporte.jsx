@@ -66,6 +66,8 @@ export default function EditorPassaporte({ perfil = null, carimbos: carimbosReai
   const [salvandoCadastro, setSalvandoCadastro] = useState(false);
   const [statusCadastro, setStatusCadastro] = useState('');
   const [removerFoto, setRemoverFoto] = useState(false);
+  // Carimbos que a pessoa tirou da coleção compartilhada (por chave).
+  const [fora, setFora] = useState(() => new Set());
   const codigo = perfil?.codigo;
   const numeroPerfil = perfil?.numero;
   const edicaoBloqueada = exportando || consultando || salvandoCadastro || carregando;
@@ -73,7 +75,15 @@ export default function EditorPassaporte({ perfil = null, carimbos: carimbosReai
   const carimbos = useMemo(() => (demonstracao ? cidadesExemplo.slice(0, quantidade) : carimbosReais).map((c, i) => ({ ...c, chave: c.entradaId || `${c.slug || c.tipo || 'carimbo'}-${c.dia}-${i}` })), [demonstracao, cidadesExemplo, quantidade, carimbosReais]);
   const cidades = useMemo(() => carimbos.filter((c) => c.tipo === 'cidade' || c.slug), [carimbos]);
   const inicio = carimbos.length === 0;
-  const folhas = useMemo(() => paginarColecao(carimbos, formato), [carimbos, formato]);
+  const naColecao = useMemo(() => carimbos.filter((c) => !fora.has(c.chave)), [carimbos, fora]);
+  const folhas = useMemo(() => paginarColecao(naColecao, formato), [naColecao, formato]);
+  // "Até a viagem anterior": tira os carimbos do dia mais recente.
+  const ultimoDia = useMemo(() => carimbos.reduce((m, c) => (c.dia > m ? c.dia : m), ''), [carimbos]);
+  const temViagemAnterior = carimbos.some((c) => c.dia && c.dia < ultimoDia);
+  function alternarCarimbo(chave) {
+    setFora((atual) => { const novo = new Set(atual); if (novo.has(chave)) novo.delete(chave); else novo.add(chave); return novo; });
+    setPagina(0); setMensagem('');
+  }
   const destaque = cidades.find((c) => c.chave === cidade || c.slug === cidade) || cidades.at(-1) || null;
   const indice = colecao ? Math.min(pagina, folhas.length - 1) : 0;
   const completo = colecao && escopo === 'completo';
@@ -115,13 +125,13 @@ export default function EditorPassaporte({ perfil = null, carimbos: carimbosReai
   const lote = useMemo(() => {
     const promessas = new Map();
     const total = colecao ? folhas.length : 1;
-    const estados = new Set(carimbos.map((c) => c.uf || (c.tipo === 'estacao' ? 'MG' : null)).filter(Boolean)).size;
+    const estados = new Set(naColecao.map((c) => c.uf || (c.tipo === 'estacao' ? 'MG' : null)).filter(Boolean)).size;
     return {
       total,
       obter(i) {
         if (!promessas.has(i)) {
           const imagem = colecao
-            ? gerarPaginaColecao({ folha: folhas[i], indice: i, totalPaginas: total, dados, fotoSrc, numero, totalCarimbos: carimbos.length, estados, formato })
+            ? gerarPaginaColecao({ folha: folhas[i], indice: i, totalPaginas: total, dados, fotoSrc, numero, totalCarimbos: naColecao.length, estados, formato })
             : gerarPreviaStory({ destaque, outros: carimbos.filter((c) => c !== destaque), dados, fotoSrc, numero, identidadeAcima: layout === 'identidade', inicio: inicio || !destaque });
           promessas.set(i, imagem.then((tela) => {
             if (demonstracao) {
@@ -142,7 +152,7 @@ export default function EditorPassaporte({ perfil = null, carimbos: carimbosReai
         return promessas.get(i);
       },
     };
-  }, [colecao, folhas, dados, fotoSrc, carimbos, destaque, layout, inicio, formato, numero, prefixoArquivo, demonstracao]);
+  }, [colecao, folhas, dados, fotoSrc, carimbos, naColecao, destaque, layout, inicio, formato, numero, prefixoArquivo, demonstracao]);
 
   useEffect(() => {
     let ativo = true;
@@ -286,7 +296,7 @@ export default function EditorPassaporte({ perfil = null, carimbos: carimbosReai
         <section className="sl-preview" aria-label="Prévia da imagem para compartilhar">
           <div className="sl-preview-label"><span>{demonstracao ? 'MODELO DE EXEMPLO' : colecao ? 'SEU PASSAPORTE' : 'SUA CONQUISTA'}</span><span>{dimensoes}</span></div>
           <div className="sl-phone" data-formato={altura === 1350 ? 'feed' : 'stories'} aria-busy={(!pronto || carregando) && !erroAtual}>
-            <canvas ref={canvas} width={1080} height={altura} role="img" aria-hidden={demonstracao && !exibida ? true : undefined} aria-label={colecao ? `Passaporte de ${dados.piloto}, página ${indice + 1} de ${folhas.length}, ${folhas[indice].carimbos.length} carimbos nesta página, ${carimbos.length} no total` : `Passaporte de ${dados.piloto}: ${inicio || !destaque ? 'minha história começa em ' + dados.origem : 'estive em ' + destaque.nome}`} />
+            <canvas ref={canvas} width={1080} height={altura} role="img" aria-hidden={demonstracao && !exibida ? true : undefined} aria-label={colecao ? `Passaporte de ${dados.piloto}, página ${indice + 1} de ${folhas.length}, ${folhas[indice].carimbos.length} carimbos nesta página, ${naColecao.length} no total` : `Passaporte de ${dados.piloto}: ${inicio || !destaque ? 'minha história começa em ' + dados.origem : 'estive em ' + destaque.nome}`} />
             {demonstracao && !exibida && <img className="sl-exemplo-inicial" src="/selo/passaporte/home-story.webp" alt="Modelo ilustrativo preenchido, com foto, identificação e carimbos de cidades" width={540} height={960} />}
             {(!pronto || carregando) && !erroAtual && <div className={`sl-loading${demonstracao && !exibida ? ' sl-loading-exemplo' : ''}`} role="status">{carregando ? 'Carregando sua coleção…' : 'Preparando sua página…'}</div>}
           </div>
@@ -296,7 +306,7 @@ export default function EditorPassaporte({ perfil = null, carimbos: carimbosReai
               <span aria-live="polite">Página <b>{indice + 1}</b> de {folhas.length}</span>
               <button type="button" aria-label="Próxima página" disabled={indice === folhas.length - 1} onClick={() => setPagina(indice + 1)}>→</button>
             </nav>
-            <p className="sl-page-info">{indice === 0 ? 'Identificação' : `Carimbos ${folhas[indice].inicio + 1}–${folhas[indice].inicio + folhas[indice].carimbos.length}`}{indice === 0 && folhas[0].carimbos.length > 0 ? ' e primeiros carimbos' : ''} · {carimbos.length} na coleção</p>
+            <p className="sl-page-info">{indice === 0 ? 'Identificação' : `Carimbos ${folhas[indice].inicio + 1}–${folhas[indice].inicio + folhas[indice].carimbos.length}`}{indice === 0 && folhas[0].carimbos.length > 0 ? ' e primeiros carimbos' : ''} · {naColecao.length} na coleção</p>
           </>}
           {demonstracao && <p className="sl-example">Foto, número e conquistas de exemplo para visualizar composição.</p>}
         </section>
@@ -309,6 +319,22 @@ export default function EditorPassaporte({ perfil = null, carimbos: carimbosReai
             ['stories', 'Stories', '1080 × 1920 · sequência'],
             ['feed', 'Feed', '1080 × 1350 · carrossel'],
           ]} />}
+          {colecao && carimbos.length > 1 && <fieldset className="sl-layout sl-escolher">
+            <legend>Carimbos no passaporte <small>{naColecao.length} de {carimbos.length}</small></legend>
+            <div className="sl-escolher-atalhos">
+              <button type="button" disabled={exportando || !fora.size} onClick={() => { setFora(new Set()); setPagina(0); setMensagem(''); }}>Todos</button>
+              {temViagemAnterior && <button type="button" disabled={exportando} onClick={() => { setFora(new Set(carimbos.filter((c) => c.dia === ultimoDia).map((c) => c.chave))); setPagina(0); setMensagem(''); }}>Até a viagem anterior</button>}
+            </div>
+            <div className="sl-escolher-grade">
+              {carimbos.map((c) => (
+                <label key={c.chave} data-fora={fora.has(c.chave) || undefined} title={`${c.nome || c.alt || 'Carimbo'} · ${c.dia.split('-').reverse().join('/')}`}>
+                  <input type="checkbox" checked={!fora.has(c.chave)} disabled={exportando} onChange={() => alternarCarimbo(c.chave)} />
+                  <img src={c.mini || c.src} alt="" width={56} height={56} loading="lazy" />
+                  <span>{c.nome || c.alt}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>}
           {demonstracao && <div className="sl-field">
             <label htmlFor="sl-quantidade">Coleção de exemplo</label>
             <select id="sl-quantidade" value={quantidade} disabled={exportando} onChange={(e) => { setQuantidade(Number(e.target.value)); if (e.target.value === '0') setLayout('identidade'); setPagina(0); setCidade('socorro-sp'); setMensagem(''); }}>
@@ -356,7 +382,7 @@ export default function EditorPassaporte({ perfil = null, carimbos: carimbosReai
           </div>}
           {colecao && <Escolha legenda="Compartilhar ou baixar" nome="escopo" valor={escopo} disabled={exportando} onChange={(id) => { setEscopo(id); setMensagem(''); }} opcoes={[
             ['atual', 'Página atual', `Só imagem ${indice + 1}`],
-            ['completo', 'Passaporte completo', `${folhas.length} ${folhas.length === 1 ? 'imagem' : 'imagens'} · todos os carimbos`],
+            ['completo', 'Passaporte completo', `${folhas.length} ${folhas.length === 1 ? 'imagem' : 'imagens'} · ${naColecao.length === carimbos.length ? 'todos os carimbos' : `${naColecao.length} carimbos escolhidos`}`],
           ]} />}
           <div className="sl-actions">
             <button type="submit" className="sl-share" disabled={!podeExportar}>{exportando ? 'Preparando arquivo…' : completo ? `Compartilhar ${folhas.length} ${folhas.length === 1 ? 'imagem' : 'imagens'}` : colecao ? 'Compartilhar página atual' : 'Compartilhar conquista'} <span aria-hidden="true">↗</span></button>
