@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { carimbarAqui, prepararFotoCidade, publicarFotoCidade } from './actions';
+import { carimbarAqui, escolherArteCarimbo, prepararFotoCidade, publicarFotoCidade } from './actions';
 import { comTempo, comprimirFoto, subirFoto } from './fotoCliente';
 import { appendReading, readQueue, queueKey } from '../../public/pwa/store.mjs';
 
@@ -153,29 +153,74 @@ export default function CarimboCidade({ codigo, autor, onCarimbo, onStory, compa
       {feito && esperado && feito.cidade?.slug !== esperado.slug && (
         <p className="selo-dica" role="status">Você está em {feito.cidade.nome}/{feito.cidade.uf}, não em {esperado.nome}. Carimbamos a cidade onde você está.</p>
       )}
-      {feito && <Carimbado key={feito.entradaId} codigo={codigo} feito={feito} autor={autor} onStory={onStory} />}
+      {feito && <Carimbado key={feito.entradaId} codigo={codigo} feito={feito} autor={autor} onStory={onStory} onArte={avisar} compacto={compacto} />}
       {msg && <p className="selo-erro" role="alert">{msg}</p>}
       <small className="selo-dica">Um carimbo por cidade por dia. Voltou outro dia? Carimba de novo e conta como nova visita. <Link href="/selo/mapa">Ver o mapa de carimbos →</Link></small>
     </section>
   );
 }
 
-// Depois do carimbo: arte da cidade e a foto opcional.
-function Carimbado({ codigo, feito, autor, onStory }) {
+// Depois do carimbo: escolha da arte, story e a foto opcional.
+function Carimbado({ codigo, feito, autor, onStory, onArte, compacto }) {
   const { cidade } = feito;
+  const [arte, setArte] = useState(feito.arte);
+  const imagem = feito.artes?.find((a) => a.id === arte)?.imagem || feito.imagem;
   return (
     <div className="carimbo-feito" role="status">
-      <img className="carimbo-feito-arte" src={feito.imagem} alt={`Carimbo de ${cidade.nome}/${cidade.uf}`} width={160} height={160} />
+      <img className="carimbo-feito-arte" src={imagem} alt={`Carimbo de ${cidade.nome}/${cidade.uf}`} width={160} height={160} />
       <div className="carimbo-feito-texto">
         <b>{cidade.nome}/{cidade.uf}</b>
         <span>{feito.ja ? `Já estava carimbada em ${dataCurta(feito.dia)} no seu passaporte.` : `Carimbada no seu passaporte · ${dataCurta(feito.dia)}`}</span>
         {feito.serie && <span className="carimbo-feito-serie">Nº {feito.serie}</span>}
       </div>
+      <EscolherArte codigo={codigo} feito={feito} arte={arte} onEscolhida={(id) => { setArte(id); onArte?.(); }} />
       {onStory
         ? <button type="button" className="selo-btn carimbo-feito-story" onClick={() => onStory(feito.entradaId)}>Compartilhar nos Stories</button>
         : <Link className="selo-btn carimbo-feito-story" href={`/selo/passaporte?story=${feito.entradaId}`}>Compartilhar nos Stories</Link>}
-      <FotoCarimbo codigo={codigo} entradaId={feito.entradaId} cidade={cidade} autor={autor} />
+      <FotoCarimbo codigo={codigo} entradaId={feito.entradaId} cidade={cidade} autor={autor} publicaInicial />
+      {!compacto && <Link className="selo-btn secundario carimbo-feito-mapa" href="/selo/mapa">Ver outros carimbos no mapa</Link>}
     </div>
+  );
+}
+
+// Opções de arte da cidade (com a data e o nº desta passagem). A pessoa toca
+// numa e confirma no OK; só então o passaporte troca a arte do carimbo.
+function EscolherArte({ codigo, feito, arte, onEscolhida }) {
+  const [marcada, setMarcada] = useState(arte);
+  const [salvando, setSalvando] = useState(false);
+  const [erro, setErro] = useState('');
+  if (!feito.artes || feito.artes.length < 2) return null;
+  async function confirmar() {
+    setSalvando(true);
+    setErro('');
+    try {
+      const r = await comTempo(escolherArteCarimbo({ codigo, entradaId: feito.entradaId, arte: marcada }), 20_000);
+      if (!r?.ok) { setErro(r?.erro || 'Não salvou a escolha. Tente de novo.'); return; }
+      onEscolhida(marcada);
+    } catch {
+      setErro('Sem conexão agora. Seu carimbo continua na arte anterior; tente de novo.');
+    } finally {
+      setSalvando(false);
+    }
+  }
+  return (
+    <fieldset className="carimbo-artes">
+      <legend>Escolha seu carimbo</legend>
+      <p>{feito.artes.length} artes de {feito.cidade.nome}. Toque na que você quer e confirme: ela vai para o seu passaporte.</p>
+      <div className="carimbo-artes-opcoes">
+        {feito.artes.map((a) => (
+          <label key={a.id} className="carimbo-arte" data-marcada={a.id === marcada || undefined}>
+            <input type="radio" name={`arte-${feito.entradaId}`} value={a.id} checked={a.id === marcada} onChange={() => setMarcada(a.id)} />
+            <img src={a.mini} alt="" width={96} height={96} loading="lazy" />
+            <span>{a.nome}{a.id === arte && <small>no passaporte</small>}</span>
+          </label>
+        ))}
+      </div>
+      <button type="button" className="selo-btn" onClick={confirmar} disabled={salvando || marcada === arte}>
+        {salvando ? 'Salvando…' : marcada === arte ? 'Este é o seu carimbo ✓' : 'OK, usar este carimbo'}
+      </button>
+      {erro && <p className="selo-erro" role="alert">{erro}</p>}
+    </fieldset>
   );
 }
 
@@ -214,20 +259,20 @@ export function FotoCarimbo({ codigo, entradaId, cidade, autor, titulo = 'Quer g
     <>
       {foto === 'publica' || foto === 'privada' ? (
         <p className="carimbo-feito-foto">
-          {foto === 'publica' ? <>Foto no mapa de {cidade.nome}. <Link href={`/selo/cidade/${cidade.slug}`}>Ver a cidade →</Link></> : 'Foto guardada só no seu passaporte.'}
+          {foto === 'publica' ? <>Foto na página de {cidade.nome}. <Link href={`/selo/cidade/${cidade.slug}`}>Ver a cidade →</Link></> : 'Foto guardada só no seu passaporte.'}
         </p>
       ) : (
         <div className="carimbo-feito-foto">
           <span className="selo-legenda">{titulo}</span>
           <label className="selo-check">
             <input type="checkbox" checked={publica} onChange={(e) => setPublica(e.target.checked)} />
-            Mostrar no mapa de {cidade.nome}{autor ? `, como ${autor}` : ''}
+            Mostrar na página de {cidade.nome}{autor ? `, como ${autor}` : ''}
           </label>
           <div className="selo-foto-botao">
             <span className="selo-btn secundario" aria-hidden="true">{foto === 'enviando' ? 'Enviando a foto…' : 'Escolher ou tirar foto'}</span>
             <input type="file" accept="image/*" aria-label={`Postar foto de ${cidade.nome}`} onChange={enviar} disabled={foto === 'enviando'} />
           </div>
-          <small className="selo-dica">Foto pública aparece na hora para quem abrir o mapa. Qualquer pessoa pode denunciar foto imprópria. Sem rosto de terceiros sem autorização.</small>
+          <small className="selo-dica">Foto pública aparece na hora na página da cidade e no mapa. Qualquer pessoa pode denunciar foto imprópria. Sem rosto de terceiros sem autorização.</small>
           {erro && <p className="selo-erro" role="alert">{erro}</p>}
         </div>
       )}

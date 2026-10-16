@@ -249,3 +249,61 @@
   .ph-hero h1 { font-size: clamp(44px, 10vw, 64px); }
   .ph-hero-livro { max-width: 360px; justify-self: center; }
 }
+
+/* Mapa de carimbos: calor. Quanto mais carimbada a cidade (ou o grupo),
+   maior e mais forte o anel; o topo pulsa. */
+.mapa-grupo:not(.tem) { border: 2px dashed #7a6f60; box-shadow: 0 2px 6px rgba(0, 0, 0, .2); }
+.mapa-grupo:not(.tem) b { font-size: 15px; color: #5c5346; }
+.mapa-grupo i { position: absolute; top: -7px; right: -7px; min-width: 22px; height: 22px; padding: 0 5px; display: grid; place-items: center; border-radius: 11px; background: var(--pv-orange); border: 2px solid #fff; color: #fff; font: 800 12px/1 var(--font); font-style: normal; }
+.mapa-grupo.calor-2 { border-color: var(--pv-orange); }
+.mapa-grupo.calor-3, .mapa-pino-selo.calor-3, .mapa-pino-bola.calor-3 { border-color: #c92a2a; animation: mapa-calor 1.8s ease-out infinite; }
+.mapa-grupo.calor-3 i, .mapa-pino-selo.calor-3 b { background: #c92a2a; }
+.mapa-pino-selo.calor-2 { box-shadow: 0 0 0 3px rgba(240, 140, 0, .55); }
+.mapa-pino-selo.calor-3 { box-shadow: 0 0 0 4px rgba(201, 42, 42, .6); }
+@keyframes mapa-calor {
+  0% { box-shadow: 0 0 0 0 rgba(201, 42, 42, .55), 0 3px 12px rgba(0, 0, 0, .35); }
+  70% { box-shadow: 0 0 0 14px rgba(201, 42, 42, 0), 0 3px 12px rgba(0, 0, 0, .35); }
+  100% { box-shadow: 0 0 0 0 rgba(201, 42, 42, 0), 0 3px 12px rgba(0, 0, 0, .35); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mapa-grupo.calor-3, .mapa-pino-selo.calor-3, .mapa-pino-bola.calor-3 { animation: none; box-shadow: 0 0 0 4px rgba(201, 42, 42, .6); }
+}
+.mapa-ranking { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 10px 0 0; font: 600 13px/1.2 var(--font); }
+.mapa-ranking > span { text-transform: uppercase; letter-spacing: .06em; opacity: .7; }
+.mapa-ranking button { display: inline-flex; gap: 6px; align-items: center; min-height: 36px; padding: 6px 12px; border-radius: 18px; border: 1px solid var(--pv-orange); background: rgba(240, 140, 0, .1); color: inherit; font: inherit; cursor: pointer; }
+.mapa-ranking button.topo { background: #c92a2a; border-color: #c92a2a; color: #fff; }
+.mapa-grupo:not(.tem) { background: rgba(255, 255, 255, .82); border-width: 1.5px; }
+.mapa-grupo:not(.tem) b { font-size: 12px; }
+
+/* Lista do mapa: um bloco por estado. No celular cada estado é um
+   carrossel de arrastar para o lado (scroll-snap), sem rolar a página inteira. */
+.mapa-estado { margin-top: 28px; min-width: 0; }
+/* Filho de grid cresce até o conteúdo: sem isso o carrossel alarga a página. */
+.mapa-pagina > * { min-width: 0; }
+.mapa-estado > header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.mapa-estado > header h3 { margin: 0; font: 800 24px/1 var(--font); }
+.mapa-estado > header span { opacity: .7; }
+.mapa-estado > header a { margin-left: auto; font-weight: 700; }
+@media (max-width: 768px) {
+  .mapa-carrossel { display: flex; min-width: 0; gap: 12px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; margin-inline: -16px; padding: 4px 16px 12px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .mapa-carrossel::-webkit-scrollbar { display: none; }
+  .mapa-carrossel > li { flex: 0 0 min(44vw, 190px); scroll-snap-align: start; }
+}
+/* Cards dos carrosséis no padrão de catálogo: card branco, arte sobre cinza
+   claro, nome sem serifa, etiquetas em pílula e o "+" discreto no canto. */
+.passaporte-universo .mapa-carrossel .cartao-selo { background: #fff; color: #18181b; border: 1px solid #e4e4e7; border-radius: 8px; }
+.passaporte-universo .mapa-carrossel .cartao-selo-arte { background: #f6f7f9; padding: 22px; }
+.passaporte-universo .mapa-carrossel .cartao-selo-arte img { mix-blend-mode: normal; }
+.passaporte-universo .mapa-carrossel .cartao-selo-link { gap: 10px; padding-bottom: 16px; }
+.passaporte-universo .mapa-carrossel .cartao-selo strong { color: #18181b; font: 500 15px/1.3 system-ui, -apple-system, 'Segoe UI', sans-serif; }
+.passaporte-universo .mapa-carrossel .cartao-selo-etiquetas small { background: #e8e9ed; color: #3f3f46; font: 600 12px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif; }
+.passaporte-universo .mapa-carrossel .cartao-selo-etiquetas small[data-tom="rota"] { background: #ea580c; color: #fff; font-size: 11px; text-transform: uppercase; }
+.passaporte-universo .mapa-carrossel .cartao-selo-etiquetas small[data-tom="sim"] { background: #e3f6e8; color: #17692e; }
+.passaporte-universo .mapa-carrossel .cartao-selo-mais { top: calc(100cqw - 40px); right: 10px; width: 30px; height: 30px; border-color: #c4c4cc; color: #71717a; }
+.passaporte-universo .mapa-carrossel .cartao-selo-mais svg { width: 16px; height: 16px; }
+/* Memória pública na página da cidade (com ou sem foto). */
+.cidade-fotos li { display: flex; flex-direction: column; }
+.cidade-fotos li > div { margin-top: auto; }
+.cidade-relato { margin: 0; padding: 12px 14px 0; font-size: 15px; line-height: 1.5; white-space: pre-line; overflow-wrap: anywhere; }
+.cidade-fotos li.so-texto .cidade-relato { padding-top: 16px; font-size: 16px; }
+.cidade-fotos li.so-texto .cidade-relato::before { content: '“'; display: block; height: 22px; font: 800 40px/1 Georgia, serif; color: var(--pv-orange); }

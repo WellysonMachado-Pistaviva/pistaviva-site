@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { municipioBrasilPorSlug } from '../../../lib/selo/municipiosBrasil.mjs';
+import { NOMES_ARTES } from '../../../lib/selo/artesCarimbo.mjs';
 import { VERSAO_ARTE, variantesMunicipio } from '../../../lib/selo/municipioBrasilArte.mjs';
 import { regiaoDoMunicipio } from '../../../lib/selo/regioes.mjs';
 import { PORTAIS, ibgeCidades } from '../../../lib/selo/portaisTurismo.mjs';
 import ChamadaItajuba from '../../../selo/chamada/ChamadaItajuba';
 
-const NOMES_VARIANTES = { carimbo: 'Carimbo do passaporte', postal: 'Postal vintage', 'cartao-original': 'Cartão original', 'coruja-viajante': 'Coruja viajante', 'coruja-quadrada': 'Coruja na moldura', 'coruja-escudo': 'Coruja no escudo' };
+const NOMES_VARIANTES = NOMES_ARTES;
 
 export const revalidate = 3600;
 export async function generateMetadata({ params }) {

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import '../../selo-publico.css';
 import { localPorSlug } from '../../../lib/selo/locais.mjs';
 import { urlCarimbo } from '../../../lib/selo/carimboUrl.mjs';
-import { fotosDaCidade, resumoMapa } from '../../../lib/selo/store';
+import { fotosDaCidade, memoriasDaCidade, resumoMapa } from '../../../lib/selo/store';
 import DenunciarFoto from './DenunciarFoto';
 import ChamadaItajuba from '../../chamada/ChamadaItajuba';
 import { regiaoDoMunicipio } from '../../../lib/selo/regioes.mjs';
@@ -20,13 +20,24 @@ export async function generateMetadata({ params }) {
 
 const dataCurta = (dia) => new Date(`${dia}T12:00:00`).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/\./g, '');
 
+// Postagem = uma passagem com foto pública e/ou memória pública.
+function postagens(fotos, memorias) {
+  const por = new Map();
+  for (const f of fotos) por.set(f.id, { id: f.id, dia: f.dia, autor: f.autor, em: f.fotoEm || '', foto: true, relato: '' });
+  for (const m of memorias) {
+    const p = por.get(m.id) || { id: m.id, dia: m.dia, autor: m.autor, em: '', foto: false };
+    por.set(m.id, { ...p, relato: m.relato, em: [p.em, m.em || ''].sort().at(-1) });
+  }
+  return [...por.values()].sort((a, b) => b.em.localeCompare(a.em));
+}
+
 async function dados(slug) {
   try {
-    const [totais, fotos] = await Promise.all([resumoMapa(), fotosDaCidade(slug)]);
-    return { total: totais.find((t) => t.carimbo === slug) || {}, fotos };
+    const [totais, fotos, memorias] = await Promise.all([resumoMapa(), fotosDaCidade(slug), memoriasDaCidade(slug)]);
+    return { total: totais.find((t) => t.carimbo === slug) || {}, fotos, posts: postagens(fotos, memorias) };
   } catch (e) {
     console.error('[selo] cidade (migração do mapa aplicada?)', e?.message);
-    return { total: {}, fotos: [] };
+    return { total: {}, fotos: [], posts: [] };
   }
 }
 
@@ -34,7 +45,7 @@ export default async function CidadePage({ params }) {
   const { slug } = await params;
   const cidade = localPorSlug(slug);
   if (!cidade) notFound();
-  const { total, fotos } = await dados(slug);
+  const { total, fotos, posts } = await dados(slug);
   const carimbos = Number(total.carimbos) || 0;
   return (
     <div className="pv-study selo-public-page passaporte-universo">
@@ -59,11 +70,12 @@ export default async function CidadePage({ params }) {
         <ChamadaItajuba cidade={cidade.nome} />
         <section aria-labelledby="cidade-fotos-titulo">
           <h2 id="cidade-fotos-titulo">Quem passou por {cidade.nome}</h2>
-          {fotos.length ? (
+          {posts.length ? (
             <ul className="cidade-fotos">
-              {fotos.map((f) => (
-                <li key={f.id}>
-                  <img src={`/selo/foto/${f.id}`} alt={`Foto de ${f.autor} em ${cidade.nome}`} loading="lazy" />
+              {posts.map((f) => (
+                <li key={f.id} className={f.foto ? undefined : 'so-texto'}>
+                  {f.foto && <img src={`/selo/foto/${f.id}`} alt={`Foto de ${f.autor} em ${cidade.nome}`} loading="lazy" />}
+                  {f.relato && <blockquote className="cidade-relato">{f.relato}</blockquote>}
                   <div>
                     <span><b>{f.autor}</b> · {dataCurta(f.dia)}</span>
                     <DenunciarFoto id={f.id} />
@@ -71,7 +83,7 @@ export default async function CidadePage({ params }) {
                 </li>
               ))}
             </ul>
-          ) : <p>Ainda sem fotos. Quem carimbar {cidade.nome} pode postar a primeira.</p>}
+          ) : <p>Ainda sem fotos nem memórias. Quem carimbar {cidade.nome} pode postar a primeira.</p>}
         </section>
       </div>
     </div>

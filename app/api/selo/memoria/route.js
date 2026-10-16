@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache';
 import { lerMemoria, gravarMemoria } from '../../../lib/selo/memoriaServidor';
 import { codigoMemoriaValido, UUID_ENTRADA, validarRelato } from '../../../lib/selo/memoria.mjs';
 import { excedeu } from '../../../lib/selo/limites';
@@ -20,7 +21,7 @@ export async function GET(req) {
   try {
     const m = await lerMemoria(p.codigo, p.entradaId);
     if (!m) return json({ erro: 'Memória não encontrada.' }, 404);
-    if (!p.foto) return json({ relato: m.relato, atualizadoEm: m.atualizadoEm, fotoStatus: m.fotoPath ? m.fotoStatus : null });
+    if (!p.foto) return json({ relato: m.relato, publica: m.publica, atualizadoEm: m.atualizadoEm, fotoStatus: m.fotoPath ? m.fotoStatus : null });
     if (!m.fotoPath || ['oculta', 'denunciada'].includes(m.fotoStatus)) return json({ erro: 'Foto indisponível.' }, 404);
     let bytes;
     if (storeLocal) bytes = storeLocal.lerFoto(m.fotoPath);
@@ -48,9 +49,13 @@ export async function PUT(req) {
   try { dados = JSON.parse(corpo); } catch { return json({ erro: 'Pedido inválido.' }, 400); }
   const v = validarRelato(dados?.relato);
   if (!v.ok) return json({ erro: v.erro }, 400);
+  if (dados?.publica != null && typeof dados.publica !== 'boolean') return json({ erro: 'Pedido inválido.' }, 400);
   try {
-    const salvo = await gravarMemoria(p.codigo, p.entradaId, v.relato);
-    return salvo ? json(salvo) : json({ erro: 'Memória não encontrada.' }, 404);
+    // publica: aparece na página da cidade com primeiro nome + inicial + nº.
+    const salvo = await gravarMemoria(p.codigo, p.entradaId, v.relato, dados?.publica === true);
+    if (!salvo) return json({ erro: 'Memória não encontrada.' }, 404);
+    revalidatePath(`/selo/cidade/${salvo.carimbo}`);
+    return json({ relato: salvo.relato, publica: salvo.publica, atualizadoEm: salvo.atualizadoEm });
   } catch (e) {
     console.error('[selo] salvar memória', e?.code || e?.message);
     return json({ erro: 'Não salvou sua memória. Seu texto continua aqui para tentar novamente.' }, 503);

@@ -102,7 +102,7 @@ test('store local: carimbo idempotente no dia, passaporte só com autorização,
     assert.equal(primeiro.ok, true);
     assert.equal(primeiro.ja, false);
     // Repetir no mesmo dia devolve o mesmo carimbo (a foto opcional vai nele).
-    assert.deepEqual(s.carimbarCidade(codigo, d), { ok: true, ja: true, id: primeiro.id, serie: 1 });
+    assert.deepEqual(s.carimbarCidade(codigo, d), { ok: true, ja: true, id: primeiro.id, serie: 1, arte: null });
     const outroDia = s.carimbarCidade(codigo, { ...d, dia: '2026-10-20' });
     assert.equal(outroDia.ja, false);
     assert.notEqual(outroDia.id, primeiro.id);

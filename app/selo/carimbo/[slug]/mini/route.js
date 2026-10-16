@@ -1,6 +1,7 @@
 import sharp from 'sharp';
 import { localPorSlug } from '../../../../lib/selo/locais.mjs';
-import { carimboDoMunicipio } from '../../../../lib/selo/carimboCidade.mjs';
+import { carimboDoMunicipio, carimboNaArte } from '../../../../lib/selo/carimboCidade.mjs';
+import { ARTE_PADRAO, ARTE_VALIDA } from '../../../../lib/selo/carimboUrl.mjs';
 import { montarCarimboCidadeSvg } from '../../../../lib/selo/carimboCidadeArte.mjs';
 import { municipioBrasilPorSlug } from '../../../../lib/selo/municipiosBrasil.mjs';
 import { montarSeloMunicipioBrasil } from '../../../../lib/selo/municipioBrasilArte.mjs';
@@ -28,9 +29,13 @@ async function classico(slug) {
 export async function GET(req, { params }) {
   const { slug } = await params;
   if (!localPorSlug(slug)) return new Response(null, { status: 404 });
-  const cor = new URL(req.url).searchParams.get('estilo') === 'cor';
-  const img = cor ? await classico(slug)
-    : sharp(Buffer.from(carimboDoMunicipio(slug)), { density: 192 }).resize(LADO, LADO, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } });
+  const q = new URL(req.url).searchParams;
+  const cor = q.get('estilo') === 'cor';
+  // ?arte=: miniatura de uma das artes da cidade (seletor do check-in).
+  const arte = ARTE_VALIDA.test(q.get('arte') || '') && q.get('arte') !== ARTE_PADRAO ? q.get('arte') : null;
+  const svg = arte ? carimboNaArte(slug, arte) : carimboDoMunicipio(slug);
+  const img = cor && !arte ? await classico(slug)
+    : sharp(Buffer.from(svg), { density: 192 }).resize(LADO, LADO, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } });
   const webp = await img.webp({ quality: 90 }).toBuffer();
   return new Response(webp, {
     headers: {

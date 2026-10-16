@@ -103,13 +103,21 @@ export async function perfilPorCodigo(codigo) {
 
 // ── carimbos de cidade (pv_selo_entradas, supabase_selo_cidades.sql) ───────
 
-const entradaPublica = (e) => ({ id: e.id, carimbo: e.carimbo, uf: e.uf, dia: e.dia, criadoEm: e.criado_em, fotoStatus: e.foto_path ? e.foto_status || 'privada' : null, serie: codigoSerie(e.serie, e.id) });
+const entradaPublica = (e) => ({ id: e.id, carimbo: e.carimbo, uf: e.uf, dia: e.dia, criadoEm: e.criado_em, fotoStatus: e.foto_path ? e.foto_status || 'privada' : null, serie: codigoSerie(e.serie, e.id), arte: e.arte || null });
+
+// Até supabase_selo_escolhas.sql rodar, a coluna arte não existe: consulta
+// sem ela e todo carimbo sai na arte padrão.
+async function comArte(montar, campos) {
+  const r = await montar(`${campos}, arte`);
+  if (r.error && /arte/.test(r.error.message || '')) return montar(campos);
+  return r;
+}
 
 // Até a migração rodar, a tabela e a coluna não existem: o link pessoal segue
 // funcionando, só sem carimbos de cidade.
 async function passaporteDoBanco(sb, motoId) {
   const [e, p] = await Promise.all([
-    sb.from('pv_selo_entradas').select('id, carimbo, uf, dia, criado_em, foto_path, foto_status, serie').eq('motociclista_id', motoId).order('criado_em', { ascending: false }).limit(500),
+    comArte((c) => sb.from('pv_selo_entradas').select(c).eq('motociclista_id', motoId).order('criado_em', { ascending: false }).limit(500), 'id, carimbo, uf, dia, criado_em, foto_path, foto_status, serie'),
     sb.from('pv_selo_motociclistas').select('passaporte_publico_em').eq('id', motoId).maybeSingle(),
   ]);
   if (e.error || p.error) console.error('[selo] passaporte (migração de cidades aplicada?)', e.error?.message || p.error?.message);
@@ -146,11 +154,11 @@ export async function carimbarCidade(codigo, d) {
   const sb = supabaseAdmin();
   // Confere antes de inserir: o gatilho da série roda antes do conflito e
   // gastaria um número a cada toque repetido no mesmo dia.
-  const doDia = () => sb.from('pv_selo_entradas').select('id, serie')
-    .eq('motociclista_id', m.id).eq('carimbo', d.carimbo).eq('dia', d.dia).maybeSingle();
+  const doDia = () => comArte((c) => sb.from('pv_selo_entradas').select(c)
+    .eq('motociclista_id', m.id).eq('carimbo', d.carimbo).eq('dia', d.dia).maybeSingle(), 'id, serie');
   const { data: ja, error: e1 } = await doDia();
   if (e1) throw e1;
-  if (ja) return { ok: true, ja: true, id: ja.id, serie: ja.serie ?? null };
+  if (ja) return { ok: true, ja: true, id: ja.id, serie: ja.serie ?? null, arte: ja.arte || null };
   const { data, error } = await sb.from('pv_selo_entradas').upsert({
     motociclista_id: m.id, tipo: 'cidade', carimbo: d.carimbo, ibge: d.ibge, uf: d.uf, dia: d.dia,
     metodo: d.metodo || 'gps', capturado_em: d.capturadoEm || new Date().toISOString(),
@@ -160,7 +168,7 @@ export async function carimbarCidade(codigo, d) {
   if (data.length) return { ok: true, ja: false, id: data[0].id, serie: data[0].serie ?? null };
   const { data: outro, error: e2 } = await doDia();   // outro toque gravou no mesmo instante
   if (e2) throw e2;
-  return { ok: true, ja: true, id: outro?.id, serie: outro?.serie ?? null };
+  return { ok: true, ja: true, id: outro?.id, serie: outro?.serie ?? null, arte: outro?.arte || null };
 }
 
 // Foto opcional do carimbo; só o dono anexa à própria entrada. { carimbo, status } | null.
@@ -174,6 +182,43 @@ export async function anexarFotoCidade(codigo, entradaId, path, publica) {
     .eq('id', entradaId).eq('motociclista_id', m.id).select('carimbo');
   if (error) throw error;
   return data[0] ? { carimbo: data[0].carimbo, status } : null;
+}
+
+// Entrada de cidade do dono do código: { id, carimbo } | null.
+export async function entradaDoDono(codigo, entradaId) {
+  if (local) return local.entradaDoDono(codigo, entradaId);
+  const m = await motoPorCodigo(codigo);
+  if (!m) return null;
+  const { data, error } = await supabaseAdmin().from('pv_selo_entradas').select('id, carimbo')
+    .eq('id', entradaId).eq('motociclista_id', m.id).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+// Arte escolhida para o carimbo (já validada contra as artes da cidade).
+export async function gravarArte(codigo, entradaId, arte) {
+  if (local) return local.gravarArte(codigo, entradaId, arte);
+  const m = await motoPorCodigo(codigo);
+  if (!m) return false;
+  const { data, error } = await supabaseAdmin().from('pv_selo_entradas').update({ arte })
+    .eq('id', entradaId).eq('motociclista_id', m.id).select('id');
+  if (error) throw error;
+  return data.length > 0;
+}
+
+// Memórias que os donos marcaram para a página da cidade, mais novas primeiro.
+// Até a migração rodar, não há memória pública: devolve vazio.
+export async function memoriasDaCidade(slug, limite = 60) {
+  if (local) return local.memoriasDaCidade(slug, limite);
+  const { data, error } = await supabaseAdmin().from('pv_selo_memorias')
+    .select('entrada_id, relato, atualizado_em, pv_selo_entradas!inner(carimbo, dia, pv_selo_motociclistas(nome, numero))')
+    .eq('publica', true).eq('oculta', false).neq('relato', '').eq('pv_selo_entradas.carimbo', slug)
+    .order('atualizado_em', { ascending: false }).limit(limite);
+  if (error) { console.error('[selo] memórias da cidade (migração de escolhas aplicada?)', error.message); return []; }
+  return (data || []).map((m) => ({
+    id: m.entrada_id, relato: m.relato, em: m.atualizado_em, dia: m.pv_selo_entradas.dia,
+    autor: autorFoto(m.pv_selo_entradas.pv_selo_motociclistas?.nome, m.pv_selo_entradas.pv_selo_motociclistas?.numero),
+  }));
 }
 
 // Quantos passaportes existem (números da home; sem dado pessoal).
@@ -267,7 +312,7 @@ export async function passaportePublico(numero) {
     if (error || !m) return null;
     const [v, e] = await Promise.all([
       sb.from('pv_selo_visitas').select('estacao, ano, retirado_em').eq('motociclista_id', m.id).not('retirado_em', 'is', null),
-      sb.from('pv_selo_entradas').select('id, carimbo, uf, dia, criado_em').eq('motociclista_id', m.id).order('criado_em', { ascending: false }).limit(500),
+      comArte((c) => sb.from('pv_selo_entradas').select(c).eq('motociclista_id', m.id).order('criado_em', { ascending: false }).limit(500), 'id, carimbo, uf, dia, criado_em'),
     ]);
     if (v.error) throw v.error;
     if (e.error) throw e.error;

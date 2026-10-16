@@ -22,7 +22,7 @@ export async function GET(req) {
       const c = localPorSlug(e.carimbo);
       return {
         tipo: 'cidade', entradaId: e.id, slug: e.carimbo, nome: c?.nome || e.carimbo, uf: c?.uf || e.uf,
-        src: urlCarimbo(e.carimbo, { dia: e.dia, serie: e.serie }),
+        src: urlCarimbo(e.carimbo, { dia: e.dia, serie: e.serie, arte: e.arte }),
         mini: urlMiniCarimbo(e.carimbo),
         alt: `Carimbo ${c ? `${c.nome}/${c.uf}` : e.carimbo}, ${dataCarimbo(e.dia)}`,
         dia: e.dia, serie: e.serie, visita: e.visita,

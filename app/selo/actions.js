@@ -12,12 +12,14 @@ import { diaDoCarimbo } from '../lib/selo/cidades.mjs';
 import { municipioDoPonto } from '../lib/selo/malhaBrasil.mjs';
 import { validarPassaporte, validarVisita } from '../lib/selo/schema.mjs';
 import { codigoSerie, horaDaCaptura } from '../lib/selo/mapaCidades.mjs';
-import { urlCarimbo } from '../lib/selo/carimboUrl.mjs';
+import { ARTE_PADRAO, ARTE_VALIDA, urlCarimbo, urlMiniArte } from '../lib/selo/carimboUrl.mjs';
+import { artesDaCidade } from '../lib/selo/carimboCidade.mjs';
+import { nomeDaArte } from '../lib/selo/artesCarimbo.mjs';
 import { acessoPassaporte } from '../lib/selo/acessoServidor';
 import { normalizarBuscaAcesso } from '../lib/selo/acessoRegras.mjs';
 import { normalizarWhatsapp } from '../lib/selo/whatsapp.mjs';
 import {
-  anexarFotoCidade, autorizarConquista, autorizarPassaporte, carimbarCidade, confirmarFoto, denunciarFoto, fotoEnviada, marcarProva, motoPorCodigo, motociclistaPorWhatsapp, registrarCheckin, registrarVisita,
+  anexarFotoCidade, entradaDoDono, gravarArte, autorizarConquista, autorizarPassaporte, carimbarCidade, confirmarFoto, denunciarFoto, fotoEnviada, marcarProva, motoPorCodigo, motociclistaPorWhatsapp, registrarCheckin, registrarVisita,
   salvarEndereco, urlUploadFoto, visitaAtual, visitaPorChave,
 } from '../lib/selo/store';
 
@@ -282,10 +284,32 @@ export async function carimbarAqui({ codigo, lat, lng, precisao, capturadoEm } =
     revalidatePath('/selo/mapa');
     const dia = diaDoCarimbo(hora.quando);
     const serie = codigoSerie(feito.serie, feito.id);
-    return { ok: true, ja: feito.ja, entradaId: feito.id, serie, dia, imagem: urlCarimbo(slug, { dia, serie }), cidade: { slug, nome, uf } };
+    const arte = feito.arte || ARTE_PADRAO;
+    // Opções de arte da cidade, já com a data e o nº desta passagem: a pessoa
+    // escolhe uma e confirma (escolherArteCarimbo).
+    const artes = artesDaCidade(slug).map((id) => ({ id, nome: nomeDaArte(id), mini: urlMiniArte(slug, id), imagem: urlCarimbo(slug, { dia, serie, arte: id }) }));
+    return { ok: true, ja: feito.ja, entradaId: feito.id, serie, dia, arte, artes, imagem: urlCarimbo(slug, { dia, serie, arte }), cidade: { slug, nome, uf } };
   } catch (e) {
     console.error('[selo] carimbarAqui', e);
     return { ok: false, erro: 'Não gravou o carimbo. Tente de novo.' };
+  }
+}
+
+// Arte escolhida para o carimbo depois do check-in. Só o dono troca, e só
+// por uma das artes daquela cidade.
+export async function escolherArteCarimbo({ codigo, entradaId, arte } = {}) {
+  if (!codigoValido(codigo) || !UUID.test(String(entradaId)) || typeof arte !== 'string' || !ARTE_VALIDA.test(arte)) return { ok: false, erro: 'Pedido inválido.' };
+  if (await limitar('selo-arte', 60, 10 * 60_000)) return { ok: false, erro: 'Muitas trocas seguidas. Espere alguns minutos.' };
+  try {
+    const entrada = await entradaDoDono(codigo, entradaId);
+    if (!entrada) return { ok: false, erro: 'Carimbo não encontrado.' };
+    if (!artesDaCidade(entrada.carimbo).includes(arte)) return { ok: false, erro: 'Essa arte não existe para esta cidade.' };
+    if (!await gravarArte(codigo, entradaId, arte === ARTE_PADRAO ? null : arte)) return { ok: false, erro: 'Carimbo não encontrado.' };
+    revalidatePath(`/selo/m/${codigo}`);
+    return { ok: true, arte };
+  } catch (e) {
+    console.error('[selo] escolherArteCarimbo', e);
+    return { ok: false, erro: 'Não salvou a escolha. Tente de novo.' };
   }
 }
 
@@ -322,14 +346,14 @@ export async function publicarFotoCidade({ codigo, entradaId, publica } = {}) {
 
 // Denúncia anônima: uma por IP por foto (só o hash do IP é gravado).
 export async function denunciarFotoCidade({ id } = {}) {
-  if (!UUID.test(String(id))) return { ok: false, erro: 'Foto inválida.' };
+  if (!UUID.test(String(id))) return { ok: false, erro: 'Postagem inválida.' };
   if (await limitar('selo-denuncia', 20, 60 * 60_000)) return { ok: false, erro: 'Muitas denúncias seguidas. Tente mais tarde.' };
   const h = await headers();
   const ip = (h.get('x-forwarded-for') || '').split(',')[0].trim() || h.get('x-real-ip') || 'desconhecido';
   const quem = createHash('sha256').update(`selo-denuncia:${ip}`).digest('hex');
   try {
     const status = await denunciarFoto(id, quem);
-    if (status == null) return { ok: false, erro: 'Foto não encontrada.' };
+    if (status == null) return { ok: false, erro: 'Postagem não encontrada.' };
     return { ok: true, escondida: status !== 'publica' };
   } catch (e) {
     console.error('[selo] denunciarFotoCidade', e);

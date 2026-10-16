@@ -2,11 +2,12 @@
 import { useState } from 'react';
 import { denunciarFotoCidade } from '../../actions';
 
-// Denúncia anônima: 3 pessoas diferentes escondem a foto até a revisão.
+// Denúncia anônima: 3 pessoas diferentes escondem a postagem (foto e
+// memória) até a revisão.
 export default function DenunciarFoto({ id }) {
   const [estado, setEstado] = useState('pronto');   // pronto | enviando | feito | erro
   async function denunciar() {
-    if (!window.confirm('Denunciar esta foto como imprópria? Ela é revisada pela equipe.')) return;
+    if (!window.confirm('Denunciar esta postagem como imprópria? Ela é revisada pela equipe.')) return;
     setEstado('enviando');
     try {
       const r = await denunciarFotoCidade({ id });

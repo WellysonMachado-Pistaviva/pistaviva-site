@@ -434,7 +434,7 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
     const m = db.motociclistas.find((x) => x.codigo === codigo);
     if (!m) return null;
     const ja = db.entradas.find((e) => e.motociclista_id === m.id && e.carimbo === d.carimbo && e.dia === d.dia);
-    if (ja) return { ok: true, ja: true, id: ja.id, serie: ja.serie ?? null };
+    if (ja) return { ok: true, ja: true, id: ja.id, serie: ja.serie ?? null, arte: ja.arte || null };
     // Igual ao gatilho pv_selo_entradas_serie: número nunca reaproveitado.
     db.series[d.carimbo] = (db.series[d.carimbo] || 0) + 1;
     const e = {
@@ -499,8 +499,11 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
     if (!db.denuncias.some((d) => d.entrada_id === id && d.quem === quem)) db.denuncias.push({ entrada_id: id, quem, criado_em: new Date().toISOString() });
     e.denuncias = db.denuncias.filter((d) => d.entrada_id === id).length;
     if (e.foto_status === 'publica' && e.denuncias >= LIMITE_DENUNCIAS) e.foto_status = 'denunciada';
+    // A denúncia vale para a postagem inteira: esconde também a memória pública.
+    if (e.memoria_publica && e.denuncias >= LIMITE_DENUNCIAS) e.memoria_oculta = true;
     gravar(db);
-    return e.foto_status;
+    if (e.foto_status) return e.foto_status;
+    return e.memoria_publica ? (e.memoria_oculta ? 'denunciada' : 'publica') : null;
   }
 
   function listarFotosCidades(status) {
@@ -530,23 +533,52 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
     return ler().entradas.filter((e) => e.motociclista_id === motoId).sort((a, b) => b.criado_em.localeCompare(a.criado_em));
   }
 
-  function memoriaPorEntrada(codigo, entradaId) {
-    const db = ler();
+  function doDono(db, codigo, entradaId) {
     const m = db.motociclistas.find((x) => x.codigo === codigo);
-    const e = m && db.entradas.find((x) => x.id === entradaId && x.motociclista_id === m.id);
-    if (!e) return null;
-    return { relato: e.memoria_relato || '', atualizadoEm: e.memoria_em || null, fotoPath: e.foto_path || null, fotoStatus: e.foto_status || null };
+    return (m && db.entradas.find((x) => x.id === entradaId && x.motociclista_id === m.id)) || null;
   }
 
-  function salvarMemoria(codigo, entradaId, relato, agora = new Date()) {
+  function entradaDoDono(codigo, entradaId) {
+    const e = doDono(ler(), codigo, entradaId);
+    return e ? { id: e.id, carimbo: e.carimbo } : null;
+  }
+
+  function gravarArte(codigo, entradaId, arte) {
     const db = ler();
-    const m = db.motociclistas.find((x) => x.codigo === codigo);
-    const e = m && db.entradas.find((x) => x.id === entradaId && x.motociclista_id === m.id);
+    const e = doDono(db, codigo, entradaId);
+    if (!e) return false;
+    e.arte = arte;
+    gravar(db);
+    return true;
+  }
+
+  function memoriaPorEntrada(codigo, entradaId) {
+    const e = doDono(ler(), codigo, entradaId);
+    if (!e) return null;
+    return { relato: e.memoria_relato || '', publica: Boolean(e.memoria_publica), atualizadoEm: e.memoria_em || null, fotoPath: e.foto_path || null, fotoStatus: e.foto_status || null, carimbo: e.carimbo };
+  }
+
+  function salvarMemoria(codigo, entradaId, relato, publica = false, agora = new Date()) {
+    const db = ler();
+    const e = doDono(db, codigo, entradaId);
     if (!e) return null;
     e.memoria_relato = relato;
+    e.memoria_publica = publica;
     e.memoria_em = agora.toISOString();
     gravar(db);
-    return { relato, atualizadoEm: e.memoria_em };
+    return { relato, publica, atualizadoEm: e.memoria_em, carimbo: e.carimbo };
+  }
+
+  function memoriasDaCidade(slug, limite = 60) {
+    const db = ler();
+    return db.entradas
+      .filter((e) => e.carimbo === slug && e.memoria_publica && !e.memoria_oculta && e.memoria_relato)
+      .sort((a, b) => (b.memoria_em || '').localeCompare(a.memoria_em || ''))
+      .slice(0, limite)
+      .map((e) => {
+        const m = db.motociclistas.find((x) => x.id === e.motociclista_id);
+        return { id: e.id, relato: e.memoria_relato, em: e.memoria_em, dia: e.dia, autor: autorFoto(m?.nome, m?.numero) };
+      });
   }
 
   function autorizarPassaporte(codigo, publico, agora = new Date()) {
@@ -595,7 +627,7 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
     visitaAtual, checkin, marcarProva, revogarCheckin, salvarEndereco, porCupom, registrarUso,
     criarParceiro, listarParceiros, ativarParceiro, parceiroPorToken, salvarSeloParceiro, parceiroPorSelo, contagemSelos, paradasOficiais, perfil, porWhatsapp, urlUpload, uploadValido, salvarFoto, fotoExiste, lerFoto, marcarFoto, ler,
     listarVisitas, mudarStatusFoto, motociclistas, excluirMotociclista,
-    motoPorCodigo, carimbarCidade, entradas, autorizarPassaporte, passaportePublico, memoriaPorEntrada, salvarMemoria,
+    motoPorCodigo, carimbarCidade, entradas, autorizarPassaporte, passaportePublico, memoriaPorEntrada, salvarMemoria, entradaDoDono, gravarArte, memoriasDaCidade,
     criarPassaporte, anexarFotoCidade, resumoMapa, fotosDaCidade, fotoPublica, denunciarFoto, listarFotosCidades, mudarStatusFotoCidade,
   };
 }

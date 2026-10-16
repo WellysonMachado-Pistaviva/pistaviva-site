@@ -416,3 +416,18 @@ fieldset.selo-campo { border: 0; padding: 0; margin: 0; min-width: 0; }
 
 .carimbo-andamento { margin: 0; color: var(--pv-muted-dark); font-size: 14px; }
 .carimbo-andamento:empty { display: none; }
+.carimbo-feito-arte { object-fit: contain; }
+.carimbo-feito-mapa { grid-column: 1 / -1; }
+/* Escolha da arte depois do check-in: fileira de opções de arrastar para o
+   lado; a marcada ganha borda laranja. */
+.carimbo-artes { grid-column: 1 / -1; display: grid; gap: 10px; min-width: 0; margin: 0; padding: 14px 0 0; border: 0; border-top: 1px dashed var(--pv-line-light-2, #d8d2c6); }
+.carimbo-artes legend { padding: 0; font: 800 15px/1.2 var(--font); text-transform: uppercase; letter-spacing: .04em; }
+.carimbo-artes p { margin: 0; font-size: 14px; color: var(--pv-muted-dark); }
+.carimbo-artes-opcoes { display: flex; gap: 10px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; padding: 4px 2px 10px; scrollbar-width: thin; }
+.carimbo-arte { position: relative; flex: 0 0 112px; display: grid; gap: 6px; justify-items: center; padding: 10px 8px; background: #f6f7f9; border: 2px solid #e4e4e7; border-radius: 10px; cursor: pointer; scroll-snap-align: start; text-align: center; }
+.carimbo-arte input { position: absolute; opacity: 0; pointer-events: none; }
+.carimbo-arte img { width: 88px; height: 88px; object-fit: contain; background: transparent; }
+.carimbo-arte span { display: grid; gap: 2px; font: 600 12px/1.25 var(--font); color: #27272a; }
+.carimbo-arte small { color: #17692e; font-size: 11px; }
+.carimbo-arte[data-marcada] { border-color: var(--pv-orange, #ea580c); background: #fff4ec; box-shadow: 0 0 0 2px rgba(234, 88, 12, .2); }
+.carimbo-arte:has(input:focus-visible) { outline: 3px solid var(--pv-orange, #ea580c); outline-offset: 2px; }

@@ -47,6 +47,9 @@ export default function ModalCarimbar({ cidade, onFechar }) {
             <Link className="selo-text-link" href="/selo/meu-numero">Já tenho passaporte →</Link>
           </div>
         )}
+        <div className="modal-carimbar-rodape">
+          <button type="button" className="selo-btn secundario" onClick={() => dialogo.current?.close()}>Voltar e ver outros carimbos</button>
+        </div>
       </div>
     </dialog>
   );

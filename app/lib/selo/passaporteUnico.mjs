@@ -32,7 +32,7 @@ export function montarPassaporte({ entradas = [], estacoes = [] }, { ano = new D
   const cidades = r.entradas.map((e) => ({
     entradaId: e.id, slug: e.carimbo, nome: localPorSlug(e.carimbo)?.nome || e.carimbo, serie: e.serie || null,
     chave: `c-${e.id}`, tipo: 'cidade', uf: localPorSlug(e.carimbo)?.uf || e.uf || '', titulo: nomeCidade[e.carimbo] || e.carimbo, dia: e.dia,
-    img: urlCarimbo(e.carimbo, { dia: e.dia, serie: e.serie }), href: `/selo/cidade/${e.carimbo}`, visita: e.visita,
+    img: urlCarimbo(e.carimbo, { dia: e.dia, serie: e.serie, arte: e.arte }), href: `/selo/cidade/${e.carimbo}`, visita: e.visita,
   }));
   // Mais recente primeiro (grade); o livro inverte, como um passaporte de papel.
   const carimbos = [...cidades, ...selos].map((c) => ({ ...c, giro: giro(c.chave) }))

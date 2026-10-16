@@ -19,8 +19,8 @@
 
 .modal-carimbar { position: fixed; inset: 0; margin: auto; height: fit-content; width: min(560px, calc(100vw - 32px)); overflow: auto; max-height: calc(100dvh - 32px); padding: 0; border: 0; border-radius: 24px; background: #fff; color: #1c1c1f; box-shadow: 0 30px 80px rgba(0, 0, 0, .35); }
 .modal-carimbar::backdrop { background: rgba(20, 18, 14, .55); backdrop-filter: blur(3px); }
-.modal-carimbar-caixa { display: grid; gap: 16px; padding: 22px; }
-.modal-carimbar-topo { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid #ececef; }
+.modal-carimbar-caixa { display: grid; gap: 16px; padding: 0 22px 22px; }
+.modal-carimbar-topo { position: sticky; top: 0; z-index: 2; margin: 0 -22px; padding: 18px 22px 14px; background: #fff; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid #ececef; }
 .modal-carimbar-topo p { margin: 4px 0 0; color: #666; font-size: 14px; }
 .modal-carimbar-fechar { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: transparent; color: #333; cursor: pointer; }
 .modal-carimbar-fechar:hover { background: #f1f1f3; }
@@ -33,3 +33,7 @@
 .modal-carimbar-sem { display: grid; gap: 12px; }
 /* O site pinta o fundo de toda <img> enquanto carrega; selo é transparente. */
 .cartao-selo img, .modal-carimbar img, .mapa-pino img, .mapa-popup img { background: transparent; }
+/* Depois de carimbar o conteúdo fica longo no celular: o X fica sempre no
+   topo e o "Voltar" sempre embaixo, para ninguém ficar preso no modal. */
+.modal-carimbar-rodape { position: sticky; bottom: 0; z-index: 2; margin: 0 -22px -22px; padding: 12px 22px calc(12px + env(safe-area-inset-bottom)); background: #fff; border-top: 1px solid #ececef; }
+.modal-carimbar-rodape .selo-btn { width: 100%; }
