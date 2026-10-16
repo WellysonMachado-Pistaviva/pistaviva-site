@@ -1,16 +1,16 @@
 import Link from 'next/link';
 import { ArrowUpRight, BookOpen, MapPinned, Stamp } from 'lucide-react';
-import EditorialHero from '../components/EditorialHero';
 import Cover from '../components/Cover';
 import { localValido } from '../lib/selo/constantes.mjs';
 import { ESTACOES, estacaoDe } from '../lib/selo/estacao.mjs';
 import SeloForm from './SeloForm';
-import PassaporteMockup from './PassaporteMockup';
+import SeloNav from './SeloNav';
 import Vantagens from './Vantagens';
 import Conquistadores from './Conquistadores';
 import { PARQUE_COORD, PARQUE_ENDERECO } from '../parque-da-cidade/dados';
 import DestinationRoute from '../components/DestinationRoute';
 import './selo-landing.css';
+import './selo-publico.css';
 
 export const dynamic = 'force-dynamic';
 // A entrada é pública e deve aparecer no Google; as telas internas do Selo seguem fora (layout).
@@ -25,14 +25,17 @@ export default async function SeloPage({ searchParams }) {
   const { local } = await searchParams;
   const { estacao, ano } = estacaoDe();
   return (
-    <div className="pv-study selo-landing">
-      <EditorialHero id="selo-titulo" eyebrow="Pistaviva / Selo da Estação"
-        title={<>Itajubá.<br />Quatro estações.<br /><em>Sua história.</em></>}
-        image="/selo/parque-aereo.webp" imageAlt="Vista aérea do Parque da Cidade de Itajubá, com o lago e as montanhas da Mantiqueira"
-        action={{ href: '#selo-cadastro', label: 'Registrar minha visita' }}
-        footer={<><span>Parque da Cidade · Itajubá, MG</span><span>{ESTACOES[estacao].nome} / {ano}</span></>}>
-        Cada chegada merece uma lembrança. Carimbo no passaporte da Rota Biker, adesivo da estação e mais uma história para levar com você.
-      </EditorialHero>
+    <div className="pv-study selo-landing passaporte-universo">
+      <SeloNav />
+      <div className="study-container selo-publico">
+        <header className="passaporte-cabecalho" aria-labelledby="selo-titulo">
+          <p className="study-kicker">Passaporte do motociclista / Selo da Estação</p>
+          <h1 id="selo-titulo">Itajubá.<br /><em>Quatro estações.</em></h1>
+          <p>Cada chegada merece uma lembrança. Visite o Parque da Cidade, conquiste o selo de {ESTACOES[estacao].nome.toLowerCase()} e leve mais uma história no seu passaporte.</p>
+          <a className="study-button" href="#selo-cadastro">Registrar minha visita</a>
+          <Link className="passaporte-amostra-link" href="/selo/passaporte/modelo#amostra-passaporte">Ver uma amostra do passaporte preenchido →</Link>
+        </header>
+      </div>
       <nav className="study-container study-shortcuts" aria-label="Explore o Selo da Estação">
         {[
           { href: '#selo-cadastro', icon: Stamp, title: 'Registre sua visita', subtitle: 'Comece sua coleção em Itajubá' },
@@ -57,7 +60,7 @@ export default async function SeloPage({ searchParams }) {
           </div>
           <div className="selo-passaporte-mesa">
             <span className="selo-mesa-nota">Lembranças de uma boa estrada.</span>
-            <PassaporteMockup estacao={estacao} ano={ano} />
+            <img src="/selo/passaporte/home-passaporte.webp" alt="Amostra do passaporte preenchido com identificação e carimbos de cidades" width={1040} height={660} loading="lazy" />
           </div>
         </section>
         <div className="selo-registro-grid">

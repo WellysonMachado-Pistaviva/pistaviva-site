@@ -1,0 +1,64 @@
+[
+  {
+    "name": "chromium-mobile",
+    "checks": [
+      "registro automático em produção",
+      "menu mobile fechado inicialmente, abre e fecha",
+      "manifest, start_url e ícones acessíveis",
+      "critérios de instalação Chromium sem erros",
+      "navegação offline com resumo e sem overflow",
+      "GPS negado e timeout com recuperação",
+      "GPS simulado salvo e fila preservada após reload",
+      "nova aba offline",
+      "320 px, 390 px e paisagem",
+      "armazenamento cheio informa falha",
+      "cache sem páginas privadas ou APIs",
+      "retorno da conexão",
+      "pendência vencida identificada",
+      "resumo corrompido não impede captura",
+      "sem perfil: recuperação orientada"
+    ],
+    "errors": [],
+    "version": "155.0.8059.41",
+    "installability": []
+  },
+  {
+    "name": "webkit-mobile",
+    "checks": [
+      "registro automático em produção",
+      "menu mobile fechado inicialmente, abre e fecha",
+      "manifest, start_url e ícones acessíveis",
+      "navegação offline com resumo e sem overflow",
+      "GPS negado e timeout com recuperação",
+      "GPS simulado salvo e fila preservada após reload",
+      "nova aba offline",
+      "320 px, 390 px e paisagem",
+      "armazenamento cheio informa falha",
+      "cache sem páginas privadas ou APIs",
+      "retorno da conexão",
+      "pendência vencida identificada",
+      "resumo corrompido não impede captura",
+      "sem perfil: recuperação orientada"
+    ],
+    "errors": [],
+    "version": "26.5"
+  },
+  {
+    "name": "chromium-update",
+    "checks": [
+      "update aguarda, sem reload e preservando formulário",
+      "ativação ao fechar abas remove só cache antigo e preserva storage",
+      "navegador reiniciado sem rede preserva worker, coleção e pendência"
+    ],
+    "errors": []
+  },
+  {
+    "name": "webkit-update",
+    "checks": [
+      "update aguarda, sem reload e preservando formulário",
+      "ativação ao fechar abas remove só cache antigo e preserva storage",
+      "navegador reiniciado sem rede preserva worker, coleção e pendência"
+    ],
+    "errors": []
+  }
+]

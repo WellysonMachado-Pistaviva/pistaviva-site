@@ -3,7 +3,12 @@ export default function manifest() {
     name: 'Pistaviva — Mototurismo no Brasil',
     short_name: 'PistaViva',
     description: 'A maior comunidade de mototurismo do Brasil.',
-    start_url: '/',
+    id: '/',
+    start_url: '/selo/passaporte',
+    shortcuts: [
+      { name: 'Meu passaporte', url: '/selo/passaporte' },
+      { name: 'Modo estrada', url: '/pwa/offline.html' },
+    ],
     scope: '/',
     display: 'standalone',
     orientation: 'portrait',

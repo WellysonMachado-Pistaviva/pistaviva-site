@@ -59,3 +59,14 @@
 .sa-geo { margin-top: 12px; }
 .sa-geo code { font-size: 13px; color: var(--txt); user-select: all; overflow-wrap: anywhere; }
 @media (max-width: 640px) { .sa-beneficio { grid-template-columns: 1fr; padding: 12px var(--pv-space-2) 0; } }
+.sa-cadastros .cbody { padding: 20px; }
+.sa-cadastros .ig-btn { min-height: 44px; max-width: 100%; white-space: normal; text-align: center; }
+.sa-cadastro-busca { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin: 16px 0; }
+.sa-cadastro-busca label { display: grid; gap: 8px; flex: 1 1 240px; }
+.sa-cadastro-busca input { width: 100%; min-height: 44px; font-size: 16px; }
+.sa-cadastro-lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; }
+.sa-cadastro-lista article { min-width: 0; overflow-wrap: anywhere; }
+.sa-cadastro-lista dl > div { display: flex; gap: 12px; margin: 8px 0; }
+.sa-cadastro-lista dt { font-weight: 700; min-width: 80px; }
+.sa-cadastro-lista dd { margin: 0; }
+.sa-cadastro-retrato { display: block; max-width: 100%; object-fit: cover; margin: 12px 0; }

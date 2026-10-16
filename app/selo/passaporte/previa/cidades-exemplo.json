@@ -1,0 +1,402 @@
+[
+  {
+    "slug": "socorro-sp",
+    "nome": "Socorro",
+    "uf": "SP",
+    "dia": "2026-10-11",
+    "serie": "0001·B",
+    "src": "/selos/brasil/socorro-sp/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "urubici-sc",
+    "nome": "Urubici",
+    "uf": "SC",
+    "dia": "2026-10-08",
+    "serie": "0002·B",
+    "src": "/selos/brasil/urubici-sc/selo.svg?variante=retangulo"
+  },
+  {
+    "slug": "foz-do-iguacu-pr",
+    "nome": "Foz do Iguaçu",
+    "uf": "PR",
+    "dia": "2026-10-05",
+    "serie": "0003·B",
+    "src": "/selos/brasil/foz-do-iguacu-pr/selo.svg?variante=redondo"
+  },
+  {
+    "slug": "barretos-sp",
+    "nome": "Barretos",
+    "uf": "SP",
+    "dia": "2026-10-02",
+    "serie": "0004·B",
+    "src": "/selos/brasil/barretos-sp/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "penha-sc",
+    "nome": "Penha",
+    "uf": "SC",
+    "dia": "2026-09-29",
+    "serie": "0005·B",
+    "src": "/selos/brasil/penha-sc/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "brasilia-df",
+    "nome": "Brasília",
+    "uf": "DF",
+    "dia": "2026-09-26",
+    "serie": "0006·B",
+    "src": "/selos/brasil/brasilia-df/selo.svg?variante=triangulo"
+  },
+  {
+    "slug": "jundiai-sp",
+    "nome": "Jundiaí",
+    "uf": "SP",
+    "dia": "2026-09-23",
+    "serie": "0007·B",
+    "src": "/selos/brasil/jundiai-sp/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "tres-coracoes-mg",
+    "nome": "Três Corações",
+    "uf": "MG",
+    "dia": "2026-09-20",
+    "serie": "0008·B",
+    "src": "/selos/brasil/tres-coracoes-mg/selo.svg?variante=coruja"
+  },
+  {
+    "slug": "itajuba-mg",
+    "nome": "Itajubá",
+    "uf": "MG",
+    "dia": "2026-09-17",
+    "serie": "0009·B",
+    "src": "/selos/brasil/itajuba-mg/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "sao-bento-do-sapucai-sp",
+    "nome": "São Bento do Sapucaí",
+    "uf": "SP",
+    "dia": "2026-09-14",
+    "serie": "0010·B",
+    "src": "/selos/brasil/sao-bento-do-sapucai-sp/selo.svg?variante=retangulo"
+  },
+  {
+    "slug": "sao-lourenco-mg",
+    "nome": "São Lourenço",
+    "uf": "MG",
+    "dia": "2026-09-11",
+    "serie": "0011·B",
+    "src": "/selos/brasil/sao-lourenco-mg/selo.svg?variante=redondo"
+  },
+  {
+    "slug": "salesopolis-sp",
+    "nome": "Salesópolis",
+    "uf": "SP",
+    "dia": "2026-09-08",
+    "serie": "0012·B",
+    "src": "/selos/brasil/salesopolis-sp/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "ponta-grossa-pr",
+    "nome": "Ponta Grossa",
+    "uf": "PR",
+    "dia": "2026-09-05",
+    "serie": "0013·B",
+    "src": "/selos/brasil/ponta-grossa-pr/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "prado-ba",
+    "nome": "Prado",
+    "uf": "BA",
+    "dia": "2026-09-02",
+    "serie": "0014·B",
+    "src": "/selos/brasil/prado-ba/selo.svg?variante=triangulo"
+  },
+  {
+    "slug": "jaguarao-rs",
+    "nome": "Jaguarão",
+    "uf": "RS",
+    "dia": "2026-08-30",
+    "serie": "0015·B",
+    "src": "/selos/brasil/jaguarao-rs/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "ametista-do-sul-rs",
+    "nome": "Ametista do Sul",
+    "uf": "RS",
+    "dia": "2026-08-27",
+    "serie": "0016·B",
+    "src": "/selos/brasil/ametista-do-sul-rs/selo.svg?variante=coruja"
+  },
+  {
+    "slug": "conceicao-do-mato-dentro-mg",
+    "nome": "Conceição do Mato Dentro",
+    "uf": "MG",
+    "dia": "2026-08-24",
+    "serie": "0017·B",
+    "src": "/selos/brasil/conceicao-do-mato-dentro-mg/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "sao-miguel-do-passa-quatro-go",
+    "nome": "São Miguel do Passa Quatro",
+    "uf": "GO",
+    "dia": "2026-08-21",
+    "serie": "0018·B",
+    "src": "/selos/brasil/sao-miguel-do-passa-quatro-go/selo.svg?variante=retangulo"
+  },
+  {
+    "slug": "porto-uniao-sc",
+    "nome": "Porto União",
+    "uf": "SC",
+    "dia": "2026-08-18",
+    "serie": "0019·B",
+    "src": "/selos/brasil/porto-uniao-sc/selo.svg?variante=redondo"
+  },
+  {
+    "slug": "abadiania-go",
+    "nome": "Abadiânia",
+    "uf": "GO",
+    "dia": "2026-08-15",
+    "serie": "0020·B",
+    "src": "/selos/brasil/abadiania-go/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "piumhi-mg",
+    "nome": "Piumhi",
+    "uf": "MG",
+    "dia": "2026-08-12",
+    "serie": "0021·B",
+    "src": "/selos/brasil/piumhi-mg/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "maua-da-serra-pr",
+    "nome": "Mauá da Serra",
+    "uf": "PR",
+    "dia": "2026-08-09",
+    "serie": "0022·B",
+    "src": "/selos/brasil/maua-da-serra-pr/selo.svg?variante=triangulo"
+  },
+  {
+    "slug": "siqueira-campos-pr",
+    "nome": "Siqueira Campos",
+    "uf": "PR",
+    "dia": "2026-08-06",
+    "serie": "0023·B",
+    "src": "/selos/brasil/siqueira-campos-pr/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "carlopolis-pr",
+    "nome": "Carlópolis",
+    "uf": "PR",
+    "dia": "2026-08-03",
+    "serie": "0024·B",
+    "src": "/selos/brasil/carlopolis-pr/selo.svg?variante=coruja"
+  },
+  {
+    "slug": "bocaiuva-do-sul-pr",
+    "nome": "Bocaiúva do Sul",
+    "uf": "PR",
+    "dia": "2026-07-31",
+    "serie": "0025·B",
+    "src": "/selos/brasil/bocaiuva-do-sul-pr/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "pirai-do-sul-pr",
+    "nome": "Piraí do Sul",
+    "uf": "PR",
+    "dia": "2026-07-28",
+    "serie": "0026·B",
+    "src": "/selos/brasil/pirai-do-sul-pr/selo.svg?variante=retangulo"
+  },
+  {
+    "slug": "morro-redondo-rs",
+    "nome": "Morro Redondo",
+    "uf": "RS",
+    "dia": "2026-07-25",
+    "serie": "0027·B",
+    "src": "/selos/brasil/morro-redondo-rs/selo.svg?variante=redondo"
+  },
+  {
+    "slug": "barra-do-ribeiro-rs",
+    "nome": "Barra do Ribeiro",
+    "uf": "RS",
+    "dia": "2026-07-22",
+    "serie": "0028·B",
+    "src": "/selos/brasil/barra-do-ribeiro-rs/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "casca-rs",
+    "nome": "Casca",
+    "uf": "RS",
+    "dia": "2026-07-19",
+    "serie": "0029·B",
+    "src": "/selos/brasil/casca-rs/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "itaara-rs",
+    "nome": "Itaara",
+    "uf": "RS",
+    "dia": "2026-07-16",
+    "serie": "0030·B",
+    "src": "/selos/brasil/itaara-rs/selo.svg?variante=triangulo"
+  },
+  {
+    "slug": "rio-dos-cedros-sc",
+    "nome": "Rio dos Cedros",
+    "uf": "SC",
+    "dia": "2026-07-13",
+    "serie": "0031·B",
+    "src": "/selos/brasil/rio-dos-cedros-sc/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "doutor-pedrinho-sc",
+    "nome": "Doutor Pedrinho",
+    "uf": "SC",
+    "dia": "2026-07-10",
+    "serie": "0032·B",
+    "src": "/selos/brasil/doutor-pedrinho-sc/selo.svg?variante=coruja"
+  },
+  {
+    "slug": "lauro-muller-sc",
+    "nome": "Lauro Müller",
+    "uf": "SC",
+    "dia": "2026-07-07",
+    "serie": "0033·B",
+    "src": "/selos/brasil/lauro-muller-sc/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "timbe-do-sul-sc",
+    "nome": "Timbé do Sul",
+    "uf": "SC",
+    "dia": "2026-07-04",
+    "serie": "0034·B",
+    "src": "/selos/brasil/timbe-do-sul-sc/selo.svg?variante=retangulo"
+  },
+  {
+    "slug": "piraju-sp",
+    "nome": "Piraju",
+    "uf": "SP",
+    "dia": "2026-07-01",
+    "serie": "0035·B",
+    "src": "/selos/brasil/piraju-sp/selo.svg?variante=redondo"
+  },
+  {
+    "slug": "garca-sp",
+    "nome": "Garça",
+    "uf": "SP",
+    "dia": "2026-06-28",
+    "serie": "0036·B",
+    "src": "/selos/brasil/garca-sp/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "barra-bonita-sp",
+    "nome": "Barra Bonita",
+    "uf": "SP",
+    "dia": "2026-06-25",
+    "serie": "0037·B",
+    "src": "/selos/brasil/barra-bonita-sp/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "sao-jose-do-barreiro-sp",
+    "nome": "São José do Barreiro",
+    "uf": "SP",
+    "dia": "2026-06-22",
+    "serie": "0038·B",
+    "src": "/selos/brasil/sao-jose-do-barreiro-sp/selo.svg?variante=triangulo"
+  },
+  {
+    "slug": "sete-barras-sp",
+    "nome": "Sete Barras",
+    "uf": "SP",
+    "dia": "2026-06-19",
+    "serie": "0039·B",
+    "src": "/selos/brasil/sete-barras-sp/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "guapiara-sp",
+    "nome": "Guapiara",
+    "uf": "SP",
+    "dia": "2026-06-16",
+    "serie": "0040·B",
+    "src": "/selos/brasil/guapiara-sp/selo.svg?variante=coruja"
+  },
+  {
+    "slug": "martinopolis-sp",
+    "nome": "Martinópolis",
+    "uf": "SP",
+    "dia": "2026-06-13",
+    "serie": "0041·B",
+    "src": "/selos/brasil/martinopolis-sp/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "santo-antonio-da-alegria-sp",
+    "nome": "Santo Antônio da Alegria",
+    "uf": "SP",
+    "dia": "2026-06-10",
+    "serie": "0042·B",
+    "src": "/selos/brasil/santo-antonio-da-alegria-sp/selo.svg?variante=retangulo"
+  },
+  {
+    "slug": "mucuri-ba",
+    "nome": "Mucuri",
+    "uf": "BA",
+    "dia": "2026-06-07",
+    "serie": "0043·B",
+    "src": "/selos/brasil/mucuri-ba/selo.svg?variante=redondo"
+  },
+  {
+    "slug": "nova-vicosa-ba",
+    "nome": "Nova Viçosa",
+    "uf": "BA",
+    "dia": "2026-06-04",
+    "serie": "0044·B",
+    "src": "/selos/brasil/nova-vicosa-ba/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "caravelas-ba",
+    "nome": "Caravelas",
+    "uf": "BA",
+    "dia": "2026-06-01",
+    "serie": "0045·B",
+    "src": "/selos/brasil/caravelas-ba/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "alcobaca-ba",
+    "nome": "Alcobaça",
+    "uf": "BA",
+    "dia": "2026-05-29",
+    "serie": "0046·B",
+    "src": "/selos/brasil/alcobaca-ba/selo.svg?variante=triangulo"
+  },
+  {
+    "slug": "teixeira-de-freitas-ba",
+    "nome": "Teixeira de Freitas",
+    "uf": "BA",
+    "dia": "2026-05-26",
+    "serie": "0047·B",
+    "src": "/selos/brasil/teixeira-de-freitas-ba/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "medeiros-neto-ba",
+    "nome": "Medeiros Neto",
+    "uf": "BA",
+    "dia": "2026-05-23",
+    "serie": "0048·B",
+    "src": "/selos/brasil/medeiros-neto-ba/selo.svg?variante=coruja"
+  },
+  {
+    "slug": "lajedao-ba",
+    "nome": "Lajedão",
+    "uf": "BA",
+    "dia": "2026-05-20",
+    "serie": "0049·B",
+    "src": "/selos/brasil/lajedao-ba/selo.svg?variante=faixa"
+  },
+  {
+    "slug": "itanhem-ba",
+    "nome": "Itanhém",
+    "uf": "BA",
+    "dia": "2026-05-17",
+    "serie": "0050·B",
+    "src": "/selos/brasil/itanhem-ba/selo.svg?variante=retangulo"
+  }
+]

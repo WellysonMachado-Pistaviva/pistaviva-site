@@ -3,6 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import PassaporteIcone from './PassaporteIcone';
+import usePerfilLocal from '../selo/usePerfilLocal';
+import { contextoPassaporte, destinosPassaporte } from '../lib/selo/navegacao.mjs';
+import './passaporte-mobile.css';
 
 // Shell mobile no estilo IGNIS: app bar (topo) + bottom-nav (5 itens) + sheet "Mais".
 // Usa rotas Next REAIS (<Link>), não hash-SPA — preserva SSR/SEO/sitemap.
@@ -45,8 +48,24 @@ export default function MobileShell() {
   const closeRef = useRef(null);
   const sheetRef = useRef(null);
   const pathname = usePathname() || '/';
+  const perfil = usePerfilLocal();
+  const noPassaporte = contextoPassaporte(pathname);
+  const destinos = destinosPassaporte(pathname, perfil);
+  const primary = noPassaporte ? [
+    { href: destinos.passaporte, label: 'Passaporte', active: /\/selo\/(passaporte|m\/)/.test(pathname), icon: <><path d="M4 4h7a3 3 0 0 1 3 3v14a4 4 0 0 0-4-2H4Z" /><path d="M14 7a3 3 0 0 1 3-3h4v15h-3a4 4 0 0 0-4 2" /></> },
+    { href: destinos.carimbar, label: 'Carimbar', active: false, icon: <><path d="M8 14V9a4 4 0 1 1 8 0v5M5 14h14v5H5ZM3 22h18" /></> },
+    { href: '/selo/mapa', label: 'Mapa', active: /^\/selo\/(mapa|cidade)(\/|$)/.test(pathname), icon: PRIMARY[1].icon },
+  ] : PRIMARY;
+  const menu = noPassaporte ? [
+    MENU.find(m => m.href === '/selos'),
+    { href: '/selo/mural', t: 'Conquistadores', s: 'Comunidade e coleções', i: MENU[2].i },
+    { href: '/selo/passaporte?editar=1#personalizar-passaporte', t: 'Personalizar', s: 'Foto, garupa e compartilhar', i: MENU[6].i },
+    { href: destinos.privacidade, t: 'Privacidade', s: 'Publicação e dados pessoais', i: <><rect x="5" y="10" width="14" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></> },
+    { href: '/pwa/offline.html', t: 'Modo estrada', s: 'Coleção salva e pendências', i: MENU[7].i },
+    { href: '/', t: 'Início do site', s: 'Destinos, agenda e matérias', i: PRIMARY[0].icon },
+  ] : MENU;
   const isActive = (href) => href === '/' ? pathname === '/' : pathname.startsWith(href);
-  const moreActive = !PRIMARY.some(p => isActive(p.href));
+  const moreActive = !primary.some(p => noPassaporte ? p.active : isActive(p.href));
   const close = (restoreFocus = false) => {
     setOpen(false);
     if (restoreFocus) queueMicrotask(() => triggerRef.current?.focus());
@@ -84,7 +103,7 @@ export default function MobileShell() {
           <img src="/logo.svg" alt="Pistaviva" />
         </Link>
         <span className="igm-sp" />
-        <Link href="/selo/passaporte" className="igm-iconbtn" aria-label="Meu passaporte">
+        <Link href={destinos.passaporte} className="igm-iconbtn" aria-label="Meu passaporte">
           <PassaporteIcone size={19} />
         </Link>
         <Link href="/eventos" className="igm-iconbtn" aria-label="Ver eventos">
@@ -93,9 +112,9 @@ export default function MobileShell() {
       </header>
 
       {/* Bottom nav */}
-      <nav className="igm-bottomnav" aria-label="Navegação">
-        {PRIMARY.map(p => (
-          <Link key={p.href} href={p.href} aria-current={isActive(p.href) ? 'page' : undefined} className={`igm-navbtn${isActive(p.href) ? ' active' : ''}`} onClick={() => setOpen(false)}>
+      <nav className={`igm-bottomnav${noPassaporte ? ' igm-bottomnav-passaporte' : ''}`} aria-label={noPassaporte ? 'Navegação do passaporte' : 'Navegação'}>
+        {primary.map(p => (
+          <Link key={p.href} href={p.href} aria-current={(noPassaporte ? p.active : isActive(p.href)) ? 'page' : undefined} className={`igm-navbtn${(noPassaporte ? p.active : isActive(p.href)) ? ' active' : ''}`} onClick={() => setOpen(false)}>
             <Svg>{p.icon}</Svg>{p.label}
           </Link>
         ))}
@@ -126,11 +145,11 @@ export default function MobileShell() {
       >
         <div className="igm-grab" />
         <div className="igm-sheet-head">
-          <h3>Escolha próximo caminho</h3>
+          <h3>{noPassaporte ? 'Mais do passaporte' : 'Escolha próximo caminho'}</h3>
           <button ref={closeRef} type="button" onClick={() => close(true)} aria-label="Fechar mais opções">×</button>
         </div>
         <div className="igm-menugrid">
-          {MENU.map(m => (
+          {menu.map(m => (
             <Link key={m.href} href={m.href} className="igm-menucell" onClick={() => close()}>
               <span className="igm-mi"><Svg>{m.i}</Svg></span>
               <span><b>{m.t}</b><span>{m.s}</span></span>

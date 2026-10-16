@@ -1,7 +1,7 @@
 import 'server-only';
 import { supabaseAdmin } from '../supabaseAdmin';
 import { collectAllPages } from '../adminAnalytics.mjs';
-import { almocoStatus, beneficioApto, enderecoCompleto, formatarCodigo, gerarCodigo } from './beneficio.mjs';
+import { almocoStatus, beneficioApto, enderecoCompleto, formatarCodigo, gerarCodigo, soCheckinPorFoto } from './beneficio.mjs';
 import { conquistaDoAno, conquistasPublicas } from './conquistas.mjs';
 import { estacaoDe } from './estacao.mjs';
 import { criarStoreLocal } from './storeLocal.mjs';
@@ -88,11 +88,12 @@ export async function perfilPorCodigo(codigo) {
       cep: moto.cep || '', logradouro: moto.logradouro || '', numero: moto.numero_endereco || '',
       complemento: moto.complemento || '', bairro: moto.bairro || '',
     },
-    // O código só sai do servidor quando endereço + check-in estão completos.
+    // O código só sai do servidor com endereço completo + check-in GPS ou balcão.
     beneficio: {
       endereco: enderecoCompleto(moto),
       apto: beneficioApto(moto, visitas),
       codigo: moto.cupom && beneficioApto(moto, visitas) ? formatarCodigo(moto.cupom) : null,
+      soFoto: soCheckinPorFoto(visitas),
       almoco: almocoStatus(visitas, usos),
     },
     visitas: visitas.map(visitaPublica), conquistas,
@@ -557,7 +558,9 @@ export async function excluirMotociclista(id) {
   if (error) throw error;
   // Sem a migração de cidades a tabela não existe: segue só com as fotos das visitas.
   const { data: entradas } = await sb.from('pv_selo_entradas').select('foto_path').eq('motociclista_id', id);
-  const fotos = [...visitas.flatMap((v) => [v.foto_path, v.prova_path]), ...(entradas || []).map((e) => e.foto_path)].filter(Boolean);
+  const { data: identificacao, error: ei } = await sb.from('pv_selo_identificacoes').select('foto_path').eq('motociclista_id', id).maybeSingle();
+  if (ei && !['42P01', 'PGRST205'].includes(ei.code)) throw ei;
+  const fotos = [...visitas.flatMap((v) => [v.foto_path, v.prova_path]), ...(entradas || []).map((e) => e.foto_path), identificacao?.foto_path].filter(Boolean);
   if (fotos.length) {
     const { error: e } = await sb.storage.from(BUCKET).remove(fotos);
     if (e) throw e;

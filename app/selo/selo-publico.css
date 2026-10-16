@@ -239,3 +239,13 @@
 .mapa-grupo { position: relative; display: grid; place-items: center; border-radius: 50%; background: #fff; border: 3px solid #121612; box-shadow: 0 3px 12px rgba(0, 0, 0, .35); cursor: pointer; }
 .mapa-grupo img { position: absolute; inset: 6px; width: calc(100% - 12px); height: calc(100% - 12px); object-fit: contain; opacity: .35; background: transparent; }
 .mapa-grupo b { position: relative; font: 800 18px/1 var(--font); color: #121612; }
+
+@media (max-width: 768px) {
+  .ph-acoes { align-items: stretch; }
+  .ph-acoes > .study-button, .ph-acoes > .selo-text-link { width: 100%; min-height: 48px; }
+  .ph-acoes > .selo-text-link { display: flex; align-items: center; }
+  .ph-meu { padding-top: 24px; }
+  .ph-meu > header .ph-h2 { font-size: 32px; }
+  .ph-hero h1 { font-size: clamp(44px, 10vw, 64px); }
+  .ph-hero-livro { max-width: 360px; justify-self: center; }
+}

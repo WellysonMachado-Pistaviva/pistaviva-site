@@ -1,0 +1,12 @@
+@media (max-width: 768px) {
+  .igm-bottomnav.igm-bottomnav-passaporte { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  body:has(.igm-bottomnav-passaporte) .selo-nav { display: none; }
+  body:has(.igm-bottomnav-passaporte) .pv-online { display: none; }
+  body:has(.igm-bottomnav-passaporte) .igm-iconbtn { min-width: 44px; min-height: 44px; }
+  .igm-bottomnav-passaporte .igm-navbtn { min-height: 64px; touch-action: manipulation; }
+  .igm-bottomnav-passaporte .igm-navbtn:focus-visible { outline: 2px solid var(--pv-orange); outline-offset: -4px; }
+  .igm-bottomnav-passaporte .igm-navbtn:active { transform: none; background: var(--pv-black-3); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body:has(.igm-bottomnav-passaporte) :is(.igm-sheet, .igm-scrim, .igm-navbtn) { transition: none; }
+}

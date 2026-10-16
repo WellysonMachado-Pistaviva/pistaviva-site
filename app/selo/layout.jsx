@@ -1,4 +1,5 @@
 import './selo.css';
+import './passaporte-fluxo.css';
 
 export const metadata = {
   title: { default: 'Selo da Estação', template: '%s · Selo da Estação' },

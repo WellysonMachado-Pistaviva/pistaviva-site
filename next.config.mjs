@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Keep PWA acceptance builds separate from an active next dev session.
+  distDir: process.env.PASSAPORTE_ACESSO_BUILD === '1' ? '.cache/passaporte-acesso-build' : process.env.PASSAPORTE_FLUXO_TEST === '1' ? '.cache/passaporte-fluxo-next' : process.env.PWA_TEST_BUILD === '1' ? '.cache/pwa-next' : '.next',
   poweredByHeader: false,
   // Arquivos lidos em tempo de execução pelo Selo (fontes dos carimbos e a
   // malha de municípios do check-in): garante que vão junto nas funções.
@@ -77,6 +79,8 @@ const nextConfig = {
 
     return [
       { source: '/:path*', headers: securityHeaders },
+      { source: '/sw.js', headers: [{ key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' }, { key: 'Service-Worker-Allowed', value: '/' }] },
+      { source: '/pwa/:path*', headers: [{ key: 'Cache-Control', value: 'no-cache' }, { key: 'X-Robots-Tag', value: 'noindex' }] },
       {
         source: '/admin/:path*',
         headers: [

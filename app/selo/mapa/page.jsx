@@ -28,7 +28,7 @@ export default async function MapaPage() {
   const fotos = cidades.reduce((s, c) => s + c.fotos, 0);
   const visitadas = cidades.filter((c) => c.carimbos > 0).length;
   return (
-    <div className="pv-study selo-public-page">
+    <div className="pv-study selo-public-page passaporte-universo">
       <SeloNav />
       <div className="study-container mapa-pagina">
         <header>

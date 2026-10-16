@@ -7,5 +7,5 @@ export const metadata = {
 };
 
 export default function SelosLayout({ children }) {
-  return <div className="pv-study selos"><SeloNav />{children}</div>;
+  return <div className="pv-study selos passaporte-universo"><SeloNav />{children}</div>;
 }

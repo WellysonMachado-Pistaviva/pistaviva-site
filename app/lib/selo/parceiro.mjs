@@ -2,7 +2,7 @@
 // /selo/parceiro/{token}. Sem login: o token é a credencial e pode ser revogado
 // no admin. O parceiro só vê o mínimo para decidir o desconto.
 import { ESTACOES } from './estacao.mjs';
-import { almocoStatus, beneficioApto, enderecoCompleto } from './beneficio.mjs';
+import { almocoStatus, beneficioApto, enderecoCompleto, soCheckinPorFoto } from './beneficio.mjs';
 
 export const tokenValido = (t) => /^[A-Za-z0-9_-]{32}$/.test(String(t || ''));
 
@@ -40,7 +40,7 @@ export function resumoParceiro(r, parceiroId) {
   const almoco = almocoStatus(visitas, usos);
   return {
     valido: apto,
-    motivo: apto ? null : !dados ? 'Cadastro incompleto.' : 'Ainda sem carimbo no Parque.',
+    motivo: apto ? null : !dados ? 'Cadastro incompleto.' : soCheckinPorFoto(visitas) ? 'Check-in só por foto: confirme no balcão do Parque.' : 'Ainda sem carimbo no Parque.',
     pessoa: { nome: nomeCurto(moto.nome), numero: moto.numero },
     etapas: { dados, carimbo: carimbos.length > 0, beneficio: apto },
     ultimoCarimbo: carimbos[0] || null,

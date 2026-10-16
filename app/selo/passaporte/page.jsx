@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import '../selo-publico.css';
+import './modelo/modelo.css';
 import { MapPinned, Share2, Stamp, WifiOff } from 'lucide-react';
 import GeradorPassaporte from './GeradorPassaporte';
 import AtalhoPassaporte from './AtalhoPassaporte';
@@ -21,10 +22,10 @@ export const metadata = {
 const PERGUNTAS = [
   ['Quanto custa?', 'Nada. O passaporte digital é grátis. O passaporte físico da Rota Biker e os adesivos das estações são retirados nos pontos oficiais.'],
   ['Dá para carimbar de casa?', 'Não. O carimbo só entra se o GPS do celular mostrar que você está dentro do município, conferido no servidor contra o contorno oficial do IBGE. Sua posição não fica gravada: só a cidade.'],
-  ['E se eu estiver sem sinal na estrada?', 'Toque em carimbar mesmo assim. O celular guarda a leitura do GPS e envia sozinho quando a internet voltar, com a data em que você passou (vale por 72 horas).'],
+  ['E se eu estiver sem sinal na estrada?', 'Com seu passaporte já salvo neste celular, toque em carimbar. A leitura do GPS fica guardada no aparelho. Abra o passaporte com internet em até 72 horas para confirmar a passagem com a data original.'],
   ['O que é o número de série do carimbo?', 'Cada conquista ganha a ordem de chegada naquela cidade e uma letra de conferência, como "Nº 0007·K". O número é seu, nunca se repete e serve para sorteios e ações dos parceiros.'],
   ['Preciso postar foto?', 'Não. A foto é opcional. Se postar e marcar "mostrar no mapa", ela aparece na página da cidade com seu primeiro nome e a inicial. Qualquer foto imprópria pode ser denunciada.'],
-  ['Troquei de celular. E agora?', 'Recupere seu passaporte com o WhatsApp que você cadastrou. Seus carimbos ficam guardados no servidor.'],
+  ['Troquei de celular. E agora?', 'Abra seu link pessoal no novo aparelho. Se perdeu o link, entre em “Já tenho passaporte” para falar com a equipe e confirmar sua identidade. Seus carimbos continuam guardados no servidor.'],
 ];
 
 async function numeros() {
@@ -39,7 +40,9 @@ async function numeros() {
 
 const n = (v) => Number(v).toLocaleString('pt-BR');
 
-export default async function PassaporteHomePage() {
+export default async function PassaporteHomePage({ searchParams }) {
+  const query = await searchParams || {};
+  const story = typeof query.story === 'string' && /^[0-9a-f-]{36}$/i.test(query.story) ? query.story : null;
   const { passaportes, totais } = await numeros();
   // Sem 'mini': a home não mostra a arte dos selos (fica na biblioteca e no mapa completo).
   const cidades = cidadesNoMapa(totais);
@@ -48,7 +51,7 @@ export default async function PassaporteHomePage() {
   const estados = new Set(visitadas.map((c) => c.uf)).size;
 
   return (
-    <div className="pv-study selo-public-page">
+    <div className="pv-study selo-public-page passaporte-home-page passaporte-identidade">
       <SeloNav />
       <div className="study-container ph">
         {/* Abertura: a ideia antes do cadastro. */}
@@ -65,6 +68,14 @@ export default async function PassaporteHomePage() {
           </figure>
         </section>
 
+        <section id="meu-passaporte" className="passaporte-pagina ph-meu" aria-labelledby="ph-meu-titulo">
+          <header>
+            <p className="study-kicker">Seu passaporte</p>
+            <h2 id="ph-meu-titulo" className="ph-h2">Seu próximo carimbo começa aqui.</h2>
+          </header>
+          <GeradorPassaporte story={story} editar={query.editar === '1'} />
+        </section>
+
         <dl className="ph-numeros" aria-label="O passaporte agora">
           <div><dt>Passaportes</dt><dd>{n(passaportes)}</dd></div>
           <div><dt>Carimbos</dt><dd>{n(carimbos)}</dd></div>
@@ -78,7 +89,7 @@ export default async function PassaporteHomePage() {
           <ol className="ph-passos">
             <li><Stamp size={28} aria-hidden="true" /><b>Crie seu passaporte</b><span>Nome, WhatsApp e cidade. Leva um minuto e vale para o Brasil inteiro.</span></li>
             <li><MapPinned size={28} aria-hidden="true" /><b>Carimbe na cidade</b><span>Chegou numa cidade? Toque em carimbar. Vale em qualquer cidade do Brasil: o GPS confere e o carimbo entra com data e número de série.</span></li>
-            <li><WifiOff size={28} aria-hidden="true" /><b>Sem sinal? Tudo bem</b><span>O celular guarda a passagem e envia quando a internet voltar. Estrada sem 4G não tira seu carimbo.</span></li>
+            <li><WifiOff size={28} aria-hidden="true" /><b>Sem sinal? Guarde a passagem</b><span>Com o passaporte salvo no aparelho, registre pelo GPS. Abra de novo com internet em até 72 horas para confirmar.</span></li>
             <li><Share2 size={28} aria-hidden="true" /><b>Mostre nos Stories</b><span>Um story pronto com o carimbo do dia, seu passaporte com foto e garupa, e as outras cidades que você já conquistou.</span></li>
           </ol>
         </section>
@@ -119,7 +130,7 @@ export default async function PassaporteHomePage() {
           <p className="study-kicker">Mapa de carimbos</p>
           <h2 id="ph-mapa" className="ph-h2">Cada carimbo, num mapa só.</h2>
           <p className="ph-lead">Veja quantos motociclistas já passaram por cada cidade e as fotos de quem esteve lá.</p>
-          <MapaCarimbos cidades={cidades} />
+          <MapaCarimbos cidades={cidades} adiado />
           <Link className="study-button" href="/selo/mapa">Abrir o mapa completo</Link>
         </section>
 
@@ -147,13 +158,7 @@ export default async function PassaporteHomePage() {
           </div>
         </section>
 
-        <section id="meu-passaporte" className="passaporte-pagina ph-meu" aria-labelledby="ph-meu-titulo">
-          <header>
-            <p className="study-kicker">Seu passaporte</p>
-            <h2 id="ph-meu-titulo" className="ph-h2">Conectando pessoas<br /><em>a lugares.</em></h2>
-          </header>
-          <GeradorPassaporte />
-        </section>
+
       </div>
     </div>
   );

@@ -37,7 +37,7 @@ export default async function CidadePage({ params }) {
   const { total, fotos } = await dados(slug);
   const carimbos = Number(total.carimbos) || 0;
   return (
-    <div className="pv-study selo-public-page">
+    <div className="pv-study selo-public-page passaporte-universo">
       <SeloNav />
       <div className="study-container cidade-pagina">
         <Link className="selo-publico-voltar" href="/selo/mapa">← Mapa de carimbos</Link>

@@ -117,7 +117,7 @@ function Formulario({ local, inicial, perfil }) {
   async function enviar(e) {
     e.preventDefault();
     if (estado === 'enviando') return;
-    const dados = { ...f, local, tem_foto: Boolean(foto), site: hp.current?.value || '' };
+    const dados = { ...f, local, codigo: perfil?.codigo, tem_foto: Boolean(foto), site: hp.current?.value || '' };
     const v = validarVisita(dados);
     if (!v.ok) {
       setErros(v.erros);
@@ -146,7 +146,7 @@ function Formulario({ local, inicial, perfil }) {
   }
 
   const erroDe = (campo) => erros[campo] ? <p className="selo-erro" id={`erro-${campo}`}>{erros[campo]}</p> : null;
-  const aria = (campo) => ({ id: `selo-${campo}`, 'aria-invalid': Boolean(erros[campo]), 'aria-describedby': erros[campo] ? `erro-${campo}` : undefined });
+  const aria = (campo) => ({ id: `selo-${campo}`, disabled: !f.chave || estado === 'enviando', 'aria-invalid': Boolean(erros[campo]), 'aria-describedby': erros[campo] ? `erro-${campo}` : undefined });
   const enviando = estado === 'enviando';
 
   if (estado === 'foto-falhou') {
@@ -162,7 +162,7 @@ function Formulario({ local, inicial, perfil }) {
   }
 
   return (
-    <form className="selo-form" onSubmit={enviar} noValidate aria-busy={enviando}>
+    <form className="selo-form" onSubmit={enviar} noValidate aria-busy={enviando || !f.chave}>
       {perfil?.codigo && (
         <div className="selo-aviso">
           <span>Seu número de colecionador é <b> {formatarNumero(perfil.numero)}</b></span>
@@ -181,7 +181,7 @@ function Formulario({ local, inicial, perfil }) {
         <label htmlFor="selo-whatsapp">WhatsApp pessoal</label>
         <input className="selo-input" {...aria('whatsapp')} name="whatsapp" type="tel" required inputMode="numeric" autoComplete="tel-national"
           placeholder="(35) 99999-9999" value={f.whatsapp} onChange={(e) => mudar('whatsapp', mascararWhatsapp(e.target.value))} />
-        <small className="selo-dica">Obrigatório para evitar selos repetidos e recuperar sua coleção. Use sempre o mesmo número.</small>
+        <small className="selo-dica">Obrigatório para identificar suas visitas. Use seu número pessoal e guarde seu link de acesso.</small>
         {erroDe('whatsapp')}
       </div>
 
@@ -209,7 +209,7 @@ function Formulario({ local, inicial, perfil }) {
         <div className="selo-opcoes">
           {PASSOU_POR.map((p) => (
             <label key={p.id} className="selo-check">
-              <input type="checkbox" name="passou_por" value={p.id} checked={f.passou_por.includes(p.id)}
+              <input type="checkbox" name="passou_por" value={p.id} disabled={!f.chave || enviando} checked={f.passou_por.includes(p.id)}
                 onChange={(e) => mudar('passou_por', e.target.checked ? [...f.passou_por, p.id] : f.passou_por.filter((x) => x !== p.id))} />
               {p.nome}
             </label>
@@ -229,7 +229,7 @@ function Formulario({ local, inicial, perfil }) {
         ) : (
           <div className="selo-foto-botao">
             <span className="selo-btn claro" aria-hidden="true">Adicionar foto</span>
-            <input type="file" accept="image/*" aria-label="Adicionar foto" onChange={escolherFoto} />
+            <input type="file" accept="image/*" aria-label="Adicionar foto" disabled={!f.chave || enviando} onChange={escolherFoto} />
           </div>
         )}
         {fotoMsg && <p className="selo-dica" role="status">{fotoMsg}</p>}

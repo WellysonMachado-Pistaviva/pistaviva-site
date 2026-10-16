@@ -1,0 +1,7 @@
+/* Fontes da arte aprovada, restritas ao editor e ao modelo interativo. */
+@font-face { font-family: PassaporteSlab; src: url('/selo/passaporte/fontes/RobotoSlab.ttf') format('truetype'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: PassaporteTitulo; src: url('/selo/passaporte/fontes/Impacted.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: PassaporteCarimbo; src: url('/selo/passaporte/fontes/MailartRubberstamp.otf') format('opentype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: PassaporteAssinatura; src: url('/selo/passaporte/fontes/MrsSaintDelafield.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+.story-lab, .sl-modelo { --font: PassaporteSlab, serif; --display: PassaporteTitulo, serif; --mono: PassaporteSlab, serif; font-family: PassaporteSlab, serif; }
+.story-lab .sl-note { font-family: PassaporteSlab, serif; font-style: normal; font-size: 15px; }

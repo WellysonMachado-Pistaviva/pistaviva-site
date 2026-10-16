@@ -16,6 +16,7 @@ import CarimboCidade, { FotoCarimbo } from '../../CarimboCidade';
 import { localPorSlug } from '../../../lib/selo/locais.mjs';
 import { autorFoto } from '../../../lib/selo/mapaCidades.mjs';
 import PassaporteUnico from '../../PassaporteUnico';
+import PassaporteOffline from '../../PassaporteOffline';
 import SeloNav from '../../SeloNav';
 import { montarPassaporte } from '../../../lib/selo/passaporteUnico.mjs';
 import AutorizacaoPassaporte from '../../AutorizacaoPassaporte';
@@ -28,7 +29,9 @@ const data = (valor) => new Date(valor).toLocaleString('pt-BR', { timeZone: 'Ame
 
 export default async function MeuSeloPage({ params, searchParams }) {
   const { codigo } = await params;
-  const { foto } = await searchParams;
+  const { foto, balcao } = await searchParams;
+  // ?balcao=1: link aberto pelo admin no aparelho da equipe; nada fica salvo nele.
+  const lembrar = balcao !== '1';
   const p = await perfilPorCodigo(codigo);
   if (!p) notFound();
   const agora = new Date();
@@ -52,18 +55,19 @@ export default async function MeuSeloPage({ params, searchParams }) {
   return (
     <>
     <SeloNav />
-    <div className="selo-wrap selo-pilha selo-passaporte">
+    <div className={`selo-wrap selo-pilha selo-passaporte${lembrar ? ' selo-public-page' : ''}`}>
       <PassaporteUnico privado pessoa={p} modelo={modelo} acoes={<>
-        <a className="selo-btn" href="#carimbar">Carimbar cidade</a>
+        <a className="selo-btn secundario" href="#pu-carimbos">Ver meus carimbos</a>
         {publicado && <Link className="selo-btn secundario" href={`/selo/passaporte/${p.numero}`}>Ver como os outros veem</Link>}
-      </>} />
+      </>} carimbar={<div id="carimbar"><CarimboCidade codigo={p.codigo} autor={autorFoto(p.nome, p.numero)} /></div>} />
+
+      {lembrar && <PassaporteOffline pessoa={{ codigo: p.codigo, numero: p.numero, nome: p.nome }} carimbos={modelo.carimbos.map(({ titulo, uf, dia, tipo }) => ({ titulo, uf, dia, tipo }))} />}
 
       <section className="pu-painel" aria-labelledby="pu-painel-titulo">
         <h2 id="pu-painel-titulo">O que fazer agora</h2>
-        <div id="carimbar"><CarimboCidade codigo={p.codigo} autor={autorFoto(p.nome, p.numero)} /></div>
 
         {semFoto.length > 0 && <details className="pu-grupo">
-          <summary><span>Fotos das cidades<small>{semFoto.length === 1 ? '1 carimbo sem foto' : `${semFoto.length} carimbos sem foto`} · opcional, aparece no <Link href="/selo/mapa">mapa</Link></small></span></summary>
+          <summary><span>Fotos das cidades<small>{semFoto.length === 1 ? '1 carimbo sem foto' : `${semFoto.length} carimbos sem foto`} · privadas, você escolhe se publica</small></span></summary>
           <div>
             {semFoto.map((e) => {
               const { slug, nome, uf } = localPorSlug(e.carimbo);
@@ -108,7 +112,7 @@ export default async function MeuSeloPage({ params, searchParams }) {
           <summary><span>Postar nos Stories<small>Cartão com seus selos e cidades</small></span></summary>
           <div>
             <CompartilharCartao imagem={`/selo/m/${p.codigo}/cartao?ano=${ano}`} link={`/selo?utm_source=passaporte&utm_medium=stories&utm_campaign=selo&ref=${p.numero}`}
-              texto="Meu passaporte de motociclista na Rota Biker. Bora colecionar?" />
+              texto="Meu passaporte do motociclista na Pista Viva. Cada carimbo, uma conquista." />
             <small className="selo-dica">O cartão mostra seu primeiro nome, a inicial do sobrenome e seu nº. Não mostra o link do seu passaporte.</small>
             <Link className="selo-text-link" href="/selo/passaporte">Montar imagem com foto e página de identificação →</Link>
           </div>
@@ -132,7 +136,7 @@ export default async function MeuSeloPage({ params, searchParams }) {
           </div>
         </details>
 
-        <details className="pu-grupo">
+        <details id="privacidade" className="pu-grupo">
           <summary><span>Privacidade e publicação<small>{publicado ? 'Passaporte público aberto' : 'Só você vê este passaporte'}</small></span></summary>
           <div>
             <AutorizacaoPassaporte codigo={p.codigo} numero={p.numero} publico={p.passaportePublico} />
@@ -145,7 +149,8 @@ export default async function MeuSeloPage({ params, searchParams }) {
                 <AutorizacaoMural key={`${a}-${Boolean(publicacao?.autorizado_em)}`} codigo={codigo} ano={a} autorizado={Boolean(publicacao?.autorizado_em)} publicado={Boolean(publicacao?.aprovado_em)} />
               </section>;
             })}
-            <SalvarNumero codigo={p.codigo} numero={p.numero} />
+            <SalvarNumero codigo={p.codigo} numero={p.numero} lembrar={lembrar} />
+            {lembrar && <Link className="selo-text-link" href="/selo/meu-numero">Criar senha, entrar ou recuperar acesso →</Link>}
           </div>
         </details>
       </section>

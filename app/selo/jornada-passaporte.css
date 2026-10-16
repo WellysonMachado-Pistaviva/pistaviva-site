@@ -1,0 +1,88 @@
+/* Caderno de estrada: mapa pessoal e memórias por passagem. */
+.jornada-mapa { min-width: 0; }
+.jornada-papel { position: relative; padding: 24px 0; overflow: hidden; color: var(--sl-ink); background: transparent; border-block: 1px dashed var(--sl-field-line); }
+.jornada-manchete { position: relative; z-index: 1; }
+.jornada-kicker { margin: 0; color: var(--sl-note-ink); font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.jornada-manchete h3 { margin: 12px 0; color: var(--sl-stamp); font-family: PassaporteCarimbo, serif; font-size: clamp(24px, 5vw, 36px); font-weight: 400; line-height: 1.2; text-transform: uppercase; }
+.jornada-manchete > p:last-child { margin: 0; font-size: 15px; }
+.jornada-brasil { display: block; width: 100%; max-height: 480px; margin: 8px auto; mix-blend-mode: multiply; }
+.jornada-uf { fill: var(--sl-photo-paper); stroke: var(--sl-paper); stroke-width: 1.5; stroke-linejoin: round; }
+.jornada-uf.visitada { fill: var(--sl-stamp); }
+.jornada-uf.apagada { opacity: .4; }
+.jornada-cidade-ponto { fill: var(--sl-ink); stroke: var(--sl-paper); stroke-width: 1.5; }
+.jornada-legenda { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; color: var(--sl-note-ink); font-size: 12px; }
+.jornada-legenda > span { display: inline-flex; gap: 8px; align-items: center; }
+.jornada-legenda i { width: 12px; height: 12px; background: var(--sl-stamp); }
+.jornada-legenda small { font-size: 11px; }
+.jornada-ultimos-carimbos { display: grid; gap: 16px; padding-top: 24px; }
+.jornada-ultimos-carimbos ol { display: flex; justify-content: center; gap: 24px; margin: 0; padding: 0; list-style: none; }
+.jornada-ultimos-carimbos li { display: grid; justify-items: center; gap: 8px; }
+.jornada-ultimos-carimbos img { width: 80px; height: 80px; object-fit: contain; mix-blend-mode: multiply; }
+.jornada-ultimos-carimbos time { font-family: PassaporteSlab, serif; font-size: 9px; color: var(--sl-note-ink); }
+.jornada-assinatura { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--sl-field-line); }
+.jornada-assinatura strong { overflow-wrap: anywhere; }
+.jornada-assinatura > span { color: var(--sl-note-ink); font-family: var(--mono); font-size: 12px; }
+.jornada-filtros { display: flex; flex-wrap: wrap; gap: 8px; }
+.jornada-filtros button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--sl-line); background: var(--sl-field-paper); color: var(--sl-ink); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.jornada-filtros button[aria-pressed='true'] { background: var(--sl-ink); color: var(--sl-paper); border-color: var(--sl-ink); }
+.jornada-filtros button span { opacity: .72; font-family: var(--mono); font-size: 12px; }
+.jornada-lista-titulo { display: grid; gap: 4px; margin: 0; font-weight: 700; }
+.jornada-lista-titulo span { font-size: 14px; font-weight: 400; color: var(--sl-note-ink); }
+.jornada-cidades { margin: 0; padding: 0; list-style: none; }
+.jornada-cidades > li { border-top: 1px solid var(--sl-line); }
+.jornada-cidades > li:last-child { border-bottom: 1px solid var(--sl-line); }
+.jornada-cidade { display: grid; grid-template-columns: 56px minmax(0, 1fr) 24px; align-items: center; gap: 16px; width: 100%; padding: 12px 4px; text-align: left; color: inherit; background: transparent; border: 0; font: inherit; cursor: pointer; }
+.jornada-cidade:hover { background: var(--sl-hover-paper); }
+.jornada-cidade img { width: 56px; height: 56px; object-fit: contain; mix-blend-mode: multiply; }
+.jornada-cidade > span { display: grid; gap: 4px; }
+.jornada-cidade strong { overflow-wrap: anywhere; font-family: PassaporteSlab, serif; font-weight: 600; font-size: 14px; }
+.jornada-cidade strong small { margin-left: 8px; font-family: var(--mono); font-weight: 400; color: var(--sl-note-ink); }
+.jornada-cidade time { font-size: 12px; color: var(--sl-note-ink); font-family: var(--mono); }
+.jornada-cidade > span:last-child { font-size: 24px; color: var(--sl-stamp); }
+.jornada-passagens { padding: 0 4px 12px; font-size: 13px; }
+.jornada-passagens summary { min-height: 32px; cursor: pointer; }
+.jornada-passagens ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 8px 0 0; padding: 0; }
+.jornada-passagens button { min-height: 44px; padding: 8px; font: inherit; background: var(--sl-field-paper); color: inherit; border: 1px solid var(--sl-line); cursor: pointer; }
+.jornada-ver-todas { justify-self: start; padding: 8px 0; min-height: 44px; font: inherit; font-weight: 700; color: var(--sl-stamp); background: transparent; border: 0; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+.jornada-compartilhar { display: flex; flex-wrap: wrap; gap: 12px; }
+.jornada-compartilhar .selo-btn { width: auto; flex: 1 1 200px; }
+.jornada-dica { margin: 0; font-size: 14px; line-height: 1.5; color: var(--sl-note-ink); }
+.jornada-carimbo-botao { display: grid; justify-items: center; align-content: start; gap: 8px; width: 100%; min-height: 44px; padding: 4px; color: inherit; background: transparent; border: 0; font: inherit; cursor: pointer; }
+.pu-trilho .jornada-carimbo-botao { gap: 8px; }
+.jornada-carimbo-botao:hover img { transform: scale(1.04); }
+.jornada-memoria-salva { color: var(--sl-stamp); font-size: 11px; }
+.jornada-dialogo { width: min(620px, calc(100% - 32px)); max-height: calc(100dvh - 32px); margin: auto; padding: 0; border: 6px solid var(--sl-frame); border-radius: var(--sl-radius-phone-mobile); background: var(--sl-paper) url('/selo/passaporte/papel.webp') repeat; background-size: 560px auto; color: var(--sl-ink); font-family: PassaporteSlab, serif; overscroll-behavior: contain; }
+.jornada-dialogo::backdrop { background: var(--sl-backdrop); }
+.jornada-memoria { display: grid; gap: 24px; padding: 24px; }
+.jornada-memoria-topo { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.jornada-memoria-topo button { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border: 1px solid var(--sl-line); background: var(--sl-field-paper); color: inherit; font-size: 28px; cursor: pointer; }
+.jornada-memoria-carimbo { display: grid; grid-template-columns: 112px minmax(0, 1fr); align-items: center; gap: 24px; padding-bottom: 24px; border-bottom: 1px dashed var(--sl-line); }
+.jornada-memoria-carimbo > img { width: 112px; height: 112px; object-fit: contain; mix-blend-mode: multiply; }
+.jornada-memoria-carimbo > div { display: grid; gap: 8px; min-width: 0; }
+.selo-app .jornada-memoria-carimbo h2 { margin: 0; font-family: PassaporteTitulo, serif; font-weight: 400; font-size: 36px; line-height: 1.1; overflow-wrap: anywhere; }
+.jornada-memoria-carimbo time, .jornada-memoria-carimbo span { font-size: 13px; color: var(--sl-note-ink); }
+.jornada-memoria-carimbo strong { color: var(--sl-stamp); font-family: var(--mono); font-size: 13px; }
+.jornada-privacidade { margin: 0; padding-left: 12px; border-left: 2px solid var(--sl-stamp); font-size: 14px; line-height: 1.5; color: var(--sl-note-ink); }
+.jornada-foto { display: grid; gap: 8px; margin: 0; }
+.jornada-foto img { width: 100%; max-height: 360px; object-fit: contain; background: var(--sl-photo-paper); border: 6px solid var(--sl-field-paper); box-shadow: 0 8px 16px -8px var(--sl-shadow-phone); }
+.jornada-foto figcaption { color: var(--sl-note-ink); font-size: 12px; }
+.jornada-relato { display: grid; gap: 12px; }
+.jornada-relato label { font-weight: 700; }
+.jornada-relato textarea { width: 100%; min-height: 144px; resize: vertical; padding: 12px; border: 1px solid var(--sl-field-line); background: var(--sl-field-paper); color: var(--sl-ink); font: inherit; font-size: 17px; line-height: 1.6; box-sizing: border-box; }
+.jornada-relato small { color: var(--sl-note-ink); font-family: var(--mono); font-size: 12px; }
+.jornada-relato p { margin: 0; }
+.jornada-mapa button:focus-visible, .jornada-dialogo :is(button, a, textarea, input):focus-visible, .jornada-carimbo-botao:focus-visible { outline: 2px solid var(--pv-orange-deep); outline-offset: 3px; }
+.jornada-mapa button:disabled, .jornada-dialogo button:disabled { opacity: .5; cursor: default; }
+@media (max-width: 480px) {
+  .jornada-papel { padding: 20px 0; }
+  .jornada-manchete h3 { font-size: 24px; }
+  .jornada-manchete > p:last-child { font-size: 14px; }
+  .jornada-dialogo { width: calc(100% - 16px); max-height: calc(100dvh - 16px); }
+  .jornada-memoria { padding: 16px; gap: 20px; }
+  .jornada-memoria-carimbo { grid-template-columns: 80px minmax(0, 1fr); gap: 16px; }
+  .jornada-memoria-carimbo > img { width: 80px; height: 80px; }
+  .jornada-memoria-carimbo h2 { font-size: 28px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .jornada-carimbo-botao img { transition: transform .15s; }
+}

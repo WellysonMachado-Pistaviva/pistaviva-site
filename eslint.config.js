@@ -7,7 +7,7 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 export default defineConfig([
   // Ignora build output e vendored — eslint estava varrendo bundles do .next
   // (require/_N_E/Deno/module) e gerando milhares de no-undef falsos.
-  globalIgnores(['dist', 'legacy', 'test-*.mjs', '.next', '.netlify', '.vercel', 'out', 'build', 'next-env.d.ts', 'public/**']),
+  globalIgnores(['dist', '.cache', 'legacy', 'test-*.mjs', '.next', '.netlify', '.vercel', 'out', 'build', 'next-env.d.ts', 'public/**']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [

@@ -115,3 +115,7 @@
   .pu-abas button { padding-inline: 8px; font-size: 13px; }
   .pu-colecoes a > span { flex-wrap: wrap; gap: 4px 12px; }
 }
+
+#carimbar, #pu-carimbos { scroll-margin-top: 96px; }
+.pu > #carimbar { min-width: 0; }
+.pu > #carimbar .selo-btn { min-height: 48px; }

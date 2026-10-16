@@ -1,20 +1,21 @@
 import Link from 'next/link';
-import EditorialHero from '../../components/EditorialHero';
 import Conquistadores from '../Conquistadores';
 import SeloNav from '../SeloNav';
 import '../selo-publico.css';
 export const metadata = { title: 'Conquistadores de Itajubá' };
 
 export default function MuralPage() {
-  return <div className="pv-study selo-public-page">
+  return <div className="pv-study selo-public-page passaporte-universo">
     <SeloNav />
-    <EditorialHero id="conquistadores-titulo" eyebrow="Pistaviva / Passaportes da comunidade"
-      title={<>A estrada conhece<br /><em>o seu nome.</em></>}
-      image="/motosul/g-chegada.jpg" imageAlt="Motociclistas chegando a um encontro em Itajubá"
-      action={{ href: '#ranking', label: 'Conheça os conquistadores' }}
-      footer={<><span>Conquistadores de Itajubá</span><a href="#ranking">Conheça as coleções ↓</a></>}>
-      O carimbo prova a chegada. O passaporte conta a história. Conheça quem está deixando sua marca em Itajubá — e venha escrever a sua.
-    </EditorialHero>
-    <div className="study-container selo-publico" id="ranking"><Conquistadores /><p className="selo-dica">O passaporte físico é da Rota Biker. Esta coleção registra as visitas ao Parque da Cidade de Itajubá.</p><Link className="selo-publico-voltar" href="/parque-da-cidade">Planejar minha visita ao Parque →</Link></div>
+    <div className="study-container selo-publico">
+      <header className="passaporte-cabecalho" aria-labelledby="conquistadores-titulo">
+        <p className="study-kicker">Passaporte do motociclista / Comunidade</p>
+        <h1 id="conquistadores-titulo">Conquistadores.<br /><em>Histórias na estrada.</em></h1>
+        <p>Cada nome tem um passaporte. Conheça as coleções publicadas por quem passou por Itajubá e conquistou seus selos.</p>
+        <a className="study-button" href="#ranking">Ver os conquistadores</a>
+        <Link className="passaporte-amostra-link" href="/selo/passaporte/modelo#amostra-passaporte">Ver uma amostra do passaporte preenchido →</Link>
+      </header>
+      <div id="ranking"><Conquistadores /></div><p className="selo-dica">Esta coleção registra as visitas ao Parque da Cidade de Itajubá.</p><Link className="selo-publico-voltar" href="/parque-da-cidade">Planejar minha visita ao Parque →</Link>
+    </div>
   </div>;
 }

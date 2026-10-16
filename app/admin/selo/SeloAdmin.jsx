@@ -6,6 +6,7 @@ import { showToast } from '../../components/AuthProvider';
 import { ESTACOES, diaSP, estacaoDe } from '../../lib/selo/estacao.mjs';
 import { formatarNumero } from '../../lib/selo/constantes.mjs';
 import { mascararWhatsapp } from '../../lib/selo/whatsapp.mjs';
+import Cadastros from './Cadastros';
 
 const DIA_MS = 24 * 60 * 60 * 1000;
 const PRESETS = [
@@ -15,7 +16,7 @@ const PRESETS = [
   { id: 'ano', label: 'Este ano', de: () => `${diaSP().slice(0, 4)}-01-01` },
   { id: 'tudo', label: 'Tudo', de: () => '' },
 ];
-const ABAS = [['painel', 'Painel'], ['fotos', 'Fotos'], ['cidades', 'Fotos de cidade'], ['balcao', 'Balcão'], ['beneficio', 'Benefício'], ['parceiros', 'Parceiros'], ['checkin', 'Check-in'], ['conquistas', 'Conquistadores']];
+const ABAS = [['painel', 'Painel'], ['cadastros', 'Cadastros'], ['fotos', 'Fotos'], ['cidades', 'Fotos de cidade'], ['balcao', 'Balcão'], ['beneficio', 'Benefício'], ['parceiros', 'Parceiros'], ['checkin', 'Check-in'], ['conquistas', 'Conquistadores']];
 const METODO = { gps: 'GPS', foto: 'foto do passaporte' };
 const dataHora = new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
 const qs = (o) => new URLSearchParams(Object.entries(o).filter(([, v]) => v)).toString();
@@ -54,7 +55,7 @@ export default function SeloAdmin() {
         <div className="ph-actions">
           <a className="ig-btn ig-btn--ghost" href="/selo/balcao" target="_blank" rel="noopener noreferrer">Imprimir QR do balcão</a>
           <a className="ig-btn ig-btn--ghost" href="/selo" target="_blank" rel="noopener noreferrer">Abrir formulário</a>
-          <button type="button" className="ig-btn ig-btn--primary" onClick={exportarCsv}>Exportar CSV</button>
+          <button type="button" className="ig-btn ig-btn--primary" onClick={exportarCsv}>Exportar visitas (CSV)</button>
         </div>
       </div>
 
@@ -71,6 +72,7 @@ export default function SeloAdmin() {
       </div>
 
       {aba === 'painel' && <Painel periodo={periodo} setPeriodo={setPeriodo} onModo={setModo} />}
+      {aba === 'cadastros' && <Cadastros onModo={setModo} />}
       {aba === 'fotos' && <Fotos />}
       {aba === 'cidades' && <FotosCidades />}
       {aba === 'balcao' && <Balcao />}
@@ -373,7 +375,7 @@ function Balcao() {
                   </div>
                 ))}
                 {!p.visitas.some((v) => v.estacao === estacao && v.ano === ano) && <span>Sem selo da estação atual.</span>}
-                <a className="ig-btn ig-btn--ghost ig-btn--sm" href={`/selo/m/${p.codigo}`} target="_blank" rel="noopener noreferrer">Abrir selo</a>
+                <a className="ig-btn ig-btn--ghost ig-btn--sm" href={`/selo/m/${p.codigo}?balcao=1`} target="_blank" rel="noopener noreferrer">Abrir selo</a>
                 <button type="button" className="ig-btn ig-btn--danger ig-btn--sm" onClick={() => excluir(p)}>Excluir dados</button>
               </div>
             </li>
@@ -463,7 +465,7 @@ function Beneficio() {
             <div className="sa-acoes">
               <input className="sa-nota" value={nota} onChange={(e) => setNota(e.target.value)} placeholder="Nota (opcional): ex. 10% lanchonete" maxLength={120} aria-label="Nota do uso" />
               <button type="button" className="ig-btn ig-btn--primary ig-btn--sm" disabled={salvando} onClick={registrar}>{salvando ? 'Registrando…' : 'Registrar uso'}</button>
-              <a className="ig-btn ig-btn--ghost ig-btn--sm" href={`/selo/m/${r.pessoa.codigo}`} target="_blank" rel="noopener noreferrer">Abrir coleção</a>
+              <a className="ig-btn ig-btn--ghost ig-btn--sm" href={`/selo/m/${r.pessoa.codigo}?balcao=1`} target="_blank" rel="noopener noreferrer">Abrir coleção</a>
             </div>
           )}
         </div>

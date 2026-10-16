@@ -5,10 +5,11 @@ import { salvarPerfil } from './perfilLocal';
 
 // Guarda o link no celular e oferece mandar para si mesmo (WhatsApp, notas…).
 // Quem envia é a própria pessoa: o sistema não dispara mensagem nenhuma.
-export default function SalvarNumero({ codigo, numero }) {
+// lembrar=false: aberto pelo balcão/admin, no aparelho da equipe; não grava nada.
+export default function SalvarNumero({ codigo, numero, lembrar = true }) {
   const [msg, setMsg] = useState('');
   // Não grava o nome aqui: o formulário guarda o nome completo para a próxima visita.
-  useEffect(() => { salvarPerfil({ codigo, numero }); }, [codigo, numero]);
+  useEffect(() => { if (lembrar) salvarPerfil({ codigo, numero }); }, [codigo, numero, lembrar]);
 
   async function salvar() {
     const url = `${window.location.origin}/selo/m/${codigo}`;

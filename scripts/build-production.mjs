@@ -13,6 +13,9 @@ for (const name of [
   delete env[name];
 }
 const steps = [
+  [process.execPath, ['scripts/migrate-selo-identificacoes.mjs']],
+  [process.execPath, ['scripts/migrate-selo-acessos.mjs']],
+  [process.execPath, ['scripts/migrate-selo-memorias.mjs']],
   [process.execPath, ['scripts/selo-preflight.mjs']],
   [process.execPath, ['scripts/migrate-admin.mjs']],
   [process.execPath, ['scripts/migrate-event-departures.mjs']],

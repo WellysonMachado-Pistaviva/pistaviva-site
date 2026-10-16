@@ -77,7 +77,7 @@ No painel, aba **Balcão**, cada visita da estação mostra método, distância 
 
 ## Código de benefício
 
-Cada pessoa pode receber um código aleatório de 8 caracteres (ex. `K7QM-3XPA`, sem I/L/O/0/1). Diferente do nº de colecionador, não é sequencial nem adivinhável. Ele só aparece na coleção depois de **endereço completo** (CEP, rua, número, bairro) **e** ao menos um check-in ou entrega confirmada.
+Cada pessoa pode receber um código aleatório de 8 caracteres (ex. `K7QM-3XPA`, sem I/L/O/0/1). Diferente do nº de colecionador, não é sequencial nem adivinhável. Ele só aparece na coleção depois de **endereço completo** (CEP, rua, número, bairro) **e** ao menos uma entrega confirmada no balcão ou check-in por **GPS**. Check-in só por foto do passaporte libera o selo digital, mas não o código: qualquer arquivo sobe sem revisão, então o desconto espera a confirmação no balcão.
 
 Na aba **Benefício**, o atendente digita o código: formato errado ou inexistente é recusado sem revelar dados. Código válido mostra nome, número, check-ins e usos anteriores; **Registrar uso** grava data e nota. Ainda não há limite automático de usos: defina a regra do desconto antes de divulgar.
 
@@ -112,7 +112,7 @@ O mockup animado `PassaporteMockup` aparece antes da foto na entrada, como demon
 | Benefício | Regra | Onde registra |
 |---|---|---|
 | Cafezinho de boas-vindas | Para quem chega de moto. Sem conferência no sistema. | — |
-| 10% de desconto | Código do colecionador (endereço completo + check-in). | Painel do parceiro → "Registrar desconto aplicado" |
+| 10% de desconto | Código do colecionador (endereço completo + balcão ou check-in GPS; foto não vale). | Painel do parceiro → "Registrar desconto aplicado" |
 | Almoço grátis | 4 estações do **mesmo ano** confirmadas **no balcão** (`retirado_em`). Check-in por GPS/foto não conta. Um almoço por ano completo, em qualquer parceiro. | Painel do parceiro → "Registrar almoço concedido" |
 
 - O banco impede dois almoços do mesmo ano (`pv_selo_beneficio_usos_almoco_uidx`). Dois caixas ao mesmo tempo: o segundo recebe "Almoço de {ano} já foi registrado".
@@ -155,6 +155,8 @@ Uma cidade por município com monumento (42). Catálogo e contornos em `app/lib/
 
 
 ## Carimbo de cidade, mapa e fotos (2026-10-14)
+
+> Atualização local de 15/10: [fluxo mobile e mudanças de recuperação](passaporte-fluxo-mobile-implementacao-2026-10-15.md). O lote ainda não foi publicado. Recuperação por telefone e três letras foi desativada; fotos novas começam privadas e passagens offline exigem retomar com conexão para confirmar. As notas abaixo descrevem a versão anterior.
 
 Fluxo da pessoa:
 1. Abre `/selo/passaporte` (ícone de passaporte no topo do site). Sem passaporte, cria ali mesmo: nome, WhatsApp, cidade e aceite. WhatsApp já cadastrado não abre o passaporte; manda para `/selo/meu-numero`.

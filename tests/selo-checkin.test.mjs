@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { alvoDoLocal, avaliarCheckin, distanciaM, lerAlvo } from '../app/lib/selo/geo.mjs';
 import {
-  ALFABETO, beneficioApto, formatarCodigo, gerarCodigo, normalizarCodigo, validarEndereco,
+  ALFABETO, beneficioApto, soCheckinPorFoto, formatarCodigo, gerarCodigo, normalizarCodigo, validarEndereco,
 } from '../app/lib/selo/beneficio.mjs';
 import { estadoSelo } from '../app/lib/selo/estacao.mjs';
 import { criarStoreLocal } from '../app/lib/selo/storeLocal.mjs';
@@ -85,10 +85,16 @@ test('endereço: CEP com máscara, número S/N, complemento opcional', () => {
   assert.ok(ruim.erros.cep && ruim.erros.logradouro && ruim.erros.numero && ruim.erros.bairro);
 });
 
-test('benefício exige endereço completo e check-in ou balcão', () => {
+test('benefício exige endereço completo e check-in GPS ou balcão', () => {
   const end = { cep: '37500036', logradouro: 'Rua X', numero_endereco: '10', bairro: 'Centro' };
   assert.equal(beneficioApto(end, [{ liberado_em: null, retirado_em: null }]), false);
-  assert.equal(beneficioApto(end, [{ liberadoEm: '2026-10-13T15:00:00Z' }]), true);
+  assert.equal(beneficioApto(end, [{ liberadoEm: '2026-10-13T15:00:00Z', checkinMetodo: 'gps' }]), true);
+  assert.equal(beneficioApto(end, [{ liberado_em: '2026-10-13T15:00:00Z', checkin_metodo: 'gps' }]), true);
+  // Foto do passaporte: qualquer arquivo sobe sem revisão, então não libera desconto.
+  assert.equal(beneficioApto(end, [{ liberado_em: '2026-10-13T15:00:00Z', checkin_metodo: 'foto' }]), false);
+  assert.equal(soCheckinPorFoto([{ liberado_em: '2026-10-13T15:00:00Z', checkin_metodo: 'foto' }]), true);
+  assert.equal(soCheckinPorFoto([{ liberado_em: '2026-10-13T15:00:00Z', checkin_metodo: 'foto' }, { retirado_em: '2026-10-13T15:00:00Z' }]), false);
+  assert.equal(beneficioApto(end, [{ liberado_em: '2026-10-13T15:00:00Z', checkin_metodo: 'foto', retirado_em: '2026-10-13T16:00:00Z' }]), true);
   assert.equal(beneficioApto(end, [{ retirado_em: '2026-10-13T15:00:00Z' }]), true);
   assert.equal(beneficioApto({ ...end, bairro: '' }, [{ retirado_em: '2026-10-13T15:00:00Z' }]), false);
 });

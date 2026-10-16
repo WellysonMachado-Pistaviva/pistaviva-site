@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0e1311"><meta name="robots" content="noindex">
+  <title>Modo estrada · Pistaviva</title>
+  <link rel="icon" href="/pwa-192x192.png"><link rel="stylesheet" href="/pwa/offline.css">
+  <script type="module" src="/pwa/offline.js"></script>
+</head>
+<body>
+  <header><a href="/selo/passaporte">PISTAVIVA</a><span id="connection" role="status">Modo estrada</span></header>
+  <main>
+    <p class="eyebrow">Seu companheiro de viagem</p>
+    <h1>A estrada continua.<br>Seu passaporte também.</h1>
+    <p id="intro">Aqui você consulta o resumo salvo e guarda uma passagem pelo GPS para confirmar depois.</p>
+    <noscript>Ative JavaScript para acessar o resumo e os carimbos pendentes deste celular.</noscript>
+    <section aria-labelledby="capture-title">
+      <h2 id="capture-title">Chegou? Guarde sua passagem.</h2>
+      <p>O GPS pode funcionar sem internet. A cidade e o carimbo serão confirmados quando você abrir seu passaporte com conexão, em até 72 horas.</p>
+      <button id="capture" type="button" disabled>Guardar passagem pelo GPS</button>
+      <p id="capture-status" role="status" aria-atomic="true"></p>
+      <p id="capture-error" role="alert"></p>
+      <p id="pending"></p>
+      <small>A leitura de localização fica neste aparelho até o envio. Nenhum carimbo é confirmado nesta tela.</small>
+    </section>
+    <section aria-labelledby="collection-title">
+      <p class="eyebrow" id="passport-number">Seu passaporte</p>
+      <h2 id="collection-title">Coleção salva</h2>
+      <p id="saved-at">Abra seu passaporte com internet para salvar uma cópia do resumo neste celular.</p>
+      <div id="collection"></div>
+    </section>
+    <a class="button secondary" id="resume" href="/selo/passaporte">Voltar ao passaporte online</a>
+    <p id="resume-help">Quando o sinal voltar, abra seu passaporte para enviar as passagens guardadas.</p>
+    <p class="footnote">Esta versão mostra nomes e datas dos carimbos. Mapas, fotos e novas confirmações precisam de internet. Limpar os dados do navegador remove o resumo e as passagens pendentes.</p>
+  </main>
+</body>
+</html>

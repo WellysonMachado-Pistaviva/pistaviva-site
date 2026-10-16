@@ -8,7 +8,7 @@ import Vantagens from './Vantagens';
 
 const mascararCep = (v) => v.replace(/\D/g, '').slice(0, 8).replace(/^(\d{5})(\d)/, '$1-$2');
 
-// Código de benefício do colecionador: aparece só com endereço completo + check-in.
+// Código de benefício do colecionador: aparece só com endereço completo + check-in GPS ou balcão.
 export default function Beneficio({ codigo, endereco, beneficio }) {
   const [editando, setEditando] = useState(!beneficio.endereco);
   if (beneficio.codigo && !editando) {
@@ -28,8 +28,10 @@ export default function Beneficio({ codigo, endereco, beneficio }) {
     return (
       <section className="selo-cartao selo-beneficio">
         <span className="selo-kicker">Benefício de colecionador</span>
-        <h2>Falta o check-in</h2>
-        <p>Endereço salvo. Faça o check-in desta estação para liberar seu código exclusivo.</p>
+        <h2>{beneficio.soFoto ? 'Falta confirmar no balcão' : 'Falta o check-in'}</h2>
+        <p>{beneficio.soFoto
+          ? 'Endereço salvo. A foto do passaporte libera o selo digital; o código exclusivo sai quando a visita for confirmada no balcão do Parque.'
+          : 'Endereço salvo. Confirme a visita no balcão ou faça o check-in por GPS no Parque para liberar seu código exclusivo.'}</p>
         <Vantagens almoco={beneficio.almoco} />
         <button type="button" className="selo-btn secundario" onClick={() => setEditando(true)}>Editar endereço</button>
       </section>

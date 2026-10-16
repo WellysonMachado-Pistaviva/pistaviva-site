@@ -6,7 +6,7 @@ export default async function AnnouncementBar() {
   let a = null;
   try {
     const sb = supabaseServer();
-    const { data } = await sb.from('pv_site_config').select('announcement, announcement_active').eq('id', 1).maybeSingle();
+    const { data } = await sb.from('pv_site_config').select('announcement, announcement_active').eq('id', 1).maybeSingle().abortSignal(AbortSignal.timeout(2000));
     a = data;
   } catch { /* sem config */ }
   if (!a?.announcement_active || !a?.announcement) return null;

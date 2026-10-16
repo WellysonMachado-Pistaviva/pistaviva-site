@@ -49,6 +49,9 @@ test('resumo: sem carimbo, sem cadastro, inexistente', () => {
   assert.equal(semDados.motivo, 'Cadastro incompleto.');
   assert.equal(semDados.ultimoCarimbo.metodo, 'balcão');
   assert.deepEqual(resumoParceiro(null, 'p'), { valido: false, motivo: 'Código não encontrado.' });
+  const soFoto = resumoParceiro({ moto: { nome: 'Ana', numero: 1, ...END }, visitas: [{ estacao: 'verao', ano: 2026, liberado_em: '2026-02-01T10:00:00Z', checkin_metodo: 'foto' }], usos: [] }, 'p');
+  assert.equal(soFoto.valido, false);
+  assert.equal(soFoto.motivo, 'Check-in só por foto: confirme no balcão do Parque.');
 });
 
 test('store local: parceiro desativado perde o link; uso fica ligado ao parceiro', () => {

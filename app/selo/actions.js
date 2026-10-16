@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { headers } from 'next/headers';
 import { excedeu } from '../lib/selo/limites';
 import { copiarEvento } from '../lib/selo/planilhas';
-import { findCity, normalizeCity } from '../lib/municipios.mjs';
+import { findCity } from '../lib/municipios.mjs';
 import { validarEndereco } from '../lib/selo/beneficio.mjs';
 import { estacaoDe } from '../lib/selo/estacao.mjs';
 import { alvoDoLocal, avaliarCheckin } from '../lib/selo/geo.mjs';
@@ -13,9 +13,11 @@ import { municipioDoPonto } from '../lib/selo/malhaBrasil.mjs';
 import { validarPassaporte, validarVisita } from '../lib/selo/schema.mjs';
 import { codigoSerie, horaDaCaptura } from '../lib/selo/mapaCidades.mjs';
 import { urlCarimbo } from '../lib/selo/carimboUrl.mjs';
+import { acessoPassaporte } from '../lib/selo/acessoServidor';
+import { normalizarBuscaAcesso } from '../lib/selo/acessoRegras.mjs';
 import { normalizarWhatsapp } from '../lib/selo/whatsapp.mjs';
 import {
-  anexarFotoCidade, autorizarConquista, autorizarPassaporte, carimbarCidade, confirmarFoto, criarPassaporte, denunciarFoto, fotoEnviada, marcarProva, motoPorCodigo, motociclistaPorWhatsapp, registrarCheckin, registrarVisita,
+  anexarFotoCidade, autorizarConquista, autorizarPassaporte, carimbarCidade, confirmarFoto, denunciarFoto, fotoEnviada, marcarProva, motoPorCodigo, motociclistaPorWhatsapp, registrarCheckin, registrarVisita,
   salvarEndereco, urlUploadFoto, visitaAtual, visitaPorChave,
 } from '../lib/selo/store';
 
@@ -46,10 +48,21 @@ export async function enviarVisita(entrada) {
   const { estacao, ano } = estacaoDe();
 
   try {
+    // O formulário das estações também reencontra pessoas pelo telefone.
+    // Não pode virar uma segunda recuperação sem prova de acesso.
+    const existente = await motociclistaPorWhatsapp(d.whatsapp);
+    const propriaAntes = await visitaPorChave(d.chave);
+    if (existente && entrada?.codigo !== existente.codigo && !propriaAntes) {
+      return { ok: false, erro: 'Para registrar uma nova estação, abra seu passaporte salvo neste celular. Se perdeu o acesso, fale com a equipe.' };
+    }
     const r = await registrarVisita({ ...d, cidade, estacao, ano });
+    // Confere a chave novamente após a gravação: cobre dois cadastros simultâneos.
+    const propriaVisita = await visitaPorChave(d.chave);
+    if (r?.codigo !== entrada?.codigo && propriaVisita?.id !== r?.visitaId) {
+      return { ok: false, erro: 'Abra seu passaporte ou fale com a equipe para continuar.' };
+    }
     if (r && !r.reaproveitada) copiarEvento('cadastro', r.visitaId);
-    const propriaVisita = d.tem_foto ? await visitaPorChave(d.chave) : null;
-    const upload = propriaVisita?.id === r.visitaId ? await urlUploadFoto(`${r.visitaId}.jpg`, await baseUrl()) : null;
+    const upload = d.tem_foto && propriaVisita?.id === r.visitaId ? await urlUploadFoto(`${r.visitaId}.jpg`, await baseUrl()) : null;
     return { ok: true, numero: r.numero, codigo: r.codigo, reaproveitada: r.reaproveitada, upload };
   } catch (e) {
     console.error('[selo] enviarVisita', e);
@@ -76,22 +89,10 @@ export async function novaUrlFoto(chave) {
   return { ok: true, upload: await urlUploadFoto(`${visita.id}.jpg`, await baseUrl()) };
 }
 
-// "Esqueci meu número": WhatsApp + 3 primeiras letras do nome. Pedir as letras
-// impede que alguém descubra o número de outra pessoa só tendo o telefone dela.
-export async function recuperarNumero({ whatsapp, nome } = {}) {
-  if (await limitar('selo-recuperar', 8, 10 * 60_000)) return { ok: false, erro: 'Muitas tentativas. Espere 10 minutos ou peça no balcão.' };
-  const wa = normalizarWhatsapp(whatsapp);
-  const letras = normalizeCity(nome).replace(/\s/g, '').slice(0, 3);
-  if (!wa || letras.length < 3) return { ok: false, erro: 'Digite o WhatsApp e as 3 primeiras letras do seu nome.' };
-  try {
-    const moto = await motociclistaPorWhatsapp(wa);
-    const confere = moto && normalizeCity(moto.nome).replace(/\s/g, '').startsWith(letras);
-    if (!confere) return { ok: false, erro: 'Não achamos. Confira os dados ou peça seu número no balcão.' };
-    return { ok: true, codigo: moto.codigo };
-  } catch (e) {
-    console.error('[selo] recuperarNumero', e);
-    return { ok: false, erro: 'Não consultou. Tente de novo ou peça no balcão.' };
-  }
+// Compatibilidade com abas antigas de recuperação por dados pessoais.
+// O novo fluxo usa um código offline de uso único, entregue no cadastro.
+export async function recuperarNumero() {
+  return { ok: false, assistida: true, erro: 'Para recuperar seu acesso, entre em contato com a equipe da Pista Viva. Telefone e nome não liberam o passaporte.' };
 }
 
 
@@ -203,14 +204,39 @@ export async function criarMeuPassaporte(entrada) {
   const d = v.dados;
   const cidade = findCity(d.uf, d.cidade)?.name || d.cidade;
   try {
-    const r = await criarPassaporte({ ...d, cidade });
-    if (r.existente) return { ok: false, existente: true, erro: 'Este WhatsApp já tem passaporte. Recupere o seu com o mesmo número.' };
-    return { ok: true, numero: Number(r.numero), codigo: r.codigo, nome: d.nome, cidade, uf: d.uf };
+    const r = await acessoPassaporte.cadastrar({ ...d, cidade, senha: entrada?.senha, confirmacao: entrada?.confirmacao });
+    return r.ok ? { ...r, numero: Number(r.numero) } : r;
   } catch (e) {
     console.error('[selo] criarMeuPassaporte', e);
     return { ok: false, erro: 'Não criou. Tente de novo.' };
   }
 }
+
+async function pedidoAcesso(tipo, entrada) {
+  const d = entrada && typeof entrada === 'object' && !Array.isArray(entrada) ? entrada : {};
+  if (d.site) return { ok: false, erro: 'Não foi possível confirmar o acesso.' };
+  const h = await headers();
+  // Hash account identifiers before passing them to the shared limiter.
+  const alvo = tipo === 'entrar' ? String(normalizarWhatsapp(d.whatsapp) || '').slice(0, 12)
+    : tipo === 'ativar' ? String(d.codigo || '').slice(0, 12)
+      : [d.iniciais, d.finais, d.cidade, d.uf].map((v) => normalizarBuscaAcesso(String(v || '').slice(0, 80))).join('|');
+  if (await excedeu(h, { scope: `selo-acesso-${tipo}-ip`, limit: 20, windowMs: 15 * 60_000, exigirCompartilhado: true })
+    || await excedeu(h, { scope: `selo-acesso-${tipo}-conta`, limit: 5, windowMs: 15 * 60_000, quem: alvo, exigirCompartilhado: true })) {
+    return { ok: false, erro: 'Muitas tentativas. Espere 15 minutos ou fale com a equipe.' };
+  }
+  try {
+    const r = await acessoPassaporte[tipo](d);
+    if (!r.ok && !r.erros) console.info('[selo] acesso negado', tipo);
+    return r;
+  } catch {
+    // Never log passwords, recovery codes, private links or database payloads.
+    console.error('[selo] acesso indisponível', tipo);
+    return { ok: false, erro: 'Acesso indisponível. Tente novamente em alguns minutos.' };
+  }
+}
+export async function entrarNoPassaporte(d) { return pedidoAcesso('entrar', d); }
+export async function ativarSenhaPassaporte(d) { return pedidoAcesso('ativar', d); }
+export async function redefinirSenhaPassaporte(d) { return pedidoAcesso('recuperar', d); }
 
 // ── carimbo de cidade da Rota Biker ──────────────────────────────────────────
 // 1) carimbarAqui: o GPS diz em qual município a pessoa está; o servidor confere

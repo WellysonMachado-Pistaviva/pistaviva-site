@@ -3,7 +3,9 @@ import { after } from 'next/server';
 import { CABECALHO_PLANILHA, paraLinhas } from './relatorio.mjs';
 import { ABA_EVENTOS, ABA_VISITAS, TIPOS_EVENTO, copiasParaApagar, eventosSemExcluidos, idPlanilhaValido, nomeCopia } from './planilhasRegras.mjs';
 import { abas, acrescentar, apagarAbas, garantirAba, ler, sheetsConfigurado, substituir } from './googleSheets';
-import { listarVisitasAdmin, visitaParaPlanilha } from './store';
+import { listarVisitasAdmin, MODO, visitaParaPlanilha } from './store';
+import { todosCadastros } from './identificacaoServidor';
+import { CABECALHO_CADASTROS, cadastrosLinhas } from './identificacaoRegras.mjs';
 
 // Cópia do Selo em Google Sheets. O banco é a fonte da verdade; as planilhas
 // são cópias: OFICIAL (atualizada a cada evento + foto completa diária) e
@@ -14,7 +16,7 @@ const RESERVA = () => process.env.SELO_PLANILHA_RESERVA;
 const cabecalhoEventos = () => ['quando', 'evento', ...CABECALHO_PLANILHA];
 const dataHoraSP = (d) => new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'medium' }).format(d);
 
-export const planilhasAtivas = () => sheetsConfigurado() && idPlanilhaValido(OFICIAL());
+export const planilhasAtivas = () => MODO !== 'local' && sheetsConfigurado() && idPlanilhaValido(OFICIAL());
 
 async function registrarEvento(tipo, visitaId) {
   const v = await visitaParaPlanilha(visitaId);
@@ -43,8 +45,11 @@ async function fotoCompleta(planilha, linhas, { comCopia, numeros }) {
 
 // Foto completa nas duas planilhas, cada uma independente da outra.
 export async function sincronizarPlanilhas() {
+  if (MODO === 'local') return { ok: false, erro: 'Planilhas de produção não são alteradas pelo armazenamento local.' };
   if (!sheetsConfigurado()) return { ok: false, erro: 'Google Sheets não configurado.' };
   const visitas = await listarVisitasAdmin();
+  const cadastros = await todosCadastros();
+  const linhasCadastros = [CABECALHO_CADASTROS, ...cadastrosLinhas(cadastros)];
   const linhas = [[...CABECALHO_PLANILHA, `atualizado ${dataHoraSP(new Date())}`], ...paraLinhas(visitas)];
   const numeros = new Set(paraLinhas(visitas).map((l) => l[0]));
   const resultado = { ok: true, linhas: visitas.length };
@@ -52,6 +57,7 @@ export async function sincronizarPlanilhas() {
     if (!idPlanilhaValido(id)) { resultado[nome] = 'não configurada'; resultado.ok = false; continue; }
     try {
       await fotoCompleta(id, linhas, { comCopia, numeros });
+      await substituir(id, 'Cadastros', linhasCadastros);
       resultado[nome] = 'ok';
     } catch (e) {
       console.error('[selo] planilha', nome, e.message);

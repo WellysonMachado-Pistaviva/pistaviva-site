@@ -26,7 +26,7 @@ export default async function SelosPage() {
         <p className="study-kicker">Pistaviva / Passaporte do motociclista</p>
         <h1>Selos que se<br /><em>conquistam na estrada.</em></h1>
         <p>Nada de marcar no sofá: cada selo é confirmado no local, por GPS ou no balcão. Colecione, feche o ano e mostre seu passaporte.</p>
-        <Link className="study-button" href="/selo">Começar minha coleção <ArrowUpRight size={20} aria-hidden="true" /></Link>
+        <Link className="study-button" href="/selo/passaporte#criar-passaporte">Começar minha coleção <ArrowUpRight size={20} aria-hidden="true" /></Link>
       </header>
 
       <Link className="selos-colecao" href="/selos/brasil">

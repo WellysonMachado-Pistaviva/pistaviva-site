@@ -12,7 +12,9 @@ export const STATUS_FOTO = ['privada', 'publica', 'denunciada', 'oculta'];
 // { ok, quando: Date, offline } | { ok: false, motivo: 'futuro' | 'antigo' | 'invalido' }
 export function horaDaCaptura(capturadoEm, agora = new Date()) {
   if (capturadoEm == null || capturadoEm === '') return { ok: true, quando: agora, offline: false };
-  const t = new Date(capturadoEm).getTime();
+  // Vem do cliente: só texto ISO. Objeto/array derrubava new Date() com TypeError.
+  if (typeof capturadoEm !== 'string' || capturadoEm.length > 40) return { ok: false, motivo: 'invalido' };
+  const t = Date.parse(capturadoEm);
   if (!Number.isFinite(t)) return { ok: false, motivo: 'invalido' };
   if (t > agora.getTime() + RELOGIO_FOLGA_MS) return { ok: false, motivo: 'futuro' };
   if (agora.getTime() - t > OFFLINE_MAX_MS) return { ok: false, motivo: 'antigo' };

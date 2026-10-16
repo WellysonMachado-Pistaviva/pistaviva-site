@@ -8,22 +8,23 @@ const dataCarimbo = (dia) => {
   return `${d}/${m}/${a.slice(2)}`;
 };
 
-function Carimbo({ c, link, legenda = false }) {
+function Carimbo({ c, link, legenda = false, onAbrir, salvos }) {
   const corpo = <>
     <img src={c.img} alt={`${c.tipo === 'estacao' ? 'Selo' : 'Carimbo'} ${c.titulo}`} width={120} height={120} loading="lazy" />
     {c.visita > 1 && <span className="pu-vez" aria-label={`${c.visita}ª vez`}>+{c.visita - 1}</span>}
     {legenda && <strong className="pu-carimbo-nome">{c.titulo}</strong>}
     <time dateTime={c.dia}>{dataCarimbo(c.dia)}</time>
+    {salvos?.[c.entradaId] && <small className="jornada-memoria-salva">Memória salva</small>}
   </>;
   return <li className="pu-carimbo" data-tipo={c.tipo} style={{ '--pu-giro': `${c.giro}deg` }}>
-    {link ? <Link href={c.href} title={c.titulo}>{corpo}</Link> : corpo}
+    {onAbrir ? <button type="button" className="jornada-carimbo-botao" onClick={() => onAbrir(c)} aria-label={`Abrir ${c.titulo}, ${dataCarimbo(c.dia)}`}>{corpo}</button> : link ? <Link href={c.href} title={c.titulo}>{corpo}</Link> : corpo}
   </li>;
 }
 
 // "Passaporte" folheia como papel (mais antigo primeiro, 6 por página);
 // "Todos" mostra a grade inteira, mais recente primeiro.
-export default function CarimbosVista({ carimbos, paginas, vazio }) {
-  const [vista, setVista] = useState('estados');
+export default function CarimbosVista({ carimbos, paginas, vazio, onAbrir, salvos }) {
+  const [vista, setVista] = useState('passaporte');
   const [pagina, setPagina] = useState(0);
   if (!carimbos.length) return <p className="pu-vazio">{vazio}</p>;
   const dupla = [paginas[pagina * 2] || [], paginas[pagina * 2 + 1] || []];
@@ -47,7 +48,7 @@ export default function CarimbosVista({ carimbos, paginas, vazio }) {
             <section className="pu-estado" key={uf} aria-label={`Carimbos · ${uf}`}>
               <header><h3>{uf}</h3><span>{lista.length} {lista.length === 1 ? 'carimbo' : 'carimbos'}</span></header>
               <div className="pu-trilho" role="region" aria-label={`Carimbos de ${uf}, rolagem horizontal`} tabIndex={0}>
-                <ol>{lista.map((c) => <Carimbo key={c.chave} c={c} link legenda />)}</ol>
+                <ol>{lista.map((c) => <Carimbo key={c.chave} c={c} link legenda onAbrir={onAbrir} salvos={salvos} />)}</ol>
               </div>
             </section>
           ))}
@@ -58,7 +59,7 @@ export default function CarimbosVista({ carimbos, paginas, vazio }) {
             {dupla.map((lista, i) => (
               <ol key={i} className="pu-folha">
                 <li className="pu-folha-topo" aria-hidden="true"><span>Entradas</span><span>{pagina * 2 + i + 1}</span></li>
-                {lista.map((c) => <Carimbo key={c.chave} c={c} />)}
+                {lista.map((c) => <Carimbo key={c.chave} c={c} onAbrir={onAbrir} salvos={salvos} />)}
               </ol>
             ))}
           </div>
@@ -70,7 +71,7 @@ export default function CarimbosVista({ carimbos, paginas, vazio }) {
         </div>
       ) : (
         <ol className="pu-grade" role="region" aria-label="Todos os carimbos">
-          {carimbos.map((c) => <Carimbo key={c.chave} c={c} link />)}
+          {carimbos.map((c) => <Carimbo key={c.chave} c={c} link onAbrir={onAbrir} salvos={salvos} />)}
         </ol>
       )}
     </div>

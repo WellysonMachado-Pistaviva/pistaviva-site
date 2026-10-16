@@ -1,8 +1,8 @@
 import GrowthEvents from './components/GrowthEvents';
 import { Saira, Saira_Condensed, Saira_Semi_Condensed } from 'next/font/google';
 import Script from 'next/script';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
+import Analiticos from './components/Analiticos';
+import { scriptGa } from './lib/urlPrivada.mjs';
 import PV from '../src/palette';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;        // ex: G-XXXXXXXXXX
@@ -15,6 +15,7 @@ import SiteFooter from './components/SiteFooter';
 import OnlineCounter from './components/OnlineCounter';
 import AnnouncementBar from './components/AnnouncementBar';
 import MobileShell from './components/MobileShell';
+import PwaStatus from './components/PwaStatus';
 
 // Tipografia oficial: Saira Condensed (impacto), Saira (leitura) e
 // Saira Semi Condensed (navegação, labels e botões).
@@ -102,20 +103,18 @@ export default function RootLayout({ children }) {
             <MobileShell />
             <SiteHeader />
             <OnlineCounter />
-            <main id="app" tabIndex={-1} style={{ flex: 1 }}>{children}</main>
+            <main id="app" tabIndex={-1} style={{ flex: 1 }}><PwaStatus />{children}</main>
             <SiteFooter />
           </div>
         </AuthProvider>
-        <Analytics />
+        <Analiticos />
         <GrowthEvents />
-        <SpeedInsights />
 
         {GA_ID && (
           <>
+            {/* Inline antes do gtag.js: desliga o GA nas rotas com credencial na URL. */}
+            <Script id="ga4" strategy="afterInteractive">{scriptGa(GA_ID)}</Script>
             <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="lazyOnload" />
-            <Script id="ga4" strategy="lazyOnload">
-              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
-            </Script>
           </>
         )}
         <AdSenseLoader client={ADSENSE_ID} />

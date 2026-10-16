@@ -208,3 +208,41 @@
   --wa:var(--pv-whatsapp);
   --x-green:var(--pv-brand-estrada-x);
 }
+
+/* Tinta da demonstração, igual à arte oficial do passaporte. */
+.selo-app:has(.passaporte-identidade) {
+  --sl-ink: #1e1111;
+  --sl-stamp: #a3281c;
+  --sl-field-paper: #f6eee6;
+}
+
+/* Passaporte compartilhável: papel, tinta e controles do editor. */
+:root {
+  --sl-paper: #f5f3ee;
+  --sl-ink: #1e1111;
+  --sl-muted: #747269;
+  --sl-line: #d9d6cc;
+  --sl-brand-accent: #e85a18;
+  --sl-status: #a84429;
+  --sl-stamp: #a3281c;
+  --sl-frame: #191a17;
+  --sl-photo-paper: #e7dfcf;
+  --sl-shadow-phone: #41392e45;
+  --sl-ink-warm: #5a4a3a;
+  --sl-loading-paper: #e7dfcfdd;
+  --sl-hover-paper: #eae6dc;
+  --sl-field-paper: #f6eee6;
+  --sl-selected-paper: #f0e9df;
+  --sl-field-line: #ccc8be;
+  --sl-shadow-photo: #41392e25;
+  --sl-note-ink: #72644f;
+  --sl-button: #ed5d20;
+  --sl-button-ink: #201a15;
+  --sl-button-hover: #de5014;
+  --sl-button-line: #414139;
+  --sl-radius-phone: 32px;
+  --sl-radius-phone-mobile: 27px;
+  --sl-radius-control: 3px;
+  --sl-radius-button: 2px;
+  --sl-backdrop: rgba(0, 0, 0, .6);
+}

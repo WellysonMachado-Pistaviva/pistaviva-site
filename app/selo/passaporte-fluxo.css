@@ -1,0 +1,25 @@
+/* Fluxo operacional preserva papel e carimbos, com ações legíveis no celular. */
+.selo-app :is(#criar-passaporte, #carimbar, #personalizar-passaporte, #privacidade) { scroll-margin-top: 80px; }
+.selo-app .passaporte-criar { width: 100%; max-width: 640px; margin-inline: auto; }
+.selo-app .passaporte-criar #pp-criar-titulo { font-size: 32px; line-height: 1.1; }
+.selo-app .passaporte-criar .selo-form { margin-top: 24px; }
+.selo-app .passaporte-criar .selo-text-link { display: inline-flex; align-items: center; min-height: 48px; }
+.selo-app .passaporte-criar :is(input, select) { scroll-margin-block: 96px; }
+.selo-app .passaporte-criar small { line-height: 1.5; }
+.selo-app .ph-faq summary { min-height: 44px; align-content: center; }
+.selo-app .pu-grupo > summary { min-height: 48px; }
+.selo-app .carimbo-cidade .selo-btn { min-height: 52px; touch-action: manipulation; }
+.selo-app .mapa-carimbos-adiado { display: grid; align-content: center; justify-items: center; padding: 24px; text-align: center; background: var(--sl-field-paper); }
+.selo-app .mapa-carimbos-adiado .selo-btn { width: auto; }
+body:has(.selo-passaporte, .passaporte-criar, .selo-recuperar) .pv-online { display: none; }
+@media (max-width: 768px) {
+  .selo-app .passaporte-criar { padding: 20px 16px; }
+  .selo-app .ph-meu > header { display: none; }
+  .selo-app .ph-meu { padding-top: 24px; }
+  .selo-app .selo-passaporte { padding-top: 16px; padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
+  .selo-app .carimbo-cidade h2 { font-size: 28px; line-height: 1.1; }
+  .selo-app .leaflet-container .leaflet-control-zoom a { width: 44px; height: 44px; line-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .selo-app { scroll-behavior: auto; }
+}

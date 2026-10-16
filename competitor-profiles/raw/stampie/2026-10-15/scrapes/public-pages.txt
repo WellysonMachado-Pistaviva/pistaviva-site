@@ -1,0 +1,541 @@
+Fontes públicas consultadas em 2026-10-15. Extração web; limitações de acesso registradas nos resultados.
+
+Stampie – Passport-style travel tracker with stamps (https://stampie.app/)
+citeturn1view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://stampie.app","lineno":null}); Total lines: 302
+L0: cite0†About cite1†Explore cite2†Stamps cite3†Map cite4†Collections cite5†Shop L1: 
+L2: cite6†Sign In cite7†Download App L3: 
+L4: [Button: Sign In]cite7†Download L5: 
+L6: Your travel passport
+L7: 
+L8: # Collect travel stamps.
+L9: 
+L10: A stamp for every country you visit, a map of everywhere you have been, and a journal to remember it all. Try for free.
+L11: 
+L12: or start on the web
+L13: 
+L14: STAMPIE PASSPORT
+L15: 
+L16: A TRAVEL JOURNAL
+L17: ## P PASSPORT
+L18: 
+L19: USA/GBR/EU
+L20: 
+L21: Surname / Nom
+L22: 
+L23: TRAVELER
+L24: 
+L25: Given Names
+L26: 
+L27: ALEX
+L28: 
+L29: Nationality
+L30: 
+L31: GLOBAL
+L32: 
+L33: DOB
+L34: 
+L35: 01 JAN 1995
+L36: 
+L37: P<INTALEX&LT;&LT;TRAVELER&&&&&&&&&&
+L38: 1234567890INT9501018M2501010&&&&&&&&
+L39: 
+L40: Stamps Entry / Sortie
+L41: 
+L42: cite8†Image: Norway†cdn.stampie.app L43: 
+L44: 03/09/25
+L45: 
+L46: cite9†Image: Italy†cdn.stampie.app L47: 
+L48: 01/20/25
+L49: 
+L50: cite10†Image: United States†cdn.stampie.app L51: 
+L52: 11/16/23
+L53: 
+L54: cite11†Image: Portugal†cdn.stampie.app L55: 
+L56: 05/23/23
+L57: 
+L58: cite12†Image: Australia†cdn.stampie.app L59: 
+L60: 05/08/23
+L61: 
+L62: cite13†Image: Peru†cdn.stampie.app L63: 
+L64: 06/29/22
+L65: cite14†Image: Japan†cdn.stampie.app L66: 
+L67: 04/14/19
+L68: 
+L69: cite15†Image: Iceland†cdn.stampie.app L70: 
+L71: 02/02/25
+L72: 
+L73: cite16†Image: France†cdn.stampie.app L74: 
+L75: 07/18/24
+L76: 
+L77: - 2 -
+L78: 
+L79: Stamps Entry / Sortie
+L80: 
+L81: cite17†Image: Spain†cdn.stampie.app L82: 
+L83: 06/04/24
+L84: 
+L85: cite18†Image: Greece†cdn.stampie.app L86: 
+L87: 09/12/24
+L88: 
+L89: cite19†Image: Turkey†cdn.stampie.app L90: 
+L91: 10/21/23
+L92: 
+L93: cite20†Image: Thailand†cdn.stampie.app L94: 
+L95: 02/07/23
+L96: 
+L97: cite21†Image: Vietnam†cdn.stampie.app L98: 
+L99: 03/19/23
+L100: 
+L101: cite22†Image: Indonesia†cdn.stampie.app L102: 
+L103: 08/26/22
+L104: 
+L105: cite23†Image: Mexico†cdn.stampie.app L106: 
+L107: 11/15/21
+L108: cite24†Image: Morocco†cdn.stampie.app L109: 
+L110: 04/08/20
+L111: 
+L112: cite25†Image: New Zealand†cdn.stampie.app L113: 
+L114: 12/11/18
+L115: 
+L116: - 3 -
+L117: 
+L118: This passport contains 4 pages
+L119: 
+L120: End of Booklet
+L121: 
+L122: MADE WITH STAMPIE
+L123: ## Stampie on
+L124: iOS & Android
+L125: 
+L126: Track your travel stamps in a digital passport. Explore countries, collect memories, and journal every journey.
+L127: 
+L128: Scan the QR code to download the app on your phone.
+L129: 
+L130: cite26†Image: Stampie app on iPhone L131: 
+L132: ## Your travel tracker, reimagined
+L133: 
+L134: Build your travel tracker around the things that already feel like souvenirs. Passport-style stamps for every country, a travel map of where you have been, and a light travel journal for the notes you want to keep.
+L135: ### Track countries visited
+L136: 
+L137: Add a country, get a stamp, and keep a running count of every place you have been.
+L138: 
+L139: ### Your personal travel map
+L140: 
+L141: Visualize where you have been on a world map that fills in as you travel.
+L142: 
+L143: ### Passport-style stamps
+L144: 
+L145: Illustrated stamps for every country, wonder, and place worth remembering.
+L146: 
+L147: ### A lightweight travel journal
+L148: 
+L149: Add quick notes to each trip, so the memory stays with the stamp.
+L150: ### Home screen widgets
+L151: 
+L152: Pin your latest stamps and visited country count to your home screen on iOS or Android, and watch your travels at a glance.
+L153: 
+L154: ### Share and export
+L155: 
+L156: Export your passport as an image, post it to socials, or hand out your stampie.app/@username link.
+L157: ## Featured collections
+L158: 
+L159: Collect stamps for the places worth remembering — countries, cities, and U.S. states.
+L160: 
+L161: cite27†+245 Countries Every country on Earth, from the ones you've visited in to the ones still on your list.249 stamps cite28†+78 Islands The world's most beautiful islands, from tropical paradises to Mediterranean gems.82 stamps cite29†+46 U.S. States PRO All 50 U.S. states. The ultimate American roadtrip.50 stamps L162: 
+L163: cite4†Browse all collections L164: ## Every stamp, on one map
+L165: 
+L166: Countries, cities, landmarks, wonders and marathons, plotted where they actually are. Zoom into anywhere you have been and see what there is to collect.
+L167: 
+L168: Loading the map…
+L169: 
+L170: cite30†Open the stamps map L171: ## Passports from the community
+L172: 
+L173: See where fellow travellers have been, and get inspired for your next trip.
+L174: cite31†Find joy in the journey PRO@love2travel11·Washington DC STAMPIEPASSPORT A TRAVEL JOURNAL Countries38 Stamps186 Latest“Collecting memories, airline miles, and stories from around the world ✈️🌍 cite32†Traveling Large@travelinglarge·Atlanta, Ga.STAMPIEPASSPORT A TRAVEL JOURNAL Countries49 Stamps126 Latest“Die with memories not dreams cite33†Eileen PRO@twilightmelfina STAMPIEPASSPORT A TRAVEL JOURNAL Countries32 Stamps106 Latest L175: 
+L176: cite34†See all 1,401 public passports L177: 
+L178: From the journal
+L179: ## Stories from the road
+L180: 
+L181: Guides, checklists, and the odd rabbit hole about keeping track of everywhere you've been.
+L182: 
+L183: cite35†Read the blog L184: cite36†OCT2026 Checklists Philippines regions checklist: how many of the 18 have you visited?An interactive Philippines regions checklist you can tick off and save. Track all 18 regions you've visited across Luzon, Visayas and Mindanao, see your count and percentage, and color them in on a free Philippines map.6 min read cite37†OCT2026 Checklists France regions checklist: how many of the 13 have you visited?An interactive France regions checklist you can tick off and save.
+L185: Track all 13 regions of metropolitan France you've visited, see your count and percentage, and color them in on a free France map.5 min read cite38†OCT2026 Checklists Brazil states checklist: how many of the 27 have you visited?An interactive Brazil states checklist you can tick off and save. Track all 26 states and the Federal District you've visited, see your count and percentage, and color them in on a free Brazil map.5 min read L186: cite5†STAMPIE SHOP L187: ## Digital keepsakes
+L188: 
+L189: Transform your digital passport into tangible art or give the gift of adventure.
+L190: cite39†Beta Personalized Travel World Map Poster Visualize your travel journey on a clean, elegant world map. Highlight the places you've visited and create a meaningful memory poster.FREE$19.99 cite40†Beta Personalized Travel Stamp Poster Turn your travels into a beautiful stamp collection. Select the countries you've visited and create a timeless poster — perfect as a gift or keepsake.FREE$19.99 cite5†Check shop now L191: ## Frequently Asked Questions
+L192: 
+L193: Have questions? We are here to help.
+L194: 
+L195: Is Stampie free to use?
+L196: 
+L197: Yes, the core of the app is free. You can sign up, collect base stamps that you'd usually get in your passport (with some additional ones as well), build your profile, and track your travels. Pro is an optional upgrade that unlocks additional stamp collections, regional maps, and more, and also backs the project so it can sustain itself long term.
+L198: 
+L199: Why isn't the app fully free, and why is there a Pro version?
+L200: We're a small, fully bootstrapped team with no outside investors, and being able to maintain and improve the app is possible thanks to our Pro members backing the project. It goes straight back into building and maintaining it. See the cite41†Pro page for what's included.
+L201: 
+L202: How do you create the stamps?
+L203: Our stamps are designed with AI-assisted tools, reviewed and edited one by one by our team. Every stamp is pre-made and shared across all users, and nothing is generated from your personal data. You can read more in our cite42†Terms .
+L204: 
+L205: What does Stampie Pro include?
+L206: Pro unlocks extra stamp collections, unlimited photos per stamp, passport & map customization, and a Pro badge on your profile. Go Pro with a monthly ($6.99) or yearly ($29.99) plan, or a one-time $59.99 lifetime purchase. See the cite41†Pro page for the full list.
+L207: 
+L208: Is Pro a subscription?
+L209: You choose. Pro comes as a monthly or yearly subscription, or a one-time lifetime purchase that's yours forever. Subscriptions renew automatically, and you can cancel anytime, so you keep Pro until the end of the period you've already paid for.
+L210: 
+L211: What does my Pro support, and how is the price decided?
+L212: Stampie isn't just a data tracker, it's a living catalog: every stamp is curated and edited one by one by our team, with new collections and features shipping regularly. Going Pro funds that ongoing work, the app servers and maintenance, and the development behind new stamps, maps, and features shaped by your feedback. The plans are priced to stay sustainable and fair next to other travel apps: monthly or yearly to support it as we go, or lifetime to back it once.
+L213: Can I get a refund if I'm not satisfied with Pro?
+L214: Yes, within 14 days. How it works depends on where you bought it.
+L215: Bought on the web: email us at info@stampie.app within 14days of purchase and we'll refund you, no questions asked.
+L216: Bought in the iPhone or Android app:the payment goes to Apple or Google first, not to us, so we have no way to refund it ourselves directly. You'll need to ask them: cite43†reportaproblem.apple.com†reportaproblem.apple.com for Apple, or the order in your Google Play account for Android. The decision is theirs, and they usually look at requests made within 90 days.
+L217: Within 14days we won't stand in the way, no questions asked, and if the store checks with us we'll tell them we're happy for it to go through. Email us either way and we'll help however we can.
+L218: Why is the price different in my currency or in the app?
+L219: 
+L220: Prices on our website are in US dollars and are the base price. In the App Store and Google Play, the price is shown in your local currency and can differ from the US dollar price: the stores set their own regional prices and apply currency conversion and any local taxes. You always see the exact amount before you confirm a purchase.
+L221: 
+L222: Why has the Pro price changed over time?
+L223: While Stampie was in beta, we ran early-adopter pricing: the price started low and went up in steps as more people joined, our way of thanking the people who supported the app earliest, before it was fully stable. Now that Stampie is out of beta, that run has ended, and the price you see today is our final, settled price. It won't keep going up like it did during beta, and keeping it settled is fair to everyone who bought in early.
+L224: 
+L225: Can I request a stamp that doesn't exist yet?
+L226: Absolutely. If a country, city, or event is missing, open the Stamps page and use the “Request a stamp” link, or email us directly at info@stampie.app. Every request goes into a pool, nothing is dropped, but please note we can't always add every stamp right away, some take longer or aren't possible due to trademarks and copyrights, or current priorities.
+L227: 
+L228: How do you decide which requested stamps get added?
+L229: Every request goes into a pool, nothing is dropped. From there we look at a few things: how many people have asked for it (places requested by many users jump the queue), whether it fits an existing collection or needs a new one, and whether we can use it at all. That last one is the usual reason something takes longer: trademarked places like theme parks and some branded attractions need research, or are not possible because of copyright.
+L230: Requests that have not landed yet are not rejected. They are either waiting behind higher-demand items or were not possible to settle in a quick evaluation. We are a small team, so some take a while.
+L231: Can I use Stampie stamps outside the app?
+L232: 
+L233: Stamps are for personal enjoyment within Stampie and products we offer (like printable posters from our shop). Redistribution or commercial use outside Stampie isn't permitted. See our cite42†Terms for details.
+L234: 
+L235: Is my data private?
+L236: You control your profile visibility. If you set your profile to public, others can see your profile and stamp entries; if you set it to private, your entries are visible only to you. You can change this anytime in your settings.
+L237: Stamps themselves aren't generated from your personal data, they're a shared catalog used by everyone. We never sell your personal data. We're a small, fully bootstrapped team, and the app's upkeep and development is funded by our Pro members backing the project. For full details see our cite44†Privacy policy .
+L238: How do I contact the team?
+L239: 
+L240: The fastest way is email: info@stampie.app. We read everything and usually respond reasonably fast, within a couple of days at most.
+L241: 
+L242: cite45†Stampie L243: 
+L244: A passport-style travel tracker with stamps.
+L245: 
+L246: cite1†Explore L247: 
+L248:   * cite34†Passports L249:   * cite2†Stamps L250:   * cite46†Map L251:   * cite4†Collections L252:   * cite47†Countries L253:   * cite5†Shop L254: 
+L255: cite48†Free Travel Tools L256:   * cite49†Countries Visited Map L257:   * cite50†U.S. States Visited Map L258:   * cite51†German States Visited Map L259:   * cite52†Japan Prefectures Visited Map L260:   * cite53†Travel Bucket List L261:   * cite54†Travel Passport Stamps L262:   * cite55†Trip Countdown L263: 
+L264: cite56†Free Travel Games L265: 
+L266:   * cite57†Guess the Flag L267:   * cite58†Name All the Countries L268:   * cite59†World Capitals Quiz L269:   * cite60†Name All 50 U.S. States L270:   * cite61†Road Trip Bingo L271:   * cite62†Travel Would You Rather L272: 
+L273: Pro
+L274: 
+L275:   * cite41†Stampie Pro L276:   * cite63†Pro Stamps L277:   * cite64†Gift Cards L278:   * cite65†Redeem Code L279: Company
+L280: 
+L281:   * cite0†About L282:   * cite35†Blog L283:   * cite66†FAQ L284:   * cite67†Press L285:   * cite68†Contact L286: 
+L287: Legal
+L288: 
+L289:   * cite42†Terms L290:   * cite44†Privacy L291:   * cite69†Attributions L292: 
+L293: Stamps are designed with AI-assisted tools and curated by the editorial team.
+L294: Stampie is independent and is not affiliated with or endorsed by any event or organization referenced, unless explicitly marked as an official partner.
+L295: 
+L296: © 2026 cite70†Noe Crafts†noecrafts.com . All rights reserved.
+L297: ## Your cart
+L298: 
+L299: Your cart is empty
+L300: 
+L301: Design a poster and it will show up here.
+--------------------------------------------------------------------------------
+Explore Travel Passports – Stampie (https://stampie.app/passports)
+citeturn1view1 [wordlim: 200] Crawled: last month; Content type: text/html; Source: open({"ref_id":"https://stampie.app/passports","lineno":null}); Total lines: 68
+L0: [Button: Sign In]cite0†Download L1: # Explore passports
+L2: 
+L3: Browse 1,047 public passports from the Stampie community and see where fellow travellers have been.
+L4: 
+L5: [Input: Search travellers…]
+L6: 
+L7: Sort by
+L8: 
+L9: [Select]
+L10: cite1†Nathan Martin@nmartin4 STAMPIEPASSPORT A TRAVEL JOURNAL Countries118 Stamps310 Latest cite2†T Tuto sports@tutosports14 STAMPIEPASSPORT A TRAVEL JOURNAL Countries109 Stamps113 Latest“TS cite3†Israel Vargas@israelvargasa·Virginia, USA STAMPIEPASSPORT A TRAVEL JOURNAL Countries89 Stamps220 Latest cite4†Masato@masatoseki·Canada STAMPIEPASSPORT A TRAVEL JOURNAL Countries86 Stamps206 Latest cite5†Sergii Kondratenkov PRO@serjiokon87·Varna, Bulgaria STAMPIEPASSPORT A TRAVEL JOURNAL Countries75 Stamps189 Latest“Seaman cite6†Kervin Dichoso PRO@dafuqitskerv·European Union 🇪🇺STAMPIEPASSPORT A TRAVEL JOURNAL Countries74 Stamps314 Latest“Shipboard IT cite7†Q Q@theav8r242 STAMPIEPASSPORT A TRAVEL JOURNAL Countries66 Stamps127 Latest cite8†B Bledi@bledi STAMPIEPASSPORT A TRAVEL JOURNAL Countries62 Stamps167 Latest cite9†Nholicas@nholicas·Indonesia STAMPIEPASSPORT A TRAVEL JOURNAL Countries61 Stamps158 Latest“I walk around cite10†Gergo Szombati@picigeriutazik·Budapest STAMPIEPASSPORT A TRAVEL JOURNAL Countries60 Stamps62 Latest cite11†alby@alby·Taiwan STAMPIEPASSPORT A TRAVEL JOURNAL Countries56 Stamps165 Latest cite12†M@matttheworldnomad STAMPIEPASSPORT A TRAVEL JOURNAL Countries55 Stamps60 Latest cite13†Marek Lando@mareklando·Poland STAMPIEPASSPORT A TRAVEL JOURNAL Countries53 Stamps56 Latest cite14†B Badplayernl@badplayernl·Dushanbe, Tajikistan STAMPIEPASSPORT A TRAVEL JOURNAL Countries52 Stamps109 Latest cite15†M Mayank@mayank STAMPIEPASSPORT A TRAVEL JOURNAL Countries51 Stamps59 Latest“Traveler cite16†Victor Malyushev PRO@malyushev·Bulgaria STAMPIEPASSPORT A TRAVEL JOURNAL Countries50 Stamps166 Latest“Collecting countries, not souvenirs cite17†Wendy Moeller@wendymoeller·Orlando, Florida STAMPIEPASSPORT A TRAVEL JOURNAL Countries50 Stamps136 Latest“Travel Lover, National Park Geek, Checklist Enthusiast, Adventurer cite18†Tasha@autismfamilytravelguide·Edinburgh STAMPIEPASSPORT A TRAVEL JOURNAL Countries50 Stamps55 Latest“Travel Mum @ Autism Family Travel Guide cite19†sixto champala PRO@champ6·San Diego STAMPIEPASSPORT A TRAVEL JOURNAL Countries48 Stamps50 Latest cite20†Meredith P@meredith·United States STAMPIEPASSPORT A TRAVEL JOURNAL Countries48 Stamps49 Latest“Queer, deaf, unstoppable. cite21†Tammy 301@tammy301 STAMPIEPASSPORT A TRAVEL JOURNAL Countries46 Stamps52 Latest cite22†S Saiful Razali PRO@sar1908 STAMPIEPASSPORT A TRAVEL JOURNAL SAR Countries45 Stamps233 Latest cite23†Simo PRO@simonbianchins·Bergamo, Italy STAMPIEPASSPORT A TRAVEL JOURNAL Simone Bianchini Countries45 Stamps89 Latest cite24†Adrian Caamiño@adrcaa-2·Iligan, Philippines STAMPIEPASSPORT A TRAVEL JOURNAL Countries45 Stamps49 Latest“Just a wanderer cite25†mary PRO@msobie·New York City STAMPIEPASSPORT A TRAVEL JOURNAL Countries44 Stamps68 Latest“Artist, technologist, yoga teacher. cite26†Devan Howard@devanjhoward·Bali STAMPIEPASSPORT A TRAVEL JOURNAL Countries44 Stamps49 Latest cite27†Ron Matthews@ronmatthews STAMPIEPASSPORT A TRAVEL JOURNAL Countries43 Stamps128 Latest cite28†LilySharmilla PRO@lilysharmilla·Malaysia STAMPIEPASSPORT A TRAVEL JOURNAL Countries43 Stamps54 Latest“Listen.Learn.Travel cite29†Alex KKT@alexkkt STAMPIEPASSPORT A TRAVEL JOURNAL Countries42 Stamps44 Latest“Unboxing Earth cite30†Alex Kwasznin@sender STAMPIEPASSPORT A TRAVEL JOURNAL Countries41 Stamps45 Latest cite31†Sophia Tuffin@tufftufftuffin STAMPIEPASSPORT A TRAVEL JOURNAL Countries40 Stamps119 Latest cite32†M Mohn@mightyemon·Hong kong STAMPIEPASSPORT A TRAVEL JOURNAL Countries39 Stamps70 Latest“One place at a time cite33†dewi ida@dewiida05·Yogyakarta, Indonesia STAMPIEPASSPORT A TRAVEL JOURNAL Countries39 Stamps65 Latest“Travel & culinary enthusiast cite34†F Fabian@fabian STAMPIEPASSPORT A TRAVEL JOURNAL Countries39 Stamps40 Latest cite35†Omar Atilano PRO@atilano·Monterrey, México STAMPIEPASSPORT A TRAVEL JOURNAL Countries38 Stamps204 Latest“Viajero 🧳 Mexicano 🤠 cite36†iamenjoy PRO@love2travel11·Washington DC STAMPIEPASSPORT A TRAVEL JOURNAL Countries38 Stamps166 Latest“Collecting memories, airline miles, and stories from around the world ✈️🌍 cite37†viajamanda@viajamanda STAMPIEPASSPORT A TRAVEL JOURNAL Countries38 Stamps108 Latest cite38†Kamonphon Aro@asgis STAMPIEPASSPORT A TRAVEL JOURNAL Countries38 Stamps51 Latest cite39†Filipe Santos@toflip1972·Lisboa, Portugal STAMPIEPASSPORT A TRAVEL JOURNAL Countries38 Stamps42 Latest cite40†N Nico@atalaynihat·Türkiye STAMPIEPASSPORT A TRAVEL JOURNAL Countries38 Stamps40 Latest cite41†Eka Dani Saputra@ekadanisaputra·Bandung, Indonesia STAMPIEPASSPORT A TRAVEL JOURNAL Countries38 Stamps38 Latest“Solo Backpacker and Nature Lover cite42†Sammy@samanthaguevara·Ulaanbaatar, Mongolia STAMPIEPASSPORT A TRAVEL JOURNAL Countries37 Stamps218 Latest“living my 20s intentionally 🥳 cite43†E Ege@ege STAMPIEPASSPORT A TRAVEL JOURNAL Countries37 Stamps41 Latest cite44†Ben Goméz Red@shiaolien·Philippines STAMPIEPASSPORT A TRAVEL JOURNAL Countries37 Stamps37 Latest“Budget traveler, no-fuss, low-key, enjoys the view and experience more than the 'gram, foodie, kinda vlogger cite45†TJ@tjtelan·United Kingdom STAMPIEPASSPORT A TRAVEL JOURNAL Countries36 Stamps54 Latest“🧭 Wanderer.
+L11: Explorer. Go the Distance 🌍 cite46†Nicholas Sendelbach PRO@nsendelbach·East Coast USA STAMPIEPASSPORT A TRAVEL JOURNAL Countries35 Stamps124 Latest cite47†F Fer@fer STAMPIEPASSPORT A TRAVEL JOURNAL Countries35 Stamps39 Latest cite48†Thoranin Triwit@gler·Bangkok STAMPIEPASSPORT A TRAVEL JOURNAL Countries35 Stamps38 Latest L12: Prevcite49†1 cite50†2 …cite51†22 cite50†Next L13: 
+L14: cite52†Stampie L15: 
+L16: A passport-style travel tracker with stamps.
+L17: 
+L18: cite53†Explore L19: 
+L20:   * cite49†Passports L21:   * cite54†Stamps L22:   * cite55†Collections L23:   * cite56†Countries L24:   * cite57†Shop L25: 
+L26: cite58†Free Travel Tools L27: 
+L28:   * cite59†Countries Visited Map L29:   * cite60†U.S. States Visited Map L30:   * cite61†German States Visited Map L31:   * cite62†Japan Prefectures Visited Map L32:   * cite63†Travel Bucket List L33:   * cite64†Travel Passport Stamps L34:   * cite65†Trip Countdown L35: 
+L36: cite66†Free Travel Games L37:   * cite67†Guess the Flag L38:   * cite68†World Capitals Quiz L39:   * cite69†Name All the Countries L40:   * cite70†Name All 50 U.S. States L41:   * cite71†Road Trip Bingo L42:   * cite72†Travel Would You Rather L43: 
+L44: Pro
+L45: 
+L46:   * cite73†Stampie Pro L47:   * cite74†Pro Stamps L48:   * cite75†Gift Cards L49:   * cite76†Redeem Code L50: 
+L51: Company
+L52: 
+L53:   * cite77†About L54:   * cite78†Blog L55:   * cite79†FAQ L56:   * cite80†Press L57:   * cite81†Contact L58: 
+L59: Legal
+L60: 
+L61:   * cite82†Terms L62:   * cite83†Privacy L63:   * cite84†Attributions L64: Stamps are designed with AI-assisted tools and curated by the editorial team.
+L65: Stampie is independent and is not affiliated with or endorsed by any event or organization referenced, unless explicitly marked as an official partner.
+L66: 
+L67: © 2026 cite85†Noe Crafts†noecrafts.com . All rights reserved.
+--------------------------------------------------------------------------------
+Internal Error ()
+citeturn1view2 [wordlim: 200] Source: open({"ref_id":"https://stampie.app/@tutosports14","lineno":null}); Total lines: 1
+L0: URL https://stampie.app/%40tutosports14 is not accessible via this tool.
+--------------------------------------------------------------------------------
+What's new in Stampie: July 2026 – Stampie (https://stampie.app/blog/stampie-updates-july-2026)
+citeturn1view3 [wordlim: 200] Crawled: last month; Content type: text/html; Source: open({"ref_id":"https://stampie.app/blog/stampie-updates-july-2026","lineno":null}); Total lines: 186
+L0: [Button: Sign In]cite0†Download L1: 
+L2: cite1†All posts L3: 
+L4: news product updates
+L5: # What's new in Stampie: July 2026
+L6: 
+L7: The second issue of our updates series. City stamps, a brand new United States map, fresh collections for U.S. states and national parks, a big upgrade to share cards, multi-pinned collections, and a passport you can make your own.
+L8: 
+L9: cite2†Ebru ·July 19, 2026·5 min read
+L10: 
+L11: Share
+L12: 
+L13: cite3†Image: What's new in Stampie: July 2026 L14: Welcome back to What's new in Stampie. Last month was a big catch-up issue covering everything we'd shipped up to then. This month is all about what landed since: a lot of it came straight from what you asked for.
+L15: ## A stamp for your cities now 🏙️
+L16: 
+L17: This was the top of the list in June, and it's here. Stampie is no longer just about countries. You can now collect a stamp for the cities you've explored too.
+L18: 
+L19: Barcelona, Bangkok, Cape Town, the city break you almost forgot about, they each get their own stamp now, sitting right alongside the country they belong to. Your passport finally matches the way you actually travel, one trip at a time, not one country at a time.
+L20: 
+L21: cite4†+426 Cities & Towns 433 stamps L22: ## New collections to chase
+L23: 
+L24: Alongside cities, we've been busy filling the catalog with new things to collect. A few of the new arrivals:
+L25: 
+L26:   * U.S. states. All 50, each shaped like the real state. Road-trippers, this one's for you.
+L27:   * U.S. national parks. All 63, from Yosemite to the Everglades to the wild ones up in Alaska.
+L28:   * Islands. For the trips that were all about getting off the mainland.
+L29: The core country, continent, city, and island collections are free. Specialty sets like wonders, marathons, U.S. states, and national parks come with Pro.
+L30: 
+L31: The U.S. states set was a real labor of love. Each stamp takes the actual shape of the state, so Texas looks like Texas and Florida like Florida, and watching them line up in your passport is oddly satisfying. It's easily one of our favorite collections to have curated.
+L32: 
+L33: cite5†+43 U.S. StatesPRO 50 stamps L34: The national parks set runs just as deep, all 63 of them:
+L35: 
+L36: cite6†+56 U.S. National ParksPRO 63 stamps L37: 
+L38: The U.S. states and national parks collections are available with Stampie Pro.
+L39: And you don't need the app to start. We turned a few of these into free interactive checklists you can tick off right here on the blog: the cite7†U.S. states checklist , the cite8†U.S. national parks checklist , and the cite9†seven wonders checklist . Your progress saves on your device, and whenever you're ready, the same collections are waiting in Stampie.
+L40: ## A brand new map: the United States
+L41: 
+L42: Until now, your travels lived on one world map. This month a second map joined it: a detailed map of the United States that fills in state by state as you go.
+L43: 
+L44: Watch it color in as you collect your state stamps, with your count and progress right there. It's the same satisfying "watch it fill up" feeling as the world map, zoomed all the way into one country. The U.S. map is a Pro feature, and it's the first of more regional maps to come.
+L45: Both maps are fully zoomable now too. Pinch in and pan around to get up close to exactly where you've been, on the world map and the U.S. map alike.
+L46: 
+L47: United States map screens
+L48: 
+L49: cite10†Image: United States map screenshot 1 cite11†Image: United States map screenshot 2 L50: ## Share exactly what you want
+L51: 
+L52: Share cards got the biggest glow-up this month.
+L53: 
+L54:   * Choose what shows up. You're now in control of what lands on your card, so you share only the parts you want to.
+L55:   * Your map, on a card. Turn your travel map itself into a share card and show off where in the world you've been in one glance.
+L56:   * Share a single trip. Beyond your whole passport, you can now share one stamp entry as its own beautiful card, ready to post anywhere.
+L57: Share cards screens
+L58: cite12†Image: Share cards screenshot 1 cite13†Image: Share cards screenshot 2 L59: ## Pin more than one 📌
+L60: 
+L61: Last month you could pin one collection to the top of your Stamps tab. Now you can pin as many as you like and keep your bucket lists side by side.
+L62: Feature the one you care about most as a big card, line the rest up underneath, and drag them into whatever order makes sense to you. Newly pinned collections jump to the top, and the whole thing updates the instant you tap, with a little haptic nudge to confirm. Your pins also stay exactly where you left them now, even after you log out and back in.
+L63: 
+L64: cite14†Image: Multiple pinned collections at the top of the Stamps tab, one featured as a large card L65: ## Make your passport yours
+L66: 
+L67: Your passport doesn't have to look like everyone else's anymore. You can now customize it: pick a cover design, add decorations, and choose your own map colors so your travels look the way you want them to. Passport customization is a Pro feature.
+L68: 
+L69: Passport customization screens
+L70: 
+L71: cite15†Image: Passport customization screenshot 1 cite16†Image: Passport customization screenshot 2 L72: ## The social side is starting
+
+
+Internal Error ()
+citeturn2view0 [wordlim: 200] Source: open({"ref_id":"https://stampie.app/@tutosports14","lineno":null}); Total lines: 1
+L0: URL https://stampie.app/%40tutosports14 is not accessible via this tool.
+--------------------------------------------------------------------------------
+Collections – Stampie (https://stampie.app/collections)
+citeturn2view1 [wordlim: 200] Crawled: 3 days ago; Content type: text/html; Source: open({"ref_id":"https://stampie.app/collections","lineno":null}); Total lines: 115
+L0: cite0†About cite1†Explore cite2†Stamps cite3†Map cite4†Collections cite5†Shop L1: 
+L2: cite6†Sign In cite7†Download App L3: 
+L4: [Button: Sign In]cite7†Download L5: # Collections
+L6: 
+L7: Browse stamps by collection.
+L8: 
+L9: cite8†Countries Every country on Earth, from the ones you've visited in to the ones still on your list.249 stamps L10: 
+L11: 2 sets inside Countries
+L12: 
+L13: cite9†ASEAN The 11 member nations of the Association of Southeast Asian Nations.11 stamps L14: 
+L15: cite10†European Union The 27 member states of the European Union.27 stamps L16: 
+L17: cite11†Cities & Towns From world capitals to storybook towns, starting with the most iconic and loved, and growing with every update.638 stamps L18: 1 set inside Cities & Towns
+L19: 
+L20: cite12†Capital Cities Capitals from Reykjavik to Wellington. Some are the country's biggest city, some are the trick question in every quiz.248 stamps L21: 
+L22: cite13†Continents All seven continents, from Africa to Antarctica.7 stamps cite14†Islands The world's most beautiful islands, from tropical paradises to Mediterranean gems.81 stamps L23: 
+L24: cite15†States & Regions PRO The world's well-known states, provinces, and regions from the 50 U.S. states to Germany's 16 Bundesländer.240 stamps L25: 12 sets inside States & Regions
+L26: 
+L27: cite16†U.S. States PRO All 50 U.S. states. The ultimate American roadtrip.50 stamps L28: 
+L29: cite17†Canadian Provinces PRO Canada's 10 provinces and 3 territories. British Columbia to Ontario.13 stamps L30: 
+L31: cite18†Australian States PRO Australia's 6 states and 2 territories, from Sydney to the Outback.8 stamps L32: 
+L33: cite19†UK Nations PRO The four nations of the United Kingdom. England, Scotland, Wales and Northern Ireland.4 stamps L34: cite20†Italian Regions PRO All 20 regions of Italy, each shown through its greatest work of art and heritage.20 stamps L35: 
+L36: cite21†Spanish Regions PRO All 19 regions of Spain covering seventeen communities and the two cities of Ceuta and Melilla.19 stamps L37: 
+L38: cite22†Japan Prefectures PRO All 47 prefectures of Japan, from Hokkaido to Okinawa.47 stamps L39: 
+L40: cite23†German States PRO Germany's all 16 Bundesländer, Berlin to Bavaria.16 stamps L41: cite24†French Regions PRO All 13 regions of France, from Brittany on the Atlantic to Provence-Alpes-Côte d’Azur on the Mediterranean.13 stamps L42: 
+L43: cite25†Philippine Regions PRO All 18 regions of the Philippines, from Ilocos in the north to Bangsamoro in the south.18 stamps L44: 
+L45: cite26†Brazilian States PRO All 27 states of Brazil, from Amazonas in the north to Rio Grande do Sul in the south.27 stamps L46: cite27†NYC Boroughs PRO All five boroughs of New York City. Manhattan, Brooklyn, Queens, The Bronx and Staten Island.5 stamps L47: 
+L48: cite28†U.S. National Parks PRO All 63 U.S. National Parks, each with its iconic landmark and wildlife.63 stamps cite29†Oceans PRO All five oceans, Pacific to Arctic. Four if you learned geography before the Southern got its name.5 stamps L49: cite30†Wonders & Landmarks PRO The world's greatest wonders and landmarks, from ancient marvels to natural giants, from Big Ben to the Burj Khalifa.154 stamps L50: 
+L51: 1 set inside Wonders & Landmarks
+L52: 
+L53: cite31†7 Wonders PRO The New Seven Wonders of the World, from the Colosseum to Machu Picchu.7 stamps L54: cite32†Experiences & Events PRO The world's most iconic festivals, celebrations and once-in-a-lifetime experiences.32 stamps cite33†Marathons PRO The world's great marathons, from Berlin to Big Sur, one finish line at a time.22 stamps cite34†Former Countries PRO Countries that once stamped your passport but no longer exist.4 stamps L55: 
+L56: cite35†Stampie L57: 
+L58: A passport-style travel tracker with stamps.
+L59: 
+L60: cite1†Explore L61: 
+L62:   * cite36†Passports L63:   * cite2†Stamps L64:   * cite37†Map L65:   * cite4†Collections L66:   * cite38†Countries L67:   * cite5†Shop L68: cite39†Free Travel Tools L69: 
+L70:   * cite40†Countries Visited Map L71:   * cite41†U.S. States Visited Map L72:   * cite42†German States Visited Map L73:   * cite43†Japan Prefectures Visited Map L74:   * cite44†Travel Bucket List L75:   * cite45†Travel Passport Stamps L76:   * cite46†Trip Countdown L77: 
+L78: cite47†Free Travel Games L79: 
+L80:   * cite48†Guess the Flag L81:   * cite49†Name All the Countries L82:   * cite50†World Capitals Quiz L83:   * cite51†Name All 50 U.S. States L84:   * cite52†Road Trip Bingo L85:   * cite53†Travel Would You Rather L86: 
+L87: Pro
+L88:   * cite54†Stampie Pro L89:   * cite55†Pro Stamps L90:   * cite56†Gift Cards L91:   * cite57†Redeem Code L92: 
+L93: Company
+L94: 
+L95:   * cite0†About L96:   * cite58†Blog L97:   * cite59†FAQ L98:   * cite60†Press L99:   * cite61†Contact L100: 
+L101: Legal
+L102: 
+L103:   * cite62†Terms L104:   * cite63†Privacy L105:   * cite64†Attributions L106: 
+L107: Stamps are designed with AI-assisted tools and curated by the editorial team.
+L108: Stampie is independent and is not affiliated with or endorsed by any event or organization referenced, unless explicitly marked as an official partner.
+L109: © 2026 cite65†Noe Crafts†noecrafts.com . All rights reserved.
+L110: ## Your cart
+L111: 
+L112: Your cart is empty
+L113: 
+L114: Design a poster and it will show up here.
+--------------------------------------------------------------------------------
+What's new in Stampie: July 2026 – Stampie (https://stampie.app/blog/stampie-updates-july-2026)
+citeturn2view2 [wordlim: 200] Crawled: last month; Content type: text/html; Source: open({"ref_id":"https://stampie.app/blog/stampie-updates-july-2026","lineno":50}); Total lines: 186
+L0: [Button: Sign In]cite0†Download L1: 
+L2: cite1†All posts L3: 
+L4: news product updates
+L5: # What's new in Stampie: July 2026
+L6: 
+L7: The second issue of our updates series. City stamps, a brand new United States map, fresh collections for U.S. states and national parks, a big upgrade to share cards, multi-pinned collections, and a passport you can make your own.
+L8: 
+L9: cite2†Ebru ·July 19, 2026·5 min read
+L10: 
+L11: Share
+L12: 
+L13: cite3†Image: What's new in Stampie: July 2026 L14: Welcome back to What's new in Stampie. Last month was a big catch-up issue covering everything we'd shipped up to then. This month is all about what landed since: a lot of it came straight from what you asked for.
+L15: ## A stamp for your cities now 🏙️
+L16: 
+L17: This was the top of the list in June, and it's here. Stampie is no longer just about countries. You can now collect a stamp for the cities you've explored too.
+L18: 
+L19: Barcelona, Bangkok, Cape Town, the city break you almost forgot about, they each get their own stamp now, sitting right alongside the country they belong to. Your passport finally matches the way you actually travel, one trip at a time, not one country at a time.
+L20: 
+L21: cite4†+426 Cities & Towns 433 stamps L22: ## New collections to chase
+L23: 
+L24: Alongside cities, we've been busy filling the catalog with new things to collect. A few of the new arrivals:
+L25: 
+L26:   * U.S. states. All 50, each shaped like the real state. Road-trippers, this one's for you.
+L27:   * U.S. national parks. All 63, from Yosemite to the Everglades to the wild ones up in Alaska.
+L28:   * Islands. For the trips that were all about getting off the mainland.
+L29: The core country, continent, city, and island collections are free. Specialty sets like wonders, marathons, U.S. states, and national parks come with Pro.
+L30: 
+L31: The U.S. states set was a real labor of love. Each stamp takes the actual shape of the state, so Texas looks like Texas and Florida like Florida, and watching them line up in your passport is oddly satisfying. It's easily one of our favorite collections to have curated.
+L32: 
+L33: cite5†+43 U.S. StatesPRO 50 stamps L34: The national parks set runs just as deep, all 63 of them:
+L35: 
+L36: cite6†+56 U.S. National ParksPRO 63 stamps L37: 
+L38: The U.S. states and national parks collections are available with Stampie Pro.
+L39: And you don't need the app to start. We turned a few of these into free interactive checklists you can tick off right here on the blog: the cite7†U.S. states checklist , the cite8†U.S. national parks checklist , and the cite9†seven wonders checklist . Your progress saves on your device, and whenever you're ready, the same collections are waiting in Stampie.
+L40: ## A brand new map: the United States
+L41: 
+L42: Until now, your travels lived on one world map. This month a second map joined it: a detailed map of the United States that fills in state by state as you go.
+L43: 
+L44: Watch it color in as you collect your state stamps, with your count and progress right there. It's the same satisfying "watch it fill up" feeling as the world map, zoomed all the way into one country. The U.S. map is a Pro feature, and it's the first of more regional maps to come.
+L45: Both maps are fully zoomable now too. Pinch in and pan around to get up close to exactly where you've been, on the world map and the U.S. map alike.
+L46: 
+L47: United States map screens
+L48: 
+L49: cite10†Image: United States map screenshot 1 cite11†Image: United States map screenshot 2 L50: ## Share exactly what you want
+L51: 
+L52: Share cards got the biggest glow-up this month.
+L53: 
+L54:   * Choose what shows up. You're now in control of what lands on your card, so you share only the parts you want to.
+L55:   * Your map, on a card. Turn your travel map itself into a share card and show off where in the world you've been in one glance.
+L56:   * Share a single trip. Beyond your whole passport, you can now share one stamp entry as its own beautiful card, ready to post anywhere.
+L57: Share cards screens
+L58: cite12†Image: Share cards screenshot 1 cite13†Image: Share cards screenshot 2 L59: ## Pin more than one 📌
+L60: 
+L61: Last month you could pin one collection to the top of your Stamps tab. Now you can pin as many as you like and keep your bucket lists side by side.
+L62: Feature the one you care about most as a big card, line the rest up underneath, and drag them into whatever order makes sense to you. Newly pinned collections jump to the top, and the whole thing updates the instant you tap, with a little haptic nudge to confirm. Your pins also stay exactly where you left them now, even after you log out and back in.
+L63: 
+L64: cite14†Image: Multiple pinned collections at the top of the Stamps tab, one featured as a large card L65: ## Make your passport yours
+L66: 
+L67: Your passport doesn't have to look like everyone else's anymore. You can now customize it: pick a cover design, add decorations, and choose your own map colors so your travels look the way you want them to. Passport customization is a Pro feature.
+L68: 
+L69: Passport customization screens
+L70: 
+L71: cite15†Image: Passport customization screenshot 1 cite16†Image: Passport customization screenshot 2 L72: ## The social side is starting
+L73: 
+L74: Stampie has always had shareable profiles, but until now there was no real way to stumble onto other travelers. That's starting to change.
+L75: 
+L76: We've added a cite17†passports directory on the web, a place to browse other people's public passports and see how the rest of the community is filling up their maps. It's an early first step, web-only for now, and it's the beginning of making following other travelers a real part of the app. Bringing it to the phone is next on the list.
+L77: ## Plus the usual polish
+L78: 
+L79: Under all of that, we spent a lot of time on the quiet stuff: faster, smoother pinning, tidier collection browsing, and a fix for a date bug that could show a trip a day early depending on where in the world you were. None of it makes a headline, but together it's what keeps the app feeling calm to use.
+L80: ## What's next
+L81: 
+L82: We're still filling out the catalog and the map lineup, and the passports directory is heading to the phone next, with more social features to follow. As always, the best way to shape what comes next is to tell us what you want.
+L83: 
+L84: Got an idea, a feature you're missing, or a rough edge that bugs you? Drop us a line at info@stampie.app. We read every one.
+L85: ## Behind Stampie
+L86: 
+L87: cite18†Image: Ebru in Peru, 2023 L88: 
+L89: The idea for Stampie started in Peru 🇵🇪, back in 2023. I’ve always loved collecting passport stamps, that small thrill of seeing a new one land at the border. On that trip they just waved me through. No stamp. A small thing, but it stuck with me.
+L90: Turns out a lot of countries have quietly stopped stamping. A couple of years later I built the first version of Stampie for a hackathon, somewhere to keep that little ritual alive even when the ink doesn’t come. A passport-style journal for anyone who still wants this souvenir from every trip.
+L91: 
+L92: It quietly found its way to people. As an indie team, we keep working on Stampie in coffee breaks, on weekends, and from wherever the next trip takes us.
+L93: 
+L94: cite19†Image: Ebru L95: cite2†SEE MY PROFILE Founder & Travel Enthusiast
+L96: ### Like this? Try Stampie.
+L97: 
+L98: A passport for the places you've been. Collect a stamp for every country you visit, plus cities, islands and more, and keep every trip in one place. On iOS, Android, and the web.
+L99: 
+L100: cite20†Try in browser L101: 
+L102: cite21†Image: Stampie app preview L103: ## You might also like
+L104: 
+L105: cite22†What's new in Stampie: June 2026 June 12, 2026 cite23†Cape Town Marathon becomes the 8th World Marathon Major, and Africa's first June 11, 2026 cite24†Why didn't my passport get stamped? A country-by-country guide (2026)April 26, 2026 L106: How this post was made: AI-assisted tools may be used in research, drafting and image generation, then reviewed and edited by the author. Travel policies change quickly. For visa, border, and entry requirements, please check primary sources (official immigration sites, your embassy) before you go.
+L107: 
+L108: Spotted an error or something that doesn't look right? Report a concern and we'll take a look.
+L109: 
+L110: On this page
+L111:   * cite25†A stamp for your cities now 🏙️ L112:   * cite26†New collections to chase L113:   * cite27†A brand new map: the United States L114:   * cite28†Share exactly what you want L115:   * cite29†Pin more than one 📌 L116:   * cite30†Make your passport yours L117:   * cite31†The social side is starting L118:   * cite32†Plus the usual polish L119:   * cite33†What's next L120: 
+L121: cite34†Image†cdn.stampie.app 11.07.25
+L122: 
+L123: cite35†Image†cdn.stampie.app 03.10.25
+L124: 
+L125: cite36†Image†cdn.stampie.app 22.04.25
+L126: 
+L127: Collect travel stamps
+L128: One for every country you visit. Build your passport and keep the memories.
+L129: 
+L130: cite20†Start your passport L131: 
+L132: cite20†Stampie L133: 
+L134: A passport-style travel tracker with stamps.
+L135: 
+L136: cite37†Explore L137: 
+L138:   * cite17†Passports L139:   * cite38†Stamps L140:   * cite39†Collections L141:   * cite40†Countries L142:   * cite41†Shop L143: 
+L144: cite42†Free Travel Tools L145:   * cite43†Countries Visited Map L146:   * cite44†U.S. States Visited Map L147:   * cite45†German States Visited Map L148:   * cite46†Japan Prefectures Visited Map L149:   * cite47†Travel Bucket List L150:   * cite48†Travel Passport Stamps L151:   * cite49†Trip Countdown L152: 
+L153: cite50†Free Travel Games L154: 
+L155:   * cite51†Guess the Flag L156:   * cite52†World Capitals Quiz L157:   * cite53†Name All the Countries L158:   * cite54†Name All 50 U.S. States L159:   * cite55†Road Trip Bingo L160:   * cite56†Travel Would You Rather L161: 
+L162: Pro
+L163: 
+L164:   * cite57†Stampie Pro L165:   * cite58†Pro Stamps L166:   * cite59†Gift Cards L167:   * cite60†Redeem Code L168: Company
+L169: 
+L170:   * cite61†About L171:   * cite1†Blog L172:   * cite62†FAQ L173:   * cite63†Press L174:   * cite64†Contact L175: 
+L176: Legal
+L177: 
+L178:   * cite65†Terms L179:   * cite66†Privacy L180:   * cite67†Attributions L181: 
+L182: Stamps are designed with AI-assisted tools and curated by the editorial team.
+L183: Stampie is independent and is not affiliated with or endorsed by any event or organization referenced, unless explicitly marked as an official partner.
+L184: 
+L185: © 2026 cite68†Noe Crafts†noecrafts.com . All rights reserved.
+--------------------------------------------------------------------------------
+Internal Error ()
+citeturn2view3 [wordlim: 200] Source: open({"ref_id":"https://www.pistavivamototurismo.com.br/selo/passaporte","lineno":null}); Total lines: 1
+L0: URL https://www.pistavivamototurismo.com.br/selo/passaporte is not accessible via this tool.
+

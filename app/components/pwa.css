@@ -1,0 +1,3 @@
+.pwa-status { padding: 12px 20px; background: var(--pv-offwhite-2); color: var(--pv-text-dark); border-bottom: 1px solid var(--pv-line-light-2); font-size: 14px; }
+.pwa-status p { margin: 0; }
+.pwa-status a { display: inline-flex; align-items: center; min-height: 44px; color: var(--pv-orange-deep); font-weight: 700; text-decoration: underline; }

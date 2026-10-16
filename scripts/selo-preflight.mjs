@@ -20,6 +20,9 @@ const ESPERADO = {
   pv_selo_entradas: 'id, motociclista_id, tipo, carimbo, ibge, uf, dia, criado_em, metodo, distancia_m, precisao_m, foto_path, capturado_em, foto_status, foto_em, denuncias, serie',
   pv_selo_series: 'carimbo, ultimo',
   pv_selo_denuncias: 'entrada_id, quem, criado_em',
+  pv_selo_memorias: 'entrada_id, relato, atualizado_em',
+  pv_selo_acessos: 'motociclista_id, senha_hash, recuperacao_hash, criado_em, atualizado_em',
+  pv_selo_identificacoes: 'motociclista_id, piloto, garupa, origem, assinatura, foto_path, atualizado_em',
 };
 
 const falhas = [];
@@ -27,7 +30,12 @@ const ok = (msg) => console.log(`OK     ${msg}`);
 const falha = (msg) => { falhas.push(msg); console.log(`FALHA  ${msg}`); };
 
 for (const [tabela, colunas] of Object.entries(ESPERADO)) {
-  const { error } = await sb.from(tabela).select(colunas).limit(1);
+  let { error } = await sb.from(tabela).select(colunas).limit(1);
+  // PostgREST refreshes its schema asynchronously after the additive migration.
+  for (let tentativa = 0; error?.code === 'PGRST205' && tentativa < 8; tentativa++) {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    ({ error } = await sb.from(tabela).select(colunas).limit(1));
+  }
   if (error) falha(`${tabela}: ${error.message}`); else ok(`${tabela} (${colunas.split(',').length} colunas)`);
 }
 

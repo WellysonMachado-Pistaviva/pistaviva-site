@@ -1,9 +1,10 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { carimbarAqui, prepararFotoCidade, publicarFotoCidade } from './actions';
 import { comTempo, comprimirFoto, subirFoto } from './fotoCliente';
+import { appendReading, readQueue, queueKey } from '../../public/pwa/store.mjs';
 
 const ERRO_GPS = {
   1: 'Localização bloqueada. Libere o acesso à localização para este site nas configurações do navegador.',
@@ -20,15 +21,12 @@ function posicaoAtual() {
 
 // Estrada sem sinal: a leitura do GPS fica no celular e vai quando a rede
 // voltar (o servidor aceita até 72 h e carimba no dia da leitura).
-const chaveFila = (codigo) => `selo:pendentes:${codigo}`;
 function lerFila(codigo) {
-  try { return JSON.parse(localStorage.getItem(chaveFila(codigo)) || '[]'); } catch { return []; }
+  try { return readQueue(localStorage, codigo); } catch { return []; }
 }
 function gravarFila(codigo, lista) {
-  try {
-    if (lista.length) localStorage.setItem(chaveFila(codigo), JSON.stringify(lista));
-    else localStorage.removeItem(chaveFila(codigo));
-  } catch { /* storage bloqueado: segue sem fila */ }
+  if (lista.length) localStorage.setItem(queueKey(codigo), JSON.stringify(lista));
+  else localStorage.removeItem(queueKey(codigo));
 }
 
 const FALHA_FOTO = 'A foto não subiu. O carimbo já está no passaporte; tente a foto de novo.';
@@ -46,6 +44,7 @@ export default function CarimboCidade({ codigo, autor, onCarimbo, onStory, compa
   const [fila, setFila] = useState([]);
   const [sincronizando, setSincronizando] = useState(false);
   const ocupado = estado !== 'pronto';
+  const envioEmCurso = useRef(false);
 
   const avisar = useCallback(() => {
     if (onCarimbo) onCarimbo();
@@ -54,22 +53,28 @@ export default function CarimboCidade({ codigo, autor, onCarimbo, onStory, compa
 
   const enviarFila = useCallback(async () => {
     const pendentes = lerFila(codigo);
-    if (!pendentes.length || !navigator.onLine) return;
+    if (!pendentes.length || !navigator.onLine || envioEmCurso.current) return;
+    envioEmCurso.current = true;
     setSincronizando(true);
-    const ficam = [];
+    const concluidos = new Set();
     const feitos = [];
     for (const p of pendentes) {
       try {
         const r = await comTempo(carimbarAqui({ codigo, ...p }), 20_000);
-        if (r?.ok) feitos.push(r);
-        else if (!r?.definitivo) ficam.push(p);
-        else feitos.push({ ok: false, erro: r.erro });
+        if (r?.ok || r?.definitivo) {
+          concluidos.add(JSON.stringify(p));
+          feitos.push(r.ok ? r : { ok: false, erro: r.erro });
+        }
       } catch {
-        ficam.push(p);
+        // Preserve reading for the next attempt.
       }
     }
-    gravarFila(codigo, ficam);
-    setFila(ficam);
+    // Keep readings added by another tab while requests were in flight.
+    const ficam = lerFila(codigo).filter((p) => !concluidos.has(JSON.stringify(p)));
+    let falhaStorage = false;
+    try { gravarFila(codigo, ficam); } catch { falhaStorage = true; }
+    setFila(falhaStorage ? lerFila(codigo) : ficam);
+    envioEmCurso.current = false;
     setSincronizando(false);
     const ok = feitos.filter((r) => r.ok);
     if (ok.length) {
@@ -79,6 +84,7 @@ export default function CarimboCidade({ codigo, autor, onCarimbo, onStory, compa
     }
     const falha = feitos.find((r) => !r.ok);
     if (falha) setMsg(`Um check-in guardado não valeu: ${falha.erro}`);
+    if (falhaStorage) setMsg('Não foi possível atualizar as pendências neste aparelho. Os registros guardados serão conferidos de novo na próxima tentativa.');
   }, [codigo, avisar]);
 
   useEffect(() => {
@@ -105,31 +111,40 @@ export default function CarimboCidade({ codigo, autor, onCarimbo, onStory, compa
     } catch (err) {
       if (!leitura) { setMsg(ERRO_GPS[err?.code] || 'Não conseguimos ler o GPS. Tente de novo.'); return; }
       // Leu o GPS mas não chegou no servidor: guarda e envia quando o sinal voltar.
-      const nova = [...lerFila(codigo), leitura];
-      gravarFila(codigo, nova);
-      setFila(nova);
+      try {
+        setFila(appendReading(localStorage, codigo, leitura));
+      } catch {
+        setMsg('Não foi possível guardar a passagem neste celular. Verifique o armazenamento e tente de novo quando tiver conexão.');
+      }
     } finally {
       setEstado('pronto');
     }
   }
 
   return (
-    <section className={`selo-cartao selo-checkin carimbo-cidade${compacto ? ' compacto' : ''}`} aria-labelledby={compacto ? undefined : 'selo-cidade-titulo'} aria-label={compacto ? 'Carimbar pelo GPS' : undefined} aria-busy={ocupado || sincronizando}>
+    <section className={`selo-cartao selo-checkin carimbo-cidade${compacto ? ' compacto' : ''}`} aria-labelledby={compacto ? undefined : 'selo-cidade-titulo'} aria-label={compacto ? 'Carimbar pelo GPS' : undefined}>
       {!compacto && <>
         <span className="selo-kicker">Passaporte · carimbo de cidade</span>
         <h2 id="selo-cidade-titulo">Chegou numa cidade? Carimbe.</h2>
-        <p>Toque em carimbar e permita a localização. Vale em qualquer cidade do Brasil: o carimbo dela entra no seu passaporte na hora, com data e número de série. Sua posição não fica gravada; só a cidade.</p>
+        <p>Permita a localização para carimbar a cidade onde você está, com data e número de série. Vale em todo o Brasil.</p>
       </>}
-      <button type="button" className="selo-btn" onClick={carimbar} disabled={ocupado}>
-        {estado === 'localizando' ? 'Procurando sua localização…' : estado === 'carimbando' ? 'Carimbando…' : 'Carimbar esta cidade'}
+      <button type="button" className="selo-btn" onClick={carimbar} disabled={ocupado || sincronizando}>
+        {estado === 'localizando' ? 'Procurando sua localização…' : estado === 'carimbando' ? 'Carimbando…' : sincronizando ? 'Enviando carimbos guardados…' : 'Carimbar esta cidade'}
       </button>
+
+      <p className="carimbo-andamento" role="status" aria-atomic="true">
+        {estado === 'localizando' ? 'Buscando sua posição pelo GPS. Isso pode levar até 20 segundos.'
+          : estado === 'carimbando' ? 'Localização encontrada. Confirmando seu carimbo…'
+          : sincronizando ? 'Enviando os carimbos guardados neste celular…' : ''}
+      </p>
+      {!compacto && <small className="selo-dica">O GPS só é consultado quando você toca em carimbar. Sua posição não fica gravada no servidor; só a cidade.</small>}
 
       {fila.length > 0 && (
         <div className="carimbo-pendente" role="status">
           <span className="carimbo-pendente-selo" aria-hidden="true" />
           <div>
-            <b>{fila.length === 1 ? '1 carimbo guardado sem sinal' : `${fila.length} carimbos guardados sem sinal`}</b>
-            <span>Vai sozinho quando a internet voltar (vale por 72 h). Não feche o navegador em modo anônimo.</span>
+            <b>{fila.length === 1 ? '1 passagem aguardando confirmação' : `${fila.length} passagens aguardando confirmação`}</b>
+            <span>Guardada neste aparelho. Abra o passaporte com internet em até 72 horas para confirmar. Não limpe os dados do navegador.</span>
           </div>
           <button type="button" className="selo-btn secundario" onClick={enviarFila} disabled={sincronizando}>{sincronizando ? 'Enviando…' : 'Enviar agora'}</button>
         </div>
@@ -166,9 +181,9 @@ function Carimbado({ codigo, feito, autor, onStory }) {
 
 // Foto opcional de um carimbo: logo depois de carimbar ou mais tarde, pelo
 // passaporte (quem estava sem sinal posta quando a internet voltar).
-export function FotoCarimbo({ codigo, entradaId, cidade, autor, titulo = 'Quer postar uma foto daqui? (opcional)' }) {
+export function FotoCarimbo({ codigo, entradaId, cidade, autor, titulo = 'Quer guardar uma foto daqui? (opcional)', publicaInicial = false, onEnviada }) {
   const [foto, setFoto] = useState('nenhuma');   // nenhuma | enviando | publica | privada
-  const [publica, setPublica] = useState(true);
+  const [publica, setPublica] = useState(publicaInicial);
   const [erro, setErro] = useState('');
 
   async function enviar(e) {
@@ -188,6 +203,7 @@ export function FotoCarimbo({ codigo, entradaId, cidade, autor, titulo = 'Quer p
       const r = (await publicar()) || (await publicar());
       if (!r?.ok) { setErro(r?.erro || FALHA_FOTO); setFoto('nenhuma'); return; }
       setFoto(r.status);
+      onEnviada?.(r.status);
     } catch {
       setErro(navigator.onLine ? FALHA_FOTO : 'Sem sinal agora. O carimbo já está no passaporte; poste a foto quando a internet voltar.');
       setFoto('nenhuma');

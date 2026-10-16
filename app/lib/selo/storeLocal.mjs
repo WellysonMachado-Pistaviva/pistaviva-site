@@ -20,7 +20,7 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
   function ler() {
     if (!existsSync(arquivo)) return { proximoNumero: 1, motociclistas: [], visitas: [], conquistas: [], usos: [], parceiros: [], entradas: [], denuncias: [], series: {} };
     const db = JSON.parse(readFileSync(arquivo, 'utf8'));
-    return { ...db, conquistas: db.conquistas || [], usos: db.usos || [], parceiros: db.parceiros || [], entradas: db.entradas || [], denuncias: db.denuncias || [], series: db.series || {} };
+    return { ...db, acessos: db.acessos || [], conquistas: db.conquistas || [], usos: db.usos || [], parceiros: db.parceiros || [], entradas: db.entradas || [], denuncias: db.denuncias || [], series: db.series || {} };
   }
   function gravar(db) {
     mkdirSync(pasta, { recursive: true });
@@ -263,6 +263,30 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
     return fotoExiste(path) ? readFileSync(join(pastaFotos, path)) : null;
   }
 
+  function apagarFoto(path) {
+    if (fotoExiste(path)) rmSync(join(pastaFotos, path));
+  }
+
+  function identificacao(codigo) {
+    const db = ler();
+    const m = db.motociclistas.find((p) => p.codigo === codigo);
+    if (!m) return null;
+    return { motoId: m.id, registro: (db.identificacoes || []).find((i) => i.motociclista_id === m.id) || null };
+  }
+
+  function salvarIdentificacao(codigo, dados, fotoPath, alterarFoto) {
+    const db = ler();
+    const m = db.motociclistas.find((p) => p.codigo === codigo);
+    if (!m) return null;
+    db.identificacoes ||= [];
+    const anterior = db.identificacoes.find((i) => i.motociclista_id === m.id);
+    const registro = { motociclista_id: m.id, piloto: dados.piloto, garupa: dados.garupa, origem: dados.origem, assinatura: dados.assinatura, foto_path: alterarFoto ? fotoPath : anterior?.foto_path || null, atualizado_em: new Date().toISOString() };
+    db.identificacoes = db.identificacoes.filter((i) => i.motociclista_id !== m.id);
+    db.identificacoes.push(registro);
+    gravar(db);
+    return { foto_anterior: alterarFoto ? anterior?.foto_path || null : null, atualizado_em: registro.atualizado_em };
+  }
+
   function marcarFoto(chave, path) {
     const db = ler();
     const v = db.visitas.find((x) => x.chave_envio === chave);
@@ -344,7 +368,7 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
 
   // Passaporte criado pelo site (pv_selo_criar_passaporte). WhatsApp já
   // cadastrado não devolve o código: a recuperação é em /selo/meu-numero.
-  function criarPassaporte(d, agora = new Date()) {
+  function criarPassaporte(d, agora = new Date(), acesso = null) {
     if (!/^[1-9][0-9]{9,10}$/.test(d.whatsapp || '')) throw new Error('WhatsApp obrigatório.');
     const db = ler();
     const ja = db.motociclistas.find((m) => m.whatsapp === d.whatsapp);
@@ -355,8 +379,53 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
       criado_em: agora.toISOString(), atualizado_em: agora.toISOString(),
     };
     db.motociclistas.push(moto);
+    if (acesso) {
+      db.acessos ||= [];
+      db.acessos.push({ motociclista_id: moto.id, senha_hash: acesso.senha_hash, recuperacao_hash: acesso.recuperacao_hash });
+    }
     gravar(db);
     return { numero: moto.numero, codigo: moto.codigo, existente: false };
+  }
+
+  function cadastrarAcesso(d, c) {
+    const r = criarPassaporte(d, new Date(), c);
+    return r.existente ? null : { codigo: r.codigo, numero: r.numero, nome: d.nome, cidade: d.cidade, uf: d.uf };
+  }
+  function buscarAcesso(teste) {
+    const db = ler();
+    const a = (db.acessos || []).find((a) => teste(a, db.motociclistas.find((m) => m.id === a.motociclista_id)));
+    if (!a) return null;
+    const m = db.motociclistas.find((m) => m.id === a.motociclista_id);
+    return { ...a, pessoa: { nome: m.nome, whatsapp: m.whatsapp, cidade: m.cidade, uf: m.uf } };
+  }
+  const acessoPorWhatsapp = (numero) => buscarAcesso((_a, m) => m?.whatsapp === numero);
+  const acessoPorRecuperacao = (hash) => buscarAcesso((a) => a.recuperacao_hash === hash);
+  function confirmarSenha(id, hash) {
+    const db = ler();
+    if (!(db.acessos || []).some((a) => a.motociclista_id === id && a.senha_hash === hash)) return null;
+    const m = db.motociclistas.find((m) => m.id === id);
+    return m ? { codigo: m.codigo, numero: m.numero, nome: m.nome, cidade: m.cidade, uf: m.uf } : null;
+  }
+  function ativarAcesso(codigo, c) {
+    const db = ler();
+    const m = db.motociclistas.find((m) => m.codigo === codigo);
+    if (!m || (db.acessos || []).some((a) => a.motociclista_id === m.id)) return false;
+    db.acessos ||= [];
+    db.acessos.push({ motociclista_id: m.id, senha_hash: c.senha_hash, recuperacao_hash: c.recuperacao_hash });
+    gravar(db);
+    return true;
+  }
+  function redefinirAcesso(id, antigoHash, c, codigo) {
+    const db = ler();
+    const a = (db.acessos || []).find((a) => a.motociclista_id === id && a.recuperacao_hash === antigoHash);
+    const m = db.motociclistas.find((m) => m.id === id);
+    if (!a || !m || db.motociclistas.some((m) => m.codigo === codigo)) return false;
+    a.senha_hash = c.senha_hash;
+    a.recuperacao_hash = c.recuperacao_hash;
+    m.codigo = codigo;
+    m.atualizado_em = new Date().toISOString();
+    gravar(db);
+    return true;
   }
 
   // { ok, ja, id } | null (código desconhecido). Um carimbo por cidade por dia.
@@ -461,6 +530,25 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
     return ler().entradas.filter((e) => e.motociclista_id === motoId).sort((a, b) => b.criado_em.localeCompare(a.criado_em));
   }
 
+  function memoriaPorEntrada(codigo, entradaId) {
+    const db = ler();
+    const m = db.motociclistas.find((x) => x.codigo === codigo);
+    const e = m && db.entradas.find((x) => x.id === entradaId && x.motociclista_id === m.id);
+    if (!e) return null;
+    return { relato: e.memoria_relato || '', atualizadoEm: e.memoria_em || null, fotoPath: e.foto_path || null, fotoStatus: e.foto_status || null };
+  }
+
+  function salvarMemoria(codigo, entradaId, relato, agora = new Date()) {
+    const db = ler();
+    const m = db.motociclistas.find((x) => x.codigo === codigo);
+    const e = m && db.entradas.find((x) => x.id === entradaId && x.motociclista_id === m.id);
+    if (!e) return null;
+    e.memoria_relato = relato;
+    e.memoria_em = agora.toISOString();
+    gravar(db);
+    return { relato, atualizadoEm: e.memoria_em };
+  }
+
   function autorizarPassaporte(codigo, publico, agora = new Date()) {
     const db = ler();
     const m = db.motociclistas.find((x) => x.codigo === codigo);
@@ -492,17 +580,22 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
     db.conquistas = db.conquistas.filter((c) => c.motociclista_id !== id);
     db.usos = db.usos.filter((u) => u.motociclista_id !== id);
     db.motociclistas = db.motociclistas.filter((m) => m.id !== id);
+    db.acessos = (db.acessos || []).filter((a) => a.motociclista_id !== id);
+    for (const i of db.identificacoes || []) if (i.motociclista_id === id) apagarFoto(i.foto_path);
+    db.identificacoes = (db.identificacoes || []).filter((i) => i.motociclista_id !== id);
     db.visitas = db.visitas.filter((v) => v.motociclista_id !== id);
     gravar(db);
     return db.motociclistas.length < antes;
   }
 
   return {
+    identificacao, salvarIdentificacao, apagarFoto,
+    cadastrarAcesso, acessoPorWhatsapp, acessoPorRecuperacao, confirmarSenha, ativarAcesso, redefinirAcesso,
     autorizarConquista, listarConquistas, publicarConquista, registrar, retirar, visitaPorChave,
     visitaAtual, checkin, marcarProva, revogarCheckin, salvarEndereco, porCupom, registrarUso,
     criarParceiro, listarParceiros, ativarParceiro, parceiroPorToken, salvarSeloParceiro, parceiroPorSelo, contagemSelos, paradasOficiais, perfil, porWhatsapp, urlUpload, uploadValido, salvarFoto, fotoExiste, lerFoto, marcarFoto, ler,
     listarVisitas, mudarStatusFoto, motociclistas, excluirMotociclista,
-    motoPorCodigo, carimbarCidade, entradas, autorizarPassaporte, passaportePublico,
+    motoPorCodigo, carimbarCidade, entradas, autorizarPassaporte, passaportePublico, memoriaPorEntrada, salvarMemoria,
     criarPassaporte, anexarFotoCidade, resumoMapa, fotosDaCidade, fotoPublica, denunciarFoto, listarFotosCidades, mudarStatusFotoCidade,
   };
 }

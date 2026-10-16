@@ -1,0 +1,82 @@
+@import '../tipografia-passaporte.css';
+
+/* Identidade compartilhada pela página principal e pelo modelo de passaporte. */
+.selo-app:has(.passaporte-identidade) {
+  --font: PassaporteSlab, serif;
+  --display: PassaporteTitulo, serif;
+  --mono: PassaporteSlab, serif;
+  color: var(--sl-ink);
+  font-family: var(--font);
+  background: var(--sl-paper) url('/selo/passaporte/papel.webp') repeat;
+  background-size: 720px auto;
+}
+.selo-app > .passaporte-identidade { background: transparent; color: var(--sl-ink); }
+.passaporte-identidade .selo-nav {
+  background: var(--sl-paper) url('/selo/passaporte/papel.webp') repeat;
+  background-size: 640px auto;
+  border-color: var(--sl-line);
+}
+.passaporte-identidade .selo-nav a {
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: var(--sl-radius-button);
+  color: var(--sl-note-ink);
+  font-family: PassaporteSlab, serif;
+  font-size: 12px;
+}
+.passaporte-identidade .selo-nav a[aria-current='page'] {
+  color: var(--sl-stamp);
+  background: var(--sl-field-paper);
+  border-color: var(--sl-stamp);
+}
+.passaporte-identidade .selo-nav a:hover { color: var(--sl-stamp); background: var(--sl-field-paper); }
+.passaporte-identidade .ph { font-family: PassaporteSlab, serif; }
+.selo-app .passaporte-identidade :is(h1, h2) { font-family: PassaporteTitulo, serif; font-weight: 400; }
+.passaporte-identidade .ph :is(h1, h2) em {
+  color: var(--sl-stamp);
+  font-family: PassaporteCarimbo, serif;
+  font-style: normal;
+}
+.passaporte-identidade .ph .study-kicker { color: var(--sl-note-ink); font-family: PassaporteSlab, serif; }
+.passaporte-identidade .ph .study-button {
+  border-radius: var(--sl-radius-button);
+  font-family: PassaporteSlab, serif;
+  font-size: 14px;
+  letter-spacing: .04em;
+}
+.passaporte-identidade .story-lab.sl-embedded { background: transparent; }
+
+/* A apresentação usa a mesma linguagem de papel, tinta e carimbo. */
+.passaporte-home-page .ph :is(.ph-colecao, .ph-passos li, .ph-serie, .ph-faq details) {
+  background: var(--sl-paper) url('/selo/passaporte/papel.webp') repeat;
+  background-size: 560px auto;
+  border-color: var(--sl-field-line);
+  border-radius: var(--sl-radius-button);
+}
+.passaporte-home-page .ph .ph-numeros dd {
+  color: var(--sl-stamp);
+  font-family: PassaporteCarimbo, serif;
+  font-weight: 400;
+}
+.passaporte-home-page .ph :is(.ph-fileira-texto b, .ph-serie-carimbo strong) {
+  font-family: PassaporteTitulo, serif;
+  font-weight: 400;
+}
+.passaporte-home-page .ph :is(.ph-serie-carimbo, .ph-hero-serie) {
+  color: var(--sl-stamp);
+  border-color: var(--sl-stamp);
+  font-family: PassaporteCarimbo, serif;
+  font-weight: 400;
+}
+.passaporte-home-page .ph .ph-hero-serie {
+  background: var(--sl-paper) url('/selo/passaporte/papel.webp') repeat;
+  background-size: 560px auto;
+}
+.passaporte-home-page .ph .ph-comunidade {
+  color: var(--sl-ink);
+  border-block: 1px dashed var(--sl-field-line);
+  background: transparent;
+}
+.passaporte-home-page .ph .ph-comunidade .ph-h2 { color: var(--sl-ink); }
+.passaporte-home-page .ph .study-button-outline { color: var(--sl-ink); border-color: var(--sl-button-line); }
+.passaporte-home-page .ph .study-button-outline:hover { background: var(--sl-hover-paper); }

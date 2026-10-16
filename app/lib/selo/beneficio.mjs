@@ -1,6 +1,6 @@
 // Código de benefício do colecionador (ex.: desconto no Parque). Diferente do nº
 // de colecionador, que é sequencial e fácil de chutar: este é aleatório, por
-// pessoa, e só existe depois de endereço completo + check-in. O painel valida.
+// pessoa, e só existe depois de endereço completo + check-in GPS ou balcão. O painel valida.
 import { z } from 'zod';
 
 // Sem I, L, O, 0, 1: nada que se confunda lendo em voz alta ou num print.
@@ -49,11 +49,19 @@ export function validarEndereco(entrada) {
 
 export const enderecoCompleto = (m) => Boolean(m?.cep && m.logradouro && m.numero_endereco && m.bairro);
 
-// Benefício vale para quem completou o endereço e tem ao menos uma visita com
-// check-in (GPS/foto) ou entrega confirmada no balcão.
+// Benefício vale para quem completou o endereço e tem ao menos uma visita
+// confirmada no balcão ou com check-in por GPS. A foto do passaporte libera só o
+// selo digital: qualquer arquivo sobe sem revisão, então não vale desconto.
+export const visitaValeBeneficio = (v) => Boolean(v.retiradoEm || v.retirado_em)
+  || (Boolean(v.liberadoEm || v.liberado_em) && (v.checkinMetodo || v.checkin_metodo) === 'gps');
+
 export function beneficioApto(moto, visitas) {
-  return enderecoCompleto(moto) && visitas.some((v) => v.liberadoEm || v.liberado_em || v.retiradoEm || v.retirado_em);
+  return enderecoCompleto(moto) && visitas.some(visitaValeBeneficio);
 }
+
+// Tem check-in só por foto (sem GPS nem balcão): falta confirmar no balcão.
+export const soCheckinPorFoto = (visitas) => !visitas.some(visitaValeBeneficio)
+  && visitas.some((v) => (v.liberadoEm || v.liberado_em) && (v.checkinMetodo || v.checkin_metodo) === 'foto');
 
 // Almoço grátis: quem tem as 4 estações de um mesmo ano confirmadas no BALCÃO
 // (adesivo entregue). Check-in por GPS/foto não basta: o almoço custa dinheiro

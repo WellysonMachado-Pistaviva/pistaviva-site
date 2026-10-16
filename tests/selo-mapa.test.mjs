@@ -25,6 +25,8 @@ test('hora da captura: online usa agora; offline até 72 h; futuro e antigo recu
   assert.equal(horaDaCaptura('2026-10-14T15:30:00Z', agora).motivo, 'futuro');
   assert.equal(horaDaCaptura('2026-10-14T15:03:00Z', agora).ok, true);   // relógio um pouco adiantado
   assert.equal(horaDaCaptura('ontem', agora).motivo, 'invalido');
+  // Vem do cliente: tipo errado é recusado, não derruba o servidor.
+  for (const lixo of [{ toString: 1 }, [], 1760000000000, true, 'x'.repeat(41)]) assert.equal(horaDaCaptura(lixo, agora).motivo, 'invalido');
 });
 
 test('autoria: primeiro nome + inicial + nº, nunca o nome completo', () => {

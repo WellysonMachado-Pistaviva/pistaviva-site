@@ -12,7 +12,8 @@ const SEM_CACHE = { 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noind
 // Carimbos para o mockup do passaporte (/selo/passaporte). Mesmo segredo do
 // link pessoal: quem tem o código já vê esta coleção em /selo/m/[codigo].
 export async function GET(req) {
-  const codigo = new URL(req.url).searchParams.get('codigo');
+  const codigo = /^Bearer ([a-f0-9]{12})$/.exec(req.headers.get('authorization') || '')?.[1];
+  if (!codigo) return Response.json({ error: 'Acesso ao passaporte necessário.' }, { status: 401, headers: SEM_CACHE });
   try {
     const p = await perfilPorCodigo(codigo);
     if (!p) return Response.json({ error: 'Coleção não encontrada.' }, { status: 404, headers: SEM_CACHE });
