@@ -146,29 +146,32 @@ export async function criarPassaporte(d) {
   return data[0];
 }
 
-// d: { carimbo, ibge, uf, dia, distancia, precisao, metodo, capturadoEm }. { ok, ja, id, serie } | null.
+// d: { carimbo, ibge, uf, dia, distancia, precisao, metodo, capturadoEm }. { ok, ja, id, serie, dia } | null.
 export async function carimbarCidade(codigo, d) {
   if (local) return local.carimbarCidade(codigo, d);
   const m = await motoPorCodigo(codigo);
   if (!m) return null;
   const sb = supabaseAdmin();
-  // Confere antes de inserir: o gatilho da série roda antes do conflito e
-  // gastaria um número a cada toque repetido no mesmo dia.
-  const doDia = () => comArte((c) => sb.from('pv_selo_entradas').select(c)
-    .eq('motociclista_id', m.id).eq('carimbo', d.carimbo).eq('dia', d.dia).maybeSingle(), 'id, serie');
-  const { data: ja, error: e1 } = await doDia();
-  if (e1) throw e1;
-  if (ja) return { ok: true, ja: true, id: ja.id, serie: ja.serie ?? null, arte: ja.arte || null };
+  // Uma vez por cidade no passaporte: já carimbou (em qualquer dia), devolve
+  // o carimbo existente. Confere antes de inserir: o gatilho da série roda
+  // antes do conflito e gastaria um número a cada toque repetido.
+  const daCidade = async () => {
+    const { data, error } = await comArte((c) => sb.from('pv_selo_entradas').select(c)
+      .eq('motociclista_id', m.id).eq('carimbo', d.carimbo).order('dia', { ascending: true }).limit(1), 'id, serie, dia');
+    if (error) throw error;
+    return data?.[0] || null;
+  };
+  const ja = await daCidade();
+  if (ja) return { ok: true, ja: true, id: ja.id, serie: ja.serie ?? null, dia: ja.dia, arte: ja.arte || null };
   const { data, error } = await sb.from('pv_selo_entradas').upsert({
     motociclista_id: m.id, tipo: 'cidade', carimbo: d.carimbo, ibge: d.ibge, uf: d.uf, dia: d.dia,
     metodo: d.metodo || 'gps', capturado_em: d.capturadoEm || new Date().toISOString(),
     distancia_m: d.distancia, precisao_m: d.precisao, foto_path: null,
   }, { onConflict: 'motociclista_id,carimbo,dia', ignoreDuplicates: true }).select('id, serie');
-  if (error) throw error;
-  if (data.length) return { ok: true, ja: false, id: data[0].id, serie: data[0].serie ?? null };
-  const { data: outro, error: e2 } = await doDia();   // outro toque gravou no mesmo instante
-  if (e2) throw e2;
-  return { ok: true, ja: true, id: outro?.id, serie: outro?.serie ?? null, arte: outro?.arte || null };
+  if (error && error.code !== '23505') throw error;   // 23505: índice único por cidade (outro toque ganhou)
+  if (data?.length) return { ok: true, ja: false, id: data[0].id, serie: data[0].serie ?? null, dia: d.dia };
+  const outro = await daCidade();   // outro toque gravou no mesmo instante
+  return { ok: true, ja: true, id: outro?.id, serie: outro?.serie ?? null, dia: outro?.dia || d.dia, arte: outro?.arte || null };
 }
 
 // Foto opcional do carimbo; só o dono anexa à própria entrada. { carimbo, status } | null.

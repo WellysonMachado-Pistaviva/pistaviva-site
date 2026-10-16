@@ -17,12 +17,13 @@ const estacoes = [
 
 test('cidades e estações entram no mesmo passaporte, com os mesmos contadores', () => {
   const p = montarPassaporte({ entradas, estacoes }, { ano: 2026 });
-  assert.equal(p.stats.carimbos, 6);
+  assert.equal(p.stats.carimbos, 5, 'cidade repetida entra uma vez só');
   assert.equal(p.stats.estacoes, 3);
   assert.equal(p.stats.cidades, new Set([a.slug, b.slug]).size);
   assert.equal(p.stats.totalCidades, CIDADES.length);
   assert.deepEqual(p.carimbos.map((c) => c.dia), [...p.carimbos.map((c) => c.dia)].sort().reverse());
-  assert.equal(p.carimbos.find((c) => c.chave === 'c-2').visita, 2);
+  assert.equal(p.carimbos.find((c) => c.chave === 'c-2'), undefined);
+  assert.equal(p.carimbos.find((c) => c.chave === 'c-1').visita, 1);
   assert.equal(p.carimbos.find((c) => c.chave === 'e-verao-2026').visita, 2);
   assert.match(p.carimbos.find((c) => c.tipo === 'estacao').href, /^\/selos\/.+-em-itajuba$/);
 });

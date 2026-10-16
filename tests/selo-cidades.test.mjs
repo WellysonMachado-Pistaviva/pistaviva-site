@@ -72,7 +72,7 @@ test('arte: nome longo em duas linhas, data impressa e texto escapado', () => {
   assert.doesNotMatch(malicioso, /<script>/);
 });
 
-test('resumo: conta cidades, estados e "2ª visita" em dias diferentes', () => {
+test('resumo: conta cidades e estados; cidade repetida aparece uma vez (a primeira)', () => {
   const r = resumoPassaporte([
     { id: 'a', carimbo: 'socorro-sp', uf: 'SP', dia: '2026-01-02' },
     { id: 'b', carimbo: 'socorro-sp', uf: 'SP', dia: '2026-05-02' },
@@ -82,7 +82,7 @@ test('resumo: conta cidades, estados e "2ª visita" em dias diferentes', () => {
   assert.equal(r.ufs, 2);
   assert.equal(r.faltam.length, 40);
   assert.equal(r.faltam[0].poligonos, undefined);
-  assert.deepEqual(r.entradas.map((e) => [e.id, e.visita]), [['b', 2], ['c', 1], ['a', 1]]);
+  assert.deepEqual(r.entradas.map((e) => [e.id, e.visita]), [['c', 1], ['a', 1]]);
 });
 
 test('store local: carimbo idempotente no dia, passaporte só com autorização, LGPD apaga tudo', () => {
@@ -101,11 +101,15 @@ test('store local: carimbo idempotente no dia, passaporte só com autorização,
     const primeiro = s.carimbarCidade(codigo, d);
     assert.equal(primeiro.ok, true);
     assert.equal(primeiro.ja, false);
-    // Repetir no mesmo dia devolve o mesmo carimbo (a foto opcional vai nele).
-    assert.deepEqual(s.carimbarCidade(codigo, d), { ok: true, ja: true, id: primeiro.id, serie: 1, arte: null });
+    // Repetir devolve o mesmo carimbo (a foto opcional vai nele).
+    assert.deepEqual(s.carimbarCidade(codigo, d), { ok: true, ja: true, id: primeiro.id, serie: 1, dia: '2026-10-14', arte: null });
+    // Uma vez por cidade: voltar outro dia não cria outro carimbo.
     const outroDia = s.carimbarCidade(codigo, { ...d, dia: '2026-10-20' });
-    assert.equal(outroDia.ja, false);
-    assert.notEqual(outroDia.id, primeiro.id);
+    assert.equal(outroDia.ja, true);
+    assert.equal(outroDia.id, primeiro.id);
+    assert.equal(outroDia.dia, '2026-10-14');
+    const outraCidade = s.carimbarCidade(codigo, { ...d, carimbo: 'penha-sc', ibge: 4212809, uf: 'SC', dia: '2026-10-20' });
+    assert.equal(outraCidade.ja, false);
     assert.equal(s.carimbarCidade('000000000000', d), null);
     assert.equal(s.entradas(id).length, 2);
 

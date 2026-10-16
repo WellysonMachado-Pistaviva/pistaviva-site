@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { carimbarAqui, escolherArteCarimbo, prepararFotoCidade, publicarFotoCidade } from './actions';
 import { comTempo, comprimirFoto, subirFoto } from './fotoCliente';
 import { appendReading, readQueue, queueKey } from '../../public/pwa/store.mjs';
+import ConquistaPronta from './ConquistaPronta';
 
 const ERRO_GPS = {
   1: 'Localização bloqueada. Libere o acesso à localização para este site nas configurações do navegador.',
@@ -155,7 +156,7 @@ export default function CarimboCidade({ codigo, autor, onCarimbo, onStory, compa
       )}
       {feito && <Carimbado key={feito.entradaId} codigo={codigo} feito={feito} autor={autor} onStory={onStory} onArte={avisar} compacto={compacto} />}
       {msg && <p className="selo-erro" role="alert">{msg}</p>}
-      <small className="selo-dica">Um carimbo por cidade por dia. Voltou outro dia? Carimba de novo e conta como nova visita. <Link href="/selo/mapa">Ver o mapa de carimbos →</Link></small>
+      <small className="selo-dica">Cada cidade é carimbada uma vez no seu passaporte. <Link href="/selo/mapa">Ver o mapa de carimbos →</Link></small>
     </section>
   );
 }
@@ -174,9 +175,9 @@ function Carimbado({ codigo, feito, autor, onStory, onArte, compacto }) {
         {feito.serie && <span className="carimbo-feito-serie">Nº {feito.serie}</span>}
       </div>
       <EscolherArte codigo={codigo} feito={feito} arte={arte} onEscolhida={(id) => { setArte(id); onArte?.(); }} />
-      {onStory
-        ? <button type="button" className="selo-btn carimbo-feito-story" onClick={() => onStory(feito.entradaId)}>Compartilhar nos Stories</button>
-        : <Link className="selo-btn carimbo-feito-story" href={`/selo/passaporte?story=${feito.entradaId}`}>Compartilhar nos Stories</Link>}
+      <ConquistaPronta codigo={codigo}
+        carimbo={{ entradaId: feito.entradaId, slug: cidade.slug, nome: cidade.nome, uf: cidade.uf, dia: feito.dia, serie: feito.serie, src: imagem }}
+        personalizar={onStory ? () => onStory(feito.entradaId) : `/selo/passaporte?story=${feito.entradaId}`} />
       <FotoCarimbo codigo={codigo} entradaId={feito.entradaId} cidade={cidade} autor={autor} publicaInicial />
       {!compacto && <Link className="selo-btn secundario carimbo-feito-mapa" href="/selo/mapa">Ver outros carimbos no mapa</Link>}
     </div>

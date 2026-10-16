@@ -431,3 +431,5 @@ fieldset.selo-campo { border: 0; padding: 0; margin: 0; min-width: 0; }
 .carimbo-arte small { color: #17692e; font-size: 11px; }
 .carimbo-arte[data-marcada] { border-color: var(--pv-orange, #ea580c); background: #fff4ec; box-shadow: 0 0 0 2px rgba(234, 88, 12, .2); }
 .carimbo-arte:has(input:focus-visible) { outline: 3px solid var(--pv-orange, #ea580c); outline-offset: 2px; }
+/* No tema do passaporte o fundo da caixa marcada fica papel: texto em tinta. */
+.selo-app:has(.pu) .selo-check:has(input:checked) { color: var(--sl-ink, #1e1111); border-color: var(--sl-stamp, #a3281c); }

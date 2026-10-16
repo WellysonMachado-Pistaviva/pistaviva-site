@@ -420,6 +420,99 @@ async function storyCarimbo(destaque, outros, dados, foto, numero, opcoes = {}) 
   return tela;
 }
 
+// Feed "Estive em…" (1080×1350): a página de identificação do passaporte em
+// cima (como no feed da coleção) e, embaixo, "Estive em" + cidade + data,
+// o carimbo do dia e o nº de série.
+async function feedCarimbo(destaque, outros, dados, foto, numero) {
+  const f = FORMATOS.feed;
+  const W = f.largura, H = f.altura;
+  const [fundo, arte] = await Promise.all([paginaIdentidade(f, dados, foto), carregarArte(destaque.src), carregarFontes()]);
+  const tela = novaTela(W, H);
+  const ctx = tela.getContext('2d');
+  ctx.drawImage(fundo, 0, 0, W, H);
+  const espaco = (px) => { if ('letterSpacing' in ctx) ctx.letterSpacing = `${px}px`; };
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#5a4a3a';
+  ctx.font = '700 23px PassaporteSlab';
+  espaco(4);
+  ctx.fillText(`PASSAPORTE DO MOTOCICLISTA${numero == null ? '' : ` · Nº ${String(numero).padStart(4, '0')}`}`, W / 2, 56);
+
+  // Metade de baixo, abaixo da linha da página de identificação.
+  ctx.save();
+  ctx.translate(W / 2, 772);
+  ctx.rotate(-0.03);
+  ctx.fillStyle = TINTA_VERMELHA;
+  ctx.font = '50px PassaporteCarimbo';
+  espaco(8);
+  ctx.fillText('ESTIVE EM', 0, 0);
+  ctx.restore();
+  espaco(2);
+  ctx.fillStyle = TINTA;
+  const nome = destaque.nome.toUpperCase();
+  textoAjustado(ctx, nome, 124, { largura: W - 120, familia: 'PassaporteTitulo' });
+  ctx.fillText(nome, W / 2, 890);
+  ctx.font = '400 28px PassaporteSlab';
+  espaco(5);
+  ctx.fillStyle = '#4a3a2e';
+  ctx.fillText(`${destaque.uf} · ${dataLonga(destaque.dia)}${destaque.visita > 1 ? ` · ${destaque.visita}ª VISITA` : ''}`, W / 2, 938);
+
+  // Carimbo do dia à esquerda, nº de série e totais à direita.
+  ctx.save();
+  ctx.translate(330, 1090);
+  ctx.rotate(-0.08);
+  ctx.globalCompositeOperation = 'multiply';
+  ctx.shadowColor = 'rgba(0,0,0,.18)';
+  ctx.shadowBlur = 12;
+  desenharContido(ctx, arte, 0, 0, 270, 270, true);
+  ctx.restore();
+
+  if (destaque.serie) {
+    ctx.save();
+    ctx.translate(760, 1060);
+    ctx.rotate(0.06);
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.strokeStyle = TINTA_VERMELHA;
+    ctx.fillStyle = TINTA_VERMELHA;
+    ctx.lineWidth = 5;
+    ctx.strokeRect(-160, -56, 320, 112);
+    ctx.lineWidth = 2;
+    ctx.strokeRect(-150, -46, 300, 92);
+    ctx.font = '20px PassaporteCarimbo';
+    espaco(4);
+    ctx.fillText(`SÉRIE ${destaque.nome.toUpperCase()}`.slice(0, 24), 0, -14);
+    ctx.font = '44px PassaporteCarimbo';
+    espaco(3);
+    ctx.fillText(`Nº ${destaque.serie}`, 0, 34);
+    ctx.restore();
+  }
+  const todas = [destaque, ...outros];
+  const cidades = new Set(todas.filter((c) => c?.slug).map((c) => c.slug)).size;
+  const estados = new Set(todas.filter((c) => c?.uf).map((c) => c.uf)).size;
+  ctx.fillStyle = '#5a4a3a';
+  ctx.font = '700 22px PassaporteSlab';
+  espaco(3);
+  ctx.fillText(`${cidades} ${cidades === 1 ? 'CIDADE' : 'CIDADES'} · ${estados} ${estados === 1 ? 'ESTADO' : 'ESTADOS'}`, 760, 1172);
+
+  // "Conectando pessoas a lugares" já vem impresso no fundo do feed.
+  ctx.font = '700 25px PassaporteSlab';
+  espaco(3);
+  ctx.fillStyle = '#ff5a00';
+  ctx.fillText('pistavivamototurismo.com.br/selo', W / 2, H - 15);
+  espaco(0);
+  ctx.textAlign = 'start';
+  return tela;
+}
+
+// Imagem da conquista pronta para postar, logo depois do carimbo.
+// formato: 'stories' (1080×1920) | 'feed' (1080×1350).
+export async function gerarConquista({ destaque, outros, dados, fotoSrc, numero, formato = 'stories' }) {
+  const foto = fotoSrc ? await carregarImagem(fotoSrc).catch(() => null) : null;
+  return formato === 'feed'
+    ? feedCarimbo(destaque, outros, dados, foto, numero)
+    : storyCarimbo(destaque, outros, dados, foto, numero, { identidadeAcima: true });
+}
+
 // A prévia local usa a mesma arte do gerador, sem salvar dados de demonstração.
 export async function gerarPreviaStory({ destaque, outros, dados, fotoSrc, numero, identidadeAcima, inicio }) {
   const foto = fotoSrc ? await carregarImagem(fotoSrc) : null;

@@ -73,17 +73,19 @@ export function cidadeDoPonto(posicao, cidades = CIDADES) {
   return { ...r, ok: false, motivo: 'fora', distancia, cidade: perto.c };
 }
 
-// Dia do carimbo no fuso de Brasília: um carimbo por cidade por dia.
+// Dia do carimbo no fuso de Brasília (data impressa no carimbo).
 export function diaDoCarimbo(agora = new Date()) {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(agora);
 }
 
 // Resumo do passaporte de cidades: entradas ordenadas da mais recente para a
-// mais antiga. "2ª visita" quando a mesma cidade aparece em dias diferentes.
+// mais antiga. Cada cidade aparece uma vez só (a primeira passagem); carimbos
+// repetidos de antes da regra continuam no banco, mas não no passaporte.
 export function resumoPassaporte(entradas) {
-  const vezes = {};
-  const comVisita = [...entradas].sort((a, b) => a.dia.localeCompare(b.dia))
-    .map((e) => ({ ...e, visita: (vezes[e.carimbo] = (vezes[e.carimbo] || 0) + 1) }));
+  const vistas = new Set();
+  const comVisita = [...entradas].sort((a, b) => a.dia.localeCompare(b.dia) || String(a.criadoEm || '').localeCompare(String(b.criadoEm || '')))
+    .filter((e) => !vistas.has(e.carimbo) && vistas.add(e.carimbo))
+    .map((e) => ({ ...e, visita: 1 }));
   const cidades = new Set(entradas.map((e) => e.carimbo));
   const ufs = new Set(entradas.map((e) => e.uf));
   const rota = CIDADES.filter((c) => cidades.has(c.slug)).length;

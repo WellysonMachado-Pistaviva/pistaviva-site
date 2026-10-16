@@ -11,7 +11,7 @@ import { validarRelato } from '../app/lib/selo/memoria.mjs';
 import estados from '../app/lib/selo/mapaEstados.json' with { type: 'json' };
 import { lerIdentidade } from '../app/selo/passaporte/recursosPassaporte.js';
 
-test('mapa pessoal agrupa cidade sem perder memórias de visitas repetidas e sem incluir estações', () => {
+test('mapa pessoal: cidade repetida entra uma vez (a primeira passagem) e sem incluir estações', () => {
   const entradas = [
     { id: 'um', carimbo: 'socorro-sp', uf: 'SP', dia: '2026-10-11', serie: '0001·B' },
     { id: 'dois', carimbo: 'socorro-sp', uf: 'SP', dia: '2026-10-14' },
@@ -20,10 +20,10 @@ test('mapa pessoal agrupa cidade sem perder memórias de visitas repetidas e sem
   const p = montarPassaporte({ entradas, estacoes: [{ estacao: 'verao', ano: 2026, confirmadoEm: '2026-02-01T12:00:00Z' }] });
   const cidades = cidadesDoPassaporte(p.carimbos);
   assert.equal(cidades.length, 2);
-  assert.equal(cidades[0].slug, 'socorro-sp');
-  assert.deepEqual(cidades[0].visitas.map((v) => v.entradaId), ['dois', 'um']);
-  assert.equal(cidades[0].visitas[1].serie, '0001·B');
-  assert.equal(cidades[1].uf, 'AM');
+  const socorro = cidades.find((c) => c.slug === 'socorro-sp');
+  assert.deepEqual(socorro.visitas.map((v) => v.entradaId), ['um']);
+  assert.equal(socorro.visitas[0].serie, '0001·B');
+  assert.equal(cidades.find((c) => c.slug === 'manaus-am').uf, 'AM');
   assert.equal(p.stats.cidades, 2);
   assert.equal(p.colecoes[0].feitos, 1, 'Manaus não aumenta progresso das 42 cidades');
   for (const c of cidades) {
@@ -45,7 +45,7 @@ test('memória pertence à passagem e ao dono: persiste, edita, limpa e não vaz
     const bruno = s.criarPassaporte({ nome: 'Bruno Lima', whatsapp: '35933334444', cidade: 'Socorro', uf: 'SP' });
     const d = { carimbo: 'socorro-sp', uf: 'SP', ibge: 3552106, dia: '2026-10-11' };
     const um = s.carimbarCidade(ana.codigo, d);
-    const dois = s.carimbarCidade(ana.codigo, { ...d, dia: '2026-10-14' });
+    const dois = s.carimbarCidade(ana.codigo, { carimbo: 'penha-sc', uf: 'SC', ibge: 4212809, dia: '2026-10-14' });
     assert.equal(s.memoriaPorEntrada(bruno.codigo, um.id), null);
     assert.equal(s.salvarMemoria(bruno.codigo, um.id, 'Tentativa indevida'), null);
     s.salvarMemoria(ana.codigo, um.id, 'Primeira viagem com minha filha.');

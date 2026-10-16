@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { FotoCarimbo } from './CarimboCidade';
+import ConquistaPronta from './ConquistaPronta';
 import { LIMITE_RELATO } from '../lib/selo/memoria.mjs';
 
 export default function MemoriaCarimbo({ carimbo: c, codigo, rascunho, onRascunho, onFechar, onSalva }) {
@@ -22,6 +23,7 @@ export default function MemoriaCarimbo({ carimbo: c, codigo, rascunho, onRascunh
   const [foto, setFoto] = useState(null);
   const [tentativa, setTentativa] = useState(0);
   const [tentativaFoto, setTentativaFoto] = useState(0);
+  const [gerarImagem, setGerarImagem] = useState(false);
   const privado = Boolean(codigo && c.entradaId);
   const endpoint = `/api/selo/memoria?entrada=${encodeURIComponent(c.entradaId || '')}`;
 
@@ -86,7 +88,10 @@ export default function MemoriaCarimbo({ carimbo: c, codigo, rascunho, onRascunh
           </form>
         </>}
       </> : <p className="jornada-dica">{c.tipo === 'cidade' ? 'Passagem confirmada pelo GPS dentro do município.' : 'Estação confirmada no balcão.'}</p>}
-      {privado && <Link className="selo-btn secundario" href={`/selo/passaporte?story=${encodeURIComponent(c.entradaId)}`}>Montar Story desta conquista</Link>}
+      {privado && c.tipo === 'cidade' && (gerarImagem
+        ? <ConquistaPronta codigo={codigo} carimbo={{ entradaId: c.entradaId, slug: c.slug, nome: c.nome, uf: c.uf, dia: c.dia, serie: c.serie, src: c.img }}
+            personalizar={`/selo/passaporte?story=${encodeURIComponent(c.entradaId)}`} />
+        : <button type="button" className="selo-btn secundario" onClick={() => setGerarImagem(true)}>Gerar imagem para Stories e Feed</button>)}
       <Link className="selo-text-link" href={c.href}>Conhecer {c.tipo === 'cidade' ? 'a cidade' : 'esta coleção'} →</Link>
       <footer className="pu-rodape"><strong>Conectando pessoas a lugares</strong></footer>
     </div>

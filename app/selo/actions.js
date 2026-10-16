@@ -282,7 +282,8 @@ export async function carimbarAqui({ codigo, lat, lng, precisao, capturadoEm } =
     revalidatePath(`/selo/m/${codigo}`);
     revalidatePath(`/selo/cidade/${slug}`);
     revalidatePath('/selo/mapa');
-    const dia = diaDoCarimbo(hora.quando);
+    // Já carimbada antes: vale a data da primeira passagem.
+    const dia = feito.dia || diaDoCarimbo(hora.quando);
     const serie = codigoSerie(feito.serie, feito.id);
     const arte = feito.arte || ARTE_PADRAO;
     // Opções de arte da cidade, já com a data e o nº desta passagem: a pessoa

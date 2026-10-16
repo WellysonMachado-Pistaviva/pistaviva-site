@@ -12,12 +12,30 @@ begin;
 --    pessoa marcar. Continua privada por padrão no banco.
 -- 3) Denúncia vale para a postagem inteira: 3 denúncias escondem a foto e
 --    a memória pública daquela passagem.
+-- 4) Cada cidade entra uma vez só no passaporte. O site já confere antes de
+--    gravar; o índice único garante no banco. Se houver carimbos repetidos
+--    antigos, o índice não é criado (aviso abaixo) e nada é apagado: o
+--    passaporte mostra só a primeira passagem de cada cidade.
 -- ============================================================
 
 alter table public.pv_selo_entradas add column if not exists arte text;
 alter table public.pv_selo_entradas drop constraint if exists pv_selo_entradas_arte_check;
 alter table public.pv_selo_entradas add constraint pv_selo_entradas_arte_check
   check (arte is null or arte ~ '^[a-z0-9-]{1,40}$');
+
+do $$
+begin
+  if exists (
+    select 1 from public.pv_selo_entradas
+     group by motociclista_id, carimbo having count(*) > 1
+  ) then
+    raise notice 'Há carimbos repetidos por cidade: índice único não criado. O site já impede novos repetidos.';
+  else
+    create unique index if not exists pv_selo_entradas_uma_por_cidade
+      on public.pv_selo_entradas (motociclista_id, carimbo);
+  end if;
+end;
+$$;
 
 alter table public.pv_selo_memorias add column if not exists publica boolean not null default false;
 alter table public.pv_selo_memorias add column if not exists oculta boolean not null default false;

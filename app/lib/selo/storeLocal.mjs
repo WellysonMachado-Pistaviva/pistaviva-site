@@ -428,13 +428,14 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
     return true;
   }
 
-  // { ok, ja, id } | null (código desconhecido). Um carimbo por cidade por dia.
+  // { ok, ja, id, serie, dia } | null (código desconhecido). Um carimbo por cidade.
   function carimbarCidade(codigo, d, agora = new Date()) {
     const db = ler();
     const m = db.motociclistas.find((x) => x.codigo === codigo);
     if (!m) return null;
-    const ja = db.entradas.find((e) => e.motociclista_id === m.id && e.carimbo === d.carimbo && e.dia === d.dia);
-    if (ja) return { ok: true, ja: true, id: ja.id, serie: ja.serie ?? null, arte: ja.arte || null };
+    // Uma vez por cidade no passaporte (o mais antigo, se já houver repetido).
+    const ja = db.entradas.filter((e) => e.motociclista_id === m.id && e.carimbo === d.carimbo).sort((a, b) => a.dia.localeCompare(b.dia))[0];
+    if (ja) return { ok: true, ja: true, id: ja.id, serie: ja.serie ?? null, dia: ja.dia, arte: ja.arte || null };
     // Igual ao gatilho pv_selo_entradas_serie: número nunca reaproveitado.
     db.series[d.carimbo] = (db.series[d.carimbo] || 0) + 1;
     const e = {
@@ -446,7 +447,7 @@ export function criarStoreLocal(pasta = join(process.cwd(), '.selo-local')) {
     };
     db.entradas.push(e);
     gravar(db);
-    return { ok: true, ja: false, id: e.id, serie: e.serie };
+    return { ok: true, ja: false, id: e.id, serie: e.serie, dia: e.dia };
   }
 
   // Foto opcional do carimbo. Só o dono do passaporte anexa à própria entrada.

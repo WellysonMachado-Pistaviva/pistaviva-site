@@ -122,11 +122,12 @@ test('série: número por cidade na ordem de chegada, nunca reaproveitado, letra
   assert.equal(a1.serie, 1);
   assert.equal(s.carimbarCidade(a.codigo, d).serie, 1);            // mesmo dia: mesmo carimbo, mesmo nº
   assert.equal(s.carimbarCidade(b.codigo, d).serie, 2);
-  assert.equal(s.carimbarCidade(a.codigo, { ...d, dia: '2026-10-20' }).serie, 3);
+  assert.equal(s.carimbarCidade(a.codigo, { ...d, dia: '2026-10-20' }).serie, 1);   // uma vez por cidade: outro dia, mesmo carimbo
   assert.equal(s.carimbarCidade(a.codigo, { ...d, carimbo: 'barretos-sp' }).serie, 1);   // cada cidade conta a sua
   // LGPD apaga a Bia: o nº 2 não volta para ninguém.
   s.excluirMotociclista(s.motoPorCodigo(b.codigo).id);
-  assert.equal(s.carimbarCidade(a.codigo, { ...d, dia: '2026-10-21' }).serie, 4);
+  const c = s.criarPassaporte({ nome: 'Caio Reis', whatsapp: '35999990003', cidade: 'Itajubá', uf: 'MG' });
+  assert.equal(s.carimbarCidade(c.codigo, { ...d, dia: '2026-10-21' }).serie, 3);
   assert.match(codigoSerie(7, a1.id), /^0007·[A-HJ-NP-Z]$/);
   assert.equal(letraSerie(a1.id), letraSerie(a1.id));
   assert.equal(codigoSerie(null, a1.id), null);
